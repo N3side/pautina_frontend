@@ -6,9 +6,6 @@ import {$fetch} from "./fetch.tsx";
 
 // export const UserContext = createContext(null)
 
-// test 1
-// test 2
-
 function App() {
 
     const [user, setUser] = useState<any | null>(null)
@@ -40,7 +37,7 @@ function App() {
                         <img src={reactLogo} className="logo react" alt="React logo" />
                     </a>
                 </div>
-                <h1>Тест111 {user?.name}</h1>
+                <h1>Тест222 {user?.name}</h1>
                 <div className="card">
                     <button onClick={() => setCount((count) => count + 1)}>
                         count is {count}
