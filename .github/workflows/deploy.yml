@@ -1,0 +1,50 @@
+name: deploy.yml
+on:
+  pull_request:
+    types: [closed]
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Install sshpass
+        run: sudo apt-get update && sudo apt-get install -y sshpass
+
+      - name: Install rsync on remote server
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
+            -o StrictHostKeyChecking=no \
+            -p 49317 \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
+            sudo apt-get update && sudo apt-get install -y rsync
+          "
+
+      - name: Deploy with rsync
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync \
+            -avzr \
+            --exclude=".git" \
+            --exclude=".github" \
+            --exclude="prod.env" \
+            -e "ssh -o StrictHostKeyChecking=no -p 49317" \
+            ./ \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}
+
+      - name: Restart Docker on VPS
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
+            -o StrictHostKeyChecking=no \
+            -p 49317 \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
+          cd ${{ secrets.DEPLOY_PATH }}
+          docker compose --file docker-compose.yml up -d --build
+          EOF
+
