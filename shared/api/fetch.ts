@@ -22,7 +22,11 @@ export async function $fetch(
 
     const token = localStorage.getItem("token")
 
-    const url = "http://localhost:8876/api/" + route
+    const API_URL = process.env.NODE_ENV === 'production'
+        ? 'https://5fb5469c0f3e.vps.myjino.ru/api'
+        : 'http://localhost:8876/api';
+
+    const url = API_URL + route
 
     if (token) {
         headers.Authorization = "Bearer " + token
@@ -51,3 +55,5 @@ export async function $fetch(
 
     return {response,json}
 }
+
+// тут
