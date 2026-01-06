@@ -77,7 +77,7 @@ export default function RegisterWidget() {
                 className={`flex items-center flex-col w-full mx-auto my-0
                     px-[clamp(20px,1.250vw_+_16.000px,40px)] bg-white m-[auto 0] ${
                     _window?.innerWidth && _window?.innerWidth < 1024
-                        ? "w-full h-[calc(100vh_-_80px)] px-[0px] bg-[red] py-[20px]"
+                        ? "w-full h-[calc(100vh_-_80px)] px-[0px] bg-[red] py-[20px] justify-center"
                         : "py-[50px] rounded-[24px] max-w-[580px] max-h-[875px]"
                 }`}
                 style={

@@ -1,8 +1,8 @@
 import toast from "react-hot-toast"
 
-interface FetchResult {
-    response: Response
-    json: unknown
+export interface FetchResult {
+    response?: any
+    json?: any
 }
 
 // Добавь типы для параметров

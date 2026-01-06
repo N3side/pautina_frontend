@@ -33,7 +33,7 @@ export default function HeaderWidget() {
 
                 <Navigation isActive={isActive} />
 
-                {_window?.innerWidth && _window?.innerWidth < 900 || user && localStorage.getItem("token") &&
+                {_window?.innerWidth && _window?.innerWidth < 900 &&
                     <div className="flex gap-[20px] items-center">
                         {_window?.innerWidth && _window?.innerWidth < 900 && (
                             <>
