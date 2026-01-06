@@ -1,9 +1,9 @@
-interface categoriesProps {
+export interface CategoriesProps {
     text?: string
     count?: string
 }
 
-const categories: categoriesProps[] = [
+const categories: CategoriesProps[] = [
     {
         text: "Все",
         count: "5"
@@ -22,7 +22,7 @@ const categories: categoriesProps[] = [
     }
 ]
 
-interface cardProps {
+export interface CardProps {
     image?: string
     date?: string
     title?: string
@@ -31,7 +31,7 @@ interface cardProps {
     onClick?: () => void
 }
 
-const cards: cardProps[] = [
+const cards: CardProps[] = [
     {
         category: "Обучение",
         image: "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/dff0/live/61c92860-24ce-11ee-941e-23d1e9ab75fa.jpg.webp",
@@ -69,4 +69,4 @@ const cards: cardProps[] = [
     },
 ]
 
-export {categories, categoriesProps, cards, cardProps}
+export {categories, cards}

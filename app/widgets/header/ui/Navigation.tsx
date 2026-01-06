@@ -30,7 +30,7 @@ export default function Navigation({ isActive }: Props) {
         <div
             className="flex gap-[60px] items-center"
 
-            style={_window?.innerWidth <= 900 ? {
+            style={_window?.innerWidth && _window?.innerWidth <= 900 ? {
                 position: "fixed",
                 width: "100vw",
                 height: `calc(100vh - 80px)`,
@@ -53,7 +53,7 @@ export default function Navigation({ isActive }: Props) {
             <nav className="nav">
                 <ul
                     className="flex items-center gap-10"
-                    style={_window?.innerWidth <= 900 ? {
+                    style={_window?.innerWidth && _window?.innerWidth <= 900 ? {
                         display: "flex",
                         flexDirection: "column",
                         gap: "20px",
@@ -64,7 +64,7 @@ export default function Navigation({ isActive }: Props) {
                     {model.map((li, i) =>
                         <li key={i}>
                             <Link href={li?.link}>
-                                <PautinaText variant={`${_window?.innerWidth >= 900 ? "small" : "large"}`} className="cursor-pointer whitespace-nowrap" style={{ fontWeight: 600 }}>
+                                <PautinaText variant={`${_window?.innerWidth && _window?.innerWidth >= 900 ? "small" : "large"}`} className="cursor-pointer whitespace-nowrap" style={{ fontWeight: 600 }}>
                                     {li?.text}
                                 </PautinaText>
                             </Link>
@@ -76,7 +76,7 @@ export default function Navigation({ isActive }: Props) {
             {!user && isClient && !localStorage.getItem("token") && (
                 <div
                     className="flex items-center gap-2.5"
-                    style={_window?.innerWidth <= 900 ? {
+                    style={_window?.innerWidth && _window?.innerWidth <= 900 ? {
                         display: "flex",
                         flexDirection: "column",
                         alignItems: "flex-start"
@@ -88,7 +88,7 @@ export default function Navigation({ isActive }: Props) {
                             borderRadius: "9999px",
                             textTransform: "none"
                         }}>
-                            <PautinaText variant={`${_window?.innerWidth >= 900 ? "button2" : "button"}`}>
+                            <PautinaText variant={`${_window?.innerWidth && _window?.innerWidth >= 900 ? "button2" : "button"}`}>
                                 Войти
                             </PautinaText>
                         </Button>
@@ -101,7 +101,7 @@ export default function Navigation({ isActive }: Props) {
                                 borderRadius: "9999px",
                                 textTransform: "none"
                             }}>
-                                <PautinaText variant={`${_window?.innerWidth >= 900 ? "button2" : "button"}`} color={COLORS.white}>
+                                <PautinaText variant={`${_window?.innerWidth && _window?.innerWidth >= 900 ? "button2" : "button"}`} color={COLORS.white}>
                                     Регистрация
                                 </PautinaText>
                             </Button>

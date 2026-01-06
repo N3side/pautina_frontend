@@ -8,10 +8,10 @@ import Link from "@/shared/vector/contacts/Link"
 
 import {ComponentType} from "react";
 
-interface Elems {
-    Icon: ComponentType,
-    k: string,
-    value?: string
+export interface Elems {
+    Icon: ComponentType<any>; // или ComponentType<{}>
+    k: string;
+    value?: string;
 }
 
 const activity: Elems[] = [
@@ -50,4 +50,4 @@ const contacts: Elems[] = [
     },
 ]
 
-export {activity, contacts, Elems}
+export {activity, contacts}

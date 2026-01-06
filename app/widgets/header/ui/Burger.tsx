@@ -2,7 +2,7 @@ import { useState } from "react";
 
 interface Props {
     isActive?: boolean
-    setIsActive?: (value: Boolean) => void
+    setIsActive?: (value: boolean) => void
 }
 
 function Burger({isActive, setIsActive}: Props) {

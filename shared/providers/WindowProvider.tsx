@@ -3,7 +3,23 @@
 import { createContext, useEffect, useState } from "react"
 import { ReactNode } from "react"
 
-export const WindowContext = createContext(null)
+// Добавляем интерфейс и дефолтные значения
+interface WindowContextType {
+    _window: {
+        innerWidth: number | null
+        innerHeight: number | null
+    }
+    _setWindow: (window: { innerWidth: number | null; innerHeight: number | null }) => void
+}
+
+// Меняем createContext(null) на createContext с дефолтными значениями
+export const WindowContext = createContext<WindowContextType>({
+    _window: {
+        innerWidth: null,
+        innerHeight: null
+    },
+    _setWindow: () => {}
+})
 
 interface Children {
     children: ReactNode
@@ -19,7 +35,10 @@ export function WindowProvider({ children }: Children) {
     };
 
     // Инициализируем состояние без доступа к window — это важно для SSR
-    const [_window, _setWindow] = useState({ innerWidth: null, innerHeight: null })
+    const [_window, _setWindow] = useState({
+        innerWidth: null as number | null,
+        innerHeight: null as number | null
+    })
 
     useEffect(() => {
         // Теперь мы на клиенте — можно читать window

@@ -32,16 +32,16 @@ export default function BannerWidget() {
                 </div>
                 <main
                     className="flex items-center items-start mt-5 justify-between"
-                    style={_window?.innerWidth < 900 ? {
+                    style={_window?.innerWidth && _window?.innerWidth < 900 ? {
                         flexDirection: "column-reverse"
                     } : {}}
                 >
-                    <div className="_1" style={_window?.innerWidth < 900 ? { marginTop: "30px" } : {}}>
+                    <div className="_1" style={_window?.innerWidth && _window?.innerWidth < 900 ? { marginTop: "30px" } : {}}>
                         <Heading variant="h1" color={colorStyles.text.primary.light} style={{
                             fontWeight: 900,
                             width: "100%"
                         }}>
-                            Создай портфолио, {_window?.width >= 900 && <br />}
+                            Создай портфолио, {_window?.innerWidth && _window?.innerWidth >= 900 && <br />}
                             которое {_window?.innerWidth >= 900 && <br />}
                             <span className="
                                 bg-clip-text
@@ -54,7 +54,7 @@ export default function BannerWidget() {
                                 } as React.CSSProperties}>вдохновляет</span>
                         </Heading>
 
-                        <PautinaText variant="large" className="mt-[30px]" style={_window?.width >= 900 ?
+                        <PautinaText variant="large" className="mt-[30px]" style={_window?.innerWidth && _window?.innerWidth >= 900 ?
                             { maxWidth: "440px", lineHeight: "1.4" } :
                             { width: "100%" }
                         }>

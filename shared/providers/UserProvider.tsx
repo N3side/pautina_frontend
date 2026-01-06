@@ -5,16 +5,45 @@ import {$fetch} from "@/shared/api/fetch";
 import {useRouter} from "next/navigation";
 import toast from "react-hot-toast";
 
-export const UserContext = createContext(null)
+// Интерфейс для ответа от API
+interface UserResponse {
+    json?: {
+        user?: any;
+    };
+}
 
-export default function UserProvider({children}: ReactNode) {
+// 1. Определи интерфейс
+interface UserContextType {
+    user: any;
+    setUser: (user: any) => void;
+    token: string | null;
+    setToken: (token: string | null) => void;
+    isLoading: boolean;
+    setIsLoading: (isLoading: boolean) => void;
+}
 
-    const [user, setUser] = useState(null)
-    const [token, setToken] = useState(null)
-    const [isLoading, setIsLoading] = useState(true)
+// 2. Измени эту строку - добавь дефолтные значения
+export const UserContext = createContext<UserContextType>({
+    user: null,
+    setUser: () => {},
+    token: null,
+    setToken: () => {},
+    isLoading: true,
+    setIsLoading: () => {}
+})
 
-    async function getUser() {
-        const response = await $fetch("me", {isToast: false})
+interface UserProviderProps {
+    children: ReactNode;
+}
+
+export default function UserProvider({children}: UserProviderProps) {
+
+    const [user, setUser] = useState<any>(null)
+    const [token, setToken] = useState<string | null>(null)
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+
+    async function getUser(): Promise<void> {
+        const response = await $fetch("me", {isToast: false}) as UserResponse
 
         setUser(response?.json?.user)
 
@@ -33,11 +62,12 @@ export default function UserProvider({children}: ReactNode) {
 
 }
 
+// Остальной код без изменений...
 export function CheckUser({ children }: { children: React.ReactNode }) {
     const { user, isLoading, setUser } = useContext(UserContext)
     const router = useRouter()
 
-    if (!localStorage.getItem("token")) {
+    if (typeof window !== 'undefined' && !localStorage.getItem("token")) {
         toast.error("Вы не авторизованы")
         router.push("/login")
     }
@@ -57,11 +87,11 @@ export function CheckUser({ children }: { children: React.ReactNode }) {
 
     }, [isLoading, user, router]);
 
-    if (isLoading) return
+    if (isLoading) return null
 
     if (!user) {
         setUser(null)
-        return
+        return null
     }
 
     return children
@@ -86,9 +116,9 @@ export function CheckIsNotUser({ children }: { children: React.ReactNode }) {
 
     }, [isLoading, user, router])
 
-    if (isLoading) return
+    if (isLoading) return null
 
-    if (user) return
+    if (user) return null
 
     return children
 }

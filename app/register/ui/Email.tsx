@@ -3,17 +3,41 @@ import {PautinaText} from "@/shared/styles/typography/text";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import {Button} from "@mui/material";
 import {COLORS, colorStyles} from "@/shared/styles/colors";
-import {useContext, useState} from "react";
+import {useContext, useState, FormEvent, ChangeEvent} from "react";
 import {$fetch} from "@/shared/api/fetch";
 import {UserContext} from "@/shared/providers/UserProvider";
 
-export default function Email({name, email, setEmail, next}) {
+interface EmailProps {
+    name: string;
+    email: string;
+    setEmail: (email: string) => void;
+    next: () => void;
+}
 
-    const [errors, setErrors] = useState(null)
+interface RegisterResponse {
+    json?: {
+        errors?: {
+            email?: string;
+            [key: string]: string;
+        };
+        credentials?: {
+            token: string;
+        };
+    };
+}
+
+interface FormErrors {
+    email?: string;
+    [key: string]: string | undefined;
+}
+
+export default function Email({name, email, setEmail, next}: EmailProps) {
+
+    const [errors, setErrors] = useState<FormErrors | null>(null)
 
     const {setToken} = useContext(UserContext)
 
-    async function handleSubmit(e) {
+    async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
 
         setErrors(null)
 
@@ -30,7 +54,7 @@ export default function Email({name, email, setEmail, next}) {
             headers: {
                 "Content-Type": "application/json"
             }
-        })
+        }) as RegisterResponse
 
         console.log(JSON.stringify({email, name}))
 
@@ -44,7 +68,7 @@ export default function Email({name, email, setEmail, next}) {
 
         const token = response?.json?.credentials?.token
 
-        if (token) {
+        if (typeof window !== 'undefined' && token) {
             localStorage.setItem("token", token)
             setToken(token)
         }
@@ -52,11 +76,15 @@ export default function Email({name, email, setEmail, next}) {
         next()
     }
 
-    async function handleChange(e) {
+    function handleChange(e: ChangeEvent<HTMLInputElement>): void {
         const email = e.target.value
 
         setEmail(email)
-        localStorage.setItem("user_email", email)
+
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("user_email", email)
+        }
+
     }
 
     return (
@@ -76,7 +104,15 @@ export default function Email({name, email, setEmail, next}) {
                             Ваша почта *
                         </PautinaText>
                     </label>
-                    <input name="text" onChange={handleChange} defaultValue={email} placeholder="Введите ее" id="" className="w-full px-5 py-[15px] rounded-[6px]" style={{ border: `1px solid ${COLORS.gray[2]}`, boxShadow: `0px 3px 12px ${COLORS.gray[1]}` }}/>
+                    <input
+                        name="text"
+                        onChange={handleChange}
+                        defaultValue={email}
+                        placeholder="Введите ее"
+                        id="email"
+                        className="w-full px-5 py-[15px] rounded-[6px]"
+                        style={{ border: `1px solid ${COLORS.gray[2]}`, boxShadow: `0px 3px 12px ${COLORS.gray[1]}` }}
+                    />
                     {errors?.email}
                 </div>
 

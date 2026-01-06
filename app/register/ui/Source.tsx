@@ -3,23 +3,38 @@ import { PautinaText } from "@/shared/styles/typography/text";
 import { ShadowWrapper } from "@/shared/wrappers/Shadow";
 import { Button } from "@mui/material";
 import { COLORS, colorStyles } from "@/shared/styles/colors";
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { $fetch } from "@/shared/api/fetch";
 
-export default function Source() {
-    const [sources, setSources] = useState(null);
-    const [selectedSource, setSelectedSource] = useState(null);
-    const [customText, setCustomText] = useState("");
+interface Source {
+    id: string | number;
+    variant: string;
+}
 
-    async function getSources() {
-        const response = await $fetch("sources");
+interface SourcesResponse {
+    json?: {
+        sources?: Source[];
+    };
+}
+
+export default function Source() {
+    const [sources, setSources] = useState<Source[] | null>(null);
+    const [selectedSource, setSelectedSource] = useState<string | number | null>(null);
+    const [customText, setCustomText] = useState<string>("");
+
+    async function getSources(): Promise<void> {
+        const response = await $fetch("sources") as SourcesResponse;
         const sources_ = response?.json?.sources;
-        setSources(sources_);
+        setSources(sources_ || null);
     }
 
     useEffect(() => {
         getSources();
     }, []);
+
+    function handleCustomTextChange(e: ChangeEvent<HTMLInputElement>): void {
+        setCustomText(e.target.value);
+    }
 
     return (
         <div className="flex flex-col gap-6 max-w-2xl mx-auto p-4">
@@ -46,7 +61,7 @@ export default function Source() {
 
             {/* Список вариантов */}
             <div className="space-y-3">
-                {sources?.map((source) => (
+                {sources?.map((source: Source) => (
                     <div
                         key={source?.id}
                         onClick={() => setSelectedSource(source?.id)}
@@ -90,7 +105,7 @@ export default function Source() {
                     `}
                 >
                     <PautinaText
-                        variant="body"
+                        variant="secondary"
                         className={`
                             ${selectedSource === "custom"
                             ? 'text-brand-dark font-medium'
@@ -104,7 +119,7 @@ export default function Source() {
                     <input
                         type="text"
                         value={customText}
-                        onChange={(e) => setCustomText(e.target.value)}
+                        onChange={handleCustomTextChange}
                         placeholder="Введите свой вариант ответа..."
                         className={`
                             w-full px-4 py-3 rounded-lg border

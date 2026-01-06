@@ -47,4 +47,3 @@ jobs:
           cd ${{ secrets.DEPLOY_PATH }}
           docker compose --file docker-compose.yml up -d --build
           EOF
-

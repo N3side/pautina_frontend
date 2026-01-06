@@ -4,11 +4,9 @@ import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import {Button} from "@mui/material";
 import {COLORS, colorStyles} from "@/shared/styles/colors";
 import {$fetch} from "@/shared/api/fetch";
-import {CheckUser} from "@/shared/providers/UserProvider";
-import {useState} from "react";
 import toast from "react-hot-toast";
 
-export default function OTP({name, setName, email, otp, setOtp, next}) {
+export default function OTP({name, email, otp, setOtp, next}) {
 
     async function handleSubmit(e) {
 
@@ -35,7 +33,11 @@ export default function OTP({name, setName, email, otp, setOtp, next}) {
         const otp_ = e.target.value
 
         setOtp(otp_)
-        localStorage.setItem("email_otp", otp_)
+
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("email_otp", otp_)
+        }
+
     }
 
     return (

@@ -5,10 +5,10 @@ import {Button} from "@mui/material";
 import Download from "@/shared/vector/Download";
 import {IconWrapper} from "@/shared/components/IconWrapper";
 
-import { cardProps } from "../model/index"
+import { CardProps } from "../model/index"
 import {COLORS, colorStyles} from "@/shared/styles/colors";
 
-export default function Card(card: cardProps) {
+export default function Card(card: CardProps) {
     return (
         <div className="relative" onClick={card?.onClick}>
 

@@ -1,21 +1,43 @@
-FROM node:24 AS build
+# Используем Node.js LTS
+FROM node:20-alpine AS deps
 
 WORKDIR /app
 
-COPY package*.json ./
-RUN npm install
+# Копируем package.json для установки зависимостей
+COPY package.json package-lock.json* ./
+RUN npm ci
 
+FROM node:20-alpine AS builder
+WORKDIR /app
+COPY --from=deps /app/node_modules ./node_modules
 COPY . .
+
+# Сборка приложения
+ENV NEXT_TELEMETRY_DISABLED 1
 RUN npm run build
 
-FROM nginx:alpine
+# Production образ
+FROM node:20-alpine AS runner
+WORKDIR /app
 
-RUN rm /etc/nginx/conf.d/default.conf
+ENV NODE_ENV production
+ENV NEXT_TELEMETRY_DISABLED 1
 
-COPY ./_docker/nginx/conf.d/nginx.conf /etc/nginx/conf.d/default.conf
+RUN addgroup --system --gid 1001 nodejs
+RUN adduser --system --uid 1001 nextjs
 
-COPY --from=build /app/dist /usr/share/nginx/html
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
 
-EXPOSE 80
+# Копируем собранное приложение
+COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
+COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
-CMD ["nginx", "-g", "daemon off;"]
+USER nextjs
+
+EXPOSE 3000
+
+ENV PORT 3000
+ENV HOSTNAME "0.0.0.0"
+
+CMD ["node", "server.js"]

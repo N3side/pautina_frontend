@@ -16,7 +16,7 @@ export default function BioWidget() {
                 <div className="flex items-center gap-[4px]">
                     <Button style={{minWidth: "0px", padding: "8px"}}>
                         <IconWrapper>
-                            <Role className="w-[18px] h-[18px]"/>
+                            <Role className="w-[18px] h-[18px]" />
                         </IconWrapper>
                     </Button>
                     <Heading variant="h6" color={colorStyles.text.h6.light} style={{fontWeight: "700"}}>
@@ -53,7 +53,7 @@ export default function BioWidget() {
                             </PautinaText>
                         </header>
                         <ul className="flex flex-col gap-[30px]">
-                            {activity?.map((elem: Elems, i) =>
+                            {activity?.map((elem: Elems, i: number) =>
                                 <Elem key={i} Icon={elem?.Icon} k={elem?.k} value={elem?.value}/>
                             )}
                         </ul>
@@ -68,7 +68,7 @@ export default function BioWidget() {
                             </PautinaText>
                         </header>
                         <ul className="flex flex-col gap-[30px]">
-                            {contacts?.map((elem: Elems, i) =>
+                            {contacts?.map((elem: Elems, i: number) =>
                                 <Elem key={i} Icon={elem?.Icon} k={elem?.k} value={elem?.value}/>
                             )}
                         </ul>

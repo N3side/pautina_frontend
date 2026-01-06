@@ -32,12 +32,12 @@ export default function StatisticsWidget() {
 
     return (
         <section
-            className={`mt-[120px] py-[clamp(30px,1.875vw_+_24.000px,60px)]`}
+            className={`mt-[150px] py-[clamp(30px,1.875vw_+_24.000px,60px)]`}
             style={{ background: COLORS.gray[16] }}>
             <Container
                 className={
                     `grid gap-y-[20px] 
-                    ${_window?.innerWidth <= 1250
+                    ${_window?.innerWidth && _window?.innerWidth <= 1250
                         ? "grid-cols-2"
                         : "grid-cols-4"
                     }`}

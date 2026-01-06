@@ -33,28 +33,31 @@ export default function HeaderWidget() {
 
                 <Navigation isActive={isActive} />
 
-                <div className="flex gap-[20px] items-center">
-                    {_window?.innerWidth < 900 && (
-                        <>
-                            <Burger isActive={isActive} setIsActive={setIsActive} />
-                        </>
-                    )}
+                {_window?.innerWidth && _window?.innerWidth < 900 || user && localStorage.getItem("token") &&
+                    <div className="flex gap-[20px] items-center">
+                        {_window?.innerWidth && _window?.innerWidth < 900 && (
+                            <>
+                                <Burger isActive={isActive} setIsActive={setIsActive} />
+                            </>
+                        )}
 
-                    {user && localStorage.getItem("token") && (
-                        <div className="h-[40px] w-[40px] aspect-[1/1] rounded-[50%]" style={{
-                            zIndex: "1"
-                        }}>
+                        {user && typeof window !== 'undefined' && localStorage.getItem("token") && (
+                            <div className="h-[40px] w-[40px] aspect-[1/1] rounded-[50%]" style={{
+                                zIndex: "1"
+                            }}>
 
-                            <img className="w-full h-full rounded-[50%]"
-                                style={{
-                                    objectFit: "cover"
-                                }}
-                             src={user?.avatar ? user?.avatar : "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/dff0/live/61c92860-24ce-11ee-941e-23d1e9ab75fa.jpg.webp"}
-                             alt="avatar"
-                            />
-                        </div>
-                    )}
-                </div>
+                                <img className="w-full h-full rounded-[50%]"
+                                    style={{
+                                        objectFit: "cover"
+                                    }}
+                                 src={user?.avatar ? user?.avatar : "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/dff0/live/61c92860-24ce-11ee-941e-23d1e9ab75fa.jpg.webp"}
+                                 alt="avatar"
+                                />
+                            </div>
+                        )}
+                    </div>
+                }
+
 
 
             </Container>

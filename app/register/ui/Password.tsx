@@ -3,10 +3,11 @@ import {PautinaText} from "@/shared/styles/typography/text";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import {Button} from "@mui/material";
 import {COLORS, colorStyles} from "@/shared/styles/colors";
+import {FormEvent} from "react";
 
 export default function Password() {
 
-    async function handleSubmit(e) {
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
     }
 

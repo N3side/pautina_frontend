@@ -29,7 +29,11 @@ export default function Name({name, setName, next}) {
         console.log(name_)
 
         setName(name_)
-        localStorage.setItem("user_name", name_)
+
+        if (typeof window !== 'undefined') {
+            localStorage.setItem("user_name", name_)
+        }
+
     }
 
     return (

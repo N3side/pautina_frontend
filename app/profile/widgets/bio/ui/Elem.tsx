@@ -1,10 +1,9 @@
-import { ReactNode } from "react"
 import { PautinaText } from "@/shared/styles/typography/text"
 import {colorStyles} from "@/shared/styles/colors";
 
 
 interface Props {
-    Icon: ReactNode
+    Icon: any
     k: string
     value?: string
 }

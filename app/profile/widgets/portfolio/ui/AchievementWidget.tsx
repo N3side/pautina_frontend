@@ -27,7 +27,7 @@ export function AchievementWidget() {
             </div>
             <div className={`info w-full bg-[white] px-[clamp(20px,1.250vw_+_16.000px,40px)]
             py-[clamp(20px,1.250vw_+_16.000px,40px)] rounded-[20px] flex flex-col justify-between
-            ${_window?.innerWidth < 1024 ? "pr-[5px]" : ""}
+            ${_window?.innerWidth && _window?.innerWidth < 1024 ? "pr-[5px]" : ""}
             `}
              style={{
                 borderBottomLeftRadius: "0",

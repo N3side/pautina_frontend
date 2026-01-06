@@ -5,7 +5,18 @@ interface FetchResult {
     json: unknown
 }
 
-export async function $fetch(route: string, {method="GET", body=undefined, isToast=true, headers={}}={}): Promise<FetchResult> {
+// Добавь типы для параметров
+interface FetchOptions {
+    method?: string
+    body?: BodyInit | null  // Измени на BodyInit | null
+    isToast?: boolean
+    headers?: Record<string, string>
+}
+
+export async function $fetch(
+    route: string,
+    {method = "GET", body = null, isToast = true, headers = {}}: FetchOptions = {}
+): Promise<FetchResult> {
 
     headers.Accept = "application/json"
 
@@ -17,7 +28,7 @@ export async function $fetch(route: string, {method="GET", body=undefined, isToa
         headers.Authorization = "Bearer " + token
     }
 
-    const response: FetchResult = await fetch(url, {
+    const response = await fetch(url, {
         method,
         body,
         headers

@@ -16,7 +16,7 @@ export default function ProfileWidget() {
     const {user} = useContext(UserContext)
 
     return (
-        <section className={`max-w-[386px] w-full h-full rounded-[16px] ${_window.innerWidth < 1170 ? "max-w-none" : ""}`}>
+        <section className={`max-w-[386px] w-full h-full rounded-[16px] ${_window?.innerWidth && _window.innerWidth < 1170 ? "max-w-none" : ""}`}>
             <header className="w-full h-[128px] rounded-[16px]" style={{
                 background: COLORS.brand[9],
                 borderBottomRightRadius: "0px",
