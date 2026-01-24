@@ -1,12 +1,19 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
+import {Heading} from "@/shared/cat/typography/headings";
+import {PautinaText} from "@/shared/cat/typography/text";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import {Button} from "@mui/material";
-import {COLORS, colorStyles} from "@/shared/styles/colors";
+import {COLORS, colorStyles} from "@/shared/cat/colors";
 import {$fetch} from "@/shared/api/fetch";
 import toast from "react-hot-toast";
+import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
+import Input from "@/shared/components/Inputs/Input";
+import {useContext, useEffect, useState} from "react";
+import {UserContext} from "@/shared/providers/UserProvider";
+import {isBoolean} from "node:util";
 
 export default function OTP({name, email, otp, setOtp, next}) {
+
+    const {user} = useContext(UserContext)
 
     async function handleSubmit(e) {
 
@@ -40,6 +47,13 @@ export default function OTP({name, email, otp, setOtp, next}) {
 
     }
 
+    useEffect(() => {
+
+        if (Boolean(user?.confirmed_email)) {
+            next()
+        }
+    }, [user]);
+
     return (
         // <CheckUser>
             <div>
@@ -52,22 +66,10 @@ export default function OTP({name, email, otp, setOtp, next}) {
                     </PautinaText>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
-                    <div className="flex flex-col gap-[8px]">
-                        <label htmlFor="email">
-                            <PautinaText variant="secondary" style={{fontWeight: 700}}>
-                                Проверочный код *
-                            </PautinaText>
-                        </label>
-                        <input name="text" defaultValue={otp} onChange={handleChange} placeholder="Введите код" id="" className="w-full px-5 py-[15px] rounded-[6px]" style={{ border: `1px solid ${COLORS.gray[2]}`, boxShadow: `0px 3px 12px ${COLORS.gray[1]}` }}/>
-                    </div>
 
-                    <ShadowWrapper>
-                        <Button type="submit" style={{ marginTop: "15px", background: colorStyles.buttons.brand.light, padding: "15px 0px", borderRadius: '12px', width: "100%" }}>
-                            <PautinaText variant="button2" color={COLORS.white}>
-                                Далее
-                            </PautinaText>
-                        </Button>
-                    </ShadowWrapper>
+                    <Input label={"Проверочный код *"} placeholder={"Введите код"} name={"text"} onChange={handleChange} />
+
+                    <ButtonLarge text={"Далее"} />
 
                 </form>
             </div>

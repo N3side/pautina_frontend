@@ -1,10 +1,13 @@
-import { Heading } from "@/shared/styles/typography/headings";
-import { PautinaText } from "@/shared/styles/typography/text";
+import { Heading } from "@/shared/cat/typography/headings";
+import { PautinaText } from "@/shared/cat/typography/text";
 import { ShadowWrapper } from "@/shared/wrappers/Shadow";
 import { Button } from "@mui/material";
-import { COLORS, colorStyles } from "@/shared/styles/colors";
-import { useEffect, useState, ChangeEvent } from "react";
+import { COLORS, colorStyles } from "@/shared/cat/colors";
+import React, { useEffect, useState, ChangeEvent } from "react";
 import { $fetch } from "@/shared/api/fetch";
+import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
+import Input from "@/shared/components/Inputs/Input";
+import Option from "@/shared/components/Inputs/Option";
 
 interface Source {
     id: string | number;
@@ -17,10 +20,17 @@ interface SourcesResponse {
     };
 }
 
-export default function Source() {
+interface SourceResult {
+    source_id: string | number | null | undefined,
+    source: string | null
+}
+
+export default function Source({next}) {
     const [sources, setSources] = useState<Source[] | null>(null);
-    const [selectedSource, setSelectedSource] = useState<string | number | null>(null);
-    const [customText, setCustomText] = useState<string>("");
+    const [selectedSource, setSelectedSource] = useState<string | number | null>(localStorage.getItem("source"));
+    const [customText, setCustomText] = useState<string>(localStorage.getItem("custom_text"));
+
+    const [errors, setErrors] = useState(null)
 
     async function getSources(): Promise<void> {
         const response = await $fetch("sources") as SourcesResponse;
@@ -29,15 +39,50 @@ export default function Source() {
     }
 
     useEffect(() => {
-        getSources();
+        getSources()
     }, []);
 
     function handleCustomTextChange(e: ChangeEvent<HTMLInputElement>): void {
-        setCustomText(e.target.value);
+
+        setCustomText(e.target?.value);
+
+        localStorage.setItem("custom_text", e.target?.value)
+
+    }
+
+    async function handleSubmit(e) {
+
+        e.preventDefault()
+
+        setErrors(null)
+
+        console.log(customText)
+
+        const result: SourceResult = {
+            source_id: selectedSource === "custom" ? "" : selectedSource,
+            source: customText
+        }
+
+        const response = await $fetch("onboarding/source", {
+            method: "PATCH",
+            body: JSON.stringify(result),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+
+        const errors_ = response?.json?.errors
+
+        if (errors_) {
+            setErrors(errors_)
+            return
+        }
+
+        next()
     }
 
     return (
-        <div className="flex flex-col gap-6 max-w-2xl mx-auto p-4">
+        <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
             {/* Заголовок и описание */}
             <div className="flex flex-col gap-4">
                 <Heading variant="h4" className="text-gray-900">
@@ -49,110 +94,43 @@ export default function Source() {
                 </PautinaText>
             </div>
 
-            {/* Обязательное поле */}
-            <div className="mt-2">
-                <PautinaText
-                    variant="secondary"
-                    className="text-gray-700 font-semibold"
-                >
-                    Ответ *
+            <div className="font-bold text-[14px] ml-1">
+                <PautinaText variant="secondary" style={{ fontWeight: 700 }}>
+                    Ответ
                 </PautinaText>
             </div>
 
             {/* Список вариантов */}
+
             <div className="space-y-3">
                 {sources?.map((source: Source) => (
-                    <div
+                    <Option
                         key={source?.id}
+                        selected={selectedSource === source?.id}
+                        text={source?.variant}
                         onClick={() => setSelectedSource(source?.id)}
-                        className={`
-                            w-full p-4 border-2 rounded-xl cursor-pointer
-                            transition-all duration-200 ease-in-out
-                            hover:border-brand-light hover:bg-brand-light/5
-                            active:scale-[0.98]
-                            ${selectedSource === source?.id
-                            ? 'border-brand-light bg-brand-light/10 shadow-sm'
-                            : 'border-gray-200 bg-white'
-                        }
-                        `}
-                    >
-                        <PautinaText
-                            variant="small"
-                            className={`
-                                ${selectedSource === source?.id
-                                ? 'text-brand-dark font-medium'
-                                : 'text-gray-800'
-                            }
-                            `}
-                        >
-                            {source?.variant}
-                        </PautinaText>
-                    </div>
-                ))}
-            </div>
-
-            {/* Свой вариант */}
-            <div>
-                <div
-                    onClick={() => setSelectedSource("custom")}
-                    className={`
-                        w-full
-                        transition-all duration-200
-                        ${selectedSource === "custom"
-                        ? 'border-brand-light bg-brand-light/10'
-                        : 'border-gray-200 hover:border-gray-300'
-                    }
-                    `}
-                >
-                    <PautinaText
-                        variant="secondary"
-                        className={`
-                            ${selectedSource === "custom"
-                            ? 'text-brand-dark font-medium'
-                            : 'text-gray-800'
-                        }
-                        `}
-                    >
-                        Свой вариант
-                    </PautinaText>
-
-                    <input
-                        type="text"
-                        value={customText}
-                        onChange={handleCustomTextChange}
-                        placeholder="Введите свой вариант ответа..."
-                        className={`
-                            w-full px-4 py-3 rounded-lg border
-                            transition-all duration-200
-                            focus:outline-none focus:ring-2 focus:ring-brand-light/30
-                            ${selectedSource === "custom"
-                            ? 'border-brand-light/50 bg-white'
-                            : 'border-gray-300 bg-gray-50'
-                        }
-                        `}
-                        disabled={selectedSource !== "custom"}
                     />
-                </div>
+
+                ))}
+
+                <span className="text-red-500 text-sm ml-1">{errors?.source_id}</span>
+
             </div>
+
+
+            <Input
+                label={"Свой вариант"}
+                error={errors?.source}
+                name={"source"}
+                placeholder={"Свой вариант ответа"}
+                selected={selectedSource==="custom"}
+                onChange={handleCustomTextChange}
+                onClick={() => setSelectedSource("custom")}
+                defaultValue={localStorage.getItem("custom_text")}
+            />
 
             {/* Кнопка Далее */}
-            <ShadowWrapper className="w-full">
-                <Button
-                    type="submit"
-                    className="w-full"
-                    style={{
-                        marginTop: "15px",
-                        background: colorStyles.buttons.brand.light,
-                        padding: "16px 0px",
-                        borderRadius: "12px",
-                        width: "100%"
-                    }}
-                >
-                    <PautinaText variant="button2" color={COLORS.white}>
-                        Далее
-                    </PautinaText>
-                </Button>
-            </ShadowWrapper>
-        </div>
+            <ButtonLarge text={"Далее"} />
+        </form>
     );
 }

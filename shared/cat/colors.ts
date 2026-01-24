@@ -104,6 +104,16 @@ const colorStyles = {
         secondary: {
             light: COLORS.gray[16]
         }
+    },
+
+
+    border: {
+        selected: {
+            light: COLORS.brand[7]
+        },
+        basic: {
+            light: COLORS.gray[2]
+        }
     }
 }
 

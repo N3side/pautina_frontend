@@ -54,7 +54,6 @@ const textStyles = {
     },
 
     //
-
     button: {
         fontSize: "clamp(14px, 0.250vw + 13.200px, 18px)",
         fontWeight: "700",

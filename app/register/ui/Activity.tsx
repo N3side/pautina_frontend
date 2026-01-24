@@ -1,53 +1,159 @@
-import { Heading } from "@/shared/styles/typography/headings";
-import { PautinaText } from "@/shared/styles/typography/text";
-import { ShadowWrapper } from "@/shared/wrappers/Shadow";
-import { Button } from "@mui/material";
-import { COLORS, colorStyles } from "@/shared/styles/colors";
-import { useEffect, useState } from "react";
+import { Heading } from "@/shared/cat/typography/headings";
+import { PautinaText } from "@/shared/cat/typography/text";
+import React, { FormEvent, useRef, useState } from "react";
+import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
+import Option from "@/shared/components/Inputs/Option";
+import Image from 'next/image';
+import catIcon from '@/shared/raster/cat.png';
+import catIcon2 from '@/shared/raster/cat2.png';
+import Input from "@/shared/components/Inputs/Input";
 import { $fetch } from "@/shared/api/fetch";
 
-export default function Activity() {
-    const [selectedSource, setSelectedSource] = useState(null)
-    const [customText, setCustomText] = useState("")
+// Описываем структуру возможных ошибок
+interface FormErrors {
+    department?: string;
+    course?: string;
+    organization?: string;
+    post?: string;
+    status?: string;
+}
+
+interface ActivityProps {
+    next: () => void;
+}
+
+export default function Activity({ next }: ActivityProps) {
+    // Используем строковые литералы для более строгой проверки
+    const [selectedStatus, setSelectedStatus] = useState<string>("");
+    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(null);
+    const [errors, setErrors] = useState<FormErrors | null>(null);
+
+    // Ссылка должна соответствовать HTML тегу form
+    const formRef = useRef<HTMLFormElement>(null);
+
+    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+
+        if (!formRef.current) return;
+
+        const formData = new FormData(formRef.current);
+
+        // Если нужно отправить настоящий null в JSON (если API принимает JSON),
+        // но FormData всегда преобразует значения в строки.
+        // Если вы используете JSON.stringify(Object.fromEntries(formData)):
+        const statusValue = selectedStatus === "null" || selectedStatus === "" ? null : selectedStatus;
+
+        // В FormData записываем строку, так как FormData не поддерживает null типы
+        formData.set("status", String(statusValue));
+
+        const response = await $fetch("onboarding/activity", {
+            method: "PATCH",
+            body: formData
+        });
+
+        const errors_ = response?.json?.errors as FormErrors | undefined;
+
+        if (errors_) {
+            setErrors(errors_);
+            return;
+        }
+
+        next();
+    }
 
     return (
         <div className="flex flex-col gap-6 max-w-2xl mx-auto p-4">
             <div className="flex flex-col gap-4">
                 <Heading variant="h4" className="text-gray-900">
-                    Чем вы занимаетесь?
+                    Чем Вы занимаетесь?
                 </Heading>
-            </div>
-
-            <div className="mt-2">
-                <PautinaText
-                    variant="secondary"
-                    className="text-gray-700 font-semibold"
-                >
-                    Ответ
+                <PautinaText variant={"secondary"}>
+                    На нашем портале собраны много интересных людей...
                 </PautinaText>
-
-                <input name="text" defaultValue="" placeholder="Ответ" id="" className="w-full px-5 py-[15px] rounded-[6px]" style={{ border: `1px solid ${COLORS.gray[2]}`, boxShadow: `0px 3px 12px ${COLORS.gray[1]}` }}/>
-
             </div>
 
+            <form className="space-y-5" ref={formRef} onSubmit={handleSubmit}>
+                <div className="space-y-3">
+                    <Option
+                        selected={selectedStatus === "учусь"}
+                        text={"учусь"}
+                        onClick={() => setSelectedStatus("учусь")}
+                    />
+                    <Option
+                        selected={selectedStatus === "работаю"}
+                        text={"работаю"}
+                        onClick={() => setSelectedStatus("работаю")}
+                    />
+                </div>
 
-            <ShadowWrapper className="w-full">
-                <Button
-                    type="submit"
-                    className="w-full"
-                    style={{
-                        marginTop: "15px",
-                        background: colorStyles.buttons.brand.light,
-                        padding: "16px 0px",
-                        borderRadius: "12px",
-                        width: "100%"
-                    }}
-                >
-                    <PautinaText variant="button2" color={COLORS.white}>
-                        Далее
-                    </PautinaText>
-                </Button>
-            </ShadowWrapper>
+                {selectedStatus === "учусь" && (
+                    <>
+                        <div className="space-y-3">
+                            <div className="flex flex-col gap-3">
+                                <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Кто вы?</PautinaText>
+                                <Image src={catIcon} alt="Кот" width={100} height={100} />
+                            </div>
+
+                            <Option
+                                selected={schoolStudyStatus === "Я школьник"}
+                                text={"Я школьник"}
+                                onClick={() => setSchoolStudyStatus("Я школьник")}
+                            />
+                            <Option
+                                selected={schoolStudyStatus === "Я студент"}
+                                text={"Я студент"}
+                                onClick={() => setSchoolStudyStatus("Я студент")}
+                            />
+
+                            <span className="text-red-500 text-sm ml-1">
+                                {errors?.department && errors?.course && !schoolStudyStatus ? "Выберите вариант ответа" : ""}
+                            </span>
+                        </div>
+
+                        {schoolStudyStatus && (
+                            <div className="space-y-3">
+                                <Input
+                                    label={"Название учебного заведение"}
+                                    placeholder={schoolStudyStatus === "Я студент" ? "МЦК-КТИТС" : "Школа №169"}
+                                    name={"department"}
+                                    error={errors?.department}
+                                />
+                                <Input
+                                    label={schoolStudyStatus === "Я студент" ? "Курс" : "Класс"}
+                                    placeholder={schoolStudyStatus === "Я студент" ? "3" : "9"}
+                                    name={"course"}
+                                    error={errors?.course}
+                                />
+                            </div>
+                        )}
+                    </>
+                )}
+
+                {selectedStatus === "работаю" && (
+                    <div>
+                        <div className="flex flex-col gap-3">
+                            <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Где работаете?</PautinaText>
+                            <Image src={catIcon2} alt="Кот" width={100} height={100} />
+                        </div>
+                        <div className="space-y-3 mt-5">
+                            <Input
+                                label={"Организация"}
+                                placeholder={"Паутина"}
+                                name={"organization"}
+                                error={errors?.organization}
+                            />
+                            <Input
+                                label={"Должность"}
+                                placeholder={"UX/UI designer"}
+                                name={"post"}
+                                error={errors?.post}
+                            />
+                        </div>
+                    </div>
+                )}
+
+                <ButtonLarge text={"Далее"} />
+            </form>
         </div>
     );
 }

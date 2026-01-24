@@ -7,7 +7,7 @@ import {useRouter} from "next/navigation";
 
 export default function page() {
 
-    const {setUser, setToken} = useContext(UserContext)
+    const {setUser, setToken, setIsLoading} = useContext(UserContext)
 
     const router = useRouter()
 
@@ -18,6 +18,12 @@ export default function page() {
         setToken(null)
         setUser(null)
         localStorage.removeItem("token")
+        localStorage.removeItem("city")
+        localStorage.removeItem("city_id")
+        localStorage.removeItem("email_otp")
+        localStorage.removeItem("register_position")
+        localStorage.removeItem("user_email")
+        localStorage.removeItem("user_name")
 
         router.push("/")
     }

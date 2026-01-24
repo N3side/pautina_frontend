@@ -1,12 +1,12 @@
 import Calendar from "@/shared/vector/Calendar";
-import {PautinaText} from "@/shared/styles/typography/text";
+import {PautinaText} from "@/shared/cat/typography/text";
 import {Button} from "@mui/material";
 
 import Download from "@/shared/vector/Download";
 import {IconWrapper} from "@/shared/components/IconWrapper";
 
 import { CardProps } from "../model/index"
-import {COLORS, colorStyles} from "@/shared/styles/colors";
+import {COLORS, colorStyles} from "@/shared/cat/colors";
 
 export default function Card(card: CardProps) {
     return (

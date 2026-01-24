@@ -1,7 +1,7 @@
 import {useModal} from "@/shared/components/Modal"
 import {ReactNode, useContext} from "react";
-import {PautinaText} from "@/shared/styles/typography/text";
-import {Heading} from "@/shared/styles/typography/headings";
+import {PautinaText} from "@/shared/cat/typography/text";
+import {Heading} from "@/shared/cat/typography/headings";
 import Temple from "@/shared/vector/Temple";
 import Calendar from "@/shared/vector/Calendar";
 import Python from "@/shared/vector/skills/python";
@@ -12,7 +12,7 @@ import {Button} from "@mui/material";
 import Share from "@/shared/vector/Share";
 import Download from "@/shared/vector/Download";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
-import {colorStyles} from "@/shared/styles/colors";
+import {colorStyles} from "@/shared/cat/colors";
 import {WindowContext} from "@/shared/providers/WindowProvider";
 
 

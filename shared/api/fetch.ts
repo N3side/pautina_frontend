@@ -8,7 +8,7 @@ export interface FetchResult {
 // Добавь типы для параметров
 interface FetchOptions {
     method?: string
-    body?: BodyInit | null  // Измени на BodyInit | null
+    body?: BodyInit | null
     isToast?: boolean
     headers?: Record<string, string>
 }

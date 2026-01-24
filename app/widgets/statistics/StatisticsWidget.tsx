@@ -1,9 +1,9 @@
 "use client"
 
 import { WindowContext } from "@/shared/providers/WindowProvider"
-import { COLORS, colorStyles } from "@/shared/styles/colors"
-import { Heading } from "@/shared/styles/typography/headings"
-import { PautinaText } from "@/shared/styles/typography/text"
+import { COLORS, colorStyles } from "@/shared/cat/colors"
+import { Heading } from "@/shared/cat/typography/headings"
+import { PautinaText } from "@/shared/cat/typography/text"
 import { Container } from "@/shared/wrappers/Container"
 import { useContext } from "react"
 

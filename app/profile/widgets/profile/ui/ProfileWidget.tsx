@@ -1,9 +1,9 @@
-import { PautinaText } from "@/shared/styles/typography/text";
+import { PautinaText } from "@/shared/cat/typography/text";
 import { Button } from "@mui/material";
 
 import Download from "@/shared/vector/Download";
-import { Heading } from "@/shared/styles/typography/headings";
-import {COLORS, colorStyles} from "@/shared/styles/colors";
+import { Heading } from "@/shared/cat/typography/headings";
+import {COLORS, colorStyles} from "@/shared/cat/colors";
 import {useContext} from "react";
 import {WindowContext} from "@/shared/providers/WindowProvider";
 import {UserContext} from "@/shared/providers/UserProvider";

@@ -1,8 +1,8 @@
-import { Heading } from "@/shared/styles/typography/headings";
-import { PautinaText } from "@/shared/styles/typography/text";
+import { Heading } from "@/shared/cat/typography/headings";
+import { PautinaText } from "@/shared/cat/typography/text";
 import { ShadowWrapper } from "@/shared/wrappers/Shadow";
 import { Button } from "@mui/material";
-import { COLORS, colorStyles } from "@/shared/styles/colors";
+import { COLORS, colorStyles } from "@/shared/cat/colors";
 import { $fetch } from "@/shared/api/fetch";
 
 import Autocomplete from "@mui/material/Autocomplete";
@@ -10,6 +10,7 @@ import TextField from "@mui/material/TextField";
 
 import { useState, useEffect, FormEvent } from 'react';
 import {FetchResult} from "@/shared/api/fetch";
+import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 
 // Тип для города из API
 interface CityOption {
@@ -152,22 +153,7 @@ export default function City({ next }: { next: () => void }) {
                     />
                 </div>
 
-                <ShadowWrapper>
-                    <Button
-                        type="submit"
-                        style={{
-                            marginTop: "15px",
-                            background: colorStyles.buttons.brand.light,
-                            padding: "15px 0px",
-                            borderRadius: "12px",
-                            width: "100%",
-                        }}
-                    >
-                        <PautinaText variant="button2" color={COLORS.white}>
-                            Далее
-                        </PautinaText>
-                    </Button>
-                </ShadowWrapper>
+                <ButtonLarge text={"Далее"} />
             </form>
         </div>
     );

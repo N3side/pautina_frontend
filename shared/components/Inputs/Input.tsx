@@ -1,0 +1,47 @@
+import React from 'react';
+import { COLORS, colorStyles } from "@/shared/cat/colors";
+import { PautinaText } from "@/shared/cat/typography/text";
+import { InputHTMLAttributes } from "react";
+
+const INPUT_CLASSES = `
+  w-full px-5 py-4 rounded-xl transition-all duration-200 outline-none
+  border border-gray-200 bg-white
+  focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
+  hover:border-gray-300 shadow-sm
+`;
+
+interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
+    label?: string | null;
+    error?: string | null;
+    selected?: boolean;
+}
+
+const Input = ({ label, error, selected, className, style, ...props }: InputProps) => {
+    return (
+        <div className={`flex flex-col gap-2 w-full ${className || ''}`}>
+            {label && (
+                <label htmlFor={props.id} className="font-bold text-[14px] ml-1">
+                    <PautinaText variant="secondary" style={{ fontWeight: 700 }}>
+                        {label}
+                    </PautinaText>
+                </label>
+            )}
+
+            <input
+                className={INPUT_CLASSES}
+                style={{
+                    borderColor: selected ? colorStyles.border.selected.light : colorStyles.border.basic.light,
+                    boxShadow: `0px 4px 12px ${COLORS.gray[1]}`,
+                    ...style,
+                }}
+                {...props}
+            />
+
+            {error && (
+                <span className="text-red-500 text-sm ml-1">{error}</span>
+            )}
+        </div>
+    );
+};
+
+export default Input;

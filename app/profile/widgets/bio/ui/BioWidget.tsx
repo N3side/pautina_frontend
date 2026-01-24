@@ -2,11 +2,11 @@ import Role from "@/shared/vector/activity/Role"
 import Edit from "@/shared/vector/Edit"
 import {activity, contacts, Elems} from "@/app/profile/widgets/bio/model";
 import {Elem} from "@/app/profile/widgets/bio/ui/Elem";
-import {PautinaText} from "@/shared/styles/typography/text";
+import {PautinaText} from "@/shared/cat/typography/text";
 import {IconWrapper} from "@/shared/components/IconWrapper";
 import {Button} from "@mui/material";
-import {Heading} from "@/shared/styles/typography/headings";
-import {colorStyles} from "@/shared/styles/colors";
+import {Heading} from "@/shared/cat/typography/headings";
+import {colorStyles} from "@/shared/cat/colors";
 
 export default function BioWidget() {
 

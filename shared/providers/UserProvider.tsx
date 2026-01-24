@@ -1,18 +1,16 @@
 "use client"
 
-import {createContext, ReactNode, useContext, useEffect, useState} from "react";
-import {$fetch} from "@/shared/api/fetch";
-import {useRouter} from "next/navigation";
+import { createContext, ReactNode, useContext, useEffect, useState, useCallback } from "react";
+import { $fetch } from "@/shared/api/fetch";
+import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
 
-// Интерфейс для ответа от API
 interface UserResponse {
     json?: {
         user?: any;
     };
 }
 
-// 1. Определи интерфейс
 interface UserContextType {
     user: any;
     setUser: (user: any) => void;
@@ -22,7 +20,6 @@ interface UserContextType {
     setIsLoading: (isLoading: boolean) => void;
 }
 
-// 2. Измени эту строку - добавь дефолтные значения
 export const UserContext = createContext<UserContextType>({
     user: null,
     setUser: () => {},
@@ -32,93 +29,115 @@ export const UserContext = createContext<UserContextType>({
     setIsLoading: () => {}
 })
 
-interface UserProviderProps {
-    children: ReactNode;
-}
-
-export default function UserProvider({children}: UserProviderProps) {
-
+export default function UserProvider({ children }: { children: ReactNode }) {
     const [user, setUser] = useState<any>(null)
     const [token, setToken] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
-    async function getUser(): Promise<void> {
-        const response = await $fetch("me", {isToast: false}) as UserResponse
+    // Оборачиваем в useCallback, чтобы функция не пересоздавалась
+    const getUser = useCallback(async () => {
+        setIsLoading(true)
+        try {
+            const response = await $fetch("me", { isToast: false }) as UserResponse
+            if (response?.json?.user) {
+                setUser(response.json.user)
+            } else {
+                setUser(null)
+            }
+        } catch (error) {
+            setUser(null)
+        } finally {
+            setIsLoading(false)
+        }
+    }, [])
 
-        setUser(response?.json?.user)
-
-        setIsLoading(false)
-    }
-
+    // Инициализация при первой загрузке
     useEffect(() => {
-        getUser()
-    }, [token]);
+        const savedToken = localStorage.getItem("token")
+        if (savedToken) {
+            setToken(savedToken) // Это вызовет срабатывание useEffect ниже
+        } else {
+            setIsLoading(false)
+        }
+    }, [])
+
+    // Синхронизация токена: когда вызываешь setToken, обновляем localStorage и тянем юзера
+    useEffect(() => {
+        if (token) {
+            localStorage.setItem("token", token)
+            getUser()
+        } else if (token === null && !isLoading) {
+            // Если токен явно сбросили в null
+            localStorage.removeItem("token")
+            setUser(null)
+        }
+    }, [token, getUser])
 
     return (
-        <UserContext.Provider value={{user, setUser, token, setToken, isLoading, setIsLoading}}>
+        <UserContext.Provider value={{ user, setUser, token, setToken, isLoading, setIsLoading }}>
             {children}
         </UserContext.Provider>
     )
-
 }
 
-// Остальной код без изменений...
+// --- Гарды с использованием router.replace для предотвращения возврата назад ---
+
 export function CheckUser({ children }: { children: React.ReactNode }) {
-    const { user, isLoading, setUser } = useContext(UserContext)
+    const { user, isLoading } = useContext(UserContext)
     const router = useRouter()
 
-    if (typeof window !== 'undefined' && !localStorage.getItem("token")) {
-        toast.error("Вы не авторизованы")
-        router.push("/login")
-    }
-
     useEffect(() => {
-
-        if (isLoading) {
-            const id = toast.loading("Проверка авторизации...")
-            return () => toast.dismiss(id)
-        }
-
-        if (!user) {
-            setUser(null)
+        if (!isLoading && !user) {
             toast.error("Вы не авторизованы")
-            router.push("/login")
+            router.replace("/login")
         }
+    }, [isLoading, user, router])
 
-    }, [isLoading, user, router]);
-
-    if (isLoading) return null
-
-    if (!user) {
-        setUser(null)
-        return null
-    }
-
-    return children
+    if (isLoading || !user) return null
+    return <>{children}</>
 }
 
 export function CheckIsNotUser({ children }: { children: React.ReactNode }) {
-    const { user, isLoading, setUser } = useContext(UserContext)
+    const { user, isLoading } = useContext(UserContext)
     const router = useRouter()
 
     useEffect(() => {
-
-        if (isLoading) {
-            const id = toast.loading("Проверка авторизации...")
-            return () => toast.dismiss(id)
+        if (!isLoading && user) {
+            router.replace("/profile")
         }
-
-        if (user) {
-            toast.success("Вы авторизованы")
-            router.push("/profile")
-            return
-        }
-
     }, [isLoading, user, router])
 
-    if (isLoading) return null
+    if (isLoading || user) return null
+    return <>{children}</>
+}
 
-    if (user) return null
+export function CheckGuest({ children }: { children: React.ReactNode }) {
+    const { user, isLoading } = useContext(UserContext)
+    const router = useRouter()
 
-    return children
+    useEffect(() => {
+        // 1. Ждем завершения загрузки
+        if (isLoading) return;
+
+        // 2. Если юзер авторизован И он уже НЕ гость (isGuest === false)
+        // Выкидываем его, чтобы он не заполнил регистрацию второй раз
+        if (user && user.isGuest === false) {
+            toast.error("Вы уже зарегистрированы");
+            router.replace("/profile");
+        }
+    }, [isLoading, user, router]);
+
+    // 3. Состояние загрузки — показываем пустоту или спиннер
+    if (isLoading) return null;
+
+    // 4. Рендерим контент если:
+    // - Юзера еще нет (аноним, пришел на 1-й шаг)
+    // - Юзер есть и он всё еще гость (проходит шаги)
+    if (!user || user.isGuest === true) {
+        return <>{children}</>;
+    }
+
+    // Во всех остальных случаях (юзер уже полноценный) — ничего не рендерим,
+    // так как сработает редирект из useEffect
+    return null;
 }

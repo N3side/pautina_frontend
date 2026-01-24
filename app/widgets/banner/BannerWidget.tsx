@@ -1,9 +1,9 @@
 "use client"
 
 import { Container } from "@/shared/wrappers/Container"
-import { Heading } from "@/shared/styles/typography/headings"
-import { colorStyles, COLORS } from "@/shared/styles/colors"
-import { PautinaText } from "@/shared/styles/typography/text"
+import { Heading } from "@/shared/cat/typography/headings"
+import { colorStyles, COLORS } from "@/shared/cat/colors"
+import { PautinaText } from "@/shared/cat/typography/text"
 import { Button } from "@mui/material"
 import { ShadowWrapper } from "@/shared/wrappers/Shadow"
 import Image from "next/image"

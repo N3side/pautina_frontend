@@ -1,9 +1,8 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
-import {ShadowWrapper} from "@/shared/wrappers/Shadow";
-import {Button} from "@mui/material";
-import {COLORS, colorStyles} from "@/shared/styles/colors";
+import {Heading} from "@/shared/cat/typography/headings";
+import {PautinaText} from "@/shared/cat/typography/text";
 import {useState} from "react";
+import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
+import Input from "@/shared/components/Inputs/Input";
 
 export default function Name({name, setName, next}) {
 
@@ -26,8 +25,6 @@ export default function Name({name, setName, next}) {
     async function handleChange(e) {
         const name_ = e.target.value
 
-        console.log(name_)
-
         setName(name_)
 
         if (typeof window !== 'undefined') {
@@ -37,36 +34,33 @@ export default function Name({name, setName, next}) {
     }
 
     return (
-        <div>
-            <div className="flex flex-col gap-[15px]">
-                <Heading variant="h4">
+        <div className="w-full">
+            {/* Заголовок и подзаголовок */}
+            <div className="flex flex-col gap-3 text-center lg:text-left">
+                <Heading variant="h4" className="leading-tight">
                     Добро пожаловать на платформу Паутина
                 </Heading>
-                <PautinaText variant="secondary">
+                <PautinaText variant="secondary" className="opacity-80">
                     Для дальнейшей работы предлагаем познакомиться
                 </PautinaText>
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
-                <div className="flex flex-col gap-[8px]">
-                    <label htmlFor="email">
-                        <PautinaText variant="secondary" style={{fontWeight: 700}}>
-                            Как вас зовут? *
-                        </PautinaText>
-                    </label>
-                    <input name="text" onChange={handleChange} defaultValue="" placeholder="Введите ваше имя" id="" className="w-full px-5 py-[15px] rounded-[6px]" style={{ border: `1px solid ${COLORS.gray[2]}`, boxShadow: `0px 3px 12px ${COLORS.gray[1]}` }}/>
-                    {errors?.name}
-                    {/*{errors?.email}*/}
-                </div>
 
-                <ShadowWrapper>
-                    <Button type="submit" style={{ marginTop: "15px", background: colorStyles.buttons.brand.light, padding: "15px 0px", borderRadius: '12px', width: "100%" }}>
-                        <PautinaText variant="button2" color={COLORS.white}>
-                            Далее
-                        </PautinaText>
-                    </Button>
-                </ShadowWrapper>
+            {/* Форма */}
+            <form
+                onSubmit={handleSubmit}
+                className="flex flex-col gap-6 mt-8 lg:mt-10 w-full"
+            >
 
+                <Input
+                    label={"Введите Ваше имя"}
+                    placeholder={"Имя"}
+                    error={errors?.name}
+                    onChange={handleChange}
+                    defaultValue={localStorage.getItem("user_name")}
+                />
+
+                <ButtonLarge text={"Продолжить"} />
             </form>
         </div>
-    )
+    );
 }

@@ -1,13 +1,43 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
+import {Heading} from "@/shared/cat/typography/headings";
+import {PautinaText} from "@/shared/cat/typography/text";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import {Button} from "@mui/material";
-import {COLORS, colorStyles} from "@/shared/styles/colors";
-import {FormEvent} from "react";
+import {COLORS, colorStyles} from "@/shared/cat/colors";
+import {FormEvent, RefObject, useRef, useState} from "react";
+import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
+import Input from "@/shared/components/Inputs/Input";
+import {$fetch} from "@/shared/api/fetch";
+import {redirect} from "next/navigation";
 
 export default function Password() {
 
+    const [errors, setErrors] = useState(null)
+
+    const form = useRef<HTMLFormElement>(null)
+
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+
+        setErrors(null)
+
+        e.preventDefault()
+
+        const formData = new FormData(form.current)
+
+        const response = await $fetch("onboarding/password", {
+            method: "PATCH",
+            body: formData
+        })
+
+        const errors_ = response?.json?.errors
+
+        if (errors_) {
+            setErrors(errors_)
+            return
+        }
+
+        redirect("/profile")
+
+
         e.preventDefault()
     }
 
@@ -22,24 +52,11 @@ export default function Password() {
                     И завершающий штрих - безопасность. Придумайте пароль для входа в личный кабинет
                 </PautinaText>
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
-                <div className="flex flex-col gap-[8px]">
-                    <label htmlFor="email">
-                        <PautinaText variant="secondary" style={{fontWeight: 700}}>
-                            Пароль *
-                        </PautinaText>
-                    </label>
-                    <input name="text" defaultValue="" placeholder="Пароль" id="" className="w-full px-5 py-[15px] rounded-[6px]" style={{ border: `1px solid ${COLORS.gray[2]}`, boxShadow: `0px 3px 12px ${COLORS.gray[1]}` }}/>
-                    {/*{errors?.email}*/}
-                </div>
+            <form onSubmit={handleSubmit} ref={form} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 
-                <ShadowWrapper>
-                    <Button type="submit" style={{ marginTop: "15px", background: colorStyles.buttons.brand.light, padding: "15px 0px", borderRadius: '12px', width: "100%" }}>
-                        <PautinaText variant="button2" color={COLORS.white}>
-                            Перейти в профиль
-                        </PautinaText>
-                    </Button>
-                </ShadowWrapper>
+                <Input label={"Пароль *"} placeholder={"*******"} name={"password"} error={errors?.password} />
+
+                <ButtonLarge text={"Перейти в профиль"} />
 
             </form>
         </div>
