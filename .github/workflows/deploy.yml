@@ -45,5 +45,6 @@ jobs:
             -p 49317 \
             ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
           cd ${{ secrets.DEPLOY_PATH }}
-          docker compose --file docker-compose.yml up -d --build --no-cache
+          docker compose build --no-cache
+          docker compose up -d
           EOF
