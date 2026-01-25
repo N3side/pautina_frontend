@@ -8,6 +8,7 @@ import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import {$fetch} from "@/shared/api/fetch";
 import {redirect} from "next/navigation";
+import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
 
 export default function Password() {
 
@@ -34,6 +35,8 @@ export default function Password() {
             setErrors(errors_)
             return
         }
+
+        DeleteRegistrationInfo()
 
         redirect("/profile")
 

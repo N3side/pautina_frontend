@@ -5,9 +5,8 @@ import { InputHTMLAttributes } from "react";
 
 const INPUT_CLASSES = `
   w-full px-5 py-4 rounded-xl transition-all duration-200 outline-none
-  border border-gray-200 bg-white
-  focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10
-  hover:border-gray-300 shadow-sm
+  border border-[1px] border-gray-200 bg-white
+  focus: border-[2px]
 `;
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -30,7 +29,7 @@ const Input = ({ label, error, selected, className, style, ...props }: InputProp
             <input
                 className={INPUT_CLASSES}
                 style={{
-                    borderColor: selected ? colorStyles.border.selected.light : colorStyles.border.basic.light,
+                    border: `${selected ? 2 : 1}px solid ${selected ? colorStyles.border.selected.light : colorStyles.border.basic.light}`,
                     boxShadow: `0px 4px 12px ${COLORS.gray[1]}`,
                     ...style,
                 }}

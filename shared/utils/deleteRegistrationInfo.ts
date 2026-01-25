@@ -1,0 +1,16 @@
+export function DeleteRegistrationInfo(): void {
+    localStorage.removeItem("city")
+    localStorage.removeItem("city_id")
+    localStorage.removeItem("email_otp")
+    localStorage.removeItem("register_position")
+    localStorage.removeItem("user_email")
+    localStorage.removeItem("user_name")
+    localStorage.removeItem("post")
+    localStorage.removeItem("organization")
+    localStorage.removeItem("department")
+    localStorage.removeItem("selectedStatus")
+    localStorage.removeItem("schoolStudyStatus")
+    localStorage.removeItem("source")
+    localStorage.removeItem("custom_text")
+    localStorage.removeItem("course")
+}

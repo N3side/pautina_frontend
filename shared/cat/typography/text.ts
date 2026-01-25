@@ -14,7 +14,7 @@ export interface TextProps {
     fontWeight?: string
 }
 
-const textSizes = {
+export const textSizes = {
     large: "clamp(16px, 0.250vw + 15.200px, 20px)",
     default: "clamp(16px, 0.125vw + 15.600px, 18px)",
     secondary: "clamp(14px, 0.125vw + 13.600px, 16px)",

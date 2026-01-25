@@ -4,6 +4,7 @@ import {$fetch} from "@/shared/api/fetch";
 import {useContext, useEffect} from "react";
 import {UserContext} from "@/shared/providers/UserProvider";
 import {useRouter} from "next/navigation";
+import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
 
 export default function page() {
 
@@ -18,12 +19,7 @@ export default function page() {
         setToken(null)
         setUser(null)
         localStorage.removeItem("token")
-        localStorage.removeItem("city")
-        localStorage.removeItem("city_id")
-        localStorage.removeItem("email_otp")
-        localStorage.removeItem("register_position")
-        localStorage.removeItem("user_email")
-        localStorage.removeItem("user_name")
+        DeleteRegistrationInfo()
 
         router.push("/")
     }

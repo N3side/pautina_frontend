@@ -27,7 +27,7 @@ interface SourceResult {
 
 export default function Source({next}) {
     const [sources, setSources] = useState<Source[] | null>(null);
-    const [selectedSource, setSelectedSource] = useState<string | number | null>(localStorage.getItem("source"));
+    const [selectedSource, setSelectedSource] = useState<string | null>(localStorage.getItem("source"));
     const [customText, setCustomText] = useState<string>(localStorage.getItem("custom_text"));
 
     const [errors, setErrors] = useState(null)
@@ -81,6 +81,11 @@ export default function Source({next}) {
         next()
     }
 
+    useEffect(() => {
+        console.log(selectedSource)
+        localStorage.setItem("source", selectedSource)
+    }, [selectedSource]);
+
     return (
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
             {/* Заголовок и описание */}
@@ -106,9 +111,9 @@ export default function Source({next}) {
                 {sources?.map((source: Source) => (
                     <Option
                         key={source?.id}
-                        selected={selectedSource === source?.id}
+                        selected={selectedSource == source?.id}
                         text={source?.variant}
-                        onClick={() => setSelectedSource(source?.id)}
+                        onClick={() => setSelectedSource(`${source?.id}` )}
                     />
 
                 ))}

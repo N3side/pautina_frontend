@@ -53,7 +53,7 @@ export default function Email({name, email, setEmail, next}: EmailProps) {
         e.preventDefault()
 
         if (!email) {
-            setErrors({email: "Пожалуйста, введите ваше имя"})
+            setErrors({email: "Пожалуйста, введите вашу почту"})
             return
         }
 

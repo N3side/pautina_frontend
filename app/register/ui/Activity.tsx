@@ -1,6 +1,6 @@
 import { Heading } from "@/shared/cat/typography/headings";
 import { PautinaText } from "@/shared/cat/typography/text";
-import React, { FormEvent, useRef, useState } from "react";
+import React, {ChangeEvent, FormEvent, useEffect, useRef, useState} from "react";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Option from "@/shared/components/Inputs/Option";
 import Image from 'next/image';
@@ -24,8 +24,17 @@ interface ActivityProps {
 
 export default function Activity({ next }: ActivityProps) {
     // Используем строковые литералы для более строгой проверки
-    const [selectedStatus, setSelectedStatus] = useState<string>("");
-    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(null);
+    const [selectedStatus, setSelectedStatus] = useState<string>(localStorage.getItem("selectedStatus"));
+    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(localStorage.getItem("schoolStudyStatus"));
+
+
+    const [department, setDepartment] = useState<string>(localStorage.getItem("department"))
+    const [course, setCourse] = useState<string>(localStorage.getItem("course"))
+    const [organization, setOrganization] = useState<string>(localStorage.getItem("organization"))
+    const [post, setPost] = useState<string>(localStorage.getItem("post"))
+
+
+
     const [errors, setErrors] = useState<FormErrors | null>(null);
 
     // Ссылка должна соответствовать HTML тегу form
@@ -61,14 +70,43 @@ export default function Activity({ next }: ActivityProps) {
         next();
     }
 
+
+
+
+    useEffect(() => {
+        localStorage.setItem("selectedStatus", selectedStatus)
+    }, [selectedStatus]);
+
+    useEffect(() => {
+        localStorage.setItem("schoolStudyStatus", schoolStudyStatus)
+    }, [schoolStudyStatus]);
+
+    // ---
+
+    useEffect(() => {
+        localStorage.setItem("department", department)
+    }, [department]);
+
+    useEffect(() => {
+        localStorage.setItem("course", course)
+    }, [course]);
+
+    useEffect(() => {
+        localStorage.setItem("organization", organization)
+    }, [organization]);
+
+    useEffect(() => {
+        localStorage.setItem("post", post)
+    }, [post]);
+
     return (
-        <div className="flex flex-col gap-6 max-w-2xl mx-auto p-4">
+        <div className="flex flex-col gap-6 max-w-2xl mx-auto">
             <div className="flex flex-col gap-4">
                 <Heading variant="h4" className="text-gray-900">
                     Чем Вы занимаетесь?
                 </Heading>
                 <PautinaText variant={"secondary"}>
-                    На нашем портале собраны много интересных людей...
+                    На нашем портале собрано множество интересных людей
                 </PautinaText>
             </div>
 
@@ -117,12 +155,16 @@ export default function Activity({ next }: ActivityProps) {
                                     placeholder={schoolStudyStatus === "Я студент" ? "МЦК-КТИТС" : "Школа №169"}
                                     name={"department"}
                                     error={errors?.department}
+                                    defaultValue={department}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setDepartment(e?.target?.value)}
                                 />
                                 <Input
                                     label={schoolStudyStatus === "Я студент" ? "Курс" : "Класс"}
                                     placeholder={schoolStudyStatus === "Я студент" ? "3" : "9"}
                                     name={"course"}
                                     error={errors?.course}
+                                    defaultValue={course}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setCourse(e?.target?.value)}
                                 />
                             </div>
                         )}
@@ -141,12 +183,16 @@ export default function Activity({ next }: ActivityProps) {
                                 placeholder={"Паутина"}
                                 name={"organization"}
                                 error={errors?.organization}
+                                defaultValue={organization}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => setOrganization(e?.target?.value)}
                             />
                             <Input
                                 label={"Должность"}
                                 placeholder={"UX/UI designer"}
                                 name={"post"}
                                 error={errors?.post}
+                                defaultValue={post}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => setPost(e?.target?.value)}
                             />
                         </div>
                     </div>

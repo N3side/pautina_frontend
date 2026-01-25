@@ -28,6 +28,7 @@ export default function ProfileWidget() {
                     <img src={user?.avatar} alt="avatar" className="w-full h-full rounded-[50%]" style={{
                         objectFit: "cover"
                     }}/>
+                    
                 </div>
 
                 <div className="w-full flex items-center flex-col pt-[80px]">

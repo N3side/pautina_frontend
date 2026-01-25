@@ -2,10 +2,10 @@ export default function Card1({children}) {
     return (
         <section
             className="
-            w-full bg-white transition-all duration-300
+            w-full bg-white transition-all duration-300 bg-white
             flex flex-col items-center
             /* Мобильная версия: на весь экран */
-            min-h-screen px-6 py-10 justify-start
+            min-h-screen py-10 justify-start
             /* Десктопная версия: карточка */
             lg: m-[auto]
             lg:min-h-fit lg:max-w-[650px] lg:rounded-[32px]

@@ -1,17 +1,24 @@
 import Role from "@/shared/vector/activity/Role"
 import Edit from "@/shared/vector/Edit"
-import {activity, contacts, Elems} from "@/app/profile/widgets/bio/model";
+import {Elems, getActivityElems, getContactElems} from "@/app/profile/widgets/bio/model";
 import {Elem} from "@/app/profile/widgets/bio/ui/Elem";
 import {PautinaText} from "@/shared/cat/typography/text";
 import {IconWrapper} from "@/shared/components/IconWrapper";
 import {Button} from "@mui/material";
 import {Heading} from "@/shared/cat/typography/headings";
 import {colorStyles} from "@/shared/cat/colors";
+import {useContext} from "react";
+import {UserContext} from "@/shared/providers/UserProvider";
 
 export default function BioWidget() {
 
+    const {user} = useContext(UserContext)
+
+    const activityList = getActivityElems(user)
+    const contactList = getContactElems(user)
+
     return (
-        <section className="pl-[clamp(20px,1.250vw_+_16.000px,40px)] mt-[30px]">
+        <section className="pl-[clamp(20px,1.250vw_+_16.000px,40px)] mt-[30px] w-full">
             <header className="flex items-center justify-between">
                 <div className="flex items-center gap-[4px]">
                     <Button style={{minWidth: "0px", padding: "8px"}}>
@@ -37,9 +44,7 @@ export default function BioWidget() {
                         </PautinaText>
                     </header>
                     <PautinaText className="mt-[10px]" variant="secondary">
-                        Увлеченный разработчик с фокусом на Frontend технологии. Занимаюсь созданием
-                        удобных интерфейсов и изучением современных фреймворков. Активный участник
-                        хакатонов и профильных олимпиад. В поиске интересных проектов для стажировки.
+                        {user?.description || "не указано"}
                     </PautinaText>
                 </div>
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(210px,1fr))] gap-y-[30px] gap-x-[120px] mt-[30px]">
@@ -53,7 +58,7 @@ export default function BioWidget() {
                             </PautinaText>
                         </header>
                         <ul className="flex flex-col gap-[30px]">
-                            {activity?.map((elem: Elems, i: number) =>
+                            {activityList?.map((elem: Elems, i: number) =>
                                 <Elem key={i} Icon={elem?.Icon} k={elem?.k} value={elem?.value}/>
                             )}
                         </ul>
@@ -68,7 +73,7 @@ export default function BioWidget() {
                             </PautinaText>
                         </header>
                         <ul className="flex flex-col gap-[30px]">
-                            {contacts?.map((elem: Elems, i: number) =>
+                            {contactList?.map((elem: Elems, i: number) =>
                                 <Elem key={i} Icon={elem?.Icon} k={elem?.k} value={elem?.value}/>
                             )}
                         </ul>

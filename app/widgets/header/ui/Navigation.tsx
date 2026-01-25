@@ -1,26 +1,21 @@
 "use client"
 
-import { WindowContext } from "@/shared/providers/WindowProvider"
 import { COLORS, colorStyles } from "@/shared/cat/colors"
 import { PautinaText } from "@/shared/cat/typography/text"
 import { ShadowWrapper } from "@/shared/wrappers/Shadow"
-import { Button, Container } from "@mui/material"
-import {useContext, useEffect, useState} from "react"
+import { Button } from "@mui/material"
+import { useContext, useEffect, useState } from "react"
 import { model } from "../model"
 import Link from "next/link"
-import {UserContext} from "@/shared/providers/UserProvider";
+import { UserContext } from "@/shared/providers/UserProvider";
 
 interface Props {
-    isActive?: Boolean,
+    isActive?: boolean, // Исправил на маленькую букву (примитив)
 }
 
 export default function Navigation({ isActive }: Props) {
-
-    const { _window } = useContext(WindowContext)
-
     const [isClient, setIsClient] = useState(false)
-
-    const {user} = useContext(UserContext)
+    const { user } = useContext(UserContext)
 
     useEffect(() => {
         setIsClient(true);
@@ -28,43 +23,28 @@ export default function Navigation({ isActive }: Props) {
 
     return (
         <div
-            className="flex gap-[60px] items-center"
+            className={`
+                /* Мобильные стили (по умолчанию) */
+                fixed top-0 w-screen h-[calc(100vh-80px)] mt-[80px] bg-white z-20 
+                flex flex-col items-start justify-center gap-5 px-10 transition-all duration-300 ease-in-out
+                ${isActive ? "right-0" : "-right-[110%]"}
 
-            style={_window?.innerWidth && _window?.innerWidth <= 900 ? {
-                position: "fixed",
-                width: "100vw",
-                height: `calc(100vh - 80px)`,
-                top: "0",
-                // bottom: "0",
-                right: `${isActive ? "0" : "-110%"}`,
-                display: "flex",
-                flexDirection: "column",
-                gap: "20px",
-                background: "white",
-                zIndex: "20",
-                transition: ".3s ease-in-out all",
-                alignItems: "flex-start",
-                padding: "0px 40px",
-                marginTop: `80px`,
-                justifyContent: "center"
-            } : {}}
-
+                /* Десктоп стили (от lg и выше) */
+                lg:static lg:w-auto lg:h-auto lg:mt-0 lg:bg-transparent lg:z-auto
+                lg:flex-row lg:items-center lg:gap-[60px] lg:p-0 lg:right-0
+            `}
         >
             <nav className="nav">
-                <ul
-                    className="flex items-center gap-10"
-                    style={_window?.innerWidth && _window?.innerWidth <= 900 ? {
-                        display: "flex",
-                        flexDirection: "column",
-                        gap: "20px",
-                        alignItems: "flex-start",
-                        top: ``
-                    } : {}}
-                >
+                <ul className="flex flex-col items-start gap-5 lg:flex-row lg:items-center lg:gap-10">
                     {model.map((li, i) =>
                         <li key={i}>
                             <Link href={li?.link}>
-                                <PautinaText variant={`${_window?.innerWidth && _window?.innerWidth >= 900 ? "small" : "large"}`} className="cursor-pointer whitespace-nowrap" style={{ fontWeight: 600 }}>
+                                <PautinaText
+                                    /* Оставляем логику выбора варианта, так как это пропс компонента */
+                                    variant="small"
+                                    className="cursor-pointer whitespace-nowrap"
+                                    style={{fontWeight: 600}}
+                                >
                                     {li?.text}
                                 </PautinaText>
                             </Link>
@@ -74,21 +54,14 @@ export default function Navigation({ isActive }: Props) {
             </nav>
 
             {!user && isClient && !localStorage.getItem("token") && (
-                <div
-                    className="flex items-center gap-2.5"
-                    style={_window?.innerWidth && _window?.innerWidth <= 900 ? {
-                        display: "flex",
-                        flexDirection: "column",
-                        alignItems: "flex-start"
-                    } : {}}
-                >
+                <div className="flex flex-col items-start gap-2.5 lg:flex-row lg:items-center">
                     <Link href="/login">
                         <Button className="py-2.5 rounded-xl" style={{
                             padding: "10px 20px",
                             borderRadius: "9999px",
                             textTransform: "none"
                         }}>
-                            <PautinaText variant={`${_window?.innerWidth && _window?.innerWidth >= 900 ? "button2" : "button"}`}>
+                            <PautinaText variant="button2">
                                 Войти
                             </PautinaText>
                         </Button>
@@ -101,7 +74,7 @@ export default function Navigation({ isActive }: Props) {
                                 borderRadius: "9999px",
                                 textTransform: "none"
                             }}>
-                                <PautinaText variant={`${_window?.innerWidth && _window?.innerWidth >= 900 ? "button2" : "button"}`} color={COLORS.white}>
+                                <PautinaText variant="button2" color={COLORS.white}>
                                     Регистрация
                                 </PautinaText>
                             </Button>
@@ -109,7 +82,6 @@ export default function Navigation({ isActive }: Props) {
                     </Link>
                 </div>
             )}
-
         </div>
     )
 }

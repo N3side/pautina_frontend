@@ -71,8 +71,7 @@ export default function LoginWidget() {
 
     return (
         <CheckIsNotUser>
-            <Container className={`min-h-[calc(100vh_-_80px)]
-            ${_window?.innerWidth && _window?.innerWidth < 1024 ? "px-[0px]" : "mt-[20px] flex items-center"}`}>
+            <Container className="min-h-[calc(100vh-80px)] bg-white px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
                 <Card1>
                     <Heading variant="h4">
                         Вход в профиль
@@ -81,7 +80,7 @@ export default function LoginWidget() {
 
                         <Input label={"Почта"} placeholder={"ivanov@gmail.com"} name={"email"} error={errors?.email} />
 
-                        <Input label={"Пароль"} placeholder={"*******"} name={"password"} error={errors?.password} />
+                        <Input label={"Пароль"} placeholder={"*******"} name={"password"} error={errors?.password} type={"password"} />
 
                         <div className="flex justify-between">
                             <div className="flex justify-between items-center gap-[10px] select-none" style={{ fontWeight: 400 }}>
