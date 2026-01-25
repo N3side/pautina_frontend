@@ -5,7 +5,7 @@ import StatisticsWidget from "@/app/widgets/statistics/StatisticsWidget"
 import FunctionalWidget from "@/app/widgets/functional/FunctionalWidget"
 import FooterWidget from "@/app/widgets/footer/FooterWidget"
 
-// 2
+// 3
 
 export default function Home() {
     return (
