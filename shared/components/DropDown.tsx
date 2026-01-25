@@ -47,4 +47,4 @@ const DropDown = ({ trigger, children, menuClassName = '' }: DropdownProps) => {
     );
 };
 
-export default Dropdown;
+export default DropDown;
