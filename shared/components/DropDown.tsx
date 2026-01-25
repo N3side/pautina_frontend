@@ -10,7 +10,7 @@ interface DropdownProps {
     menuClassName?: string;    // Опционально: Tailwind классы для самого меню
 }
 
-const Dropdown = ({ trigger, children, menuClassName = '' }: DropdownProps) => {
+const DropDown = ({ trigger, children, menuClassName = '' }: DropdownProps) => {
     const { anchorEl, open, handleOpen, handleClose } = useMenu();
 
     return (

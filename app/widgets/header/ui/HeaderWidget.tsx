@@ -8,7 +8,7 @@ import Navigation from "./Navigation"
 import { Burger } from "./Burger"
 import { BodyBlockContext } from "@/shared/providers/BodyBlockProvider";
 import { UserContext } from "@/shared/providers/UserProvider";
-import Dropdown from "@/shared/components/Dropdown";
+import DropDown from "@/shared/components/DropDown";
 import Link from "next/link";
 import {PautinaText} from "@/shared/cat/typography/text";
 import Settings from "@/shared/vector/Settings";
@@ -54,7 +54,7 @@ export default function HeaderWidget() {
                         /* ВАЖНО: Мы убрали лишний div-обертку.
                            Сам Dropdown теперь является контейнером логики.
                         */
-                        <Dropdown
+                        <DropDown
                             /* Передаем аватарку как триггер */
                             trigger={
                                 <div className="h-[40px] w-[40px] rounded-full overflow-hidden cursor-pointer hover:opacity-80 transition border border-gray-200">
@@ -120,7 +120,7 @@ export default function HeaderWidget() {
                                 </div>
                             </div>
 
-                        </Dropdown>
+                        </DropDown>
                     )}
                 </div>
             </Container>
