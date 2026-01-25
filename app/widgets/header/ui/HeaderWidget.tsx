@@ -26,7 +26,7 @@ export default function HeaderWidget() {
         setIsBlocked(isActive)
     }, [isActive])
 
-    // Функция для выхода (пример)
+    // Функция для выхода (пример) ^-^
     const handleLogout = () => {
         localStorage.removeItem("token");
         window.location.reload();
