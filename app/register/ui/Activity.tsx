@@ -8,6 +8,7 @@ import catIcon from '@/shared/raster/cat.png';
 import catIcon2 from '@/shared/raster/cat2.png';
 import Input from "@/shared/components/Inputs/Input";
 import { $fetch } from "@/shared/api/fetch";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 // Описываем структуру возможных ошибок
 interface FormErrors {
@@ -24,14 +25,14 @@ interface ActivityProps {
 
 export default function Activity({ next }: ActivityProps) {
     // Используем строковые литералы для более строгой проверки
-    const [selectedStatus, setSelectedStatus] = useState<string>(localStorage.getItem("selectedStatus"));
-    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(localStorage.getItem("schoolStudyStatus"));
+    const [selectedStatus, setSelectedStatus] = useState<string>(safeLocalStorage.getItem("selectedStatus"));
+    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(safeLocalStorage.getItem("schoolStudyStatus"));
 
 
-    const [department, setDepartment] = useState<string>(localStorage.getItem("department") || "")
-    const [course, setCourse] = useState<string>(localStorage.getItem("course") || "")
-    const [organization, setOrganization] = useState<string>(localStorage.getItem("organization") || "")
-    const [post, setPost] = useState<string>(localStorage.getItem("post") || "")
+    const [department, setDepartment] = useState<string>(safeLocalStorage.getItem("department") || "")
+    const [course, setCourse] = useState<string>(safeLocalStorage.getItem("course") || "")
+    const [organization, setOrganization] = useState<string>(safeLocalStorage.getItem("organization") || "")
+    const [post, setPost] = useState<string>(safeLocalStorage.getItem("post") || "")
 
 
 
@@ -74,29 +75,29 @@ export default function Activity({ next }: ActivityProps) {
 
 
     useEffect(() => {
-        localStorage.setItem("selectedStatus", selectedStatus)
+        safeLocalStorage.setItem("selectedStatus", selectedStatus)
     }, [selectedStatus]);
 
     useEffect(() => {
-        localStorage.setItem("schoolStudyStatus", schoolStudyStatus)
+        safeLocalStorage.setItem("schoolStudyStatus", schoolStudyStatus)
     }, [schoolStudyStatus]);
 
     // ---
 
     useEffect(() => {
-        localStorage.setItem("department", department)
+        safeLocalStorage.setItem("department", department)
     }, [department]);
 
     useEffect(() => {
-        localStorage.setItem("course", course)
+        safeLocalStorage.setItem("course", course)
     }, [course]);
 
     useEffect(() => {
-        localStorage.setItem("organization", organization)
+        safeLocalStorage.setItem("organization", organization)
     }, [organization]);
 
     useEffect(() => {
-        localStorage.setItem("post", post)
+        safeLocalStorage.setItem("post", post)
     }, [post]);
 
     return (
@@ -198,7 +199,9 @@ export default function Activity({ next }: ActivityProps) {
                     </div>
                 )}
 
-                <ButtonLarge text={"Далее"} />
+                <ButtonLarge text={"Далее"}>
+                    <></>
+                </ButtonLarge>
             </form>
         </div>
     );

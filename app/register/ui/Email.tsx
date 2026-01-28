@@ -8,6 +8,7 @@ import {$fetch} from "@/shared/api/fetch";
 import {UserContext} from "@/shared/providers/UserProvider";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 interface EmailProps {
     name: string;
@@ -74,8 +75,8 @@ export default function Email({name, email, setEmail, next}: EmailProps) {
 
         const token = response?.json?.credentials?.token
 
-        if (typeof window !== 'undefined' && token) {
-            localStorage.setItem("token", token)
+        if (token) {
+            safeLocalStorage.setItem("token", token)
             setToken(token)
         }
 
@@ -87,9 +88,7 @@ export default function Email({name, email, setEmail, next}: EmailProps) {
 
         setEmail(email)
 
-        if (typeof window !== 'undefined') {
-            localStorage.setItem("user_email", email)
-        }
+        safeLocalStorage.setItem("user_email", email)
 
     }
 
@@ -119,11 +118,13 @@ export default function Email({name, email, setEmail, next}: EmailProps) {
                     name={"email"}
                     error={errors?.email}
                     onChange={handleChange}
-                    defaultValue={localStorage.getItem("user_email")}
+                    defaultValue={safeLocalStorage.getItem("user_email")}
                 />
 
 
-                <ButtonLarge text={"Далее"} />
+                <ButtonLarge text={"Далее"}>
+                    <></>
+                </ButtonLarge>
 
             </form>
         </div>

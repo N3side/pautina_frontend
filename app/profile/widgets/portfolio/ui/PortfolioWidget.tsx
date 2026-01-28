@@ -7,8 +7,6 @@ import Card from "@/app/profile/widgets/portfolio/ui/Card";
 import { WheelXScrollProvider } from "@/shared/components/WheelScrollXWrapper";
 import { useModal } from "@/shared/components/Modal";
 import { AchievementWidget } from "@/app/profile/widgets/portfolio/ui/AchievementWidget";
-import AddIcon from '@mui/icons-material/Add'; // Опционально: стандартная иконка плюса смотрится часто лучше книги на кнопке, но оставил Book как было
-
 
 export default function PortfolioWidget() {
     const { modal, open } = useModal({ children: <AchievementWidget /> });

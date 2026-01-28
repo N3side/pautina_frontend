@@ -37,15 +37,15 @@ export default function SettingsWidget() {
 
                         <nav className="flex flex-col p-2 gap-1">
                             <NavItem
-                                icon={<PersonIcon size={18} />}
+                                icon={<PersonIcon />}
                                 label="Общее"
                             />
                             <NavItem
-                                icon={<SecurityIcon size={18} />}
+                                icon={<SecurityIcon />}
                                 label="Безопасность"
                             />
                             <NavItem
-                                icon={<NotificationsIcon size={18} />}
+                                icon={<NotificationsIcon  />}
                                 label="Уведомления"
                                 badge={2}
                             />

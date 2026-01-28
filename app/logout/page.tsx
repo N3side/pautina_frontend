@@ -5,6 +5,7 @@ import {useContext, useEffect} from "react";
 import {UserContext} from "@/shared/providers/UserProvider";
 import {useRouter} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function page() {
 

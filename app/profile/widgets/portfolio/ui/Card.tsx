@@ -46,7 +46,7 @@ export default function Card(card: CardProps) {
                 {/* Дата */}
                 <div className="flex items-center gap-2 opacity-80">
                     <div className="text-brand">
-                        <Calendar className="w-4 h-4 fill-current"/>
+                        <Calendar />
                     </div>
                     <PautinaText variant="tiny" className="text-text-muted font-medium">
                         {card?.date}

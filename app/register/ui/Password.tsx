@@ -59,7 +59,9 @@ export default function Password() {
 
                 <Input label={"Пароль *"} placeholder={"*******"} name={"password"} type={"password"} error={errors?.password} />
 
-                <ButtonLarge text={"Перейти в профиль"} />
+                <ButtonLarge text={"Перейти в профиль"}>
+                    <></>
+                </ButtonLarge>
 
             </form>
         </div>

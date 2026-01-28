@@ -1,4 +1,5 @@
 import toast from "react-hot-toast"
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export interface FetchResult {
     response?: any
@@ -20,7 +21,7 @@ export async function $fetch(
 
     headers.Accept = "application/json"
 
-    const token = localStorage.getItem("token")
+    const token = safeLocalStorage.getItem("token")
 
     const API_URL = process.env.NODE_ENV === 'production'
         ? 'https://5fb5469c0f3e.vps.myjino.ru/api/'

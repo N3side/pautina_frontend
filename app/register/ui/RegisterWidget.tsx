@@ -17,6 +17,7 @@ import { textSizes } from "@/shared/cat/typography/text";
 // Импортируем motion
 import { motion, AnimatePresence } from "framer-motion"
 import {useTheme} from "@/shared/providers/ThemeProvider";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function RegisterWidget() {
     const { setToken, setUser } = useContext(UserContext)
@@ -31,12 +32,10 @@ export default function RegisterWidget() {
 
     useEffect(() => {
         setIsMounted(true)
-        if (typeof window !== 'undefined') {
-            setName(localStorage.getItem("user_name"))
-            setEmail(localStorage.getItem("user_email"))
-            setPosition(Number(localStorage.getItem("register_position")) || 0)
-            setOtp(localStorage.getItem("email_otp"))
-        }
+        setName(safeLocalStorage.getItem("user_name"))
+        setEmail(safeLocalStorage.getItem("user_email"))
+        setPosition(Number(safeLocalStorage.getItem("register_position")) || 0)
+        setOtp(safeLocalStorage.getItem("email_otp"))
     }, [])
 
     const handlers = {
@@ -56,7 +55,7 @@ export default function RegisterWidget() {
 
     useEffect(() => {
         if (isMounted && typeof window !== 'undefined') {
-            localStorage.setItem("register_position", position.toString())
+            safeLocalStorage.setItem("register_position", position.toString())
         }
     }, [position, isMounted])
 

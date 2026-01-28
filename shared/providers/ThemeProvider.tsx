@@ -1,8 +1,8 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
-import {safeLocalStorage} from "@/shared/utils/checkLocalStorage";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 const ThemeContext = createContext<{
-    theme: "light" | "dark";
+    theme: string;
     toggleTheme: () => void;
 }>({ theme: 'light', toggleTheme: () => {} });
 
@@ -12,7 +12,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
 
     useEffect(() => {
         // Проверка сохраненной темы или системных настроек
-        const savedTheme = localStorage.getItem('theme');
+        const savedTheme = safeLocalStorage.getItem('theme');
         if (savedTheme) {
             setTheme(savedTheme);
             document.documentElement.classList.add(savedTheme);
@@ -29,7 +29,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         document.documentElement.classList.add(newTheme);
 
         setTheme(newTheme);
-        localStorage.setItem('theme', newTheme);
+        safeLocalStorage.setItem('theme', newTheme);
     };
 
     return (

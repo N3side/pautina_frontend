@@ -11,16 +11,17 @@ import Card1 from "@/shared/components/Sections/Card1";
 import { motion, AnimatePresence } from "framer-motion"
 import {Button} from "@mui/material";
 import {textSizes} from "@/shared/cat/typography/text";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function RegisterWidget() {
-    const [email, setEmail] = useState<string | null>(localStorage.getItem("login_email"))
+    const [email, setEmail] = useState<string | null>(safeLocalStorage.getItem("login_email"))
     const [position, setPosition] = useState<number>(0)
     const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
         setIsMounted(true)
         if (typeof window !== 'undefined') {
-            setPosition(Number(localStorage.getItem("login_position")) || 0)
+            setPosition(Number(safeLocalStorage.getItem("login_position")) || 0)
         }
     }, [])
 
@@ -36,7 +37,7 @@ export default function RegisterWidget() {
 
     useEffect(() => {
         if (isMounted && typeof window !== 'undefined') {
-            localStorage.setItem("login_position", position.toString())
+            safeLocalStorage.setItem("login_position", position.toString())
         }
     }, [position, isMounted])
 

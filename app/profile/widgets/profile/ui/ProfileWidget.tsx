@@ -17,18 +17,6 @@ export default function ProfileWidget() {
     // Логика ширины (перевел на CSS классы, но оставил твою логику как fallback)
     const isMobile = _window?.innerWidth && _window.innerWidth < 1170;
 
-
-    async function handleSubmit(e) {
-
-        e.preventDefault()
-
-        const formData = new FormData(form.current)
-
-        const response = await $fetch("me/update")
-    }
-
-    const form = useRef()
-
     return (
         <section
             className={`

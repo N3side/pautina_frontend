@@ -8,6 +8,7 @@ import { $fetch } from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import Option from "@/shared/components/Inputs/Option";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 interface Source {
     id: string | number;
@@ -27,8 +28,8 @@ interface SourceResult {
 
 export default function Source({next}) {
     const [sources, setSources] = useState<Source[] | null>(null);
-    const [selectedSource, setSelectedSource] = useState<string | null>(localStorage.getItem("source"));
-    const [customText, setCustomText] = useState<string>(localStorage.getItem("custom_text"));
+    const [selectedSource, setSelectedSource] = useState<string | null>(safeLocalStorage.getItem("source"));
+    const [customText, setCustomText] = useState<string>(safeLocalStorage.getItem("custom_text"));
 
     const [errors, setErrors] = useState(null)
 
@@ -46,7 +47,7 @@ export default function Source({next}) {
 
         setCustomText(e.target?.value);
 
-        localStorage.setItem("custom_text", e.target?.value)
+        safeLocalStorage.setItem("custom_text", e.target?.value)
 
     }
 
@@ -83,7 +84,7 @@ export default function Source({next}) {
 
     useEffect(() => {
         console.log(selectedSource)
-        localStorage.setItem("source", selectedSource)
+        safeLocalStorage.setItem("source", selectedSource)
     }, [selectedSource]);
 
     return (
@@ -131,7 +132,7 @@ export default function Source({next}) {
                 selected={selectedSource==="custom"}
                 onChange={handleCustomTextChange}
                 onClick={() => setSelectedSource("custom")}
-                defaultValue={localStorage.getItem("custom_text")}
+                defaultValue={safeLocalStorage.getItem("custom_text")}
             />
 
             {/* Кнопка Далее */}

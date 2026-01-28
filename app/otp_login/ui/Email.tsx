@@ -6,13 +6,14 @@ import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import Link from "next/link";
 import {UserContext} from "@/shared/providers/UserProvider";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 interface FormErrors {
     email?: string;
     [key: string]: string | undefined;
 }
 
-export default function Email({email, name, setEmail, next}) {
+export default function Email({email,  setEmail, next}) {
 
     const [errors, setErrors] = useState<FormErrors | null>(null)
 
@@ -36,7 +37,7 @@ export default function Email({email, name, setEmail, next}) {
 
         const response = await $fetch("auth/otp/send", {
             method: "POST",
-            body: JSON.stringify({email, name}),
+            body: JSON.stringify({email}),
             headers: {
                 "Content-Type": "application/json"
             }
@@ -58,7 +59,7 @@ export default function Email({email, name, setEmail, next}) {
         setEmail(email)
 
         if (typeof window !== 'undefined') {
-            localStorage.setItem("login_email", email)
+            safeLocalStorage.setItem("login_email", email)
         }
 
     }

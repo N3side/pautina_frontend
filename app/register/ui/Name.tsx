@@ -3,6 +3,7 @@ import {PautinaText} from "@/shared/cat/typography/text";
 import {useState} from "react";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function Name({name, setName, next}) {
 
@@ -28,7 +29,7 @@ export default function Name({name, setName, next}) {
         setName(name_)
 
         if (typeof window !== 'undefined') {
-            localStorage.setItem("user_name", name_)
+            safeLocalStorage.setItem("user_name", name_)
         }
 
     }
@@ -56,10 +57,12 @@ export default function Name({name, setName, next}) {
                     placeholder={"Имя"}
                     error={errors?.name}
                     onChange={handleChange}
-                    defaultValue={localStorage.getItem("user_name")}
+                    defaultValue={safeLocalStorage.getItem("user_name")}
                 />
 
-                <ButtonLarge text={"Продолжить"} />
+                <ButtonLarge text={"Продолжить"}>
+                    <></>
+                </ButtonLarge>
             </form>
         </div>
     );

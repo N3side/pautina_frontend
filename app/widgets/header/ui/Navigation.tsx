@@ -8,6 +8,7 @@ import { model } from "../model"
 import Link from "next/link"
 import { usePathname } from "next/navigation" // Добавляем хук для активной ссылки
 import { UserContext } from "@/shared/providers/UserProvider"
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 interface Props {
     isActive?: boolean
@@ -81,7 +82,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                     </ul>
                 </nav>
 
-                {!user && isClient && !localStorage.getItem("token") && (
+                {!user && isClient && !safeLocalStorage.getItem("token") && (
                     <div className="flex flex-col w-full gap-3 mt-4 lg:mt-0 lg:flex-row lg:w-auto lg:gap-3">
                         <Link href="/login" onClick={closeMenu} className="w-full lg:w-auto">
                             <Button

@@ -7,6 +7,7 @@ import TextField from "@mui/material/TextField";
 
 import { useState, useEffect, FormEvent } from 'react';
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 // Тип для города из API
 interface CityOption {
@@ -22,8 +23,8 @@ interface RequestBody {
 }
 
 export default function City({ next }: { next: () => void }) {
-    const [city, setCity] = useState<string>(localStorage.getItem("city") || "");
-    const [cityId, setCityId] = useState<any>(localStorage.getItem("city_id") || "");
+    const [city, setCity] = useState<string>(safeLocalStorage.getItem("city") || "");
+    const [cityId, setCityId] = useState<any>(safeLocalStorage.getItem("city_id") || "");
     const [cities, setCities] = useState<CityOption[]>([]);
     const [loading, setLoading] = useState<boolean>(false);
     const [errors, setErrors] = useState<Record<string, string[]> | null>(null);
@@ -65,7 +66,7 @@ export default function City({ next }: { next: () => void }) {
 
     useEffect(() => {
         if (city !== null && city !== undefined) {
-            localStorage.setItem("city", city);
+            safeLocalStorage.setItem("city", city);
         }
 
         if (typeof city !== "string" || city.length < 2) {
@@ -85,7 +86,7 @@ export default function City({ next }: { next: () => void }) {
 
     useEffect(() => {
         if (cityId !== null && cityId !== undefined) {
-            localStorage.setItem("city_id", cityId);
+            safeLocalStorage.setItem("city_id", cityId);
         }
     }, [cityId]);
 

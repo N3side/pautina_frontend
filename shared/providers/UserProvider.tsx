@@ -4,6 +4,7 @@ import { createContext, ReactNode, useContext, useEffect, useState, useCallback 
 import { $fetch } from "@/shared/api/fetch";
 import { useRouter } from "next/navigation";
 import toast from "react-hot-toast";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 interface UserResponse {
     json?: {
@@ -53,7 +54,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 
     // Инициализация при первой загрузке
     useEffect(() => {
-        const savedToken = localStorage.getItem("token")
+        const savedToken = safeLocalStorage.getItem("token")
         if (savedToken) {
             setToken(savedToken) // Это вызовет срабатывание useEffect ниже
         } else {
@@ -64,7 +65,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     // Синхронизация токена: когда вызываешь setToken, обновляем localStorage и тянем юзера
     useEffect(() => {
         if (token) {
-            localStorage.setItem("token", token)
+            safeLocalStorage.setItem("token", token)
             getUser()
         } else if (token === null && !isLoading) {
             // Если токен явно сбросили в null

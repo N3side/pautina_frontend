@@ -10,6 +10,7 @@ import Input from "@/shared/components/Inputs/Input";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/shared/providers/UserProvider";
 import {isBoolean} from "node:util";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function OTP({name, email, otp, setOtp, next}) {
 
@@ -41,9 +42,7 @@ export default function OTP({name, email, otp, setOtp, next}) {
 
         setOtp(otp_)
 
-        if (typeof window !== 'undefined') {
-            localStorage.setItem("email_otp", otp_)
-        }
+        safeLocalStorage.setItem("email_otp", otp_)
 
     }
 
@@ -69,7 +68,9 @@ export default function OTP({name, email, otp, setOtp, next}) {
 
                     <Input label={"Проверочный код *"} placeholder={"Введите код"} name={"text"} onChange={handleChange} />
 
-                    <ButtonLarge text={"Далее"} />
+                    <ButtonLarge text={"Далее"}>
+                        <></>
+                    </ButtonLarge>
 
                 </form>
             </div>

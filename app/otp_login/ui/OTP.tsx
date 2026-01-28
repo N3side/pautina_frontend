@@ -10,6 +10,7 @@ import {router} from "next/client";
 import {colorStyles} from "@/shared/cat/colors";
 import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/utils/deleteAuthorizationInfo";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function OTP({email, next, prev}) {
 
@@ -36,7 +37,7 @@ export default function OTP({email, next, prev}) {
         const token = response?.json?.credentials?.token
 
         if (token) {
-            localStorage.setItem("token", token)
+            safeLocalStorage.setItem("token", token)
             setToken(token)
             DeleteAuthorizationInfo()
             DeleteRegistrationInfo()
@@ -52,7 +53,7 @@ export default function OTP({email, next, prev}) {
         setOtp(otp_)
 
         if (typeof window !== 'undefined') {
-            localStorage.setItem("email_otp", otp_)
+            safeLocalStorage.setItem("email_otp", otp_)
         }
 
     }
@@ -124,13 +125,19 @@ export default function OTP({email, next, prev}) {
                     </ButtonLarge>
 
                     <div className="flex gap-2 items-center">
-                        <PautinaText
-                            variant={"small"}
-                            className={`text-${!timer ? "text-main" : "text-muted"} font-${!timer ? "bold" : "medium"} cursor-${!timer ? "pointer" : "inherit"}`}
-                            onClick={!timer && handleClick}
-                        >
-                            Отправить код заново
-                        </PautinaText>
+                        <div onClick={() => {
+                            if (!timer) {
+                                handleClick()
+                            }
+                        }}>
+                            <PautinaText
+                                variant={"small"}
+                                className={`text-${!timer ? "text-main" : "text-muted"} font-${!timer ? "bold" : "medium"} cursor-${!timer ? "pointer" : "inherit"}`}
+
+                            >
+                                Отправить код заново
+                            </PautinaText>
+                        </div>
                         {timer && (
                             <PautinaText variant={"small"} className="font-semibold text-text-main">
                                 {timer}

@@ -17,6 +17,7 @@ import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Card1 from "@/shared/components/Sections/Card1";
 import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/utils/deleteAuthorizationInfo";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 interface LoginResponse {
     json?: {
@@ -60,13 +61,11 @@ export default function LoginWidget() {
 
         const token_ = response?.json?.credentials?.token
 
-        if (token_ && typeof window !== 'undefined') {
-            DeleteRegistrationInfo()
-            DeleteAuthorizationInfo()
-            localStorage.setItem("token", token_)
-            setToken(token_)
-            router.push("/profile")
-        }
+        DeleteRegistrationInfo()
+        DeleteAuthorizationInfo()
+        safeLocalStorage.setItem("token", token_)
+        setToken(token_)
+        router.push("/profile")
     }
 
     function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {

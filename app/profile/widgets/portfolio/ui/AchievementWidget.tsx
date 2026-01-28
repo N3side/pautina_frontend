@@ -15,6 +15,8 @@ import DownloadIcon from "@mui/icons-material/Download";
 import { ShadowWrapper } from "@/shared/wrappers/Shadow";
 import { WindowContext } from "@/shared/providers/WindowProvider";
 import VisibilityIcon from '@mui/icons-material/Visibility';
+import ShareIcon from '@mui/icons-material/Share';
+import EditIcon from '@mui/icons-material/Edit';
 
 export function AchievementWidget({previewImage=null}) {
     const { _window } = useContext(WindowContext);
@@ -54,7 +56,7 @@ export function AchievementWidget({previewImage=null}) {
                         // Фолбэк, если картинки нет (красивая заглушка)
                         <div className="w-full h-full bg-surface flex flex-col items-center justify-center p-4 border border-border-default/20">
                             <div className="w-16 h-16 rounded-full bg-brand/10 text-brand flex items-center justify-center mb-4">
-                                <Temple className="w-8 h-8 fill-current" />
+                                <Temple />
                             </div>
                             <div className="w-3/4 h-3 bg-border-default/40 rounded-full mb-2" />
                             <div className="w-1/2 h-3 bg-border-default/30 rounded-full" />
@@ -107,7 +109,7 @@ export function AchievementWidget({previewImage=null}) {
                             ППК. Введение в алгоритмы: реализация на языке Python
                         </Heading>
                         <div className="mt-4 flex items-center gap-2 text-text-muted">
-                            <Temple className="w-5 h-5 fill-current opacity-70" />
+                            <Temple />
                             <PautinaText variant="default" className="font-semibold text-text-main/80">
                                 Яндекс Практикум & МЦК-КТИТС
                             </PautinaText>
@@ -121,7 +123,7 @@ export function AchievementWidget({previewImage=null}) {
                                 Дата выдачи
                             </PautinaText>
                             <div className="flex items-center gap-2 text-text-main">
-                                <Calendar className="w-4 h-4 text-brand" />
+                                <Calendar />
                                 <PautinaText variant="small" className="font-medium">Ноябрь 2024</PautinaText>
                             </div>
                         </div>
@@ -142,8 +144,8 @@ export function AchievementWidget({previewImage=null}) {
                                 Стек
                             </PautinaText>
                             <div className="flex items-center gap-3 pt-1">
-                                <Python className="w-6 h-6" />
-                                <Frontend className="w-6 h-6" />
+                                <Python  />
+                                <Frontend  />
                             </div>
                         </div>
                     </div>
@@ -182,7 +184,7 @@ export function AchievementWidget({previewImage=null}) {
                         <Button
                             className="!rounded-xl !px-6 !py-2.5 !normal-case !text-text-main !border-border-default hover:!bg-input transition-all"
                             variant="outlined"
-                            startIcon={<Edit className="w-4 h-4" />}
+                            startIcon={<EditIcon  />}
                         >
                             <PautinaText variant="secondary" className="font-semibold">Редактировать</PautinaText>
                         </Button>
@@ -192,7 +194,7 @@ export function AchievementWidget({previewImage=null}) {
                                 className="!min-w-0 !w-11 !h-11 !rounded-xl !border-border-default !text-text-muted hover:!text-brand hover:!bg-brand/5 transition-all"
                                 variant="outlined"
                             >
-                                <Share className="w-5 h-5" />
+                                <ShareIcon  />
                             </Button>
 
                             <ShadowWrapper>

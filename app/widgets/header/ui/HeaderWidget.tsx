@@ -53,7 +53,7 @@ export default function HeaderWidget() {
                     </div>
 
                     {/* Профиль пользователя */}
-                    {isMounted && user && localStorage.getItem("token") && (
+                    {isMounted && user && (
                         <div className="lg:block"> {/* Скрываем на мобильных, если профиль дублируется в меню, или оставляем */}
                             <DropDown
                                 trigger={
