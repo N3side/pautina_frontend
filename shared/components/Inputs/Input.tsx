@@ -5,8 +5,9 @@ import { InputHTMLAttributes } from "react";
 
 const INPUT_CLASSES = `
   w-full px-5 py-4 rounded-xl transition-all duration-200 outline-none
-  border border-[1px] border-gray-200 bg-white
+  border border-[1px] border-gray-200 bg-input text-text-main
   focus: border-[2px]
+  placeholder:text-text-muted
 `;
 
 interface InputProps extends InputHTMLAttributes<HTMLInputElement> {
@@ -20,7 +21,7 @@ const Input = ({ label, error, selected, className, style, ...props }: InputProp
         <div className={`flex flex-col gap-2 w-full ${className || ''}`}>
             {label && (
                 <label htmlFor={props.id} className="font-bold text-[14px] ml-1">
-                    <PautinaText variant="secondary" style={{ fontWeight: 700 }}>
+                    <PautinaText variant="secondary" className="text-text-main" style={{ fontWeight: 700 }}>
                         {label}
                     </PautinaText>
                 </label>
@@ -29,8 +30,7 @@ const Input = ({ label, error, selected, className, style, ...props }: InputProp
             <input
                 className={INPUT_CLASSES}
                 style={{
-                    border: `${selected ? 2 : 1}px solid ${selected ? colorStyles.border.selected.light : colorStyles.border.basic.light}`,
-                    boxShadow: `0px 4px 12px ${COLORS.gray[1]}`,
+                    border: `${selected ? 2 : 1}px solid ${selected ? "var(--color-border-default)" : "var(--color-border-default)"}`,
                     ...style,
                 }}
                 {...props}

@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, ReactNode, useContext, useEffect, useState, useRef } from "react";
+import { createContext, ReactNode, useState, useEffect } from "react";
 
 interface BodyBlockContextType {
     isBlocked: boolean;
@@ -12,39 +12,39 @@ export const BodyBlockContext = createContext<BodyBlockContextType>({
     setIsBlocked: () => {},
 });
 
-export function BodyBlockProvider({children}: { children: ReactNode }) {
+export function BodyBlockProvider({ children }: { children: ReactNode }) {
     const [isBlocked, setIsBlocked] = useState(false);
-    const scrollYRef = useRef(0);
 
     useEffect(() => {
-        if (!isBlocked) return
+        if (typeof document === "undefined") return;
 
-        scrollYRef.current = window.scrollY;
-        const body = document.body
+        const body = document.body;
+        const html = document.documentElement;
 
-        const originalWidth = window.getComputedStyle(body).width
+        if (isBlocked) {
+            // 1. Вычисляем ширину скроллбара, чтобы страница не "прыгала" вправо
+            const scrollBarWidth = window.innerWidth - html.clientWidth;
 
-        body.style.position = "fixed"
-        body.style.top = `-${scrollYRef.current}px`
-        body.style.left = "0"
-        body.style.right = "0"
-        body.style.width = originalWidth
-        body.style.userSelect = "none"
+            // 2. Вместо fixed используем overflow
+            body.style.overflow = "hidden";
+            body.style.paddingRight = `${scrollBarWidth}px`;
+
+            // Если фон все равно ломается, принудительно фиксируем его на html
+            // html.style.backgroundColor = "var(--bg-page)"; // Опциональный костыль
+        } else {
+            // 3. Чистим за собой
+            body.style.removeProperty("overflow");
+            body.style.removeProperty("padding-right");
+        }
 
         return () => {
-            const scrollY = scrollYRef.current
-            body.style.removeProperty("position")
-            body.style.removeProperty("top")
-            body.style.removeProperty("left")
-            body.style.removeProperty("right")
-            body.style.removeProperty("width")
-            body.style.removeProperty("user-select")
-            window.scrollTo(0, scrollY)
+            body.style.removeProperty("overflow");
+            body.style.removeProperty("padding-right");
         };
     }, [isBlocked]);
 
     return (
-        <BodyBlockContext.Provider value={{isBlocked, setIsBlocked}}>
+        <BodyBlockContext.Provider value={{ isBlocked, setIsBlocked }}>
             {children}
         </BodyBlockContext.Provider>
     );

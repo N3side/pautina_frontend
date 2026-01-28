@@ -12,7 +12,7 @@ export default function Option({ text, selected, className, style, ...props }: O
     return (
         <div
             style={{
-                border: `${selected ? 2 : 1}px solid ${selected ? colorStyles.border.selected.light : colorStyles.border.basic.light}`,
+                border: `${1}px solid ${selected ? "var(--color-brand)" : "var(--color-border-default)"}`,
                 ...style
             }}
             className={`

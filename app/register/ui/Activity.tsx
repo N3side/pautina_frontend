@@ -28,10 +28,10 @@ export default function Activity({ next }: ActivityProps) {
     const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(localStorage.getItem("schoolStudyStatus"));
 
 
-    const [department, setDepartment] = useState<string>(localStorage.getItem("department"))
-    const [course, setCourse] = useState<string>(localStorage.getItem("course"))
-    const [organization, setOrganization] = useState<string>(localStorage.getItem("organization"))
-    const [post, setPost] = useState<string>(localStorage.getItem("post"))
+    const [department, setDepartment] = useState<string>(localStorage.getItem("department") || "")
+    const [course, setCourse] = useState<string>(localStorage.getItem("course") || "")
+    const [organization, setOrganization] = useState<string>(localStorage.getItem("organization") || "")
+    const [post, setPost] = useState<string>(localStorage.getItem("post") || "")
 
 
 
@@ -102,7 +102,7 @@ export default function Activity({ next }: ActivityProps) {
     return (
         <div className="flex flex-col gap-6 max-w-2xl mx-auto">
             <div className="flex flex-col gap-4">
-                <Heading variant="h4" className="text-gray-900">
+                <Heading variant="h4">
                     Чем Вы занимаетесь?
                 </Heading>
                 <PautinaText variant={"secondary"}>

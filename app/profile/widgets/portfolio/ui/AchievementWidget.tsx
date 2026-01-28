@@ -1,238 +1,214 @@
-import {useModal} from "@/shared/components/Modal"
-import {ReactNode, useContext} from "react";
-import {PautinaText} from "@/shared/cat/typography/text";
-import {Heading} from "@/shared/cat/typography/headings";
+"use client"
+
+import { useContext } from "react";
+import { PautinaText } from "@/shared/cat/typography/text";
+import { Heading } from "@/shared/cat/typography/headings";
 import Temple from "@/shared/vector/Temple";
 import Calendar from "@/shared/vector/Calendar";
 import Python from "@/shared/vector/skills/python";
 import Frontend from "@/shared/vector/skills/frontend";
-import {WheelXScrollProvider} from "@/shared/components/WheelScrollXWrapper";
+import { WheelXScrollProvider } from "@/shared/components/WheelScrollXWrapper";
 import Edit from "@/shared/vector/Edit";
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 import Share from "@/shared/vector/Share";
-import Download from "@/shared/vector/Download";
-import {ShadowWrapper} from "@/shared/wrappers/Shadow";
-import {colorStyles} from "@/shared/cat/colors";
-import {WindowContext} from "@/shared/providers/WindowProvider";
+import DownloadIcon from "@mui/icons-material/Download";
+import { ShadowWrapper } from "@/shared/wrappers/Shadow";
+import { WindowContext } from "@/shared/providers/WindowProvider";
+import VisibilityIcon from '@mui/icons-material/Visibility';
 
-
-export function AchievementWidget() {
-
-    const {_window} = useContext(WindowContext)
+export function AchievementWidget({previewImage=null}) {
+    const { _window } = useContext(WindowContext);
+    const isMobile = _window?.innerWidth && _window?.innerWidth < 1024;
 
     return (
-        <div className="bg-[#E5E7EB] w-full h-full flex rounded-[20px]">
-            <div className="h-full max-w-[426px] w-full">
+        <div className="w-full flex flex-col md:flex-row">
 
+            {/* Левая часть: Превью сертификата (имитация) */}
+            {/* --- ЧАСТЬ 1: ПРЕВЬЮ (Viewer) --- */}
+            {/* На мобилках: h-[280px] w-full
+                На десктопе: w-[350px] (или flex-basis) h-auto (растягивается)
+            */}
+            <div className="relative flex-none w-full h-[280px] md:w-[400px] md:h-auto
+                bg-[#F3F4F6] dark:bg-[#111]
+                border-b md:border-b-0 md:border-r border-border-default
+                flex items-center justify-center p-8 overflow-hidden group"
+            >
+                {/* Декоративный паттерн на фоне (точки) */}
+                <div className="absolute inset-0 opacity-[0.4] dark:opacity-[0.1]"
+                     style={{ backgroundImage: 'radial-gradient(#9ca3af 1px, transparent 1px)', backgroundSize: '20px 20px' }}
+                />
+
+                {/* Сам "Лист" сертификата */}
+                <div className="relative z-10 w-auto h-full max-h-[90%] aspect-[1.414/1] md:aspect-[1/1.414] lg:aspect-[1.414/1]
+                    bg-white shadow-[0_20px_40px_-12px_rgba(0,0,0,0.2)]
+                    border-[6px] border-white dark:border-[#2a2a2a] rounded-sm
+                    transition-transform duration-500 hover:scale-[1.02] cursor-zoom-in"
+                >
+                    {previewImage ? (
+                        <img
+                            src={previewImage}
+                            alt="Certificate Preview"
+                            className="w-full h-full object-cover"
+                        />
+                    ) : (
+                        // Фолбэк, если картинки нет (красивая заглушка)
+                        <div className="w-full h-full bg-surface flex flex-col items-center justify-center p-4 border border-border-default/20">
+                            <div className="w-16 h-16 rounded-full bg-brand/10 text-brand flex items-center justify-center mb-4">
+                                <Temple className="w-8 h-8 fill-current" />
+                            </div>
+                            <div className="w-3/4 h-3 bg-border-default/40 rounded-full mb-2" />
+                            <div className="w-1/2 h-3 bg-border-default/30 rounded-full" />
+
+                            {/* Печать */}
+                            <div className="absolute bottom-6 right-6 w-12 h-12 rounded-full border-2 border-brand/20 opacity-50 border-dashed" />
+                        </div>
+                    )}
+
+                    {/* Оверлей при наведении (Кнопка просмотра) */}
+                    <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[2px]">
+                        <Button
+                            variant="contained"
+                            className="!rounded-full !bg-white/20 !backdrop-blur-md !min-w-0 !p-3 hover:!bg-white/30 !shadow-none"
+                        >
+                            <VisibilityIcon className="text-white" />
+                        </Button>
+                    </div>
+                </div>
             </div>
-            <div className={`info w-full bg-[white] px-[clamp(20px,1.250vw_+_16.000px,40px)]
-            py-[clamp(20px,1.250vw_+_16.000px,40px)] rounded-[20px] flex flex-col justify-between
-            ${_window?.innerWidth && _window?.innerWidth < 1024 ? "pr-[5px]" : ""}
-            `}
-             style={{
-                borderBottomLeftRadius: "0",
-                borderTopLeftRadius: "0"
-            }}>
-                <div className="
-                    overflow-y-scroll
+
+            {/* Правая часть: Информация */}
+            <div className="info w-full flex flex-col h-full bg-surface">
+
+                {/* Основной контент со скроллом */}
+                <div className="flex-grow overflow-y-auto px-6 py-8 md:px-10
                     [&::-webkit-scrollbar]:w-1.5
-                    [&::-webkit-scrollbar]:h-[20%]
-                    [&::-webkit-scrollbar-track]:bg-gray-100
-                    [&::-webkit-scrollbar-thumb]:bg-gray-300
-                    dark:[&::-webkit-scrollbar-track]:bg-[transparent]
-                    dark:[&::-webkit-scrollbar-thumb]:bg-neutral-400">
-                    <div className="flex items-center gap-[15px]">
-                        <div className="px-[8px] py-[3.5px] rounded-[50%]">
-                            <PautinaText variant="tiny" style={{
-                                textTransform: "uppercase",
-                                fontWeight: 700
-                            }}>
+                    [&::-webkit-scrollbar-track]:bg-transparent
+                    [&::-webkit-scrollbar-thumb]:bg-border-default
+                    [&::-webkit-scrollbar-thumb]:rounded-full">
+
+                    {/* Тэги */}
+                    <div className="flex items-center gap-2 mb-6">
+                        <span className="px-3 py-1 rounded-full bg-brand/10 border border-brand/20">
+                            <PautinaText variant="tiny" className="text-text-brand font-bold uppercase">
                                 Обучение
                             </PautinaText>
-                        </div>
-                        <div className="tag">
-                            <PautinaText variant="tiny" style={{
-                                textTransform: "uppercase",
-                                fontWeight: 700
-                            }}>
+                        </span>
+                        <span className="px-3 py-1 rounded-full bg-green-main/10 border border-green-main/20 flex items-center gap-1.5">
+                            <div className="w-1.5 h-1.5 rounded-full bg-green-main" />
+                            <PautinaText variant="tiny" className="text-green-main font-bold uppercase">
                                 Подтверждено
                             </PautinaText>
-                        </div>
+                        </span>
                     </div>
-                    <header className="mt-[clamp(10px,0.625vw_+_8.000px,20px)]">
-                        <Heading variant="h4" style={{
-                            fontWeight: 700
-                        }}>
-                            ППК. Введение в алгоритмы:
-                            реализация на языке Python
+
+                    {/* Заголовок */}
+                    <header>
+                        <Heading variant="h4" className="text-text-main font-black leading-tight">
+                            ППК. Введение в алгоритмы: реализация на языке Python
                         </Heading>
-                        <div className="mt-[10px] flex items-center gap-[10px]">
-                            <Temple />
-                            <PautinaText variant="default" style={{
-                                fontWeight: 500
-                            }}>
+                        <div className="mt-4 flex items-center gap-2 text-text-muted">
+                            <Temple className="w-5 h-5 fill-current opacity-70" />
+                            <PautinaText variant="default" className="font-semibold text-text-main/80">
                                 Яндекс Практикум & МЦК-КТИТС
                             </PautinaText>
                         </div>
                     </header>
 
-                    <div className="mt-[clamp(10px,0.625vw_+_8.000px,20px)] grid grid-cols-[repeat(auto-fit,minmax(100px,200px))]
-                    gap-y-[5px] gap-x-[clamp(30px, 1.250vw + 26.000px, 50px)] bg-[#F9FAFB] px-[clamp(10px,0.625vw_+_8.000px,20px)] py-[clamp(10px,0.625vw_+_8.000px,20px)]">
-                        <div className="group">
-                            <PautinaText variant="tiny" color="#9CA3AF" style={{
-                                fontWeight: 700,
-                                textTransform: "uppercase"
-                            }}>
+                    {/* Сетка характеристик (Glass Style) */}
+                    <div className="mt-8 grid grid-cols-2 gap-6 bg-input/50 p-5 rounded-2xl border border-border-default/50">
+                        <div className="space-y-1">
+                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
                                 Дата выдачи
                             </PautinaText>
-                            <div className="flex items-center gap-[10px] mt-[5px]" color="#9CA3AF" style={{
-                                fontWeight: 700,
-                                textTransform: "uppercase"
-                            }}>
-                                <Calendar />
-                                <PautinaText variant="secondary" color="#1F2937" style={{
-                                    fontWeight: 500,
-                                    textTransform: "none"
-                                }}>
-                                    Ноябрь 2024
-                                </PautinaText>
+                            <div className="flex items-center gap-2 text-text-main">
+                                <Calendar className="w-4 h-4 text-brand" />
+                                <PautinaText variant="small" className="font-medium">Ноябрь 2024</PautinaText>
                             </div>
                         </div>
-                        <div className="group">
-                            <PautinaText variant="tiny" color="#9CA3AF" style={{
-                                fontWeight: 700,
-                                textTransform: "uppercase"
-                            }}>
+                        <div className="space-y-1">
+                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
                                 ID Сертификата
                             </PautinaText>
-                            <div className="mt-[5px]">
-                                <PautinaText variant="secondary" color="#1F2937" style={{
-                                    fontWeight: 500,
-                                    textTransform: "none"
-                                }}>
-                                    CRT-883920-PY
-                                </PautinaText>
-                            </div>
+                            <PautinaText variant="small" className="text-text-main font-medium">CRT-883920-PY</PautinaText>
                         </div>
-                        <div className="group">
-                            <PautinaText variant="tiny" color="#9CA3AF" style={{
-                                fontWeight: 700,
-                                textTransform: "uppercase"
-                            }}>
+                        <div className="space-y-1">
+                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
                                 Формат
                             </PautinaText>
-                            <div className="mt-[5px]">
-                                <PautinaText variant="secondary" color="#1F2937" style={{
-                                    fontWeight: 500,
-                                    textTransform: "none"
-                                }}>
-                                    Онлайн-курс (72 ч.)
-                                </PautinaText>
-                            </div>
+                            <PautinaText variant="small" className="text-text-main font-medium">Онлайн-курс (72 ч.)</PautinaText>
                         </div>
-                        <div className="group">
-                            <PautinaText variant="tiny" color="#9CA3AF" style={{
-                                fontWeight: 700,
-                                textTransform: "uppercase"
-                            }}>
-                                Навыки
+                        <div className="space-y-1">
+                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
+                                Стек
                             </PautinaText>
-                            <div className="flex items-center gap-[15px] mt-[5px]">
-                                <Python />
-                                <Frontend />
+                            <div className="flex items-center gap-3 pt-1">
+                                <Python className="w-6 h-6" />
+                                <Frontend className="w-6 h-6" />
                             </div>
                         </div>
                     </div>
 
-                    <div className="mt-[clamp(10px,0.625vw_+_8.000px,20px)]">
-                        <PautinaText variant="small" style={{
-                            fontWeight: 700,
-                            textTransform: "uppercase"
-                        }}>
+                    {/* Описание */}
+                    <div className="mt-8 space-y-3">
+                        <PautinaText variant="small" className="text-text-muted font-bold uppercase tracking-wider">
                             Описание
                         </PautinaText>
-                        <PautinaText variant="small" className="mt-[10px]">
-                            Успешное прохождение курса по основам алгоритмизации и структур
-                            данных. В рамках обучения были изучены: сортировка, поиск, рекурсия,
-                            графы и хеш-таблицы. Выполнен итоговый проект по оптимизации
-                            поискового алгоритма для базы данных на 10,000 записей.
+                        <PautinaText variant="default" className="text-text-main leading-relaxed opacity-90">
+                            Успешное прохождение курса по основам алгоритмизации и структур данных.
+                            В рамках обучения были изучены: сортировка, поиск, рекурсия, графы и хеш-таблицы.
                         </PautinaText>
                     </div>
 
-                    <div className="mt-[25px]">
-                        <PautinaText variant="small" style={{
-                            fontWeight: 700,
-                            textTransform: "uppercase"
-                        }}>
+                    {/* Компетенции */}
+                    <div className="mt-8">
+                        <PautinaText variant="small" className="text-text-muted font-bold uppercase tracking-wider mb-4">
                             Компетенции
                         </PautinaText>
-
-                        <WheelXScrollProvider className="mt-[10px]">
-                            {
-                                ["Python Core", "Algorithms", "Data Structures", "Git"].map((elem, i) =>
-                                    <li key={i} className="px-[9px] py-[6px]" style={{
-                                        border: "1px solid #E5E7EB",
-                                        borderRadius: "8px"
-                                    }}>
-                                        <PautinaText variant="small" className="whitespace-nowrap">
-                                            {elem}
-                                        </PautinaText>
-                                    </li>
-                                )
-                            }
+                        <WheelXScrollProvider className="pb-2">
+                            {["Python Core", "Algorithms", "Data Structures", "Git"].map((elem, i) => (
+                                <li key={i} className="px-4 py-2 bg-surface border border-border-default rounded-xl transition-colors hover:border-brand/50">
+                                    <PautinaText variant="small" className="whitespace-nowrap font-medium text-text-main">
+                                        {elem}
+                                    </PautinaText>
+                                </li>
+                            ))}
                         </WheelXScrollProvider>
                     </div>
                 </div>
 
-                {/*<div className="flex justify-between items-center">*/}
                 <WheelXScrollProvider className="min-h-[45px] py-[3px]">
 
-                    <div className="flex gap-[10px] min-w-max"> {/* ← ОБЕРТКА с фиксированной минимальной шириной */}
-                        <Button className="flex gap-2 shrink-0" style={{
-                            border: "1px solid #D1D5DB",
-                            borderRadius: "12px",
-                            padding: "8px 20px"
-                        }}>
-                            <Edit />
-                            <PautinaText variant="secondary" className="whitespace-nowrap" style={{
-                                textTransform: "none",
-                                fontWeight: 500
-                            }}>
-                                Редактировать
-                            </PautinaText>
+                    <div className="flex gap-[10px] min-w-max px-8"> {/* ← ОБЕРТКА с фиксированной минимальной шириной */}
+                        <Button
+                            className="!rounded-xl !px-6 !py-2.5 !normal-case !text-text-main !border-border-default hover:!bg-input transition-all"
+                            variant="outlined"
+                            startIcon={<Edit className="w-4 h-4" />}
+                        >
+                            <PautinaText variant="secondary" className="font-semibold">Редактировать</PautinaText>
                         </Button>
 
-                        <div className="rigth flex gap-[10px] items-center shrink-0">
-                            <Button className="shrink-0" style={{
-                                padding: "12px",
-                                border: "1px solid #D1D5DB",
-                                borderRadius: "12px",
-                                minWidth: "0",
-                            }}>
-                                <Share />
+                        <div className="flex items-center gap-3 ml-auto">
+                            <Button
+                                className="!min-w-0 !w-11 !h-11 !rounded-xl !border-border-default !text-text-muted hover:!text-brand hover:!bg-brand/5 transition-all"
+                                variant="outlined"
+                            >
+                                <Share className="w-5 h-5" />
                             </Button>
-                            <ShadowWrapper className="shrink-0">
-                                <Button className="shrink-0" style={{
-                                    display: 'flex',
-                                    alignItems: "center",
-                                    gap: "5px",
-                                    background: colorStyles.buttons.brand.light,
-                                    padding: "8px 30px",
-                                    borderRadius: "12px"
-                                }}>
-                                    <Download />
-                                    <PautinaText color="white" className="whitespace-nowrap" variant="secondary" style={{
-                                        textTransform: "none",
-                                        fontWeight: 500
-                                    }}>
-                                        Скачать PDF
-                                    </PautinaText>
+
+                            <ShadowWrapper>
+                                <Button
+                                    className="!rounded-xl !px-8 !py-2.5 !normal-case !bg-brand hover:!bg-brand-hover !text-white !shadow-lg !shadow-brand/20 transition-all"
+                                    variant="contained"
+                                    startIcon={<DownloadIcon className="w-5 h-5 text-text-white" />}
+                                >
+                                    <PautinaText variant="secondary" className="font-bold">Скачать PDF</PautinaText>
                                 </Button>
                             </ShadowWrapper>
                         </div>
                     </div>
                 </WheelXScrollProvider>
+
             </div>
         </div>
-    )
+    );
 }

@@ -1,15 +1,11 @@
 import { Heading } from "@/shared/cat/typography/headings";
 import { PautinaText } from "@/shared/cat/typography/text";
-import { ShadowWrapper } from "@/shared/wrappers/Shadow";
-import { Button } from "@mui/material";
-import { COLORS, colorStyles } from "@/shared/cat/colors";
 import { $fetch } from "@/shared/api/fetch";
 
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 
 import { useState, useEffect, FormEvent } from 'react';
-import {FetchResult} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 
 // Тип для города из API
@@ -108,6 +104,7 @@ export default function City({ next }: { next: () => void }) {
                 className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full"
             >
                 <div className="flex flex-col gap-[8px]">
+
                     <label>
                         <PautinaText variant="secondary" style={{ fontWeight: 700 }}>
                             Город
@@ -145,15 +142,22 @@ export default function City({ next }: { next: () => void }) {
                         renderInput={(params) => (
                             <TextField
                                 {...params}
-                                placeholder="Введите город"
-                                error={!!errors?.city || !!errors?.city_id}
-                                helperText={errors?.city || errors?.city_id}
+                                placeholder="Казань"
+                                className="!p-0 !border !border-text-muted !rounded-xl"
+                                inputProps={{
+                                    ...params.inputProps,
+                                    className:
+                                        "!text-text-main !p-2 !placeholder:text-text-muted",
+                                }}
                             />
                         )}
+
                     />
                 </div>
 
-                <ButtonLarge text={"Далее"} />
+                <ButtonLarge text={"Далее"}>
+                    <></>
+                </ButtonLarge>
             </form>
         </div>
     );

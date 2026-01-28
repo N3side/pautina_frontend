@@ -11,7 +11,6 @@ export interface TextProps {
     children?: ReactNode;
     style?: CSSProperties;
     className?: string;
-    fontWeight?: string
 }
 
 export const textSizes = {
@@ -25,52 +24,39 @@ export const textSizes = {
 const textStyles = {
     large: {
         fontSize: textSizes.large,
-        fontWeight: "500",
         fontFamily: Montserrat.style.fontFamily,
-        lineHeight: "1.1"
     },
     default: {
         fontSize: textSizes.default,
-        fontWeight: "400",
         fontFamily: Montserrat.style.fontFamily,
-        lineHeight: "1.61"
     },
     secondary: {
         fontSize: textSizes.secondary,
-        fontWeight: "400",
         fontFamily: Montserrat.style.fontFamily,
     },
     small: {
         fontSize: textSizes.small,
-        fontWeight: "400",
         fontFamily: Montserrat.style.fontFamily,
-        lineHeight: "1.43"
     },
     tiny: {
         fontSize: textSizes.tiny,
-        fontWeight: "400",
         fontFamily: Montserrat.style.fontFamily,
-        lineHeight: "1.33"
     },
 
-    //
     button: {
         fontSize: "clamp(14px, 0.250vw + 13.200px, 18px)",
-        fontWeight: "700",
         fontFamily: Montserrat.style.fontFamily,
-        lineHeight: "1.55"
     },
 
     button2: {
         fontSize: "clamp(12px, 0.125vw + 11.600px, 14px)",
-        fontWeight: "700",
         fontFamily: Montserrat.style.fontFamily,
-        lineHeight: "1.55"
     },
 }
 
 
-function PautinaText({ component = 'p', variant = 'default', color = colorStyles.text.p["light"], children, className, style }: TextProps) {
+function PautinaText({ component = 'p', variant = 'default', children, className="text-text-muted", style, ...props }: TextProps) {
+
     return React.createElement(
         component,
         {
@@ -78,9 +64,9 @@ function PautinaText({ component = 'p', variant = 'default', color = colorStyles
             style: {
                 ...textStyles[variant],
                 fontFamily: Montserrat.style.fontFamily,
-                color,
                 ...style
             },
+            ...props
         },
         children
     );

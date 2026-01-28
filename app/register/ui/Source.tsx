@@ -90,11 +90,11 @@ export default function Source({next}) {
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
             {/* Заголовок и описание */}
             <div className="flex flex-col gap-4">
-                <Heading variant="h4" className="text-gray-900">
+                <Heading variant="h4">
                     Откуда вы узнали о Паутине? *
                 </Heading>
 
-                <PautinaText variant="secondary" className="text-gray-600">
+                <PautinaText variant="secondary">
                     Нам очень важно знать как развивается проект и понимать какие каналы продвижения являются эффективными. Поэтому, ответьте пожалуйста на эти вопросы
                 </PautinaText>
             </div>
@@ -135,7 +135,9 @@ export default function Source({next}) {
             />
 
             {/* Кнопка Далее */}
-            <ButtonLarge text={"Далее"} />
+            <ButtonLarge text={"Далее"}>
+                <></>
+            </ButtonLarge>
         </form>
     );
 }

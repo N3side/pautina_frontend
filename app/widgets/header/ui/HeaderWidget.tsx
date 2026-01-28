@@ -6,122 +6,125 @@ import { useContext, useEffect, useState } from "react"
 import { WindowContext } from "@/shared/providers/WindowProvider"
 import Navigation from "./Navigation"
 import { Burger } from "./Burger"
-import { BodyBlockContext } from "@/shared/providers/BodyBlockProvider";
-import { UserContext } from "@/shared/providers/UserProvider";
-import DropDown from "@/shared/components/DropDown";
-import Link from "next/link";
-import {PautinaText} from "@/shared/cat/typography/text";
-import Settings from "@/shared/vector/Settings";
-import Logout from "@/shared/vector/Logout";
-import {colorStyles} from "@/shared/cat/colors";
+import { BodyBlockContext } from "@/shared/providers/BodyBlockProvider"
+import { UserContext } from "@/shared/providers/UserProvider"
+import DropDown from "@/shared/components/DropDown"
+import Link from "next/link"
+import { PautinaText } from "@/shared/cat/typography/text"
+import LogoutIcon from '@mui/icons-material/Logout'
+import SettingsIcon from '@mui/icons-material/Settings'
+import { Switch } from "@mui/material"
+import { useTheme } from "@/shared/providers/ThemeProvider"
+import {ThemeSwitch} from "@/shared/components/Buttons/ThemeSwitch";
 
 export default function HeaderWidget() {
-
-    const { _window } = useContext(WindowContext)
     const { setIsBlocked } = useContext(BodyBlockContext)
     const [isActive, setIsActive] = useState(false)
     const { user } = useContext(UserContext)
+    const { theme, toggleTheme } = useTheme()
+
+    // Состояние для предотвращения ошибок гидратации (проверка localStorage только на клиенте)
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
 
     useEffect(() => {
         setIsBlocked(isActive)
     }, [isActive])
 
-    // Функция для выхода (пример) ^-^
-    const handleLogout = () => {
-        localStorage.removeItem("token");
-        window.location.reload();
-    }
-
     return (
-        <header className="bg-white w-full">
-            <Container className="flex items-center w-full justify-between py-5">
-                <div className="logo">
-                    <LogoLight className="aspect-[130_/_40] w-[clamp(91px,2.438vw_+_83.200px,130px)]"/>
-                </div>
+        // sticky + backdrop-blur + border-b для красивого отделения от контента
+        <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80 backdrop-blur-md supports-[backdrop-filter]:bg-surface/60">
+            <Container className="flex items-center justify-between w-full py-4 md:py-5">
+                {/* Логотип с эффектом при наведении */}
+                <Link href="/" className="logo group relative">
+                    <LogoLight className="h-8 md:h-10 w-auto fill-text-main transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]"/>
+                </Link>
 
+                <div className="flex items-center gap-4 md:gap-6">
+                    {/* Навигация */}
+                    <Navigation isActive={isActive} setIsActive={setIsActive} />
 
-                <div className="flex gap-4 items-center">
+                    {/* Бургер (виден только на мобильных) */}
+                    <div className="flex max-[900px]:flex gap-[20px] items-center relative z-50 lg:hidden">
+                        <Burger isActive={isActive} setIsActive={setIsActive} />
+                    </div>
 
-                    <Navigation isActive={isActive} />
-
-                    {_window?.innerWidth && _window?.innerWidth < 900 &&
-						<div className="flex gap-[20px] items-center">
-							<Burger isActive={isActive} setIsActive={setIsActive} />
-						</div>
-                    }
-
-                    {user && typeof window !== 'undefined' && localStorage.getItem("token") && (
-                        /* ВАЖНО: Мы убрали лишний div-обертку.
-                           Сам Dropdown теперь является контейнером логики.
-                        */
-                        <DropDown
-                            /* Передаем аватарку как триггер */
-                            trigger={
-                                <div className="h-[40px] w-[40px] rounded-full overflow-hidden cursor-pointer hover:opacity-80 transition border border-gray-200">
-                                    <img
-                                        className="w-full h-full object-cover"
-                                        src={user?.avatar || ""} // Добавь заглушку, если аватара нет
-                                        alt="avatar"
-                                    />
-                                </div>
-                            }
-                            // menuClassName="mt-2 min-w-[150px]"
-                        >
-                            {/* Содержимое меню */}
-
-                            <div className="flex items-center justify-center">
-
-                                <div
-                                    className="w-[300px] bg-[white] text-white rounded-xl overflow-hidden font-sans">
-
-                                    <div className="p-5 flex gap-3 items-start">
-                                        <img
-                                            src={user?.avatar}
-                                            alt="Avatar"
-                                            className="w-10 h-10 rounded-full object-cover shrink-0 bg-gray-600"
-                                        />
-
-                                        <div className="flex flex-col overflow-hidden">
-                                            <PautinaText variant={"default"} className="font-normal text-base truncate">{user?.full_name}</PautinaText>
-
-                                            {user?.nickname && (
-                                                <PautinaText variant={"small"} className="font-normal text-sm text-[#AAAAAA] truncate">@{user?.nickname}</PautinaText>
-                                            )}
-
-                                            <Link href="/profile">
-                                                <PautinaText variant={"small"} color={colorStyles.text.accent.light} style={{fontWeight: 500}}>
-                                                    Перейти в профиль
-                                                </PautinaText>
-                                            </Link>
+                    {/* Профиль пользователя */}
+                    {isMounted && user && localStorage.getItem("token") && (
+                        <div className="lg:block"> {/* Скрываем на мобильных, если профиль дублируется в меню, или оставляем */}
+                            <DropDown
+                                trigger={
+                                    <div className="h-[42px] w-[42px] p-[2px] rounded-full cursor-pointer border border-transparent hover:border-brand transition-all duration-300 group">
+                                        <div className="w-full h-full rounded-full overflow-hidden relative">
+                                            <img
+                                                className="w-full h-full object-cover transition-opacity group-hover:opacity-90"
+                                                src={user?.avatar || "/default-avatar.png"} // Fallback image
+                                                alt="avatar"
+                                            />
                                         </div>
                                     </div>
+                                }
+                            >
+                                <div className="flex items-center justify-center pt-2" onClick={(e) => e.stopPropagation()}>
+                                    <div className="w-[280px] bg-surface rounded-2xl overflow-hidden font-sans border border-border-default shadow-2xl shadow-brand/10 ring-1 ring-black/5">
 
-                                    <div className="h-[1px] bg-gray-200 w-full"></div>
+                                        <div className="p-4 flex gap-3 items-center bg-surface">
+                                            <img src={user?.avatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover shrink-0 border border-border-default" />
+                                            <div className="flex flex-col min-w-0">
+                                                <PautinaText variant="default" className="text-text-main font-bold truncate">{user?.full_name}</PautinaText>
+                                                {user?.nickname && <PautinaText variant="small" className="text-text-muted truncate">@{user?.nickname}</PautinaText>}
+                                            </div>
+                                        </div>
 
-                                    <div className="py-2">
+                                        <div className="px-4 pb-3">
+                                            <Link href="/profile" className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
+                                                Перейти в профиль
+                                            </Link>
+                                        </div>
 
-                                        <Link href={"logout"} >
-                                            <button
-                                                className="w-full text-left px-4 py-2.5 flex items-center gap-4 hover:bg-[#f3f3f3] transition-colors group">
-                                                <Logout />
-                                                <PautinaText variant={"small"}>Выйти</PautinaText>
-                                            </button>
-                                        </Link>
+                                        <div className="h-[1px] bg-border-default w-full opacity-50"></div>
 
-                                        <Link href={"settings"} >
-                                            <button
-                                                className="w-full text-left px-4 py-2.5 flex items-center gap-4 hover:bg-[#f3f3f3] transition-colors group">
-                                                <Settings />
-                                                <PautinaText variant={"small"}>Настройки</PautinaText>
-                                            </button>
-                                        </Link>
+                                        <div className="py-2">
+                                            <div className="px-2">
+                                                <button className="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between hover:bg-border-default/30 transition-colors group">
+                                                    <div className="flex items-center gap-3">
+                                                        <PautinaText variant="small" className="text-text-main font-medium">Темная тема</PautinaText>
+                                                    </div>
+                                                    <Switch size="small" checked={theme === "dark"} onClick={toggleTheme} />
+                                                </button>
 
+                                                <Link href="/settings">
+                                                    <button className="w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-border-default/30 transition-colors group mt-1">
+                                                        <SettingsIcon fontSize="small" className="text-text-muted group-hover:text-text-main transition-colors" />
+                                                        <PautinaText variant="small" className="text-text-muted group-hover:text-text-main transition-colors">Настройки</PautinaText>
+                                                    </button>
+                                                </Link>
+                                            </div>
+
+                                            <div className="h-[1px] bg-border-default w-full my-2 opacity-50"></div>
+
+                                            <div className="px-2">
+                                                <Link href="/logout">
+                                                    <button className="w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-red-500/10 transition-colors group">
+                                                        <LogoutIcon fontSize="small" className="text-text-muted group-hover:text-red-500 transition-colors" />
+                                                        <PautinaText variant="small" className="text-text-muted group-hover:text-red-500 transition-colors">Выйти</PautinaText>
+                                                    </button>
+                                                </Link>
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-
-                        </DropDown>
+                            </DropDown>
+                        </div>
                     )}
+
+                    { isMounted && !user && (
+                        <ThemeSwitch size="small" checked={theme === "dark"} onClick={toggleTheme} />
+                    )}
+
                 </div>
             </Container>
         </header>

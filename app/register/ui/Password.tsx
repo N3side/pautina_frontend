@@ -57,7 +57,7 @@ export default function Password() {
             </div>
             <form onSubmit={handleSubmit} ref={form} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 
-                <Input label={"Пароль *"} placeholder={"*******"} name={"password"} error={errors?.password} />
+                <Input label={"Пароль *"} placeholder={"*******"} name={"password"} type={"password"} error={errors?.password} />
 
                 <ButtonLarge text={"Перейти в профиль"} />
 

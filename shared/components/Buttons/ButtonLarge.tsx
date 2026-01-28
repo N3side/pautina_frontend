@@ -3,13 +3,14 @@ import {PautinaText} from "@/shared/cat/typography/text";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import { Button } from "@mui/material"
 
-export default function ButtonLarge({ text, ...props }) {
+export default function ButtonLarge({ children, className="", text="", ...props }) {
     return (
         <ShadowWrapper style={{width: "100%"}}>
             <Button
                 {...props}
                 type="submit"
                 // sx — это стандарт для MUI, он работает лучше чем style
+                className={className}
                 sx={{
                     marginTop: "15px",
                     background: colorStyles.buttons.brand.light,
@@ -30,9 +31,15 @@ export default function ButtonLarge({ text, ...props }) {
                     // disableRipple: true
                 }}
             >
-                <PautinaText variant="button2" color={COLORS.white}>
-                    {text}
-                </PautinaText>
+
+                {text ? (
+                    <PautinaText variant="button2" className="text-white font-bold">
+                        {text}
+                    </PautinaText>
+                ) :
+                    <>{children}</>
+                }
+
             </Button>
         </ShadowWrapper>
     );

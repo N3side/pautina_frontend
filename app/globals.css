@@ -1,3 +1,66 @@
+@import "tailwindcss";
+
+/* 1. Настройка темы (Tailwind v4 использует префиксы для маппинга переменных) */
+@theme {
+    /* Цвета фона */
+    --color-background: var(--bg-page);
+    --color-surface: var(--bg-card);
+    --color-input: var(--bg-input);
+
+    /* Цвета текста */
+    --color-text-main: var(--text-main);
+    --color-text-muted: var(--text-muted);
+    --color-text-brand: var(--text-brand);
+
+    /* Границы и Брендинг */
+    --color-border-default: var(--border-default);
+    --color-brand: var(--brand-primary);
+    --color-brand-hover: var(--brand-hover);
+
+    --color-green-main: var(--green-main);
+
+    /* Твой кастомный цвет (теперь будет работать text-red52) */
+}
+
+/* 2. Определение CSS-переменных (Logic) */
+:root {
+    --bg-page: linear-gradient(
+        90deg,
+        rgba(14, 165, 233, 0.15) 0%,
+        rgba(14, 165, 233, 0) 50%,
+        rgba(79, 70, 229, 0) 50%,
+        rgba(79, 70, 229, 0.1) 100%
+    );
+
+    --bg-card: #ffffff;
+    --bg-input: #ffffff;
+    --text-main: #0f172a;
+    --text-muted: #64748b;
+    --text-brand: #0ea5e9;
+    --brand-primary: #0ea5e9;
+    --brand-hover: #0284c7;
+    --green-main: #16A34A;
+
+	--border-default: #e2e8f0;
+}
+
+.dark {
+	--bg-page:
+		/* 1. Свечение сверху слева (глубокий синий) */
+			radial-gradient(at 0% 0%, rgba(14, 165, 233, 0.15) 0px, transparent 50%),
+				/* 2. Свечение снизу справа (приглушенный фиолетовый) */
+			radial-gradient(at 100% 100%, rgba(79, 70, 229, 0.1) 0px, transparent 50%),
+				/* 3. Основная база: очень темный индиго-черный */
+			linear-gradient(180deg, #020617 0%, #0a0a14 100%);
+    --bg-card: #1e293b;
+    --bg-input: #1e293b;
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-brand: #38bdf8;
+
+	--border-default: #334155;
+}
+
 @layer base {
     * {
         margin: 0;
@@ -9,70 +72,27 @@
     }
 
     button {
-        cursor: pointer
+        cursor: pointer;
     }
 
     body {
         min-height: 100vh;
         height: 100%;
-        background: linear-gradient(90deg,
-                rgba(14, 165, 233, 0.15) 0%,
-                rgba(14, 165, 233, 0.0) 50%,
-                rgba(79, 70, 229, 0) 50%,
-                rgba(79, 70, 229, 0.10) 100%);
+
+        background: var(--bg-page);
         background-repeat: no-repeat;
         overflow-x: hidden;
         @apply overflow-y-scroll;
-        @apply [&::-webkit-scrollbar]:w-1.5;
-        @apply [&::-webkit-scrollbar-track]:bg-gray-100;
-        @apply [&::-webkit-scrollbar-thumb]:bg-gray-300;
-        @apply dark:[&::-webkit-scrollbar-track]:bg-neutral-700;
-        @apply dark:[&::-webkit-scrollbar-thumb]:bg-neutral-500;
-    }
 
-    .notify {
-        background: white;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: #64748B;
-        font-weight: 700;
-        border-radius: 12px;
-        min-width: 230px;
-        max-width: 300px;
-        min-height: 60px;
-        width: fit-content;
-        height: fit-content;
-        padding: 10px 20px;
-        transition: .3s ease-in-out all;
-        opacity: 0;
-        z-index: 999;
-
-        box-shadow: 0px 3px 24px rgb(209, 213, 219);
-
-        gap: 10px;
-
-        position: fixed;
-        top: -100px;
-        right: 50%;
-
-        transform: translateX(50%);
-
-        border: .1px solid rgb(203, 213, 225);
-
-        &.active {
-            opacity: 1;
-            transition: .3s ease-in-out all;
-            top: 10px;
+        /* Стилизация скроллбара */
+        &::-webkit-scrollbar {
+            width: 6px;
+        }
+        &::-webkit-scrollbar-track {
+            @apply bg-gray-100 dark:bg-neutral-700;
+        }
+        &::-webkit-scrollbar-thumb {
+            @apply bg-gray-300 dark:bg-neutral-500;
         }
     }
 }
-
-@import "tailwindcss";
-
-body {
-    
-}
-
-
-/*2*/

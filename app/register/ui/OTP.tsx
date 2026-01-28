@@ -21,7 +21,7 @@ export default function OTP({name, email, otp, setOtp, next}) {
 
         const response = await $fetch("onboarding/confirm-email", {
             method: "POST",
-            body: JSON.stringify({OTP: otp, _method: "PATCH"}),
+            body: JSON.stringify({email, OTP: otp, _method: "PATCH"}),
             headers: {
                 "Content-Type": "application/json"
             }

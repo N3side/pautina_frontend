@@ -11,18 +11,18 @@ interface Props {
 export function Elem({Icon, k, value}: Props) {
 
     return (
-        <li className="flex gap-[15px] items-center">
+        <div className="flex gap-[15px] items-center">
             <div className="icon">
                 <Icon />
             </div>
             <div className="flex flex-col gap-[2px]">
-                <PautinaText variant="tiny" color={colorStyles.text.p_tiny.light} style={{textTransform: "uppercase", fontWeight: 500}}>
+                <PautinaText variant="tiny" className="text-text-muted uppercase font-medium">
                     {k}
                 </PautinaText>
-                <PautinaText variant="secondary" color={colorStyles.text.h6.light} style={{fontWeight: 500}}>
+                <PautinaText variant="secondary" className="text-text-muted font-medium">
                     {value}
                 </PautinaText>
             </div>
-        </li>
+        </div>
     )
 }

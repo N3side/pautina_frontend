@@ -117,4 +117,4 @@ const colorStyles = {
     }
 }
 
-export { COLORS, colorStyles }
+export {COLORS, colorStyles}

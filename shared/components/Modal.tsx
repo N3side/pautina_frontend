@@ -1,78 +1,87 @@
 import { createPortal } from "react-dom"
-import { useContext, useEffect, useRef, useState, ReactNode, ReactPortal } from "react"
+import { useContext, useEffect, useRef, useState, ReactPortal } from "react"
 import { Button } from "@mui/material"
 import { Close } from "@/shared/vector/Close"
 import { IconWrapper } from "@/shared/components/IconWrapper"
-import { WindowContext } from "@/shared/providers/WindowProvider"
-import {BodyBlockContext} from "@/shared/providers/BodyBlockProvider";
+import { BodyBlockContext } from "@/shared/providers/BodyBlockProvider"
 
+// Используем CSS-переменные напрямую для скроллбара
+const scrollbarStyles = `
+  .custom-scrollbar::-webkit-scrollbar {
+    width: 0px;
+    height: 0px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb {
+    background-color: var(--border-default); /* Адаптивный цвет */
+    border-radius: 10px;
+  }
+  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-muted); /* Цвет при наведении */
+  }
+`
 
-
-export function useModal({ children }) {
-    const { _window } = useContext(WindowContext)
+export function useModal({ children, modalClassName = "", onClose = () => {} }) {
     const [isOpen, setIsOpen] = useState(false)
+    const { setIsBlocked } = useContext(BodyBlockContext)
 
     const open = () => setIsOpen(true)
-    const close = () => setIsOpen(false)
+    const close = () => {
+        onClose()
+        setIsOpen(false)
+        setTranslateY(0)
+    }
 
-    /* ------------------------------------------------------------------ */
-    /* control body blocking                                              */
-    /* ------------------------------------------------------------------ */
-
-    const {isBlocked, setIsBlocked} = useContext(BodyBlockContext)
-
+    // Блокировка скролла страницы
     useEffect(() => {
         setIsBlocked(isOpen)
+    }, [isOpen, setIsBlocked])
+
+    // Закрытие по Escape
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (isOpen && e.key === "Escape") close()
+        }
+        window.addEventListener("keydown", handleKeyDown)
+        return () => window.removeEventListener("keydown", handleKeyDown)
     }, [isOpen])
 
     /* ------------------------------------------------------------------ */
-    /* bottom-sheet drag logic                                             */
+    /* Drag Logic                                                         */
     /* ------------------------------------------------------------------ */
-    const sheetRef = useRef<HTMLDivElement>(null)
-    const [height, setHeight] = useState<number | null>(null)
     const [isDragging, setIsDragging] = useState(false)
-    const [startY, setStartY] = useState(0)
-    const [startHeight, setStartHeight] = useState(0)
-
-    const isMobile = _window?.innerWidth && _window.innerWidth < 1024
-
-    // init height on open
-    useEffect(() => {
-        if (!isOpen || !_window) return
-        const initialHeight = isMobile ? _window.innerHeight * 0.95 : 740
-        setHeight(initialHeight)
-    }, [isOpen, _window?.innerWidth, _window?.innerHeight])
+    const [translateY, setTranslateY] = useState(0)
+    const startY = useRef(0)
+    const currentY = useRef(0)
 
     const onPointerDown = (e: React.PointerEvent) => {
-        if (!isMobile || !sheetRef.current || height === null) return
         setIsDragging(true)
-        setStartY(e.clientY)
-        setStartHeight(height)
+        startY.current = e.clientY
     }
 
     useEffect(() => {
-        if (!isDragging || !isMobile) return
+        if (!isDragging) return
 
         const onPointerMove = (e: PointerEvent) => {
-            if (!isDragging || height === null) return;
-
-            const delta = e.clientY - startY;
-            const nextHeight = startHeight - delta;
-
-            if (nextHeight <= 0) {
-                close();
-                setIsDragging(false);
-                return;
+            const delta = e.clientY - startY.current
+            if (delta < 0) {
+                setTranslateY(0)
+                return
             }
-
-            setHeight(nextHeight);
-        };
+            setTranslateY(delta)
+            currentY.current = delta
+        }
 
         const onPointerUp = () => {
             setIsDragging(false)
-            if (height !== null && height <= 100) {
+            if (currentY.current > 150) {
                 close()
+            } else {
+                setTranslateY(0)
             }
+            currentY.current = 0
         }
 
         window.addEventListener("pointermove", onPointerMove)
@@ -84,65 +93,78 @@ export function useModal({ children }) {
             window.removeEventListener("pointerup", onPointerUp)
             window.removeEventListener("pointercancel", onPointerUp)
         }
-    }, [isDragging, startY, startHeight, height, isMobile])
+    }, [isDragging])
 
     /* ------------------------------------------------------------------ */
-    /* render                                                              */
+    /* Render                                                             */
     /* ------------------------------------------------------------------ */
-    const shouldRender = isOpen && (height !== null || !isMobile)
-
-    const modal: ReactPortal | null = shouldRender
+    const modal: ReactPortal | null = isOpen
         ? createPortal(
-            <div
-                className={`fixed inset-0 z-[30] flex ${
-                    isMobile ? "items-end justify-center" : "items-center justify-center"
-                }`}
-            >
-                {/* overlay */}
-                <div className="absolute inset-0 bg-black/60 backdrop-blur-[2px]" onClick={close} />
-
-                {/* sheet */}
+            <>
+                <style>{scrollbarStyles}</style>
                 <div
-                    ref={sheetRef}
-                    className={`relative bg-white w-full max-w-[1024px] touch-none ${
-                        isMobile ? "rounded-b-none" : "rounded-[24px]"
-                    }`}
-                    onPointerDown={isMobile ? onPointerDown : undefined}
-                    style={
-                        isMobile
-                            ? {
-                                height,
-                                width: "100%",
-                                transition: isDragging ? "none" : "height 0.25s cubic-bezier(0.4, 0, 0.2, 1)",
-                                maxHeight: "95vh"
-                            }
-                            : { maxHeight: "740px", height: "100%" }
-                    }
+                    role="dialog"
+                    aria-modal="true"
+                    className={`fixed inset-0 z-[30] flex items-end justify-center md:items-center ${modalClassName}`}
                 >
-                    {/* desktop close */}
-                    {!isMobile && (
-                        <Button
-                            type="button"
-                            onClick={close}
-                            style={{ position: "absolute", top: 20, right: 20, minWidth: 0 }}
-                        >
-                            <IconWrapper style={{ padding: 8 }}>
-                                <Close />
-                            </IconWrapper>
-                        </Button>
-                    )}
+                    {/* Overlay: Используем стандартный черный с прозрачностью, так как это затенение */}
+                    <div
+                        className="absolute inset-0 bg-black/60 backdrop-blur-[2px] transition-opacity"
+                        onClick={close}
+                    />
 
-                    {isMobile && (
-                        <div
-                            onPointerDown={onPointerDown}
-                            className="absolute top-[-14px] left-1/2 h-[8px] w-[80px] rounded-[20px] bg-[#d2d2d2] touch-none"
-                            style={{ transform: "translateX(-50%)" }}
-                        />
-                    )}
+                    {/* Sheet / Modal Container */}
+                    <div
+                        className={`
+                            relative shadow-xl flex flex-col
+                            
+                            /* THEME COLORS APPLIED HERE */
+                            bg-surface text-text-main
+                            
+                            /* Mobile: Bottom Sheet */
+                            w-full rounded-t-[24px] rounded-b-none 
+                            max-h-[95vh] h-auto
+                            
+                            /* Desktop: Centered Modal */
+                            md:max-w-[1024px] md:rounded-[24px] md:max-h-[740px] md:h-full
+                        `}
+                        style={{
+                            transform: `translateY(${translateY}px)`,
+                            transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)"
+                        }}
+                    >
+                        {/* 1. HEADER / DRAG HANDLE AREA */}
+                        <div className="relative flex-shrink-0">
+                            {/* Mobile Drag Handle */}
+                            <div
+                                onPointerDown={onPointerDown}
+                                className="w-full h-[30px] flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
+                            >
+                                {/* THEME COLOR: bg-border-default вместо хардкода */}
+                                <div className="h-[5px] w-[48px] rounded-full bg-border-default" />
+                            </div>
 
-                    {children}
+                            {/* Desktop Close Button */}
+                            <div className="hidden md:block absolute top-5 right-5 z-20">
+                                <Button
+                                    type="button"
+                                    onClick={close}
+                                    style={{ minWidth: 0, color: 'var(--text-muted)' }}
+                                >
+                                    <IconWrapper style={{ padding: 8 }}>
+                                        <Close />
+                                    </IconWrapper>
+                                </Button>
+                            </div>
+                        </div>
+
+                        {/* 2. SCROLLABLE CONTENT AREA */}
+                        <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar px-4 pb-8 pt-2 md:p-8 md:pt-2">
+                            {children}
+                        </div>
+                    </div>
                 </div>
-            </div>,
+            </>,
             document.body
         )
         : null

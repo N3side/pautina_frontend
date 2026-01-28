@@ -1,6 +1,5 @@
 "use client"
 
-import { colorStyles } from "@/shared/cat/colors"
 import { Container } from "@/shared/wrappers/Container"
 import { useContext, useEffect, useState } from "react"
 import { UserContext, CheckGuest } from "@/shared/providers/UserProvider"
@@ -17,6 +16,7 @@ import { Button } from "@mui/material";
 import { textSizes } from "@/shared/cat/typography/text";
 // Импортируем motion
 import { motion, AnimatePresence } from "framer-motion"
+import {useTheme} from "@/shared/providers/ThemeProvider";
 
 export default function RegisterWidget() {
     const { setToken, setUser } = useContext(UserContext)
@@ -64,26 +64,21 @@ export default function RegisterWidget() {
 
     const progress = ((position) / positions.length) * 100;
 
+    const {theme} = useTheme()
+
     return (
         <CheckGuest>
-            <Container className="min-h-[calc(100vh-80px)] bg-white px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
+            <Container className="min-h-[calc(100vh-80px)] bg-white px-0 lg:mt-5 lg:flex lg:bg-transparent">
                 <Card1>
                     {/* Прогресс-бар тоже можно сделать через motion для плавности */}
-                    <div className="w-full h-1.5 rounded-full mb-8 overflow-hidden bg-gray-100 relative">
+                    <div className={`w-full h-1.5 rounded-full mb-8 overflow-hidden bg-${ theme === "light" ? "text-main" : "text-muted" } relative`}>
                         <motion.div
                             className="h-full relative"
                             initial={{ width: 0 }}
                             animate={{ width: `${progress}%` }}
                             transition={{ duration: 0.5, ease: "easeInOut" }}
                             style={{
-                                background: colorStyles.text.accent.light,
-                                // Добавляем градиент-блик поверх основного цвета
-                                backgroundImage: `linear-gradient(
-                                    90deg, 
-                                    rgba(255,255,255,0) 0%, 
-                                    rgba(255,255,255,0.4) 50%, 
-                                    rgba(255,255,255,0) 100%
-                                )`,
+                                background: "var(--color-brand)",
                                 backgroundSize: '200% 100%', // Растягиваем, чтобы было куда двигать блик
                             }}
                         >
@@ -130,17 +125,15 @@ export default function RegisterWidget() {
                     {position > 0 && (
                         <Button
                             style={{
-                                width: "100%",
-                                marginTop: "20px",
                                 fontSize: textSizes.tiny,
-                                borderRadius: "12px",
-                                color: "#666"
                             }}
                             onClick={handlers.prev}
+                            className="!text-text-muted !rounded-xl !w-full"
                         >
                             Назад
                         </Button>
                     )}
+
                 </Card1>
             </Container>
         </CheckGuest>

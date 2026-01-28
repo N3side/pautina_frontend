@@ -13,7 +13,7 @@ export default function Home() {
             <HeaderWidget />
             <BannerWidget />
             <MissionWidget />
-            <StatisticsWidget />
+            {/*<StatisticsWidget />*/}
             <FunctionalWidget />
             <FooterWidget />
         </>

@@ -36,11 +36,11 @@ export default function Name({name, setName, next}) {
     return (
         <div className="w-full">
             {/* Заголовок и подзаголовок */}
-            <div className="flex flex-col gap-3 text-center lg:text-left">
-                <Heading variant="h4" className="leading-tight">
+            <div className="flex flex-col gap-3 lg:text-left">
+                <Heading variant="h4">
                     Добро пожаловать на платформу Паутина
                 </Heading>
-                <PautinaText variant="secondary" className="opacity-80">
+                <PautinaText variant="secondary">
                     Для дальнейшей работы предлагаем познакомиться
                 </PautinaText>
             </div>
