@@ -35,6 +35,8 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     const [token, setToken] = useState<string | null>(null)
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
+    const router = useRouter()
+
     // Оборачиваем в useCallback, чтобы функция не пересоздавалась
     const getUser = useCallback(async () => {
         setIsLoading(true)
@@ -60,7 +62,14 @@ export default function UserProvider({ children }: { children: ReactNode }) {
         } else {
             setIsLoading(false)
         }
+
     }, [])
+
+    useEffect(() => {
+        if (user?.isGuest) {
+            router.push("/register")
+        }
+    }, [user]);
 
     // Синхронизация токена: когда вызываешь setToken, обновляем localStorage и тянем юзера
     useEffect(() => {

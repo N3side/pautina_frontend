@@ -116,13 +116,26 @@ export default function City({ next }: { next: () => void }) {
                         freeSolo
                         options={cities}
                         loading={loading}
-                        value={city} // Используем value вместо inputValue
+                        value={city}
                         inputValue={city}
                         getOptionLabel={(option) =>
                             typeof option === "string" ? option : option.name
                         }
+                        sx={{
+                            "& .MuiOutlinedInput-notchedOutline": { border: "none" },
+                            "& .MuiOutlinedInput-root": { padding: 0 },
+
+                            // --- ПЕРЕКРАСКА КРЕСТИКА ---
+                            "& .MuiAutocomplete-clearIndicator": {
+                                color: "var(--color-text-main)", // Замените на нужный цвет (например, из конфига Tailwind)
+                            },
+                            // Если нужно перекрасить и стрелочку выбора
+                            "& .MuiAutocomplete-popupIndicator": {
+                                color: "blue",
+                            }
+                        }}
                         onInputChange={(e, newValue) => {
-                            setCity(newValue || ""); // Гарантируем, что это строка
+                            setCity(newValue || "");
                             setCityId("");
                         }}
                         onChange={(e, newValue) => {
@@ -144,15 +157,31 @@ export default function City({ next }: { next: () => void }) {
                             <TextField
                                 {...params}
                                 placeholder="Казань"
-                                className="!p-0 !border !border-text-muted !rounded-xl"
+                                // Ваши стили контейнера (рамка, скругление)
+                                className="!border !border-text-muted !rounded-xl !p-2"
+
+                                // --- ИСПРАВЛЕНИЕ ЗДЕСЬ ---
+                                sx={{
+                                    // Убираем внутреннюю обводку MUI, чтобы осталась только Tailwind
+                                    "& .MuiOutlinedInput-notchedOutline": {
+                                        border: "none",
+                                    },
+                                    // Убираем внутренние отступы MUI контейнера, если они мешают
+                                    "& .MuiOutlinedInput-root": {
+                                        padding: 0,
+                                    }
+                                }}
+                                // -------------------------
+
                                 inputProps={{
                                     ...params.inputProps,
+                                    // Стили самого текста внутри инпута
+                                    // Добавил !h-full и !box-border для корректного отображения
                                     className:
-                                        "!text-text-main !p-2 !placeholder:text-text-muted",
+                                        "!text-text-main !p-3 !placeholder:text-text-muted !h-full",
                                 }}
                             />
                         )}
-
                     />
                 </div>
 

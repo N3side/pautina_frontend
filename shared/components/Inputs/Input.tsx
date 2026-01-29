@@ -30,7 +30,7 @@ const Input = ({ label, error, selected, className, style, ...props }: InputProp
             <input
                 className={INPUT_CLASSES}
                 style={{
-                    border: `${selected ? 2 : 1}px solid ${selected ? "var(--color-border-default)" : "var(--color-border-default)"}`,
+                    border: `1px solid ${selected ? "var(--color-brand)" : "var(--color-border-default)"}`,
                     ...style,
                 }}
                 {...props}
