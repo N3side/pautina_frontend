@@ -26,9 +26,13 @@ export default function HeaderWidget() {
         setIsBlocked(isActive)
     }, [isActive])
 
+    useEffect(() => {
+        console.log(user)
+    }, [user]);
+
     return (
         // sticky + backdrop-blur + border-b для красивого отделения от контента
-        <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80 supports-[backdrop-filter]:bg-surface/60">
+        <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80">
             <Container className="flex items-center justify-between w-full py-4 md:py-5">
                 {/* Логотип с эффектом при наведении */}
                 <Link href="/" className="logo group relative">
@@ -39,18 +43,15 @@ export default function HeaderWidget() {
                     {/* Навигация */}
                     <Navigation isActive={isActive} setIsActive={setIsActive} />
 
-
-
-                    {/* Профиль пользователя */}
                     {user && (
-                        <div className="lg:block z-50"> {/* Скрываем на мобильных, если профиль дублируется в меню, или оставляем */}
+                        <div className="lg:block z-50">
                             <DropDown
                                 trigger={
                                     <div className="h-[42px] w-[42px] p-[2px] rounded-full cursor-pointer border border-transparent hover:border-brand transition-all duration-300 group">
                                         <div className="w-full h-full rounded-full overflow-hidden relative">
                                             <img
                                                 className="w-full h-full object-cover transition-opacity group-hover:opacity-90"
-                                                src={user?.avatar || "/default-avatar.png"} // Fallback image
+                                                src={user?.avatar}
                                                 alt="avatar"
                                             />
                                         </div>

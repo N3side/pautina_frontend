@@ -99,5 +99,6 @@
 
 body {
 	overflow-x: hidden;
-	background: var(--color-background);
+	position: relative;
+	width: 100%;
 }

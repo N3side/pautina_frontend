@@ -31,8 +31,8 @@ export function Burger({ isActive, setIsActive }: Props) {
                 {/* СРЕДНЯЯ ЛИНИЯ: просто исчезает */}
                 <span
                     className={`
-                        ${baseClass} top-1/2 -translate-y-1/2
-                        ${isActive ? "opacity-0 translate-x-32" : "opacity-100"}
+                        ${baseClass} top-1/2 -translate-y-1/2 transition-all duration-300
+                        ${isActive ? "opacity-0 scale-x-0" : "opacity-100 scale-x-100"}
                     `}
                 />
 
