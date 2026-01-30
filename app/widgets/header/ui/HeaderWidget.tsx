@@ -43,6 +43,8 @@ export default function HeaderWidget() {
                     {/* Навигация */}
                     <Navigation isActive={isActive} setIsActive={setIsActive} />
 
+                    {/**/}
+
                     {user && (
                         <div className="lg:block z-50">
                             <DropDown
