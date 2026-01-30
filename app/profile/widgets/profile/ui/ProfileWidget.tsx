@@ -43,6 +43,7 @@ export default function ProfileWidget() {
                             src={user?.avatar}
                             alt="avatar"
                             className="w-full h-full rounded-full object-cover"
+                            referrerPolicy="no-referrer"
                         />
 
                         <UploadPhoto />

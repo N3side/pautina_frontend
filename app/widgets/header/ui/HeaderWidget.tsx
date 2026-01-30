@@ -21,7 +21,6 @@ export default function HeaderWidget() {
     const [isActive, setIsActive] = useState(false)
     const { theme, toggleTheme } = useTheme()
     const { user } = useContext(UserContext)
-    const [isMounted, setIsMounted] = useState(false)
 
     useEffect(() => {
         setIsBlocked(isActive)
@@ -43,7 +42,7 @@ export default function HeaderWidget() {
 
 
                     {/* Профиль пользователя */}
-                    {isMounted && user && (
+                    {user && (
                         <div className="lg:block z-50"> {/* Скрываем на мобильных, если профиль дублируется в меню, или оставляем */}
                             <DropDown
                                 trigger={
