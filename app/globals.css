@@ -96,3 +96,8 @@
         }
     }
 }
+
+body {
+	overflow-x: hidden;
+	background: var(--color-background);
+}

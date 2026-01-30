@@ -74,7 +74,7 @@ export default function LoginWidget() {
 
     return (
         <CheckIsNotUser>
-            <Container className="min-h-[calc(100vh-80px)] bg-white px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
+            <Container className="min-h-[calc(100vh-80px)] px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
                 <Card1>
                     <Heading variant="h4" className="font-bold text-text-main">
                         Вход в профиль

@@ -67,7 +67,7 @@ export default function RegisterWidget() {
 
     return (
         <CheckGuest>
-            <Container className="min-h-[calc(100vh-80px)] bg-white px-0 lg:mt-5 lg:flex lg:bg-transparent">
+            <Container className="min-h-[calc(100vh-80px)] px-0 lg:mt-5 lg:flex lg:bg-transparent">
                 <Card1>
                     {/* Прогресс-бар тоже можно сделать через motion для плавности */}
                     <div className={`w-full h-1.5 rounded-full mb-8 overflow-hidden bg-${ theme === "light" ? "text-main" : "text-muted" } relative`}>

@@ -1,34 +1,52 @@
-import { useState } from "react";
+import React from "react"
 
 interface Props {
     isActive?: boolean
     setIsActive?: (value: boolean) => void
 }
 
-function Burger({isActive, setIsActive}: Props) {
-
-    function handleClick() {
-        setIsActive(!isActive);
-    }
+export function Burger({ isActive, setIsActive }: Props) {
+    const hLine = "h-[2px]" // Сделал чуть тоньше (2px), на мобилках смотрится аккуратнее
+    const color = "bg-text-muted"
+    const baseClass = `absolute block w-full rounded-full transition-all duration-300 ease-in-out ${hLine} ${color}`
 
     return (
-        <button onClick={handleClick} className="cursor-pointer aspect-square w-[30px]" style={{zIndex: 21}}>
-            <div className="h-full w-full relative flex">
-                <div 
-                    className="absolute w-full transition-[0.3s] duration-[all] h-0.5 origin-[left_top] top-[calc(30px_/_6)] bg-[var(--color-text-muted)]"
-                    style={{ transform: `${isActive ? "rotate(45deg)" : ""}`, transition: ".3s ease-in-out all" }}
-                ></div>
-                <div
-                    className="absolute w-full transition-[0.3s] duration-[all] h-0.5 top-[calc(30px_/_2)] bg-[var(--color-text-muted)]"
-                    style={{ opacity: `${isActive ? "0" : "1"}`, transition: ".3s ease-in-out all" }}
-                ></div>
-                <div 
-                    className="absolute w-full transition-[0.3s] duration-[all] h-0.5 origin-[left_bottom] top-[calc(5_*_30px_/_6)] bg-[var(--color-text-muted)]"
-                    style={{ transform: `${isActive ? "rotate(-45deg)" : ""}`, transition: ".3s ease-in-out all" }}
-                ></div>
+        <button
+            className="relative w-7 h-5 cursor-pointer z-50 focus:outline-none"
+            onClick={() => setIsActive && setIsActive(!isActive)}
+            aria-label="Меню"
+        >
+            <div className="relative w-full h-full">
+                {/* ВЕРХНЯЯ ЛИНИЯ: при активации прыгает в центр и поворачивается */}
+                <span
+                    className={`
+                        ${baseClass}
+                        ${isActive
+                        ? "top-1/2 -translate-y-1/2 rotate-45"
+                        : "top-0"
+                    }
+                    `}
+                />
+
+                {/* СРЕДНЯЯ ЛИНИЯ: просто исчезает */}
+                <span
+                    className={`
+                        ${baseClass} top-1/2 -translate-y-1/2
+                        ${isActive ? "opacity-0 translate-x-32" : "opacity-100"}
+                    `}
+                />
+
+                {/* НИЖНЯЯ ЛИНИЯ: прыгает в центр и поворачивается в другую сторону */}
+                <span
+                    className={`
+                        ${baseClass}
+                        ${isActive
+                        ? "top-1/2 -translate-y-1/2 -rotate-45"
+                        : "bottom-0"
+                    }
+                    `}
+                />
             </div>
         </button>
     )
 }
-
-export {Burger}

@@ -15,20 +15,13 @@ import LogoutIcon from '@mui/icons-material/Logout'
 import SettingsIcon from '@mui/icons-material/Settings'
 import { Switch } from "@mui/material"
 import { useTheme } from "@/shared/providers/ThemeProvider"
-import {ThemeSwitch} from "@/shared/components/Buttons/ThemeSwitch";
 
 export default function HeaderWidget() {
     const { setIsBlocked } = useContext(BodyBlockContext)
     const [isActive, setIsActive] = useState(false)
-    const { user } = useContext(UserContext)
     const { theme, toggleTheme } = useTheme()
-
-    // Состояние для предотвращения ошибок гидратации (проверка localStorage только на клиенте)
+    const { user } = useContext(UserContext)
     const [isMounted, setIsMounted] = useState(false)
-
-    useEffect(() => {
-        setIsMounted(true)
-    }, [])
 
     useEffect(() => {
         setIsBlocked(isActive)
@@ -36,7 +29,7 @@ export default function HeaderWidget() {
 
     return (
         // sticky + backdrop-blur + border-b для красивого отделения от контента
-        <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80 backdrop-blur-md supports-[backdrop-filter]:bg-surface/60">
+        <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80 supports-[backdrop-filter]:bg-surface/60">
             <Container className="flex items-center justify-between w-full py-4 md:py-5">
                 {/* Логотип с эффектом при наведении */}
                 <Link href="/" className="logo group relative">
@@ -47,14 +40,11 @@ export default function HeaderWidget() {
                     {/* Навигация */}
                     <Navigation isActive={isActive} setIsActive={setIsActive} />
 
-                    {/* Бургер (виден только на мобильных) */}
-                    <div className="flex max-[900px]:flex gap-[20px] items-center relative z-50 lg:hidden">
-                        <Burger isActive={isActive} setIsActive={setIsActive} />
-                    </div>
+
 
                     {/* Профиль пользователя */}
                     {isMounted && user && (
-                        <div className="lg:block"> {/* Скрываем на мобильных, если профиль дублируется в меню, или оставляем */}
+                        <div className="lg:block z-50"> {/* Скрываем на мобильных, если профиль дублируется в меню, или оставляем */}
                             <DropDown
                                 trigger={
                                     <div className="h-[42px] w-[42px] p-[2px] rounded-full cursor-pointer border border-transparent hover:border-brand transition-all duration-300 group">
@@ -121,9 +111,10 @@ export default function HeaderWidget() {
                         </div>
                     )}
 
-                    { isMounted && !user && (
-                        <ThemeSwitch size="small" checked={theme === "dark"} onClick={toggleTheme} />
-                    )}
+                    {/* Бургер (виден только на мобильных) */}
+                    <div className="flex max-[900px]:flex gap-[20px] items-center relative z-50 lg:hidden">
+                        <Burger isActive={isActive} setIsActive={setIsActive} />
+                    </div>
 
                 </div>
             </Container>

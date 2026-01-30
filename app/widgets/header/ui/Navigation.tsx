@@ -9,6 +9,9 @@ import Link from "next/link"
 import { usePathname } from "next/navigation" // Добавляем хук для активной ссылки
 import { UserContext } from "@/shared/providers/UserProvider"
 import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
+import {ThemeSwitch} from "@/shared/components/Buttons/ThemeSwitch";
+import {useTheme} from "@/shared/providers/ThemeProvider";
+
 
 interface Props {
     isActive?: boolean
@@ -20,6 +23,9 @@ export default function Navigation({ isActive, setIsActive }: Props) {
     const { user } = useContext(UserContext)
     const pathname = usePathname() // Получаем текущий путь
 
+    const { theme, toggleTheme } = useTheme()
+
+
     useEffect(() => {
         setIsClient(true)
     }, [])
@@ -28,6 +34,13 @@ export default function Navigation({ isActive, setIsActive }: Props) {
     const closeMenu = () => {
         if (setIsActive) setIsActive(false)
     }
+
+    // Состояние для предотвращения ошибок гидратации (проверка localStorage только на клиенте)
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
 
     return (
         <>
@@ -107,6 +120,16 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                         </Link>
                     </div>
                 )}
+
+                { isMounted && !user && (
+                    <ThemeSwitch
+                        size="small"
+                        className="!absolute !top-[17px] !right-[60px] !z-50 !flex lg:!hidden"
+                        checked={theme === "dark"}
+                        onClick={toggleTheme}
+                    />
+                )}
+
             </div>
         </>
     )

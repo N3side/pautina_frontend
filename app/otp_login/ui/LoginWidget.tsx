@@ -45,7 +45,7 @@ export default function RegisterWidget() {
 
     return (
         <CheckIsNotUser>
-            <Container className="min-h-[calc(100vh-80px)] bg-white px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
+            <Container className="min-h-[calc(100vh-80px)] px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
                 <Card1>
 
                     <div className="relative overflow-hidden w-full">
