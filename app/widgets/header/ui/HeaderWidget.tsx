@@ -30,6 +30,8 @@ export default function HeaderWidget() {
         console.log(user)
     }, [user]);
 
+    //
+
     return (
         // sticky + backdrop-blur + border-b для красивого отделения от контента
         <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80">
