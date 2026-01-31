@@ -74,54 +74,52 @@ export default function LoginWidget() {
 
     return (
         <CheckIsNotUser>
-            <Container className="min-h-[calc(100vh-80px)] px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
-                <Card1>
-                    <Heading variant="h4" className="font-bold text-text-main">
-                        Вход в профиль
-                    </Heading>
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-[25px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
+            <Card1>
+                <Heading variant="h4" className="font-bold text-text-main">
+                    Вход в профиль
+                </Heading>
+                <form onSubmit={handleSubmit} className="flex flex-col gap-[25px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 
-                        <Input label={"Почта"} placeholder={"ivanov@gmail.com"} name={"email"} error={errors?.email} />
+                    <Input label={"Почта"} placeholder={"ivanov@gmail.com"} name={"email"} error={errors?.email} />
 
-                        <Input label={"Пароль"} placeholder={"*******"} name={"password"} error={errors?.password} type={"password"} />
+                    <Input label={"Пароль"} placeholder={"*******"} name={"password"} error={errors?.password} type={"password"} />
 
-                        <div className="flex justify-between">
-                            <div className="flex justify-between items-center select-none" style={{ fontWeight: 400 }}>
+                    <div className="flex justify-between">
+                        <div className="flex justify-between items-center select-none" style={{ fontWeight: 400 }}>
 
-                                <Checkbox
-                                    checked={isActive}
-                                    onChange={handleCheckboxChange}
-                                    id="remember-me"
-                                    sx={{
-                                        color: 'var(--color-text-muted)', // unchecked
-                                        '&.Mui-checked': {
-                                            color: 'text-brand', // checked
-                                        },
-                                    }}
-                                />
+                            <Checkbox
+                                checked={isActive}
+                                onChange={handleCheckboxChange}
+                                id="remember-me"
+                                sx={{
+                                    color: 'var(--color-text-muted)', // unchecked
+                                    '&.Mui-checked': {
+                                        color: 'text-brand', // checked
+                                    },
+                                }}
+                            />
 
-                                <label htmlFor="remember-me" className="text-text-muted">
-                                    Запомнить меня
-                                </label>
-                            </div>
-                            <Link href="/otp_login" className="flex items-center">
-                                <PautinaText variant="secondary" className="text-text-main font-medium">
-                                    Вход по коду
-                                </PautinaText>
-                            </Link>
+                            <label htmlFor="remember-me" className="text-text-muted">
+                                Запомнить меня
+                            </label>
                         </div>
+                        <Link href="/otp_login" className="flex items-center">
+                            <PautinaText variant="secondary" className="text-text-main font-medium">
+                                Вход по коду
+                            </PautinaText>
+                        </Link>
+                    </div>
 
-                        <ButtonLarge text="Войти">
-                            <></>
-                        </ButtonLarge>
+                    <ButtonLarge text="Войти">
+                        <></>
+                    </ButtonLarge>
 
-                    </form>
+                </form>
 
-                    <PautinaText variant="secondary" className="mt-[20px] text-text-muted">
-                        Нет аккаунта ? <Link href="/register"><PautinaText component="span" variant="secondary" className="text-text-main font-medium">Регистрация</PautinaText></Link>
-                    </PautinaText>
-                </Card1>
-            </Container>
+                <PautinaText variant="secondary" className="mt-[20px] text-text-muted">
+                    Нет аккаунта ? <Link href="/register"><PautinaText component="span" variant="secondary" className="text-text-main font-medium">Регистрация</PautinaText></Link>
+                </PautinaText>
+            </Card1>
         </CheckIsNotUser>
     )
 }

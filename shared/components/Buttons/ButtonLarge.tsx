@@ -37,7 +37,9 @@ export default function ButtonLarge({ children, className="", text="", ...props 
                         {text}
                     </PautinaText>
                 ) :
-                    <>{children}</>
+                    <PautinaText variant="button2" className="text-white font-bold">
+                        {children}
+                    </PautinaText>
                 }
 
             </Button>

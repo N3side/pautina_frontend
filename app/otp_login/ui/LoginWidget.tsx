@@ -45,38 +45,36 @@ export default function RegisterWidget() {
 
     return (
         <CheckIsNotUser>
-            <Container className="min-h-[calc(100vh-80px)] px-0 lg:mt-5 lg:flex lg:items-center lg:bg-transparent">
-                <Card1>
+            <Card1>
 
-                    <div className="relative overflow-hidden w-full">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={position} // Важно! При смене ключа срабатывает анимация
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.2, ease: "easeOut" }}
-                                className="w-full"
-                            >
-                                {positions[position]}
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
-
-                    {position > 0 && (
-                        <Button
-                            style={{
-                                fontSize: textSizes.tiny,
-                            }}
-                            onClick={handlers.prev}
-                            className="!text-text-muted !rounded-xl !w-full"
+                <div className="relative overflow-hidden w-full">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={position} // Важно! При смене ключа срабатывает анимация
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="w-full"
                         >
-                            Назад
-                        </Button>
-                    )}
+                            {positions[position]}
+                        </motion.div>
+                    </AnimatePresence>
+                </div>
 
-                </Card1>
-            </Container>
+                {position > 0 && (
+                    <Button
+                        style={{
+                            fontSize: textSizes.tiny,
+                        }}
+                        onClick={handlers.prev}
+                        className="!text-text-muted !rounded-xl !w-full"
+                    >
+                        Назад
+                    </Button>
+                )}
+
+            </Card1>
         </CheckIsNotUser>
     )
 }

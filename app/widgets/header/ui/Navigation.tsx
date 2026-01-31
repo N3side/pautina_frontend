@@ -19,16 +19,11 @@ interface Props {
 }
 
 export default function Navigation({ isActive, setIsActive }: Props) {
-    const [isClient, setIsClient] = useState(false)
     const { user } = useContext(UserContext)
     const pathname = usePathname() // Получаем текущий путь
 
     const { theme, toggleTheme } = useTheme()
 
-
-    useEffect(() => {
-        setIsClient(true)
-    }, [])
 
     // Функция закрытия меню (для мобильных)
     const closeMenu = () => {
@@ -95,7 +90,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                     </ul>
                 </nav>
 
-                {!user && isClient && !safeLocalStorage.getItem("token") && (
+                {!user && (
                     <div className="flex flex-col w-full gap-3 mt-4 lg:mt-0 lg:flex-row lg:w-auto lg:gap-3">
                         <Link href="/login" onClick={closeMenu} className="w-full lg:w-auto">
                             <Button

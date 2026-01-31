@@ -26,6 +26,7 @@ export default function RegisterWidget() {
     const [position, setPosition] = useState<number>(0)
     const [otp, setOtp] = useState<string | null>(null)
     const [isMounted, setIsMounted] = useState(false)
+    const {theme} = useTheme()
 
     // Добавим направление анимации (влево/вправо) если захочешь сложнее,
     // но пока сделаем просто мягкое появление (fade + slide)
@@ -63,78 +64,75 @@ export default function RegisterWidget() {
 
     const progress = ((position) / positions.length) * 100;
 
-    const {theme} = useTheme()
 
     return (
         <CheckGuest>
-            <Container className="min-h-[calc(100vh-80px)] px-0 lg:mt-5 lg:flex lg:bg-transparent">
-                <Card1>
-                    {/* Прогресс-бар тоже можно сделать через motion для плавности */}
-                    <div className={`w-full h-1.5 rounded-full mb-8 overflow-hidden bg-${ theme === "light" ? "text-main" : "text-muted" } relative`}>
+            <Card1>
+                {/* Прогресс-бар тоже можно сделать через motion для плавности */}
+                <div className={`w-full h-1.5 rounded-full mb-8 overflow-hidden bg-${ theme === "light" ? "text-main" : "text-muted" } relative`}>
+                    <motion.div
+                        className="h-full relative"
+                        initial={{ width: 0 }}
+                        animate={{ width: `${progress}%` }}
+                        transition={{ duration: 0.5, ease: "easeInOut" }}
+                        style={{
+                            background: "var(--color-brand)",
+                            backgroundSize: '200% 100%', // Растягиваем, чтобы было куда двигать блик
+                        }}
+                    >
+                        {/* Анимированный слой с блеском */}
                         <motion.div
-                            className="h-full relative"
-                            initial={{ width: 0 }}
-                            animate={{ width: `${progress}%` }}
-                            transition={{ duration: 0.5, ease: "easeInOut" }}
-                            style={{
-                                background: "var(--color-brand)",
-                                backgroundSize: '200% 100%', // Растягиваем, чтобы было куда двигать блик
+                            className="absolute inset-0"
+                            animate={{
+                                backgroundPosition: ['200% 0%', '-200% 0%'],
                             }}
+                            transition={{
+                                duration: 3, // Скорость блеска (3 секунды)
+                                repeat: Infinity,
+                                ease: "linear",
+                            }}
+                            style={{
+                                backgroundImage: `linear-gradient(
+                                    90deg, 
+                                    transparent, 
+                                    rgba(255,255,255,0.3), 
+                                    transparent
+                                )`,
+                                backgroundSize: '50% 100%',
+                                backgroundRepeat: 'no-repeat'
+                            }}
+                        />
+                    </motion.div>
+                </div>
+
+                <div className="relative overflow-hidden w-full">
+                    <AnimatePresence mode="wait">
+                        <motion.div
+                            key={position} // Важно! При смене ключа срабатывает анимация
+                            initial={{ opacity: 0, x: 20 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            exit={{ opacity: 0, x: -20 }}
+                            transition={{ duration: 0.2, ease: "easeOut" }}
+                            className="w-full"
                         >
-                            {/* Анимированный слой с блеском */}
-                            <motion.div
-                                className="absolute inset-0"
-                                animate={{
-                                    backgroundPosition: ['200% 0%', '-200% 0%'],
-                                }}
-                                transition={{
-                                    duration: 3, // Скорость блеска (3 секунды)
-                                    repeat: Infinity,
-                                    ease: "linear",
-                                }}
-                                style={{
-                                    backgroundImage: `linear-gradient(
-                                        90deg, 
-                                        transparent, 
-                                        rgba(255,255,255,0.3), 
-                                        transparent
-                                    )`,
-                                    backgroundSize: '50% 100%',
-                                    backgroundRepeat: 'no-repeat'
-                                }}
-                            />
+                            {positions[position]}
                         </motion.div>
-                    </div>
+                    </AnimatePresence>
+                </div>
 
-                    <div className="relative overflow-hidden w-full">
-                        <AnimatePresence mode="wait">
-                            <motion.div
-                                key={position} // Важно! При смене ключа срабатывает анимация
-                                initial={{ opacity: 0, x: 20 }}
-                                animate={{ opacity: 1, x: 0 }}
-                                exit={{ opacity: 0, x: -20 }}
-                                transition={{ duration: 0.2, ease: "easeOut" }}
-                                className="w-full"
-                            >
-                                {positions[position]}
-                            </motion.div>
-                        </AnimatePresence>
-                    </div>
+                {position > 0 && (
+                    <Button
+                        style={{
+                            fontSize: textSizes.tiny,
+                        }}
+                        onClick={handlers.prev}
+                        className="!text-text-muted !rounded-xl !w-full"
+                    >
+                        Назад
+                    </Button>
+                )}
 
-                    {position > 0 && (
-                        <Button
-                            style={{
-                                fontSize: textSizes.tiny,
-                            }}
-                            onClick={handlers.prev}
-                            className="!text-text-muted !rounded-xl !w-full"
-                        >
-                            Назад
-                        </Button>
-                    )}
-
-                </Card1>
-            </Container>
+        </Card1>
         </CheckGuest>
     )
 }

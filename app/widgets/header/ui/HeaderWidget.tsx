@@ -26,12 +26,6 @@ export default function HeaderWidget() {
         setIsBlocked(isActive)
     }, [isActive])
 
-    useEffect(() => {
-        console.log(user)
-    }, [user]);
-
-    //
-
     return (
         // sticky + backdrop-blur + border-b для красивого отделения от контента
         <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80">
@@ -44,8 +38,6 @@ export default function HeaderWidget() {
                 <div className="flex items-center gap-4 md:gap-6">
                     {/* Навигация */}
                     <Navigation isActive={isActive} setIsActive={setIsActive} />
-
-                    {/**/}
 
                     {user && (
                         <div className="lg:block z-50">

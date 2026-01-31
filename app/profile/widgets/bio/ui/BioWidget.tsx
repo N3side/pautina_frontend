@@ -14,12 +14,15 @@ import EditIcon from '@mui/icons-material/Edit';
 
 // Logic
 import { Elems, getActivityElems, getContactElems } from "@/app/profile/widgets/bio/model";
+import useEditProfile from "@/app/profile/widgets/profile/ui/EditProfile";
 
 export default function BioWidget() {
     const { user } = useContext(UserContext);
 
     const activityList = getActivityElems(user);
     const contactList = getContactElems(user);
+
+    const {modalEdit, openEdit, closeEdit} = useEditProfile()
 
     return (
         <section className="w-full h-full bg-surface border border-border-default rounded-[24px] shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow duration-300">
@@ -44,6 +47,9 @@ export default function BioWidget() {
                        !text-text-muted hover:!text-brand
                        !transition-all
                     "
+
+                    onClick={openEdit}
+
                 >
                     <EditIcon fontSize="small" />
                 </Button>
@@ -108,6 +114,9 @@ export default function BioWidget() {
 
                 </div>
             </main>
+
+            {modalEdit}
+
         </section>
     )
 }
