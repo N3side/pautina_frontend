@@ -6,6 +6,8 @@ export interface FetchResult {
     json?: any
 }
 
+//
+
 // Добавь типы для параметров
 interface FetchOptions {
     method?: string
