@@ -1,6 +1,6 @@
 "use client"
 
-import { PautinaText } from "@/shared/cat/typography/text"
+import { PautinaText } from "@/shared/styles/typography/text"
 import { ShadowWrapper } from "@/shared/wrappers/Shadow"
 import { Button } from "@mui/material"
 import { useContext, useEffect, useState } from "react"
@@ -30,12 +30,6 @@ export default function Navigation({ isActive, setIsActive }: Props) {
         if (setIsActive) setIsActive(false)
     }
 
-    // Состояние для предотвращения ошибок гидратации (проверка localStorage только на клиенте)
-    const [isMounted, setIsMounted] = useState(false)
-
-    useEffect(() => {
-        setIsMounted(true)
-    }, [])
 
     return (
         <>
@@ -116,7 +110,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                     </div>
                 )}
 
-                { isMounted && !user && (
+                {!user && (
                     <ThemeSwitch
                         size="small"
                         className="!absolute !top-[17px] !right-[60px] !z-50 !flex lg:!hidden"

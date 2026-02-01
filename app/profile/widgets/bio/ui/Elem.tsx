@@ -1,5 +1,5 @@
-import { PautinaText } from "@/shared/cat/typography/text"
-import {colorStyles} from "@/shared/cat/colors";
+import { PautinaText } from "@/shared/styles/typography/text"
+import {colorStyles} from "@/shared/styles/colors";
 
 
 interface Props {

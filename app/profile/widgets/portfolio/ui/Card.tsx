@@ -1,7 +1,7 @@
 "use client"
 
 import Calendar from "@/shared/vector/Calendar";
-import { PautinaText } from "@/shared/cat/typography/text";
+import { PautinaText } from "@/shared/styles/typography/text";
 import { Button } from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward'; // Добавил иконку стрелки для эстетики

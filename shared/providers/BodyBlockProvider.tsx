@@ -23,7 +23,7 @@ export function BodyBlockProvider({ children }: { children: ReactNode }) {
 
         if (isBlocked) {
             // 1. Вычисляем ширину скроллбара, чтобы страница не "прыгала" вправо
-            const scrollBarWidth = window.innerWidth - html.clientWidth;
+            const scrollBarWidth = window ? window?.innerWidth - html.clientWidth : 0;
 
             // 2. Вместо fixed используем overflow
             body.style.overflow = "hidden";

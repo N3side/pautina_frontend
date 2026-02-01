@@ -1,5 +1,5 @@
-import { colorStyles } from "@/shared/cat/colors";
-import { PautinaText } from "@/shared/cat/typography/text";
+import { colorStyles } from "@/shared/styles/colors";
+import { PautinaText } from "@/shared/styles/typography/text";
 import React, { HTMLAttributes } from "react";
 
 // Наследуемся от стандартных атрибутов div, чтобы onClick и прочие пропсы подхватились автоматически

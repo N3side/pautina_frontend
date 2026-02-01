@@ -1,5 +1,5 @@
-import {COLORS, colorStyles} from "@/shared/cat/colors";
-import {PautinaText} from "@/shared/cat/typography/text";
+import {COLORS, colorStyles} from "@/shared/styles/colors";
+import {PautinaText} from "@/shared/styles/typography/text";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import { Button } from "@mui/material"
 

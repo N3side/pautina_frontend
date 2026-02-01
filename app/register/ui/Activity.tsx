@@ -1,5 +1,5 @@
-import { Heading } from "@/shared/cat/typography/headings";
-import { PautinaText } from "@/shared/cat/typography/text";
+import { Heading } from "@/shared/styles/typography/headings";
+import { PautinaText } from "@/shared/styles/typography/text";
 import React, {ChangeEvent, FormEvent, useEffect, useRef, useState} from "react";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Option from "@/shared/components/Inputs/Option";

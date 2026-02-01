@@ -1,4 +1,4 @@
-import {colorStyles} from "@/shared/cat/colors";
+import {colorStyles} from "@/shared/styles/colors";
 
 export default function Settings() {
     return (

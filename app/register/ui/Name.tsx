@@ -1,5 +1,5 @@
-import {Heading} from "@/shared/cat/typography/headings";
-import {PautinaText} from "@/shared/cat/typography/text";
+import {Heading} from "@/shared/styles/typography/headings";
+import {PautinaText} from "@/shared/styles/typography/text";
 import {useState} from "react";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
@@ -28,10 +28,7 @@ export default function Name({name, setName, next}) {
 
         setName(name_)
 
-        if (typeof window !== 'undefined') {
-            safeLocalStorage.setItem("user_name", name_)
-        }
-
+        safeLocalStorage.setItem("user_name", name_)
     }
 
     return (

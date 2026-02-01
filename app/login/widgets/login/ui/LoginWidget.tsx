@@ -1,9 +1,9 @@
 "use client"
 
 import { WindowContext } from "@/shared/providers/WindowProvider"
-import { COLORS, colorStyles } from "@/shared/cat/colors"
-import { Heading } from "@/shared/cat/typography/headings"
-import { PautinaText } from "@/shared/cat/typography/text"
+import { COLORS, colorStyles } from "@/shared/styles/colors"
+import { Heading } from "@/shared/styles/typography/headings"
+import { PautinaText } from "@/shared/styles/typography/text"
 import { ShadowWrapper } from "@/shared/wrappers/Shadow"
 import {Button, Checkbox} from "@mui/material"
 import Link from "next/link"
@@ -35,8 +35,7 @@ interface LoginErrors {
 }
 
 export default function LoginWidget() {
-    const { setToken, setUser } = useContext(UserContext)
-    const { _window } = useContext(WindowContext)
+    const { setToken } = useContext(UserContext)
     const [isActive, setIsActive] = useState<boolean>(false)
     const [errors, setErrors] = useState<LoginErrors | null>(null)
     const router = useRouter()

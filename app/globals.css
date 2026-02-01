@@ -1,3 +1,4 @@
+@tailwind utilities;
 @import "tailwindcss";
 
 /* 1. Настройка темы (Tailwind v4 использует префиксы для маппинга переменных) */
@@ -60,6 +61,32 @@
 
 	--border-default: #334155;
 }
+
+
+
+
+@layer utilities {
+
+	.custom-scrollbar {
+		scrollbar-width: none;
+		scrollbar-color: var(--border-default) transparent;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-track {
+		background: transparent;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-thumb {
+		background-color: var(--border-default);
+		border-radius: 10px;
+	}
+
+	.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+		background-color: var(--text-muted);
+	}
+
+}
+
 
 @layer base {
     * {

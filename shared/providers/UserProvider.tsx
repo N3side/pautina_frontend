@@ -71,14 +71,13 @@ export default function UserProvider({ children }: { children: ReactNode }) {
         }
     }, [user]);
 
-    // Синхронизация токена: когда вызываешь setToken, обновляем localStorage и тянем юзера
     useEffect(() => {
         if (token) {
             safeLocalStorage.setItem("token", token)
             getUser()
         } else if (token === null && !isLoading) {
             // Если токен явно сбросили в null
-            localStorage.removeItem("token")
+            safeLocalStorage.removeItem("token")
             setUser(null)
         }
     }, [token, getUser])

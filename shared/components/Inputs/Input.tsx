@@ -1,61 +1,107 @@
-import React, { useRef } from 'react';
-import { PautinaText } from "@/shared/cat/typography/text";
-import { InputHTMLAttributes } from "react";
+import React, { InputHTMLAttributes } from 'react';
 import { IMaskInput } from 'react-imask';
+import { PautinaText } from "@/shared/styles/typography/text";
 
-const INPUT_CLASSES = `
-  w-full px-5 py-4 rounded-xl transition-all duration-200 outline-none
-  border border-[1px] border-gray-200 bg-input text-text-main
-  focus:border-brand focus:border-[2px]
-  placeholder:text-text-muted
+const BASE_INPUT_CLASSES = `
+  w-full py-4 rounded-xl transition-all duration-300 outline-none
+  border bg-input text-text-main text-sm font-medium
+  placeholder:text-text-muted/60
+  focus:ring-4 focus:ring-brand/10 focus:bg-surface
+  disabled:opacity-50 disabled:cursor-not-allowed
 `;
 
-interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange'> {
+// Исправляем интерфейс: явно указываем, что value — это строка
+interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
+    value?: string;
     label?: string | null;
     error?: string | null;
     selected?: boolean;
-    mask?: any; // Строка типа "+7 (000) 000-00-00" или объект настроек IMask
-    onAccept?: (value: string, maskRef: any) => void; // Специальный колбэк для imask
+    mask?: any;
+    onAccept?: (value: string, maskRef: any) => void;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
+    isUsername?: boolean;
 }
 
-const Input = ({ label, error, selected, className, style, mask, onAccept, onChange, ...props }: InputProps) => {
+const Input = ({
+       label,
+       error,
+       selected,
+       className,
+       style,
+       mask,
+       onAccept,
+       onChange,
+       isUsername,
+       value,        // Выносим отдельно
+       defaultValue, // Выносим отдельно
+       ...props
+   }: InputProps) => {
 
-    const inputStyle = {
-        border: `1px solid ${selected ? "var(--color-brand)" : "var(--color-border-default)"}`,
+    const dynamicInputStyle = {
+        borderColor: error
+            ? '#ef4444'
+            : (selected ? 'var(--color-brand)' : 'var(--color-border-default)'),
+        paddingLeft: isUsername ? "2.75rem" : "1.25rem",
+        paddingRight: "1.25rem",
         ...style,
     };
 
     return (
-        <div className={`flex flex-col gap-2 w-full ${className || ''}`}>
+        <div className={`flex flex-col gap-1.5 w-full ${className || ''}`}>
             {label && (
-                <label className="font-bold text-[14px] ml-1 text-text-main">
+                <PautinaText variant="tiny" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
                     {label}
-                </label>
+                </PautinaText>
             )}
 
-            {mask ? (
-                <IMaskInput
-                    mask={mask}
-                    unmask={false} // Если true, в state будет уходить "7999...", если false — "+7 (999)..."
-                    onAccept={onAccept}
-                    // @ts-ignore - imask иногда конфликтует с типами реакта, но работает корректно
-                    className={INPUT_CLASSES}
-                    style={inputStyle}
-                    {...props}
-                />
-            ) : (
-                <input
-                    className={INPUT_CLASSES}
-                    style={inputStyle}
-                    onChange={onChange}
-                    {...props}
-                    placeholder="Пусто"
-                />
-            )}
+            <div className="relative group">
+                {isUsername && (
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-10">
+                        <span className={`text-base transition-colors duration-200 ${error ? 'text-red-400' : 'text-text-muted group-focus-within:text-brand'}`}>
+                            @
+                        </span>
+                    </div>
+                )}
+
+                {mask ? (
+                    <IMaskInput
+                        mask={mask}
+                        unmask={false}
+                        onAccept={onAccept}
+                        // Если передан value — используем его,
+                        // если нет — передаем defaultValue, чтобы маска его подхватила
+                        value={(value as string) ?? (defaultValue as string)}
+                        className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
+                        style={dynamicInputStyle}
+                        {...(props as any)}
+                    />
+                ) : (
+                    <input
+                        className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
+                        style={dynamicInputStyle}
+                        onChange={onChange}
+                        value={value}
+                        defaultValue={defaultValue}
+                        {...props}
+                        placeholder={props?.placeholder || "Введите данные..."}
+                    />
+                )}
+
+                {error && (
+                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-red-500 animate-pulse">
+                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                )}
+            </div>
 
             {error && (
-                <span className="text-red-500 text-sm ml-1">{error}</span>
+                <div className="min-h-[20px] ml-1">
+                    <span className="text-red-500 text-[12px] font-medium leading-none transition-all">
+                        {error}
+                    </span>
+                </div>
             )}
         </div>
     );

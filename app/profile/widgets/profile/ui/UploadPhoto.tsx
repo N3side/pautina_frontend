@@ -1,9 +1,9 @@
-import {Heading} from "@/shared/cat/typography/headings";
+import {Heading} from "@/shared/styles/typography/headings";
 import Cropper from "react-easy-crop";
-import {PautinaText} from "@/shared/cat/typography/text";
+import {PautinaText} from "@/shared/styles/typography/text";
 import {Button, Slider} from "@mui/material";
 import {ChangeEvent, useCallback, useEffect, useRef, useState} from "react";
-import {useModal} from "@/shared/components/Modal";
+import {useModal} from "@/shared/components/Modals/Modal";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import {$fetch} from "@/shared/api/fetch";
 import {getCroppedImg} from "@/shared/utils/cropUtil";

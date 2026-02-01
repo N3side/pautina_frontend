@@ -1,13 +1,13 @@
 import {useContext, useRef} from "react";
 import { WindowContext } from "@/shared/providers/WindowProvider";
 import { UserContext } from "@/shared/providers/UserProvider";
-import { PautinaText } from "@/shared/cat/typography/text";
-import { Heading } from "@/shared/cat/typography/headings";
+import { PautinaText } from "@/shared/styles/typography/text";
+import { Heading } from "@/shared/styles/typography/headings";
 import { Button } from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 import {$fetch} from "@/shared/api/fetch";
-import {useModal} from "@/shared/components/Modal";
+import {useModal} from "@/shared/components/Modals/Modal";
 import UploadPhoto from "@/app/profile/widgets/profile/ui/UploadPhoto";
 
 export default function ProfileWidget() {
@@ -54,7 +54,7 @@ export default function ProfileWidget() {
                 {/* --- User Info --- */}
                 <div className="flex flex-col items-center text-center space-y-2">
                     <Heading variant="h5" className="text-text-main font-bold tracking-tight">
-                        {user?.full_name}
+                        {user?.name}
                     </Heading>
 
                     <PautinaText variant="secondary" className="text-text-muted line-clamp-2 px-2">

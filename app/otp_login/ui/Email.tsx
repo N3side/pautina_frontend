@@ -1,5 +1,5 @@
-import {Heading} from "@/shared/cat/typography/headings";
-import {PautinaText} from "@/shared/cat/typography/text";
+import {Heading} from "@/shared/styles/typography/headings";
+import {PautinaText} from "@/shared/styles/typography/text";
 import {useContext, useState, FormEvent, ChangeEvent, useEffect} from "react";
 import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
@@ -58,9 +58,7 @@ export default function Email({email,  setEmail, next}) {
 
         setEmail(email)
 
-        if (typeof window !== 'undefined') {
-            safeLocalStorage.setItem("login_email", email)
-        }
+        safeLocalStorage.setItem("login_email", email)
 
     }
 
@@ -80,7 +78,7 @@ export default function Email({email,  setEmail, next}) {
                      Введите почту, к которой привязан ваш аккаунт. На нее будет отправлен одноразовый код
                 </PautinaText>
             </div>
-            <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
+            <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[20px] w-full ">
 
                 <Input
                     label={"Ваша почта *"}

@@ -1,6 +1,5 @@
 "use client"
 
-import { Container } from "@/shared/wrappers/Container"
 import { useContext, useEffect, useState } from "react"
 import { UserContext, CheckGuest } from "@/shared/providers/UserProvider"
 import Name from "@/app/register/ui/Name"
@@ -13,26 +12,19 @@ import Password from "@/app/register/ui/Password"
 import { ReactElement } from "react"
 import Card1 from "@/shared/components/Sections/Card1";
 import { Button } from "@mui/material";
-import { textSizes } from "@/shared/cat/typography/text";
-// Импортируем motion
+import { textSizes } from "@/shared/styles/typography/text";
 import { motion, AnimatePresence } from "framer-motion"
 import {useTheme} from "@/shared/providers/ThemeProvider";
 import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function RegisterWidget() {
-    const { setToken, setUser } = useContext(UserContext)
     const [name, setName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
     const [position, setPosition] = useState<number>(0)
     const [otp, setOtp] = useState<string | null>(null)
-    const [isMounted, setIsMounted] = useState(false)
     const {theme} = useTheme()
 
-    // Добавим направление анимации (влево/вправо) если захочешь сложнее,
-    // но пока сделаем просто мягкое появление (fade + slide)
-
     useEffect(() => {
-        setIsMounted(true)
         setName(safeLocalStorage.getItem("user_name"))
         setEmail(safeLocalStorage.getItem("user_email"))
         setPosition(Number(safeLocalStorage.getItem("register_position")) || 0)
@@ -55,12 +47,8 @@ export default function RegisterWidget() {
     ]
 
     useEffect(() => {
-        if (isMounted && typeof window !== 'undefined') {
-            safeLocalStorage.setItem("register_position", position.toString())
-        }
-    }, [position, isMounted])
-
-    if (!isMounted) return null
+        safeLocalStorage.setItem("register_position", position.toString())
+    }, [position])
 
     const progress = ((position) / positions.length) * 100;
 
@@ -69,7 +57,7 @@ export default function RegisterWidget() {
         <CheckGuest>
             <Card1>
                 {/* Прогресс-бар тоже можно сделать через motion для плавности */}
-                <div className={`w-full h-1.5 rounded-full mb-8 overflow-hidden bg-${ theme === "light" ? "text-main" : "text-muted" } relative`}>
+                <div className={`w-full h-1.5 rounded-full mb-8 bg-${ theme === "light" ? "text-main" : "text-muted" } relative`}>
                     <motion.div
                         className="h-full relative"
                         initial={{ width: 0 }}
@@ -105,7 +93,7 @@ export default function RegisterWidget() {
                     </motion.div>
                 </div>
 
-                <div className="relative overflow-hidden w-full">
+                <div className="relative w-full">
                     <AnimatePresence mode="wait">
                         <motion.div
                             key={position} // Важно! При смене ключа срабатывает анимация

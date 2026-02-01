@@ -1,11 +1,11 @@
-import { PautinaText } from "@/shared/cat/typography/text";
-import { Heading } from "@/shared/cat/typography/headings";
+import { PautinaText } from "@/shared/styles/typography/text";
+import { Heading } from "@/shared/styles/typography/headings";
 import Book from "@/shared/vector/Book"; // Убедись, что иконка поддерживает className или цвет через fill/stroke
 import { Button } from "@mui/material";
 import { CardProps, cards, categories, CategoriesProps } from "@/app/profile/widgets/portfolio/model";
 import Card from "@/app/profile/widgets/portfolio/ui/Card";
 import { WheelXScrollProvider } from "@/shared/components/WheelScrollXWrapper";
-import { useModal } from "@/shared/components/Modal";
+import { useModal } from "@/shared/components/Modals/Modal";
 import { AchievementWidget } from "@/app/profile/widgets/portfolio/ui/AchievementWidget";
 
 export default function PortfolioWidget() {

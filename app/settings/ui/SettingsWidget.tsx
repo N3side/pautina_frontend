@@ -1,8 +1,8 @@
 "use client"
 
 import { Container } from "@/shared/wrappers/Container";
-import { PautinaText } from "@/shared/cat/typography/text";
-import { Heading } from "@/shared/cat/typography/headings";
+import { PautinaText } from "@/shared/styles/typography/text";
+import { Heading } from "@/shared/styles/typography/headings";
 import { NavItem } from "@/shared/components/Sections/NavItem";
 
 import SecurityIcon from '@mui/icons-material/Security';

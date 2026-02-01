@@ -1,22 +1,30 @@
-// utils/safeStorage.ts (или внутри файла провайдера)
-
 export const safeLocalStorage = {
     getItem: (key: string): string | null => {
-        if (typeof window === "undefined") return null; // Защита от SSR
+        // Проверяем ТУТ только через typeof
+        if (typeof window === "undefined") return null;
+
         try {
             return localStorage.getItem(key);
         } catch (e) {
             console.warn("LocalStorage недоступен (чтение)", e);
-            return null; // Если запрещено, вернем null, как будто данных нет
+            return null;
         }
     },
-    setItem: (key: string, value: string): void => {
+    setItem: (key: string, value: string | number): void => {
         if (typeof window === "undefined") return;
+
         try {
-            localStorage.setItem(key, value);
+            localStorage.setItem(key, String(value));
         } catch (e) {
             console.warn("LocalStorage недоступен (запись)", e);
-            // Тут ничего не делаем, просто тема не сохранится
+        }
+    },
+    removeItem: (key: string): void => {
+        if (typeof window === "undefined") return;
+        try {
+            localStorage.removeItem(key);
+        } catch (e) {
+            console.warn("LocalStorage недоступен (удаление)", e);
         }
     }
 };

@@ -6,22 +6,7 @@ import { IconWrapper } from "@/shared/components/IconWrapper"
 import { BodyBlockContext } from "@/shared/providers/BodyBlockProvider"
 
 // Используем CSS-переменные напрямую для скроллбара
-const scrollbarStyles = `
-  .custom-scrollbar::-webkit-scrollbar {
-    width: 0px;
-    height: 0px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-track {
-    background: transparent;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb {
-    background-color: var(--border-default); /* Адаптивный цвет */
-    border-radius: 10px;
-  }
-  .custom-scrollbar::-webkit-scrollbar-thumb:hover {
-    background-color: var(--text-muted); /* Цвет при наведении */
-  }
-`
+
 
 export function useModal({ children, modalClassName = "", onClose = () => {} }) {
     const [isOpen, setIsOpen] = useState(false)
@@ -44,7 +29,11 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
         const handleKeyDown = (e: KeyboardEvent) => {
             if (isOpen && e.key === "Escape") close()
         }
-        window.addEventListener("keydown", handleKeyDown)
+        if (window) {
+            window.addEventListener("keydown", handleKeyDown)
+        } else {
+            return
+        }
         return () => window.removeEventListener("keydown", handleKeyDown)
     }, [isOpen])
 
@@ -84,14 +73,20 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
             currentY.current = 0
         }
 
-        window.addEventListener("pointermove", onPointerMove)
-        window.addEventListener("pointerup", onPointerUp)
-        window.addEventListener("pointercancel", onPointerUp)
+        if (window) {
+            window.addEventListener("pointermove", onPointerMove)
+            window.addEventListener("pointerup", onPointerUp)
+            window.addEventListener("pointercancel", onPointerUp)
+        }
+
 
         return () => {
-            window.removeEventListener("pointermove", onPointerMove)
-            window.removeEventListener("pointerup", onPointerUp)
-            window.removeEventListener("pointercancel", onPointerUp)
+
+            if (window) {
+                window.removeEventListener("pointermove", onPointerMove)
+                window.removeEventListener("pointerup", onPointerUp)
+                window.removeEventListener("pointercancel", onPointerUp)
+            }
         }
     }, [isDragging])
 
@@ -101,7 +96,6 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
     const modal: ReactPortal | null = isOpen
         ? createPortal(
             <>
-                <style>{scrollbarStyles}</style>
                 <div
                     role="dialog"
                     aria-modal="true"
@@ -159,7 +153,7 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
                         </div>
 
                         {/* 2. SCROLLABLE CONTENT AREA */}
-                        <div className="flex-1 overflow-y-auto overscroll-contain custom-scrollbar px-4 pb-8 pt-2 md:p-8 md:pt-2">
+                        <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pb-8 pt-2 md:p-8 md:pt-2">
                             {children}
                         </div>
                     </div>

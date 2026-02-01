@@ -4,8 +4,8 @@ import { UserContext } from "@/shared/providers/UserProvider";
 
 // UI Components
 import { Button } from "@mui/material";
-import { Heading } from "@/shared/cat/typography/headings";
-import { PautinaText } from "@/shared/cat/typography/text";
+import { Heading } from "@/shared/styles/typography/headings";
+import { PautinaText } from "@/shared/styles/typography/text";
 import { Elem } from "@/app/profile/widgets/bio/ui/Elem";
 
 // Icons
@@ -22,7 +22,7 @@ export default function BioWidget() {
     const activityList = getActivityElems(user);
     const contactList = getContactElems(user);
 
-    const {modalEdit, openEdit, closeEdit} = useEditProfile()
+    const {modalEdit, openEdit} = useEditProfile()
 
     return (
         <section className="w-full h-full bg-surface border border-border-default rounded-[24px] shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow duration-300">
@@ -66,7 +66,7 @@ export default function BioWidget() {
                     </PautinaText>
 
                     <PautinaText variant="secondary" className="text-text-main leading-relaxed">
-                        {user?.description || (
+                        {user?.bio || (
                             <span className="text-text-muted italic">Информация не указана...</span>
                         )}
                     </PautinaText>

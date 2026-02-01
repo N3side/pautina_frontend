@@ -1,8 +1,8 @@
 "use client"
 
 import { useContext } from "react";
-import { PautinaText } from "@/shared/cat/typography/text";
-import { Heading } from "@/shared/cat/typography/headings";
+import { PautinaText } from "@/shared/styles/typography/text";
+import { Heading } from "@/shared/styles/typography/headings";
 import Temple from "@/shared/vector/Temple";
 import Calendar from "@/shared/vector/Calendar";
 import Python from "@/shared/vector/skills/python";

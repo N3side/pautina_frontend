@@ -6,6 +6,7 @@ import {UserContext} from "@/shared/providers/UserProvider";
 import {useRouter} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
 import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
+import {DeleteAuthorizationInfo} from "@/shared/utils/deleteAuthorizationInfo";
 
 export default function page() {
 
@@ -19,8 +20,9 @@ export default function page() {
 
         setToken(null)
         setUser(null)
-        localStorage.removeItem("token")
+        safeLocalStorage.removeItem("token")
         DeleteRegistrationInfo()
+        DeleteAuthorizationInfo()
 
         router.push("/")
     }

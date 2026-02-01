@@ -1,4 +1,6 @@
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
+
 export function DeleteAuthorizationInfo() {
-    localStorage.removeItem("login_position")
-    localStorage.removeItem("restore_email")
+    safeLocalStorage.removeItem("login_position")
+    safeLocalStorage.removeItem("login_email")
 }

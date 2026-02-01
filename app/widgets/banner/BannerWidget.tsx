@@ -1,8 +1,8 @@
 "use client"
 
 import { Container } from "@/shared/wrappers/Container"
-import { Heading } from "@/shared/cat/typography/headings"
-import { PautinaText } from "@/shared/cat/typography/text"
+import { Heading } from "@/shared/styles/typography/headings"
+import { PautinaText } from "@/shared/styles/typography/text"
 import { ShadowWrapper } from "@/shared/wrappers/Shadow"
 import Image from "next/image"
 import Hero from "@/shared/raster/hero.jpg"
@@ -61,8 +61,8 @@ export default function BannerWidget() {
                             className="font-black text-text-main leading-[1.1] tracking-tight"
                         >
                             Создай портфолио,
-                            <br className="hidden lg:block"/>{" "}
-                            которое{" "}
+                            <br className="hidden lg:block"/>
+                            которое
                             <span className="relative inline-block">
                                 <span
                                     className="bg-clip-text text-transparent bg-gradient-to-r from-brand via-blue-500 to-purple-600 animate-gradient-x"
@@ -81,7 +81,7 @@ export default function BannerWidget() {
                             className="mt-6 text-text-muted max-w-[500px] leading-relaxed"
                         >
                             Единая экосистема для хранения сертификатов, проектов и достижений.
-                            Специально для студентов{" "}
+                            Специально для студентов
                             <span className="font-semibold text-text-main border-b border-brand/30 pb-0.5">
                                 ГАПОУ «МЦК-КТИТС»
                             </span>.
@@ -94,6 +94,7 @@ export default function BannerWidget() {
                                     <PautinaText
                                         variant="button"
                                         className="text-white font-bold text-lg"
+                                        component="span"
                                     >
                                         Создать портфолио
                                     </PautinaText>

@@ -1,8 +1,8 @@
-import {Heading} from "@/shared/cat/typography/headings";
-import {PautinaText} from "@/shared/cat/typography/text";
+import {Heading} from "@/shared/styles/typography/headings";
+import {PautinaText} from "@/shared/styles/typography/text";
 import {ShadowWrapper} from "@/shared/wrappers/Shadow";
 import {Button} from "@mui/material";
-import {COLORS, colorStyles} from "@/shared/cat/colors";
+import {COLORS, colorStyles} from "@/shared/styles/colors";
 import {useContext, useState, FormEvent, ChangeEvent, useEffect} from "react";
 import {$fetch} from "@/shared/api/fetch";
 import {UserContext} from "@/shared/providers/UserProvider";

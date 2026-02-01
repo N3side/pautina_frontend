@@ -1,5 +1,5 @@
-import {Heading} from "@/shared/cat/typography/headings";
-import {PautinaText} from "@/shared/cat/typography/text";
+import {Heading} from "@/shared/styles/typography/headings";
+import {PautinaText} from "@/shared/styles/typography/text";
 import {$fetch} from "@/shared/api/fetch";
 import toast from "react-hot-toast";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
@@ -7,7 +7,7 @@ import Input from "@/shared/components/Inputs/Input";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/shared/providers/UserProvider";
 import {router} from "next/client";
-import {colorStyles} from "@/shared/cat/colors";
+import {colorStyles} from "@/shared/styles/colors";
 import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/utils/deleteAuthorizationInfo";
 import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
@@ -52,9 +52,7 @@ export default function OTP({email, next, prev}) {
 
         setOtp(otp_)
 
-        if (typeof window !== 'undefined') {
-            safeLocalStorage.setItem("email_otp", otp_)
-        }
+        safeLocalStorage.setItem("email_otp", otp_)
 
     }
 
