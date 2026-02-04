@@ -1,10 +1,11 @@
 services:
   app:
-    build:
-      context: .
-      dockerfile: _docker/app/Dockerfile
+    # Указываем путь к образу в реестре GitHub (ghcr.io).
+    # ЗАМЕНИ 'твой_ник' и 'твой_репо' на реальные (ВСЕ МАЛЕНЬКИМИ БУКВАМИ!)
+    image: ghcr.io/n3side/REPO_NAME:pautina_frontend
+    container_name: my-app
     ports:
-      - "8080:3000"  # Исправлено с 80 на 3000
+      - "8080:3000"
     restart: unless-stopped
     environment:
       - NODE_ENV=production

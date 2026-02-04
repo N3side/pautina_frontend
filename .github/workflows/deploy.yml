@@ -1,49 +1,76 @@
-name: deploy.yml
+name: Build and Deploy
 on:
-  pull_request:
-    types: [closed]
-    branches:
-      - main
   push:
-    branches:
-      - main
+    branches: [ main ]
+
+env:
+  # ЗАМЕНИ НА СВОИ ДАННЫЕ (все буквы маленькие!)
+  REGISTRY: ghcr.io
+  # Формат: ник/репозиторий
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  deploy:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # Разрешаем workflow загружать пакеты
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 1. Логинимся в реестр GitHub (чтобы можно было пушить)
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # 2. Собираем и пушим образ (ВСЯ НАГРУЗКА ЗДЕСЬ, НЕ НА VPS!)
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: _docker/app/Dockerfile # Путь к твоему Dockerfile
+          push: true
+          tags: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}:latest
+          # Важно: собираем под Linux/AMD64 (стандарт для VPS)
+          platforms: linux/amd64
+
+      # 3. Подготовка к деплою (ставим sshpass)
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
 
-      - name: Install rsync on remote server
+      # 4. Копируем ТОЛЬКО docker-compose.yml на сервер (код копировать не надо!)
+      - name: Copy docker-compose.yml to VPS
+        run: |
+          sshpass -p "${{ secrets.SSH_PASSWORD }}" scp \
+            -o StrictHostKeyChecking=no \
+            -P 49317 \
+            docker-compose.yml \
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}/docker-compose.yml
+
+      # 5. Заходим на сервер и перезапускаем
+      - name: Deploy on VPS
         run: |
           sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
             -o StrictHostKeyChecking=no \
             -p 49317 \
-            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} "
-            sudo apt-get update && sudo apt-get install -y rsync
-          "
+            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << EOF
+          
+            cd ${{ secrets.DEPLOY_PATH }}
 
-      - name: Deploy with rsync
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" rsync \
-            -avzr \
-            --exclude=".git" \
-            --exclude=".github" \
-            --exclude="prod.env" \
-            -e "ssh -o StrictHostKeyChecking=no -p 49317" \
-            ./ \
-            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}:${{ secrets.DEPLOY_PATH }}
+            # Логинимся в GitHub Registry прямо на сервере (используя токен текущей сессии)
+            echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
 
-      - name: Restart Docker on VPS
-        run: |
-          sshpass -p "${{ secrets.SSH_PASSWORD }}" ssh \
-            -o StrictHostKeyChecking=no \
-            -p 49317 \
-            ${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }} << 'EOF'
-          cd ${{ secrets.DEPLOY_PATH }}
-          docker compose --file docker-compose.yml up -d --build
+            # Скачиваем свежий образ
+            docker compose pull
+
+            # Перезапускаем (он возьмет новый образ, билд не начнется)
+            docker compose up -d
+
+            # Чистим старые ненужные образы, чтобы не забивать диск
+            docker image prune -f
           EOF
