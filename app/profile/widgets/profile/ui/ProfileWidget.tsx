@@ -20,29 +20,23 @@ export default function ProfileWidget() {
     return (
         <section
             className={`
-                relative flex flex-col w-full h-full 
-                bg-surface border border-border-default rounded-[24px] shadow-xl overflow-hidden
-                transition-all duration-300 hover:shadow-2xl
+                relative flex flex-col w-full
+                glass-effect rounded-[24px] overflow-hidden
+                transition-all duration-300
                 ${isMobile ? "max-w-none" : "max-w-[386px]"}
             `}
         >
-            {/* --- Header Banner --- */}
-            {/* Добавил градиент для "дороговизны" */}
-            <header className="h-[140px] w-full bg-gradient-to-r from-brand to-brand-hover relative">
-                <div className="absolute inset-0 bg-black/5"></div>
-            </header>
-
             {/* --- Main Content --- */}
-            <main className="flex flex-col flex-grow px-6 pb-6">
+            <main className="flex flex-col flex-grow p-6 h-full">
 
                 {/* --- Avatar Wrapper --- */}
-                <div className="relative flex justify-center -mt-[64px] mb-4">
-                    <div className="relative w-[128px] h-[128px] rounded-full p-[6px] bg-surface shadow-sm ring-1 ring-border-default/50">
+                <div className="relative flex justify-center  mb-4">
+                    <div className="relative w-[160px] h-[160px] rounded-full p-[6px] shadow-sm ring-1 ring-border-default/50">
 
                         <img
                             src={user?.avatar}
                             alt="avatar"
-                            className="w-full h-full rounded-full object-cover"
+                            className="!w-full !h-full rounded-full object-cover"
                             referrerPolicy="no-referrer"
                         />
 
@@ -77,7 +71,7 @@ export default function ProfileWidget() {
                 </div>
 
                 {/* --- Footer Stats --- */}
-                <div className="mt-auto pt-8">
+                <div className="mt-auto ">
                     <div className="w-full grid grid-cols-2 divide-x divide-border-default border-t border-border-default py-4">
 
                         {/* Documents */}

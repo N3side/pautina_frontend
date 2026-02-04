@@ -33,7 +33,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
 
     return (
         <>
-            {/* Затемнение фона (Backdrop) для мобильной версии */}
+
             <div
                 className={`
                     fixed inset-0 bg-black/40 backdrop-blur-sm z-10 lg:hidden transition-opacity duration-300

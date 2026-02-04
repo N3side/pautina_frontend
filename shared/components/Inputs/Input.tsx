@@ -4,7 +4,7 @@ import { PautinaText } from "@/shared/styles/typography/text";
 
 const BASE_INPUT_CLASSES = `
   w-full py-4 rounded-xl transition-all duration-300 outline-none
-  border bg-input text-text-main text-sm font-medium
+  border glass-effect text-text-main text-sm font-medium
   placeholder:text-text-muted/60
   focus:ring-4 focus:ring-brand/10 focus:bg-surface
   disabled:opacity-50 disabled:cursor-not-allowed

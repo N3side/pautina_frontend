@@ -4,6 +4,7 @@ import { Button } from "@mui/material"
 import { Close } from "@/shared/vector/Close"
 import { IconWrapper } from "@/shared/components/IconWrapper"
 import { BodyBlockContext } from "@/shared/providers/BodyBlockProvider"
+import {useTheme} from "@/shared/providers/ThemeProvider";
 
 // Используем CSS-переменные напрямую для скроллбара
 
@@ -18,6 +19,8 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
         setIsOpen(false)
         setTranslateY(0)
     }
+
+    const {theme} = useTheme()
 
     // Блокировка скролла страницы
     useEffect(() => {
@@ -111,9 +114,9 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
                     <div
                         className={`
                             relative shadow-xl flex flex-col
-                            
-                            /* THEME COLORS APPLIED HERE */
-                            bg-surface text-text-main
+                             
+                            glass-effect
+                            text-text-main
                             
                             /* Mobile: Bottom Sheet */
                             w-full rounded-t-[24px] rounded-b-none 

@@ -1,14 +1,12 @@
 import {Heading} from "@/shared/styles/typography/headings";
 import {PautinaText} from "@/shared/styles/typography/text";
-import {ShadowWrapper} from "@/shared/wrappers/Shadow";
-import {Button} from "@mui/material";
-import {COLORS, colorStyles} from "@/shared/styles/colors";
 import {FormEvent, RefObject, useRef, useState} from "react";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import {$fetch} from "@/shared/api/fetch";
 import {redirect} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
+import {DeleteAuthorizationInfo} from "@/shared/utils/deleteAuthorizationInfo";
 
 export default function Password() {
 
@@ -18,16 +16,35 @@ export default function Password() {
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 
-        setErrors(null)
+        e.preventDefault();
+        setErrors(null);
 
-        e.preventDefault()
+        // Use currentTarget to get the form and create FormData immediately
+        const formData = new FormData(e.currentTarget);
 
-        const formData = new FormData(form.current)
+        const password = formData.get('password') as string;
+        const password_repeat = formData.get('password_repeat') as string;
+
+        if (!password) {
+            setErrors({
+                "password": "Пожалуйста, придумайте пароль.",
+                "password_repeat": "Пожалуйста, повторите пароль.",
+            });
+            return;
+        }
+
+        if (password_repeat !== password) {
+            setErrors({
+                "password": "Пароли должны совпадать",
+                "password_repeat": "Пароли должны совпадать",
+            });
+            return;
+        }
 
         const response = await $fetch("onboarding/password", {
             method: "PATCH",
             body: formData
-        })
+        });
 
         const errors_ = response?.json?.errors
 
@@ -37,6 +54,7 @@ export default function Password() {
         }
 
         DeleteRegistrationInfo()
+        DeleteAuthorizationInfo()
 
         redirect("/profile")
 
@@ -55,9 +73,10 @@ export default function Password() {
                     И завершающий штрих - безопасность. Придумайте пароль для входа в личный кабинет
                 </PautinaText>
             </div>
-            <form onSubmit={handleSubmit} ref={form} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
+            <form onSubmit={handleSubmit} ref={form} className="flex flex-col gap-[25px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 
                 <Input label={"Пароль *"} placeholder={"*******"} name={"password"} type={"password"} error={errors?.password} />
+                <Input label={"Подтвердите пароль *"} placeholder={"*******"} name={"password_repeat"} type={"password"} error={errors?.password_repeat} />
 
                 <ButtonLarge text={"Перейти в профиль"}>
                     <></>

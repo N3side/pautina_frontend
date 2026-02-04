@@ -12,9 +12,9 @@ export default function Card(card: CardProps) {
         <div
             className="
                 group relative flex flex-col h-full
-                bg-surface border border-border-default rounded-2xl overflow-hidden
+                glass-effect
+                rounded-2xl overflow-hidden
                 transition-all duration-300 ease-out
-                hover:-translate-y-1 hover:shadow-[0_10px_30px_-10px_rgba(0,0,0,0.1)] hover:border-brand/30
                 cursor-pointer
             "
             onClick={card?.onClick}

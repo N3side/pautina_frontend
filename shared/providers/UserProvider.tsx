@@ -89,8 +89,6 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     )
 }
 
-// --- Гарды с использованием router.replace для предотвращения возврата назад ---
-
 export function CheckUser({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useContext(UserContext)
     const router = useRouter()
@@ -130,13 +128,12 @@ export function CheckGuest({ children }: { children: React.ReactNode }) {
 
         // 2. Если юзер авторизован И он уже НЕ гость (isGuest === false)
         // Выкидываем его, чтобы он не заполнил регистрацию второй раз
-        if (user && user.isGuest === false) {
+        if (user && user?.isGuest === false) {
             toast.error("Вы уже зарегистрированы");
             router.replace("/profile");
         }
     }, [isLoading, user, router]);
 
-    // 3. Состояние загрузки — показываем пустоту или спиннер
     if (isLoading) return null;
 
     // 4. Рендерим контент если:

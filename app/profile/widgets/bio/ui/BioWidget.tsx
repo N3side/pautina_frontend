@@ -25,7 +25,7 @@ export default function BioWidget() {
     const {modalEdit, openEdit} = useEditProfile()
 
     return (
-        <section className="w-full h-full bg-surface border border-border-default rounded-[24px] shadow-sm p-6 md:p-8 hover:shadow-md transition-shadow duration-300">
+        <section className="w-full h-full glass-effect border-border-default rounded-[24px] p-6 md:p-8  duration-300">
 
             {/* --- HEADER --- */}
             <header className="flex items-center justify-between mb-8 pb-4 border-b border-border-default/60">
@@ -59,7 +59,6 @@ export default function BioWidget() {
 
                 {/* --- BIO BLOCK --- */}
                 <div className="relative p-5 rounded-2xl bg-background border border-border-default">
-                    <div className="absolute top-0 left-0 w-1 h-full bg-brand rounded-l-2xl opacity-50"></div>
 
                     <PautinaText variant="tiny" className="uppercase tracking-widest text-text-muted font-bold mb-2">
                         Обо мне (Bio)
@@ -70,6 +69,7 @@ export default function BioWidget() {
                             <span className="text-text-muted italic">Информация не указана...</span>
                         )}
                     </PautinaText>
+
                 </div>
 
                 {/* --- DETAILS GRID --- */}

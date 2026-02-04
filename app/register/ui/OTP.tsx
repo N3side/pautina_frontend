@@ -8,13 +8,13 @@ import toast from "react-hot-toast";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import {useContext, useEffect, useState} from "react";
-import {UserContext} from "@/shared/providers/UserProvider";
+import {CheckGuest, UserContext} from "@/shared/providers/UserProvider";
 import {isBoolean} from "node:util";
 import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
-export default function OTP({name, email, otp, setOtp, next}) {
+export default function OTP({name, email, otp, setOtp, next, position}) {
 
-    const {user} = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
 
     async function handleSubmit(e) {
 
@@ -32,7 +32,11 @@ export default function OTP({name, email, otp, setOtp, next}) {
             return
         }
 
-        toast.success("Вы подтвердили почту")
+        const user_ = response?.json?.user
+
+        if (user_) {
+            setUser(user_)
+        }
 
         next()
     }
@@ -48,13 +52,14 @@ export default function OTP({name, email, otp, setOtp, next}) {
 
     useEffect(() => {
 
-        if (Boolean(user?.confirmed_email)) {
+        if (user?.confirmed_email) {
             next()
         }
-    }, [user]);
+
+    }, [user, position]);
 
     return (
-        // <CheckUser>
+        // <CheckGuest>
             <div>
                 <div className="flex flex-col gap-[15px]">
                     <Heading variant="h4">
@@ -74,6 +79,6 @@ export default function OTP({name, email, otp, setOtp, next}) {
 
                 </form>
             </div>
-        // </CheckUser>
+        // </CheckGuest>
     )
 }

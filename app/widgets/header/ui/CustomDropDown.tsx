@@ -33,9 +33,9 @@ export default function CustomDropDown() {
                         }
                     >
                         <div className="flex items-center justify-center pt-2" onClick={(e) => e.stopPropagation()}>
-                            <div className="w-[280px] bg-surface rounded-2xl overflow-hidden font-sans border border-border-default shadow-2xl shadow-brand/10 ring-1 ring-black/5">
+                            <div className="w-[280px] rounded-2xl overflow-hidden font-sans glass-effect">
 
-                                <div className="p-4 flex gap-3 items-center bg-surface">
+                                <div className="p-4 flex gap-3 items-center">
                                     <img src={user?.avatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover shrink-0 border border-border-default" />
                                     <div className="flex flex-col min-w-0">
                                         <PautinaText variant="default" className="text-text-main font-bold truncate">{user?.name}</PautinaText>

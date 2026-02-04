@@ -1,6 +1,5 @@
 export const safeLocalStorage = {
     getItem: (key: string): string | null => {
-        // Проверяем ТУТ только через typeof
         if (typeof window === "undefined") return null;
 
         try {

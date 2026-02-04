@@ -2,12 +2,13 @@ import {Heading} from "@/shared/styles/typography/headings";
 import Cropper from "react-easy-crop";
 import {PautinaText} from "@/shared/styles/typography/text";
 import {Button, Slider} from "@mui/material";
-import {ChangeEvent, useCallback, useEffect, useRef, useState} from "react";
+import {ChangeEvent, useCallback, useContext, useEffect, useRef, useState} from "react";
 import {useModal} from "@/shared/components/Modals/Modal";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import {$fetch} from "@/shared/api/fetch";
 import {getCroppedImg} from "@/shared/utils/cropUtil";
-import { ZoomIn, ZoomOut } from "@mui/icons-material"; // Импортируем иконки для зума
+import { ZoomIn, ZoomOut } from "@mui/icons-material";
+import {UserContext} from "@/shared/providers/UserProvider"; // Импортируем иконки для зума
 
 export default function UploadPhoto() {
 
@@ -18,6 +19,8 @@ export default function UploadPhoto() {
 
     const [tempImage, setTempImage] = useState<string | null>(null);
 
+    const {setUser} = useContext(UserContext)
+
     const form = useRef<HTMLFormElement>(null);
 
     // Сохраняем координаты обрезки при каждом движении
@@ -26,13 +29,13 @@ export default function UploadPhoto() {
     }, []);
 
     // Очистка при закрытии
+
     const handleClose = () => {
         setTempImage(null);
         setZoom(1);
         close();
     };
 
-    // --- ЛОГИКА СОХРАНЕНИЯ ---
     async function handleSaveCroppedImage() {
         if (!tempImage || !croppedAreaPixels) return;
 
@@ -50,6 +53,12 @@ export default function UploadPhoto() {
                 method: 'PATCH',
                 body: formData
             });
+
+            const user_ = response?.json?.user
+
+            if (user_) {
+                setUser(user_)
+            }
 
             handleClose()
 
@@ -69,13 +78,10 @@ export default function UploadPhoto() {
         }
     };
 
-// ... остальные импорты
 
-// Внутри компонента:
-
-    const { modal, open, close, isOpen } = useModal({
+    const { modal, open, close } = useModal({
         children: (
-            <div className="flex flex-col h-full w-full bg-surface">
+            <div className="flex flex-col h-full w-full glass-effect rounded-xl">
                 {/* --- 1. HEADER --- */}
                 <div className="flex-none px-6 pt-6 pb-4 md:pt-8 md:px-8 border-b border-border-default/40">
                     <Heading variant="h5" className="font-bold text-text-main">
@@ -86,12 +92,6 @@ export default function UploadPhoto() {
                     </PautinaText>
                 </div>
 
-                {/* --- 2. CROPPER AREA --- */}
-                {/* FIX:
-                    h-[50vh] (или 400px) — задает явную высоту на мобилке, чтобы кроппер появился.
-                    md:h-auto md:flex-grow — на десктопе возвращаем старое поведение (заполнять пустоту),
-                    так как там у модалки есть фиксированная высота.
-                */}
                 <div className="relative w-full h-[50vh] md:h-auto md:flex-grow bg-[#1a1a1a] overflow-hidden">
                     <Cropper
                         image={tempImage || ""}
@@ -113,7 +113,7 @@ export default function UploadPhoto() {
                 </div>
 
                 {/* --- 3. CONTROLS FOOTER --- */}
-                <div className="flex-none p-6 md:p-8 space-y-6 bg-surface z-10">
+                <div className="flex-none p-6 md:p-8 space-y-6 z-10">
 
                     {/* Zoom Control */}
                     <div className="flex items-center gap-4">
@@ -176,7 +176,7 @@ export default function UploadPhoto() {
 
                 <form ref={form} className="w-full h-full relative">
 
-                    <input type="file" className="hidden" name="" id="avatar" onChange={handleFileChange}/>
+                    <input type="file" accept="image/*" className="hidden" name="" id="avatar" onChange={handleFileChange}/>
 
                     <label htmlFor="avatar" className="cursor-pointer w-full h-full flex justify-center items-center">
                         <AddAPhotoIcon className="text-white" fontSize={"small"} />

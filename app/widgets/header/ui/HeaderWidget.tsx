@@ -23,12 +23,11 @@ export default function HeaderWidget() {
     }, [isActive])
 
     return (
-        // sticky + backdrop-blur + border-b для красивого отделения от контента
-        <header className="sticky top-0 z-20 w-full transition-all duration-300 border-b border-border-default/40 bg-surface/80">
+        <header className="sticky glass-effect top-0 z-20 w-full">
             <Container className="flex items-center justify-between w-full py-4 md:py-5">
                 {/* Логотип с эффектом при наведении */}
                 <Link href="/" className="logo group relative">
-                    <LogoLight className="h-8 md:h-10 w-auto fill-text-main transition-transform duration-300 group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]"/>
+                    <LogoLight className="h-8 md:h-10 w-auto fill-text-main group-hover:scale-105 group-hover:drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]"/>
                 </Link>
 
                 <div className="flex items-center gap-4 md:gap-6">

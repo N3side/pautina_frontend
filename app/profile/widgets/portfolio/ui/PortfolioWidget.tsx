@@ -59,7 +59,7 @@ export default function PortfolioWidget() {
                                     className="
                                         group flex items-center gap-2.5
                                         py-2 px-4 rounded-full
-                                        bg-surface border border-border-default
+                                        glass-effect border border-border-default
                                         cursor-pointer select-none
                                         transition-all duration-300
                                         hover:border-brand/50 hover:shadow-md hover:-translate-y-0.5
@@ -74,7 +74,7 @@ export default function PortfolioWidget() {
                                     </PautinaText>
 
                                     {/* Badge с количеством */}
-                                    <div className="flex items-center justify-center px-2 py-0.5 rounded-full bg-border-default/50 group-hover:bg-brand/10 transition-colors">
+                                    <div className="flex items-center justify-center px-2 py-0.5 rounded-full group-hover:bg-brand/10 transition-colors">
                                         <PautinaText
                                             variant="tiny"
                                             className="font-bold text-text-muted group-hover:text-brand transition-colors"

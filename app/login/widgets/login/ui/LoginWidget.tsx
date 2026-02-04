@@ -77,7 +77,7 @@ export default function LoginWidget() {
                 <Heading variant="h4" className="font-bold text-text-main">
                     Вход в профиль
                 </Heading>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-[25px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
+                <form onSubmit={handleSubmit} className="flex flex-col gap-[10px] mt-[20px] w-full ">
 
                     <Input label={"Почта"} placeholder={"ivanov@gmail.com"} name={"email"} error={errors?.email} />
 
@@ -103,7 +103,7 @@ export default function LoginWidget() {
                             </label>
                         </div>
                         <Link href="/otp_login" className="flex items-center">
-                            <PautinaText variant="secondary" className="text-text-main font-medium">
+                            <PautinaText variant="small" className="text-text-main font-medium">
                                 Вход по коду
                             </PautinaText>
                         </Link>
@@ -115,8 +115,8 @@ export default function LoginWidget() {
 
                 </form>
 
-                <PautinaText variant="secondary" className="mt-[20px] text-text-muted">
-                    Нет аккаунта ? <Link href="/register"><PautinaText component="span" variant="secondary" className="text-text-main font-medium">Регистрация</PautinaText></Link>
+                <PautinaText variant="small" className="mt-[10px] text-text-muted">
+                    Нет аккаунта ? <Link href="/register"><PautinaText component="span" variant="small" className="text-text-main font-medium">Регистрация</PautinaText></Link>
                 </PautinaText>
             </Card1>
         </CheckIsNotUser>

@@ -111,8 +111,8 @@ export default function Activity({ next }: ActivityProps) {
                 </PautinaText>
             </div>
 
-            <form className="space-y-5" ref={formRef} onSubmit={handleSubmit}>
-                <div className="space-y-3">
+            <form className="flex flex-col gap-8" ref={formRef} onSubmit={handleSubmit}>
+                <div className="flex flex-col gap-3">
                     <Option
                         selected={selectedStatus === "учусь"}
                         text={"учусь"}
@@ -127,11 +127,10 @@ export default function Activity({ next }: ActivityProps) {
 
                 {selectedStatus === "учусь" && (
                     <>
-                        <div className="space-y-3">
-                            <div className="flex flex-col gap-3">
-                                <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Кто вы?</PautinaText>
-                                <Image src={catIcon} alt="Кот" width={100} height={100} />
-                            </div>
+                        <div className="flex flex-col gap-3">
+                            {/*<div className="flex flex-col gap-3">*/}
+                            {/*    <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Кто вы?</PautinaText>*/}
+                            {/*</div>*/}
 
                             <Option
                                 selected={schoolStudyStatus === "Я школьник"}
@@ -150,7 +149,7 @@ export default function Activity({ next }: ActivityProps) {
                         </div>
 
                         {schoolStudyStatus && (
-                            <div className="space-y-3">
+                            <div className="flex flex-col gap-3">
                                 <Input
                                     label={"Название учебного заведение"}
                                     placeholder={schoolStudyStatus === "Я студент" ? "МЦК-КТИТС" : "Школа №169"}
@@ -174,11 +173,10 @@ export default function Activity({ next }: ActivityProps) {
 
                 {selectedStatus === "работаю" && (
                     <div>
-                        <div className="flex flex-col gap-3">
-                            <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Где работаете?</PautinaText>
-                            <Image src={catIcon2} alt="Кот" width={100} height={100} />
-                        </div>
-                        <div className="space-y-3 mt-5">
+                        {/*<div className="flex flex-col gap-3">*/}
+                        {/*    <PautinaText variant={"default"} style={{ fontWeight: 700 }}></PautinaText>*/}
+                        {/*</div>*/}
+                        <div className="flex flex-col gap-3 mt-5">
                             <Input
                                 label={"Организация"}
                                 placeholder={"Паутина"}

@@ -54,7 +54,7 @@ export function AchievementWidget({previewImage=null}) {
                         />
                     ) : (
                         // Фолбэк, если картинки нет (красивая заглушка)
-                        <div className="w-full h-full bg-surface flex flex-col items-center justify-center p-4 border border-border-default/20">
+                        <div className="w-full bg-surface h-full flex flex-col items-center justify-center p-4 border border-border-default/20">
                             <div className="w-16 h-16 rounded-full bg-brand/10 text-brand flex items-center justify-center mb-4">
                                 <Temple />
                             </div>
@@ -79,7 +79,7 @@ export function AchievementWidget({previewImage=null}) {
             </div>
 
             {/* Правая часть: Информация */}
-            <div className="info w-full flex flex-col h-full bg-surface">
+            <div className="info w-full flex flex-col h-full">
 
                 {/* Основной контент со скроллом */}
                 <div className="flex-grow overflow-y-auto px-6 py-8 md:px-10
@@ -117,7 +117,7 @@ export function AchievementWidget({previewImage=null}) {
                     </header>
 
                     {/* Сетка характеристик (Glass Style) */}
-                    <div className="mt-8 grid grid-cols-2 gap-6 bg-input/50 p-5 rounded-2xl border border-border-default/50">
+                    <div className="mt-8 grid grid-cols-2 gap-6 p-5 glass-effect rounded-2xl">
                         <div className="space-y-1">
                             <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
                                 Дата выдачи
@@ -168,7 +168,7 @@ export function AchievementWidget({previewImage=null}) {
                         </PautinaText>
                         <WheelXScrollProvider className="pb-2">
                             {["Python Core", "Algorithms", "Data Structures", "Git"].map((elem, i) => (
-                                <li key={i} className="px-4 py-2 bg-surface border border-border-default rounded-xl transition-colors hover:border-brand/50">
+                                <li key={i} className="px-4 py-2 border border-border-default rounded-xl transition-colors hover:border-brand/50">
                                     <PautinaText variant="small" className="whitespace-nowrap font-medium text-text-main">
                                         {elem}
                                     </PautinaText>

@@ -42,7 +42,7 @@ export default function BannerWidget() {
                     <div className="flex flex-col items-start mt-10 lg:mt-0 relative z-10">
 
                         {/* Бейдж */}
-                        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full bg-surface border border-border-default/60 shadow-sm backdrop-blur-sm mb-8 hover:border-brand/50 transition-colors cursor-default group">
+                        <div className="inline-flex items-center gap-2.5 px-4 py-2 rounded-full glass-effect transition-colors cursor-default group">
                             <span className="relative flex h-2.5 w-2.5">
                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-main"></span>
@@ -58,7 +58,7 @@ export default function BannerWidget() {
                         {/* Заголовок H1 */}
                         <Heading
                             variant="h1"
-                            className="font-black text-text-main leading-[1.1] tracking-tight"
+                            className="font-black text-text-main leading-[1.1] tracking-tight mt-4"
                         >
                             Создай портфолио,
                             <br className="hidden lg:block"/>
@@ -128,7 +128,7 @@ export default function BannerWidget() {
                         </div>
 
                         {/* Плавающие элементы декора (Floating Cards) - для "вау" эффекта */}
-                        <div className="absolute -bottom-6 -left-6 bg-surface p-4 rounded-xl shadow-[0_8px_30px_rgb(0,0,0,0.12)] border border-border-default hidden sm:block animate-bounce" style={{ animationDuration: '3s' }}>
+                        <div className={`absolute -bottom-6 -left-6 p-4 rounded-xl glass-effect hidden sm:block animate-bounce`} style={{ animationDuration: '3s' }}>
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-2xl">🏆</div>
                                 <div>

@@ -30,7 +30,7 @@ const HighlightedText = ({ text = "", highlight = "" }) => {
 
 const MODERN_INPUT_CLASSES = `
   w-full pl-11 pr-10 py-3.5 rounded-xl outline-none
-  border border-border-default bg-input text-text-main text-sm font-medium
+  border border-border-default glass-effect text-text-main text-sm font-medium
   placeholder:text-text-muted/70
   transition-all duration-200
   focus:border-brand focus:ring-4 focus:ring-brand/10
