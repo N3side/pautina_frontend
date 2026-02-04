@@ -2,7 +2,7 @@ services:
   app:
     # Указываем путь к образу в реестре GitHub (ghcr.io).
     # ЗАМЕНИ 'твой_ник' и 'твой_репо' на реальные (ВСЕ МАЛЕНЬКИМИ БУКВАМИ!)
-    image: ghcr.io/n3side/REPO_NAME:pautina_frontend
+    image: ghcr.io/n3side/pautina_frontend:latest
     container_name: my-app
     ports:
       - "8080:3000"
