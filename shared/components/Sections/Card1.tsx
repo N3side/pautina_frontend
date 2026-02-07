@@ -7,7 +7,7 @@ export default function Card1({children}) {
             className="
                 absolute top-[50%] right-[50%]
                 w-full transition-all duration-300 px-[20px]
-                flex flex-col items-start bg-transparent
+                flex flex-col items-start
 
                 py-10 justify-start mt-0
 

@@ -10,31 +10,12 @@ import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
-interface EmailProps {
-    name: string;
-    email: string;
-    setEmail: (email: string) => void;
-    next: () => void;
-}
-
-interface RegisterResponse {
-    json?: {
-        errors?: {
-            email?: string;
-            [key: string]: string;
-        };
-        credentials?: {
-            token: string;
-        };
-    };
-}
-
 interface FormErrors {
     email?: string;
     [key: string]: string | undefined;
 }
 
-export default function Email({name, email, setEmail, next}: EmailProps) {
+export default function Email({name, email, setEmail, next, setTimer}) {
 
     const [errors, setErrors] = useState<FormErrors | null>(null)
 
@@ -64,13 +45,19 @@ export default function Email({name, email, setEmail, next}: EmailProps) {
             headers: {
                 "Content-Type": "application/json"
             }
-        }) as RegisterResponse
+        })
 
         const response_errors = response?.json?.errors
 
         if (response_errors) {
             setErrors(response_errors)
             return
+        }
+
+        const timer_ = response?.json?.timer
+
+        if (timer_) {
+            setTimer(timer_)
         }
 
         const token = response?.json?.credentials?.token

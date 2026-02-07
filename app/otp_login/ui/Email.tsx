@@ -13,7 +13,7 @@ interface FormErrors {
     [key: string]: string | undefined;
 }
 
-export default function Email({email,  setEmail, next}) {
+export default function Email({email,  setEmail, next, timer, setTimer}) {
 
     const [errors, setErrors] = useState<FormErrors | null>(null)
 
@@ -49,6 +49,10 @@ export default function Email({email,  setEmail, next}) {
             setErrors(response_errors)
             return
         }
+
+        const timer_ = response?.json?.timer
+
+        if (timer_) setTimer(timer_)
 
         next()
     }

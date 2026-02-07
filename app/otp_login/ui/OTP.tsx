@@ -1,22 +1,23 @@
 import {Heading} from "@/shared/styles/typography/headings";
 import {PautinaText} from "@/shared/styles/typography/text";
 import {$fetch} from "@/shared/api/fetch";
-import toast from "react-hot-toast";
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/shared/providers/UserProvider";
 import {router} from "next/client";
-import {colorStyles} from "@/shared/styles/colors";
 import {DeleteRegistrationInfo} from "@/shared/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/utils/deleteAuthorizationInfo";
 import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
-export default function OTP({email, next, prev}) {
+import Timer from "@/shared/components/Timer"
+
+export default function OTP({email, next, prev, timer, setTimer}) {
 
     const {user, setToken} = useContext(UserContext)
 
     const [otp, setOtp] = useState<string | number | null>(null)
+
 
     async function handleSubmit(e) {
 
@@ -44,6 +45,12 @@ export default function OTP({email, next, prev}) {
             router.push("profile")
         }
 
+        const timer_ = response?.json?.timer
+
+        console.log(timer_)
+
+        if (timer_) setTimer(timer_)
+
         next()
     }
 
@@ -63,8 +70,6 @@ export default function OTP({email, next, prev}) {
         }
     }, [user]);
 
-    const [timer, setTimer] = useState(null)
-
     async function handleClick() {
 
         const response = await $fetch("auth/otp/send", {
@@ -75,27 +80,9 @@ export default function OTP({email, next, prev}) {
             }
         })
 
-        const timer_ = response?.json?.retry_after_seconds
+        const timer_ = response?.json?.timer
         if (timer_) setTimer(timer_)
     }
-
-    useEffect(() => {
-
-        if (timer === null) return;
-
-        const id = setInterval(() => {
-            setTimer((prev) => {
-                if (prev <= 1) {
-                    clearInterval(id);
-                    return null;
-                }
-                return prev - 1;
-            });
-        }, 1000);
-
-        return () => clearInterval(id);
-
-    }, [timer]);
 
     useEffect(() => {
         if (!email) {
@@ -122,26 +109,12 @@ export default function OTP({email, next, prev}) {
                         <></>
                     </ButtonLarge>
 
-                    <div className="flex gap-2 items-center">
-                        <div onClick={() => {
-                            if (!timer) {
-                                handleClick()
-                            }
-                        }}>
-                            <PautinaText
-                                variant={"small"}
-                                className={`text-${!timer ? "text-main" : "text-muted"} font-${!timer ? "bold" : "medium"} cursor-${!timer ? "pointer" : "inherit"}`}
-
-                            >
-                                Отправить код заново
-                            </PautinaText>
-                        </div>
-                        {timer && (
-                            <PautinaText variant={"small"} className="font-semibold text-text-main">
-                                {timer}
-                            </PautinaText>
-                        )}
-                    </div>
+                    <Timer
+                        handleClick={handleClick}
+                        timer={timer}
+                        setTimer={setTimer}
+                        message="Отправить код заново"
+                    />
 
                 </form>
             </div>

@@ -26,4 +26,4 @@ export const safeLocalStorage = {
             console.warn("LocalStorage недоступен (удаление)", e);
         }
     }
-};
+}

@@ -11,6 +11,7 @@ import Link from "next/link"
 import { useTheme } from "@/shared/providers/ThemeProvider"
 import {ThemeSwitch} from "@/shared/components/Buttons/ThemeSwitch";
 import CustomDropDown from "@/app/widgets/header/ui/CustomDropDown";
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
 export default function HeaderWidget() {
     const { setIsBlocked } = useContext(BodyBlockContext)
@@ -44,7 +45,7 @@ export default function HeaderWidget() {
                     {!user && (
                         <ThemeSwitch
                             size="small"
-                            checked={theme === "dark"}
+                            checked={safeLocalStorage.getItem("theme") == "dark"}
                             onClick={toggleTheme}
                         />
                     )}

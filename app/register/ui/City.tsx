@@ -38,6 +38,8 @@ export default function City({ next = () => {} }: { next: () => void }) {
             }
         }
 
+        console.log(result)
+
         const response = await $fetch("onboarding/city", {
             method: "POST",
             body: JSON.stringify(result),

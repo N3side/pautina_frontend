@@ -17,6 +17,8 @@ export default function RegisterWidget() {
     const [email, setEmail] = useState<string | null>(safeLocalStorage.getItem("login_email"))
     const [position, setPosition] = useState<number>(0)
 
+    const [timer, setTimer] = useState(null)
+
     useEffect(() => {
 
         setPosition(Number(safeLocalStorage.getItem("login_position")) || 0)
@@ -28,8 +30,8 @@ export default function RegisterWidget() {
     }
 
     const positions: ReactElement[] = [
-        <Email key="email" email={email} setEmail={setEmail} {...handlers} />,
-        <OTP key="otp" email={email} {...handlers} />,
+        <Email key="email" email={email} setEmail={setEmail} {...handlers} timer={timer} setTimer={setTimer} />,
+        <OTP key="otp" email={email} {...handlers} timer={timer} setTimer={setTimer} />,
     ]
 
     useEffect(() => {

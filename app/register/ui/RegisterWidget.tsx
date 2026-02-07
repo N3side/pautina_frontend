@@ -25,6 +25,8 @@ export default function RegisterWidget() {
     const [otp, setOtp] = useState<string | null>(null)
     const {theme} = useTheme()
 
+    const [timer, setTimer] = useState(null)
+
     useEffect(() => {
         setName(safeLocalStorage.getItem("user_name"))
         setEmail(safeLocalStorage.getItem("user_email"))
@@ -39,9 +41,9 @@ export default function RegisterWidget() {
 
     const steps = [
         { component: <Name key="name" name={name} setName={setName} {...handlers} />, required: true },
-        { component: <Email key="email" name={name} email={email} setEmail={setEmail} {...handlers} />, required: true },
-        { component: <OTP key="otp" name={name} email={email} {...handlers} otp={otp} setOtp={setOtp} position={position} />, required: true },
-        { component: <City key="city" {...handlers} />, required: false },
+        { component: <Email key="email" name={name} email={email} setEmail={setEmail} {...handlers} setTimer={setTimer} />, required: true },
+        { component: <OTP key="otp" name={name} email={email} {...handlers} otp={otp} setOtp={setOtp} position={position} timer={timer} setTimer={setTimer} />, required: true },
+        { component: <City key="city" {...handlers} />, required: true },
         { component: <Source key="source" {...handlers} />, required: true },
         { component: <Activity key="activity" {...handlers} />, required: false },
         { component: <Password key="password" />, required: true },

@@ -1,18 +1,16 @@
 import {Heading} from "@/shared/styles/typography/headings";
 import {PautinaText} from "@/shared/styles/typography/text";
-import {ShadowWrapper} from "@/shared/wrappers/Shadow";
-import {Button} from "@mui/material";
-import {COLORS, colorStyles} from "@/shared/styles/colors";
 import {$fetch} from "@/shared/api/fetch";
-import toast from "react-hot-toast";
+
 import ButtonLarge from "@/shared/components/Buttons/ButtonLarge";
 import Input from "@/shared/components/Inputs/Input";
 import {useContext, useEffect, useState} from "react";
 import {CheckGuest, UserContext} from "@/shared/providers/UserProvider";
-import {isBoolean} from "node:util";
-import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
 
-export default function OTP({name, email, otp, setOtp, next, position}) {
+import {safeLocalStorage} from "@/shared/utils/safeLocalStorage";
+import Timer from "@/shared/components/Timer"
+
+export default function OTP({name, email, otp, setOtp, next, position, timer, setTimer}) {
 
     const {user, setUser} = useContext(UserContext)
 
@@ -39,6 +37,8 @@ export default function OTP({name, email, otp, setOtp, next, position}) {
         }
 
         next()
+
+        return
     }
 
     async function handleChange(e) {
@@ -56,7 +56,25 @@ export default function OTP({name, email, otp, setOtp, next, position}) {
             next()
         }
 
-    }, [user, position]);
+    }, [position]);
+
+
+
+    async function handleClick() {
+        const response = await $fetch("onboarding/send", {
+            method: "POST",
+            body: JSON.stringify({email}),
+            headers: {
+                "Content-type": "application/json"
+            }
+        })
+
+        const timer = response?.json?.timer
+
+        if (timer) {
+            setTimer(timer)
+        }
+    }
 
     return (
         // <CheckGuest>
@@ -76,6 +94,8 @@ export default function OTP({name, email, otp, setOtp, next, position}) {
                     <ButtonLarge text={"Далее"}>
                         <></>
                     </ButtonLarge>
+
+                    <Timer handleClick={handleClick} timer={timer} setTimer={setTimer} message={"Отправить код заново"} />
 
                 </form>
             </div>
