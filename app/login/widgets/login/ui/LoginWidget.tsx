@@ -84,23 +84,27 @@ export default function LoginWidget() {
                     <Input label={"Пароль"} placeholder={"*******"} name={"password"} error={errors?.password} type={"password"} />
 
                     <div className="flex justify-between">
-                        <div className="flex justify-between items-center select-none" style={{ fontWeight: 400 }}>
+                        <div className="flex justify-between items-center select-none font-regular">
 
-                            <Checkbox
-                                checked={isActive}
-                                onChange={handleCheckboxChange}
-                                id="remember-me"
-                                sx={{
-                                    color: 'var(--color-text-muted)', // unchecked
-                                    '&.Mui-checked': {
-                                        color: 'text-brand', // checked
-                                    },
-                                }}
-                            />
+                            <PautinaText variant="small" className="text-text-main">
+                                Или
+                            </PautinaText>
 
-                            <label htmlFor="remember-me" className="text-text-muted">
-                                Запомнить меня
-                            </label>
+                            {/*<Checkbox*/}
+                            {/*    checked={isActive}*/}
+                            {/*    onChange={handleCheckboxChange}*/}
+                            {/*    id="remember-me"*/}
+                            {/*    sx={{*/}
+                            {/*        color: 'var(--color-text-muted)', // unchecked*/}
+                            {/*        '&.Mui-checked': {*/}
+                            {/*            color: 'text-brand', // checked*/}
+                            {/*        },*/}
+                            {/*    }}*/}
+                            {/*/>*/}
+
+                            {/*<label htmlFor="remember-me" className="text-text-muted">*/}
+                            {/*    Запомнить меня*/}
+                            {/*</label>*/}
                         </div>
                         <Link href="/otp_login" className="flex items-center">
                             <PautinaText variant="small" className="text-text-main font-medium">

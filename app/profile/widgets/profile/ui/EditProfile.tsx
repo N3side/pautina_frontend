@@ -10,6 +10,9 @@ import toast from "react-hot-toast";
 import useCitySelect from "@/shared/components/Inputs/useCitySelect";
 import Source from "@/app/register/ui/Source"
 import {SourceSelectionForm} from "@/shared/components/Inputs/Source/feature";
+import {unionFormData} from "@/shared/utils/UnionFormData";
+import {editCity} from "@/app/profile/widgets/profile/api";
+import {printFormData} from "@/shared/utils/formData";
 
 export default function useEditProfile() {
 
@@ -17,8 +20,11 @@ export default function useEditProfile() {
 
     const {user, setUser} = useContext(UserContext)
 
-    const {input, city, cityId} = useCitySelect({
+    const {input, city, city_id} = useCitySelect({
         default_city: user?.translated_city || user?.city,
+        default_city_id: user?.city_id,
+        city_local: "city",
+        city_id_local: "city_id"
     })
 
     const form =
@@ -122,10 +128,11 @@ export default function useEditProfile() {
 
         setErrors(null)
 
-        const formData = new FormData(e.currentTarget);
+        const formData = unionFormData(new FormData(), [
+            ...editCity(city, city_id)
+        ])
 
-        formData.set("city", city)
-        formData.set("city_id", `${cityId}`)
+        printFormData(formData)
 
         const updates = new FormData()
 

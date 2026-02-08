@@ -110,14 +110,14 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                     </div>
                 )}
 
-                {!user && (
-                    <ThemeSwitch
-                        size="small"
-                        className="!absolute !top-[17px] !right-[60px] !z-50 !flex lg:!hidden"
-                        checked={theme === "dark"}
-                        onClick={toggleTheme}
-                    />
-                )}
+                {/*{!user && (*/}
+                {/*    <ThemeSwitch*/}
+                {/*        size="small"*/}
+                {/*        className="!absolute !top-[17px] !right-[0px] !z-50 !flex lg:!hidden"*/}
+                {/*        checked={theme === "dark"}*/}
+                {/*        onClick={toggleTheme}*/}
+                {/*    />*/}
+                {/*)}*/}
 
             </div>
         </>

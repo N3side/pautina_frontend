@@ -44,6 +44,7 @@ export default function HeaderWidget() {
 
                     {!user && (
                         <ThemeSwitch
+                            className="!z-[2000000] !relative "
                             size="small"
                             checked={safeLocalStorage.getItem("theme") == "dark"}
                             onClick={toggleTheme}

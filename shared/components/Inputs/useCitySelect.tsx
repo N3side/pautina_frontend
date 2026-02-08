@@ -2,6 +2,7 @@ import { useState, useEffect, Fragment } from 'react'
 import { Combobox, Transition } from '@headlessui/react'
 import { safeLocalStorage } from "@/shared/utils/safeLocalStorage";
 import { $fetch } from "@/shared/api/fetch";
+import toast from "react-hot-toast";
 
 // Утилита для безопасного экранирования спецсимволов в Regex
 function escapeRegExp(string: string) {
@@ -75,6 +76,25 @@ interface UseCitySelectProps {
     default_city_id?: string | number;
 }
 
+
+// Вспомогательная функция для синхронизации
+const syncLocalStorage = (key: string, value: string) => {
+    if (!key) return;
+    if (value && value.trim().length > 0) {
+        safeLocalStorage.setItem(key, value);
+    } else {
+        // Если значение пустое — удаляем ключ, чтобы не хранить мусор
+        safeLocalStorage.removeItem(key);
+    }
+};
+
+interface UseCitySelectProps {
+    city_local?: string;
+    city_id_local?: string;
+    default_city?: string;
+    default_city_id?: string | number;
+}
+
 export default function useCitySelect({
       city_local = "",
       city_id_local = "",
@@ -82,98 +102,102 @@ export default function useCitySelect({
       default_city_id = ""
   }: UseCitySelectProps = {}) {
 
-    // 1. Инициализация значения инпута (строка)
+    // 1. Инициализация: Пробуем default, затем LS, затем пустую строку
     const [city, setCity] = useState<string>(() => {
         if (default_city) return default_city;
         return safeLocalStorage.getItem(city_local) || "";
     });
 
-    // 2. Инициализация выбранного объекта (для Combobox)
-    const [selectedCity, setSelectedCity] = useState(() => {
+    const [selectedCity, setSelectedCity] = useState<{ id: string | number, name: string } | null>(() => {
         if (default_city && default_city_id) {
             return { id: default_city_id, name: default_city };
         }
+        // Можно также попробовать восстановить ID из LS, если нужно
+        const savedId = safeLocalStorage.getItem(city_id_local);
+        if (savedId && city) return { id: savedId, name: city }; // Упрощенно, т.к. имя уже в city
         return null;
     });
 
     const [cities, setCities] = useState<CityOption[]>([]);
     const [loading, setLoading] = useState(false);
 
-    // 3. Эффект для обновления стейта, если пропсы default прилетели асинхронно
+    // 2. Обработка default значений (только если они реально пришли)
     useEffect(() => {
-        if (default_city) {
+        // Применяем default только если они есть и отличаются от текущего
+        if (default_city && default_city !== city) {
             setCity(default_city);
-            // Также обновляем LS, чтобы при перезагрузке осталось то, что пришло из пропсов
-            safeLocalStorage.setItem(city_local, default_city);
+            syncLocalStorage(city_local, default_city);
+        }
+        if (default_city_id) {
+            setSelectedCity({ id: default_city_id, name: default_city });
+            if(city_id_local) safeLocalStorage.setItem(city_id_local, `${default_city_id}`);
+        }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, [default_city, default_city_id]);
 
-            if (default_city_id) {
-                setSelectedCity({ id: default_city_id, name: default_city });
-                safeLocalStorage.setItem(city_id_local, `${default_city_id}`);
+    // 3. Синхронизация названия города с LS
+    useEffect(() => {
+        // Используем хелпер, который удаляет ключ, если city пустое
+        syncLocalStorage(city_local, city);
+    }, [city, city_local]);
+
+    // 4. Синхронизация ID города с LS
+    useEffect(() => {
+        if (city_id_local) {
+            if (selectedCity?.id) {
+                safeLocalStorage.setItem(city_id_local, `${selectedCity.id}`);
+            } else {
+                safeLocalStorage.removeItem(city_id_local);
             }
         }
-    }, [default_city, default_city_id, city_local, city_id_local]);
+    }, [selectedCity, city_id_local]);
 
+    // 5. Поиск городов (Debounce)
     useEffect(() => {
         if (!city || city.length < 2) {
             setCities([]);
             return;
         }
 
-        // Не ищем, если то, что введено, совпадает с выбранным (избегаем лишних запросов при инициализации)
         if (selectedCity && city === selectedCity.name) {
             return;
         }
 
         const timeout = setTimeout(async () => {
             setLoading(true);
-            try {
-                const response = await $fetch(`cities?city=${encodeURIComponent(city)}`);
-                setCities((response?.json?.cities as CityOption[]) || []);
-            } catch (e) {
-                console.error(e);
-            }
+            const response = await $fetch(`cities?city=${encodeURIComponent(city)}`);
+            setCities((response?.json?.cities as CityOption[]) || []);
             setLoading(false);
         }, 500);
         return () => clearTimeout(timeout);
-    }, [city, selectedCity]); // Добавил selectedCity в зависимости
+    }, [city, selectedCity]);
 
-    // Обработчик очистки
     const handleClear = () => {
         setCity("");
         setSelectedCity(null);
         setCities([]);
-        safeLocalStorage.removeItem(city_local);
-        safeLocalStorage.removeItem(city_id_local); // Используем safeLocalStorage везде для консистентности
+        // LocalStorage очистится автоматически благодаря useEffect
     };
 
-    // Синхронизация выбора с LocalStorage
-    useEffect(() => {
-        if (selectedCity?.id) {
-            safeLocalStorage.setItem(city_id_local, `${selectedCity.id}`);
-        }
-    }, [selectedCity, city_id_local]);
-
-    useEffect(() => {
-        if (city) {
-            safeLocalStorage.setItem(city_local, `${city}`);
-        }
-    }, [city, city_local]);
+    const [customMode, setCustomMode] = useState(false)
 
     const input = (
         <Combobox
             as="div"
             className="flex flex-col gap-1.5 w-full"
             value={selectedCity}
-            onChange={(item: CityOption) => {
+            onChange={(item: CityOption | null) => {
+                // ВАЖНО: item может быть null при очистке через UI или Backspace в некоторых режимах
                 setSelectedCity(item);
-                setCity(item.name);
-                // Сохранение происходит в useEffect, но можно и тут явно, если нужно быстрее
+                // Если item есть - берем имя, если нет - оставляем текущее (или чистим, зависит от логики)
+                // Обычно при выборе из списка мы хотим жестко задать имя
+                if (item) {
+                    setCity(item.name);
+                }
             }}
             nullable
         >
-            <Combobox.Label className="text-xs font-semibold uppercase tracking-wider text-text-muted ml-1 mb-1">
-                Город
-            </Combobox.Label>
+            {/* ... Label и Icon остаются без изменений ... */}
 
             <div className="relative group">
                 <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted group-focus-within:text-brand transition-colors duration-200">
@@ -183,18 +207,22 @@ export default function useCitySelect({
                 <Combobox.Input
                     className={MODERN_INPUT_CLASSES}
                     placeholder="Например: Москва"
-                    displayValue={(item: any) => (typeof item === 'string' ? item : item?.name || city)}
+                    // Добавляем проверку на null для displayValue
+                    displayValue={(item: any) => {
+                        if (!item) return city;
+                        return typeof item === 'string' ? item : item.name;
+                    }}
                     onChange={(event) => {
-                        setCity(event.target.value);
-                        // Если пользователь начал стирать, сбрасываем выбранный объект ID
-                        if (selectedCity && event.target.value !== selectedCity.name) {
+                        const val = event.target.value;
+                        setCity(val);
+                        if (selectedCity && val !== selectedCity.name) {
                             setSelectedCity(null);
                         }
                     }}
                     autoComplete="off"
                 />
 
-                {/* Блок индикаторов справа (Лоадер ИЛИ Крестик) */}
+                {/* ... Индикаторы загрузки и очистки остаются без изменений ... */}
                 <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center">
                     {loading ? (
                         <div className="w-4 h-4 border-2 border-border-default border-t-brand rounded-full animate-spin"></div>
@@ -209,6 +237,7 @@ export default function useCitySelect({
                     ) : null}
                 </div>
 
+                {/* ... Combobox.Options и Transition остаются без изменений ... */}
                 <Transition
                     as={Fragment}
                     leave="transition ease-in duration-100"
@@ -216,44 +245,58 @@ export default function useCitySelect({
                     leaveTo="opacity-0"
                     afterLeave={() => setCities([])}
                 >
-                    <Combobox.Options
-                        className={`absolute top-full left-0 z-50 w-full mt-2 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] focus:outline-none py-1.5 text-sm custom-scrollbar bg-surface`}
-                    >
-                        {city.length > 1 && cities.length === 0 && !loading ? (
+                    <Combobox.Options className={`absolute top-full left-0 z-50 w-full mt-2 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] focus:outline-none py-1.5 text-sm custom-scrollbar bg-surface`}>
+                        {/* Логика рендера опций та же */}
+                        {city.length > 1 && cities.length === 0 && !loading && !customMode ? (
                             <div className="relative cursor-default select-none py-6 px-4 text-text-muted text-center flex flex-col items-center gap-3">
                                 <div className="p-3 bg-gray-50 rounded-full">
                                     <MapPinIcon className="w-6 h-6 opacity-40" />
                                 </div>
                                 <span className="text-sm">Город <span className="font-medium text-text-main">{city}</span> не найден</span>
+                                <span onClick={() => {
+                                    setCustomMode(true)
+                                    toast.success("Просто введите его и мы примем")
+                                }} className="cursor-pointer">Нажмите сюда, если вы хотите ввести свой город, которого нет в базе данных</span>
                             </div>
                         ) : (
-                            cities.map((person) => (
-                                <Combobox.Option
-                                    key={person.id}
-                                    value={person}
-                                    className={({ active, selected }) =>
-                                        `relative cursor-pointer select-none py-2.5 pl-10 pr-4 mx-1.5 rounded-lg transition-all duration-150 ${
-                                            active
-                                                ? 'bg-brand/10 text-brand font-medium'
-                                                : 'text-text-main hover:bg-gray-50'
-                                        }`
-                                    }
-                                >
-                                    {({ selected, active }) => (
-                                        <>
-                                            <span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
-                                                <HighlightedText text={person.name} highlight={city} />
-                                            </span>
 
-                                            {selected && (
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand">
-                                                    <CheckIcon className="w-4 h-4" />
+                            <div>
+                                {customMode && (
+                                    <span className="cursor-pointer relative cursor-pointer select-none py-2.5 pl-10 pr-4 mx-1.5 rounded-lg transition-all duration-150" onClick={() => {
+                                        setCustomMode(false)
+                                        toast.success("Найдите город через ввод")
+                                    }}>Нажмите сюда, если вы хотите найти город из списка</span>
+                                )}
+                            {
+                                cities.map((person) => (
+                                    <Combobox.Option
+                                        key={person.id}
+                                        value={person}
+                                        className={({ active, selected }) =>
+                                            `relative cursor-pointer select-none py-2.5 pl-10 pr-4 mx-1.5 rounded-lg transition-all duration-150 ${
+                                                active
+                                                    ? 'bg-brand/10 text-brand font-medium'
+                                                    : 'text-text-main hover:bg-gray-50'
+                                            }`
+                                        }
+                                    >
+                                        {({ selected, active }) => (
+                                            <>
+                                                <span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
+                                                    <HighlightedText text={person.name} highlight={city} />
                                                 </span>
-                                            )}
-                                        </>
-                                    )}
-                                </Combobox.Option>
-                            ))
+                                                {selected && (
+                                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand">
+                                                        <CheckIcon className="w-4 h-4" />
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                    </Combobox.Option>
+                                ))
+                            }
+                            </div>
+
                         )}
                     </Combobox.Options>
                 </Transition>
@@ -264,7 +307,6 @@ export default function useCitySelect({
     return {
         input,
         city,
-        // Возвращаем ID либо из выбранного объекта, либо, если его нет (редкий кейс), пробуем из default (если не было изменений)
-        cityId: selectedCity?.id || (city === default_city ? default_city_id : undefined)
+        city_id: selectedCity?.id || (city === default_city ? default_city_id : undefined)
     }
 }
