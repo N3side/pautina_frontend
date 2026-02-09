@@ -7,7 +7,7 @@ import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
 export default function Name({name, setName, next}) {
 
-    const [errors, setErrors] = useState(null)
+    const [errors, setErrors] = useState<Record<any, string> | null>(null)
 
     async function handleSubmit(e) {
 
@@ -54,7 +54,7 @@ export default function Name({name, setName, next}) {
                     placeholder={"Имя"}
                     error={errors?.name}
                     onChange={handleChange}
-                    defaultValue={safeLocalStorage.getItem("user_name")}
+                    defaultValue={safeLocalStorage.getItem("user_name") ?? undefined}
                 />
 
                 <ButtonLarge text={"Продолжить"}>

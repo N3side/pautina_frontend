@@ -1,12 +1,11 @@
-
-interface RequestBody {
-    city_id?: string;
+interface CityPayload {
+    city_id?: any;
     city?: string;
 }
 
-export function editCity(city, city_id) {
-
-    const result = [];
+export function editCity(city: string | null, city_id: any): CityPayload[] {
+    // Explicitly type the array here
+    const result: CityPayload[] = [];
 
     if (city_id) {
         result.push({ city_id });

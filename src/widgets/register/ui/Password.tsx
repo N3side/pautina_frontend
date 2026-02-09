@@ -10,7 +10,7 @@ import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInf
 
 export default function Password() {
 
-    const [errors, setErrors] = useState(null)
+    const [errors, setErrors] = useState<Record<any, string> | null>(null)
 
     const form = useRef<HTMLFormElement>(null)
 
@@ -27,7 +27,7 @@ export default function Password() {
 
         if (!password) {
             setErrors({
-                "password": "Пожалуйста, придумайте пароль.",
+                password: "Пожалуйста, придумайте пароль.",
                 "password_repeat": "Пожалуйста, повторите пароль.",
             });
             return;
@@ -35,7 +35,7 @@ export default function Password() {
 
         if (password_repeat !== password) {
             setErrors({
-                "password": "Пароли должны совпадать",
+                password: "Пароли должны совпадать",
                 "password_repeat": "Пароли должны совпадать",
             });
             return;

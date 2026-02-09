@@ -14,14 +14,6 @@ import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo"
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
-interface LoginResponse {
-    json?: {
-        errors?: Record<string, string>
-        credentials?: {
-            token: string
-        }
-    }
-}
 
 interface LoginErrors {
     email?: string
@@ -44,7 +36,7 @@ export default function LoginWidget() {
         const response = await $fetch("auth/login", {
             method: "POST",
             body: formData
-        }) as LoginResponse
+        })
 
         const errors_ = response?.json?.errors
 
@@ -57,14 +49,14 @@ export default function LoginWidget() {
 
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
-        safeLocalStorage.setItem("token", token_)
+        safeLocalStorage.setItem("token", token_ )
         setToken(token_)
         router.push("/profile")
     }
 
-    function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {
-        setIsActive(e.target.checked)
-    }
+    // function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {
+    //     setIsActive(e.target.checked)
+    // }
 
     return (
         // <CheckIsNotUser>

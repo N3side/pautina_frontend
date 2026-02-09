@@ -13,7 +13,7 @@ import {printFormData} from "@/shared/lib/utils/formData";
 
 export default function useEditProfile() {
 
-    const [errors, setErrors] = useState(null)
+    const [errors, setErrors] = useState<Record<string, any> | null>(null)
 
     const {user, setUser} = useContext(UserContext)
 
@@ -127,7 +127,7 @@ export default function useEditProfile() {
 
         setErrors(null)
 
-        const formData = unionFormData(new FormData(formRef.current), [
+        const formData = unionFormData(new FormData(formRef.current!), [
             ...editCity(city, city_id)
         ])
 

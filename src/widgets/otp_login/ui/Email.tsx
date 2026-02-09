@@ -12,7 +12,7 @@ interface FormErrors {
     [key: string]: string | undefined;
 }
 
-export default function Email({email,  setEmail, next, setTimer}) {
+export default function Email({email,  setEmail, next, setTimer, timer}) {
 
     const [errors, setErrors] = useState<FormErrors | null>(null)
 

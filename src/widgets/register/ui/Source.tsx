@@ -29,9 +29,9 @@ interface SourceResult {
 export default function Source({next}) {
     const [sources, setSources] = useState<Source[] | null>(null);
     const [selectedSource, setSelectedSource] = useState<string | null>(safeLocalStorage.getItem("source"));
-    const [customText, setCustomText] = useState<string>(safeLocalStorage.getItem("custom_text"));
+    const [customText, setCustomText] = useState<string | null>(safeLocalStorage.getItem("custom_text"));
 
-    const [errors, setErrors] = useState(null)
+    const [errors, setErrors] = useState<Record<any, string> | null>(null)
 
     async function getSources(): Promise<void> {
         const response = await $fetch("sources") as SourcesResponse;
@@ -84,7 +84,7 @@ export default function Source({next}) {
 
     useEffect(() => {
         console.log(selectedSource)
-        safeLocalStorage.setItem("source", selectedSource)
+        safeLocalStorage.setItem("source", `${selectedSource}`)
     }, [selectedSource]);
 
     return (
@@ -132,7 +132,7 @@ export default function Source({next}) {
                 selected={selectedSource==="custom"}
                 onChange={handleCustomTextChange}
                 onClick={() => setSelectedSource("custom")}
-                defaultValue={safeLocalStorage.getItem("custom_text")}
+                defaultValue={safeLocalStorage.getItem("custom_text") ?? undefined}
             />
 
             {/* Кнопка Далее */}

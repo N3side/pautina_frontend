@@ -92,7 +92,7 @@ export default function Email({name, email, setEmail, next, setTimer, position})
                     name={"email"}
                     error={errors?.email}
                     onChange={handleChange}
-                    defaultValue={safeLocalStorage.getItem("user_email")}
+                    defaultValue={safeLocalStorage.getItem("user_email") ?? undefined}
                 />
 
                 <ButtonLarge text={"Далее"}>

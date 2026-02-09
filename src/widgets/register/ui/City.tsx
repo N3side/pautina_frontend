@@ -8,8 +8,7 @@ import {$fetch} from "@/shared/api/fetch";
 
 export default function City({ next = () => {} }: { next: () => void }) {
 
-
-    const [setErrors] = useState<Record<string, string[]> | null>(null);
+    const [errors, setErrors] = useState<Record<string, string[]> | null>(null);
 
     const {input,city_id,city} = useCitySelect({
         city_local: "city",

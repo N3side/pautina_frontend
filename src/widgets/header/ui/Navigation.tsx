@@ -85,7 +85,6 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                 {!user && (
 
                     <div className="flex flex-col w-full gap-3 mt-4 lg:mt-0 lg:flex-row lg:w-auto lg:gap-3">
-                        {console.log(user)}
                         <Link href="/login" onClick={closeMenu} className="w-full lg:w-auto">
                             <Button
                                 className="!w-full lg:!w-auto !py-2 !rounded-xl !px-5 !normal-case !text-text-main hover:!bg-border-default/50 transition-all border border-transparent hover:border-border-default/50"

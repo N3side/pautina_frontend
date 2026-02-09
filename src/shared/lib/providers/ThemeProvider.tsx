@@ -1,23 +1,26 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
+type Theme = 'light' | 'dark';
+
 const ThemeContext = createContext<{
-    theme: string;
+    theme: Theme;
     toggleTheme: () => void;
 }>({ theme: 'light', toggleTheme: () => {} });
 
 export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
-
-    const [theme, setTheme] = useState<string | null | undefined>(safeLocalStorage.getItem("theme"));
+    // 1. Указываем конкретные строковые значения вместо null
+    // Используем оператор ?? 'light', чтобы всегда была строка
+    const [theme, setTheme] = useState<Theme>(
+        (safeLocalStorage.getItem("theme") as Theme) ?? 'light'
+    );
 
     useEffect(() => {
-        // Проверка сохраненной темы или системных настроек
-        const savedTheme = safeLocalStorage.getItem('theme');
+        const savedTheme = safeLocalStorage.getItem('theme') as Theme | null;
         if (savedTheme) {
             setTheme(savedTheme);
             document.documentElement.classList.add(savedTheme);
         } else {
-            // Можно добавить проверку системной темы
             document.documentElement.classList.add('light');
         }
     }, []);
@@ -25,6 +28,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     const toggleTheme = () => {
         const newTheme = theme === 'light' ? 'dark' : 'light';
 
+        // Теперь TypeScript спокоен, так как theme — это всегда строка
         document.documentElement.classList.remove(theme);
         document.documentElement.classList.add(newTheme);
 

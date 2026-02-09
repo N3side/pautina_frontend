@@ -1,13 +1,10 @@
-import { Heading } from "@/shared/styles/typography/headings";
-import { PautinaText } from "@/shared/styles/typography/text";
+import {Heading} from "@/shared/styles/typography/headings";
+import {PautinaText} from "@/shared/styles/typography/text";
 import React, {ChangeEvent, FormEvent, useEffect, useRef, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Option from "@/shared/ui/Inputs/Option";
-import Image from 'next/image';
-import catIcon from '@/shared/assets/images/raster/cat.png';
-import catIcon2 from '@/shared/assets/images/raster/cat2.png';
 import Input from "@/shared/ui/Inputs/Input";
-import { $fetch } from "@/shared/api/fetch";
+import {$fetch} from "@/shared/api/fetch";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
 // Описываем структуру возможных ошибок
@@ -25,7 +22,7 @@ interface ActivityProps {
 
 export default function Activity({ next }: ActivityProps) {
     // Используем строковые литералы для более строгой проверки
-    const [selectedStatus, setSelectedStatus] = useState<string>(safeLocalStorage.getItem("selectedStatus"));
+    const [selectedStatus, setSelectedStatus] = useState<string | null>(safeLocalStorage.getItem("selectedStatus"));
     const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(safeLocalStorage.getItem("schoolStudyStatus"));
 
 
@@ -75,11 +72,11 @@ export default function Activity({ next }: ActivityProps) {
 
 
     useEffect(() => {
-        safeLocalStorage.setItem("selectedStatus", selectedStatus)
+        safeLocalStorage.setItem("selectedStatus", `${selectedStatus}`)
     }, [selectedStatus]);
 
     useEffect(() => {
-        safeLocalStorage.setItem("schoolStudyStatus", schoolStudyStatus)
+        safeLocalStorage.setItem("schoolStudyStatus", `${schoolStudyStatus}`)
     }, [schoolStudyStatus]);
 
     // ---

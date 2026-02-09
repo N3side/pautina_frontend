@@ -18,7 +18,6 @@ export default function RegisterWidget() {
     const [timer, setTimer] = useState(null)
 
     useEffect(() => {
-
         setPosition(Number(safeLocalStorage.getItem("login_position")) || 0)
     }, [])
 
