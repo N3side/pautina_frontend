@@ -47,12 +47,11 @@ export default function BannerWidget() {
                               <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
                               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-main"></span>
                             </span>
-                            <PautinaText
-                                variant="tiny"
-                                className="uppercase font-bold tracking-wider text-text-muted group-hover:text-text-main transition-colors"
+                            <p
+                                className="text-tiny uppercase font-bold tracking-wider text-text-muted group-hover:text-text-main transition-colors"
                             >
                                 Официальная платформа
-                            </PautinaText>
+                            </p>
                         </div>
 
                         {/* Заголовок H1 */}
@@ -76,37 +75,34 @@ export default function BannerWidget() {
                         </Heading>
 
                         {/* Подзаголовок */}
-                        <PautinaText
-                            variant="large"
-                            className="mt-6 text-text-muted max-w-[500px] leading-relaxed"
+                        <p
+                            className="text-large mt-6 text-text-muted max-w-[500px] leading-relaxed"
                         >
                             Единая экосистема для хранения сертификатов, проектов и достижений.
                             Специально для студентов
                             <span className="font-semibold text-text-main border-b border-brand/30 pb-0.5">
                                 ГАПОУ «МЦК-КТИТС»
                             </span>.
-                        </PautinaText>
+                        </p>
 
                         {/* Кнопка */}
                         <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
                             <ShadowWrapper className="w-full sm:w-auto">
                                 <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl transition-transform hover:-translate-y-1">
-                                    <PautinaText
-                                        variant="button"
-                                        className="text-white font-bold text-lg"
-                                        component="span"
+                                    <span
+                                        className="text-button text-white font-bold text-lg"
                                     >
                                         Создать портфолио
-                                    </PautinaText>
+                                    </span>
                                 </ButtonLarge>
                             </ShadowWrapper>
                         </div>
 
                         {/* Social Proof / Stats (Опционально, для красоты низа) */}
                         <div className="mt-8 flex items-center gap-4 opacity-70">
-                            <PautinaText variant="tiny" className="text-text-muted">
+                            <p className="text-tiny text-text-muted">
                                 🚀 Уже более 1000 студентов с нами
-                            </PautinaText>
+                            </p>
                         </div>
                     </div>
 
@@ -132,8 +128,8 @@ export default function BannerWidget() {
                             <div className="flex items-center gap-3">
                                 <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-2xl">🏆</div>
                                 <div>
-                                    <PautinaText variant="small" className="font-bold text-text-main">Топ 10</PautinaText>
-                                    <PautinaText variant="tiny" className="text-text-muted">Рейтинг студентов</PautinaText>
+                                    <p className="text-small font-bold text-text-main">Топ 10</p>
+                                    <p className="text-small text-text-muted">Рейтинг студентов</p>
                                 </div>
                             </div>
                         </div>

@@ -85,15 +85,15 @@ export function AchievementWidget({previewImage=null}) {
                     {/* Тэги */}
                     <div className="flex items-center gap-2 mb-6">
                         <span className="px-3 py-1 rounded-full bg-brand/10 border border-brand/20">
-                            <PautinaText variant="tiny" className="text-text-brand font-bold uppercase">
+                            <p className="text-tiny text-text-brand font-bold uppercase">
                                 Обучение
-                            </PautinaText>
+                            </p>
                         </span>
                         <span className="px-3 py-1 rounded-full bg-green-main/10 border border-green-main/20 flex items-center gap-1.5">
                             <div className="w-1.5 h-1.5 rounded-full bg-green-main" />
-                            <PautinaText variant="tiny" className="text-green-main font-bold uppercase">
+                            <p className="text-tiny text-green-main font-bold uppercase">
                                 Подтверждено
-                            </PautinaText>
+                            </p>
                         </span>
                     </div>
 
@@ -104,39 +104,39 @@ export function AchievementWidget({previewImage=null}) {
                         </Heading>
                         <div className="mt-4 flex items-center gap-2 text-text-muted">
                             <Temple />
-                            <PautinaText variant="default" className="font-semibold text-text-main/80">
+                            <p className="text-default font-semibold text-text-main/80">
                                 Яндекс Практикум & МЦК-КТИТС
-                            </PautinaText>
+                            </p>
                         </div>
                     </header>
 
                     {/* Сетка характеристик (Glass Style) */}
                     <div className="mt-8 grid grid-cols-2 gap-6 p-5 glass-effect rounded-2xl">
                         <div className="space-y-1">
-                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
+                            <p className="text-tiny text-text-muted font-bold uppercase tracking-wider">
                                 Дата выдачи
-                            </PautinaText>
+                            </p>
                             <div className="flex items-center gap-2 text-text-main">
                                 <Calendar />
-                                <PautinaText variant="small" className="font-medium">Ноябрь 2024</PautinaText>
+                                <p className="text-small font-medium">Ноябрь 2024</p>
                             </div>
                         </div>
                         <div className="space-y-1">
-                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
+                            <p className="text-tiny text-text-muted font-bold uppercase tracking-wider">
                                 ID Сертификата
-                            </PautinaText>
-                            <PautinaText variant="small" className="text-text-main font-medium">CRT-883920-PY</PautinaText>
+                            </p>
+                            <p className="text-small text-text-main font-medium">CRT-883920-PY</p>
                         </div>
                         <div className="space-y-1">
-                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
+                            <p className="text-tiny text-text-muted font-bold uppercase tracking-wider">
                                 Формат
-                            </PautinaText>
-                            <PautinaText variant="small" className="text-text-main font-medium">Онлайн-курс (72 ч.)</PautinaText>
+                            </p>
+                            <p className="text-small text-text-main font-medium">Онлайн-курс (72 ч.)</p>
                         </div>
                         <div className="space-y-1">
-                            <PautinaText variant="tiny" className="text-text-muted font-bold uppercase tracking-wider">
+                            <p className="text-tiny text-text-muted font-bold uppercase tracking-wider">
                                 Стек
-                            </PautinaText>
+                            </p>
                             <div className="flex items-center gap-3 pt-1">
                                 <Python  />
                                 <Frontend  />
@@ -146,26 +146,26 @@ export function AchievementWidget({previewImage=null}) {
 
                     {/* Описание */}
                     <div className="mt-8 space-y-3">
-                        <PautinaText variant="small" className="text-text-muted font-bold uppercase tracking-wider">
+                        <p className="text-small text-text-muted font-bold uppercase tracking-wider">
                             Описание
-                        </PautinaText>
-                        <PautinaText variant="default" className="text-text-main leading-relaxed opacity-90">
+                        </p>
+                        <p className="text-default text-text-main leading-relaxed opacity-90">
                             Успешное прохождение курса по основам алгоритмизации и структур данных.
                             В рамках обучения были изучены: сортировка, поиск, рекурсия, графы и хеш-таблицы.
-                        </PautinaText>
+                        </p>
                     </div>
 
                     {/* Компетенции */}
                     <div className="mt-8">
-                        <PautinaText variant="small" className="text-text-muted font-bold uppercase tracking-wider mb-4">
+                        <p className="text-small text-text-muted font-bold uppercase tracking-wider mb-4">
                             Компетенции
-                        </PautinaText>
+                        </p>
                         <WheelXScrollProvider className="pb-2">
                             {["Python Core", "Algorithms", "Data Structures", "Git"].map((elem, i) => (
                                 <li key={i} className="px-4 py-2 border border-border-default rounded-xl transition-colors hover:border-brand/50">
-                                    <PautinaText variant="small" className="whitespace-nowrap font-medium text-text-main">
+                                    <p className="text-small whitespace-nowrap font-medium text-text-main">
                                         {elem}
-                                    </PautinaText>
+                                    </p>
                                 </li>
                             ))}
                         </WheelXScrollProvider>
@@ -180,7 +180,7 @@ export function AchievementWidget({previewImage=null}) {
                             variant="outlined"
                             startIcon={<EditIcon  />}
                         >
-                            <PautinaText variant="secondary" className="font-semibold">Редактировать</PautinaText>
+                            <p className="text-secondary font-semibold">Редактировать</p>
                         </Button>
 
                         <div className="flex items-center gap-3 ml-auto">
@@ -197,7 +197,7 @@ export function AchievementWidget({previewImage=null}) {
                                     variant="contained"
                                     startIcon={<DownloadIcon className="w-5 h-5 text-text-white" />}
                                 >
-                                    <PautinaText variant="secondary" className="font-bold">Скачать PDF</PautinaText>
+                                    <p className="text-secondary font-bold">Скачать PDF</p>
                                 </Button>
                             </ShadowWrapper>
                         </div>

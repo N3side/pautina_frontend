@@ -103,9 +103,9 @@ export default function Activity({ next }: ActivityProps) {
                 <Heading variant="h4">
                     Чем Вы занимаетесь?
                 </Heading>
-                <PautinaText variant={"secondary"}>
+                <p className="text-secondary">
                     На нашем портале собрано множество интересных людей
-                </PautinaText>
+                </p>
             </div>
 
             <form className="flex flex-col gap-8" ref={formRef} onSubmit={handleSubmit}>

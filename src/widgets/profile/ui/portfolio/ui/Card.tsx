@@ -30,9 +30,9 @@ export default function Card(card: CardProps) {
                 {/* Бейдж категории (с эффектом стекла) */}
                 <div className="absolute top-3 left-3">
                     <span className="inline-block px-3 py-1 backdrop-blur-md rounded-lg shadow-sm border border-black/5 dark:border-white/10">
-                        <PautinaText variant="tiny" className="text-white font-bold uppercase tracking-wider text-[10px]">
+                        <p className="text-tiny text-white font-bold uppercase tracking-wider text-[10px]">
                             {card?.category}
-                        </PautinaText>
+                        </p>
                     </span>
                 </div>
 
@@ -48,26 +48,25 @@ export default function Card(card: CardProps) {
                     <div className="text-brand">
                         <Calendar />
                     </div>
-                    <PautinaText variant="tiny" className="text-text-muted font-medium">
+                    <p className="text-tiny text-text-muted font-medium">
                         {card?.date}
-                    </PautinaText>
+                    </p>
                 </div>
 
                 {/* Заголовок (обрезается, если слишком длинный) */}
                 <div className="flex-grow">
-                    <PautinaText
-                        className="text-text-main font-bold leading-tight line-clamp-2 group-hover:text-brand transition-colors duration-300"
-                        variant="default"
+                    <p
+                        className="text-default text-text-main font-bold leading-tight line-clamp-2 group-hover:text-brand transition-colors duration-300"
                     >
                         {card?.title}
-                    </PautinaText>
+                    </p>
                 </div>
 
                 {/* Футер карточки */}
                 <div className="pt-3 mt-auto border-t border-border-default/50 flex items-center justify-between">
-                    <PautinaText variant="small" className="text-text-muted font-medium">
+                    <p className="text-small text-text-muted font-medium">
                         {card?.type}
-                    </PautinaText>
+                    </p>
 
                     {/* Кнопка действия */}
                     <div className="flex gap-2">

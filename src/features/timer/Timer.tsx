@@ -68,9 +68,9 @@ export default function Timer({ handleClick, timer, setTimer, message }: Props) 
     if (!isReady) {
         return (
             <div className="flex gap-2 items-center">
-                <PautinaText variant="small" className="text-text-main font-medium">
+                <p className="text-small text-text-main font-medium">
                     Отправить код заново
-                </PautinaText>
+                </p>
             </div>
         );
     }

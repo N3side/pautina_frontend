@@ -152,12 +152,11 @@ export default function RegisterWidget() {
                                 flex gap-2 items-center
                             `}
                         >
-                            <PautinaText
-                                className="!font-medium opacity-80 group-hover:opacity-100 transition-opacity"
-                                variant="tiny"
+                            <p
+                                className="text-tiny font-medium opacity-80 group-hover:opacity-100 transition-opacity"
                             >
                                 Пропустить
-                            </PautinaText>
+                            </p>
 
                             <motion.div
                                 animate={{ x: [0, 3, 0] }}

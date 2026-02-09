@@ -1,8 +1,6 @@
-import React from "react";
-import { ReactNode, CSSProperties } from "react";
-import { TextVariantsType } from "@/shared/types/typography";
-import { Montserrat } from "./connectFonts";
-import { colorStyles } from "../colors";
+import React, {CSSProperties, ReactNode} from "react";
+import {TextVariantsType} from "@/shared/types/typography";
+import {Montserrat} from "./connectFonts";
 
 export interface TextProps {
     component?: React.ElementType;
@@ -41,6 +39,11 @@ const textStyles = {
     tiny: {
         fontSize: textSizes.tiny,
         fontFamily: Montserrat.style.fontFamily,
+    },
+
+    label: {
+        fontSize: textSizes.tiny,
+        className: "font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5"
     },
 
     button: {

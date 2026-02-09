@@ -38,9 +38,9 @@ export default function Name({name, setName, next}) {
                 <Heading variant="h4">
                     Добро пожаловать на платформу Паутина
                 </Heading>
-                <PautinaText variant="secondary">
+                <p className="text-secondary text-text-muted">
                     Для дальнейшей работы предлагаем познакомиться
-                </PautinaText>
+                </p>
             </div>
 
             {/* Форма */}

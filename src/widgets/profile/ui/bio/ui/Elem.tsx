@@ -16,12 +16,12 @@ export function Elem({Icon, k, value}: Props) {
                 <Icon />
             </div>
             <div className="flex flex-col gap-[2px]">
-                <PautinaText variant="tiny" className="text-text-muted uppercase font-medium">
+                <p className="text-tiny text-text-muted uppercase font-medium">
                     {k}
-                </PautinaText>
-                <PautinaText variant="secondary" className="text-text-muted font-medium">
+                </p>
+                <p className="text-secondary text-text-muted font-medium">
                     {value}
-                </PautinaText>
+                </p>
             </div>
         </div>
     )

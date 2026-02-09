@@ -46,9 +46,9 @@ export default function City({ next = () => {} }: { next: () => void }) {
             <div className="flex flex-col gap-[15px] w-full">
                 <Heading variant="h4">Из какого вы города?</Heading>
 
-                <PautinaText variant="secondary">
+                <p className="secondary">
                     Напишите и выберите город из списка (если введеного города в списке нет, мы примем его)
-                </PautinaText>
+                </p>
             </div>
 
             <form

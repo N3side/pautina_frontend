@@ -80,9 +80,9 @@ export default function Email({name, email, setEmail, next, setTimer, position})
                 <Heading variant="h4">
                     Привет, {name?.charAt(0).toUpperCase() + name?.slice(1,) }, приятно познакомиться
                 </Heading>
-                <PautinaText variant="secondary">
+                <p className="secondary">
                     Чтобы система запомнила Вас, необходимо ввести свою электронную почту. На эту почту придет код подтверждения
-                </PautinaText>
+                </p>
             </div>
             <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 

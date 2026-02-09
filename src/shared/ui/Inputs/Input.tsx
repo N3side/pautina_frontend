@@ -49,9 +49,12 @@ const Input = ({
     return (
         <div className={`flex flex-col gap-1.5 w-full ${className || ''}`}>
             {label && (
-                <PautinaText variant="tiny" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
+                <p className="text-label">
                     {label}
-                </PautinaText>
+                </p>
+                // <PautinaText variant="tiny" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
+                //     {label}
+                // </PautinaText>
             )}
 
             <div className="relative group">

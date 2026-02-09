@@ -96,10 +96,10 @@ export default function OTP({email, next, prev, timer, setTimer}) {
                 <Heading variant="h4" className="text-text-main font-bold">
                     Проверка одноразового кода
                 </Heading>
-                <PautinaText variant="secondary" className="text-text-muted">
+                <p className="text-secondary text-text-muted">
                     Eсли не видите письма на {email}, посмотрите пожайлуста папку "Спам". Если письма там нет, запросите
                     код еще раз или напишите в поддержку
-                </PautinaText>
+                </p>
             </div>
             <form onSubmit={handleSubmit}
                   className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">

@@ -21,9 +21,9 @@ export default function PortfolioWidget() {
                         Портфолио
                     </Heading>
 
-                    <PautinaText variant="secondary" className="text-text-muted">
+                    <p className="text-secondary text-text-muted">
                         Достижения, сертификаты и проекты
-                    </PautinaText>
+                    </p>
                 </div>
 
                 <Button
@@ -66,21 +66,19 @@ export default function PortfolioWidget() {
                                         active:scale-95
                                     "
                                 >
-                                    <PautinaText
-                                        variant="small"
-                                        className="font-medium text-text-main group-hover:text-brand transition-colors whitespace-nowrap"
+                                    <p
+                                        className="text-small font-medium text-text-main group-hover:text-brand transition-colors whitespace-nowrap"
                                     >
                                         {category.text}
-                                    </PautinaText>
+                                    </p>
 
                                     {/* Badge с количеством */}
                                     <div className="flex items-center justify-center px-2 py-0.5 rounded-full group-hover:bg-brand/10 transition-colors">
-                                        <PautinaText
-                                            variant="tiny"
-                                            className="font-bold text-text-muted group-hover:text-brand transition-colors"
+                                        <p
+                                            className="text-tiny font-bold text-text-muted group-hover:text-brand transition-colors"
                                         >
                                             {category.count}
-                                        </PautinaText>
+                                        </p>
                                     </div>
                                 </li>
                             ))}
@@ -108,9 +106,9 @@ export default function PortfolioWidget() {
                     {/* Empty State (на случай если карт нет) */}
                     {(!cards || cards.length === 0) && (
                         <div className="col-span-full flex flex-col items-center justify-center py-20 text-center border-2 border-dashed border-border-default rounded-2xl bg-surface/50">
-                            <PautinaText variant="secondary" className="text-text-muted mb-4">
+                            <p className="text-secondary text-text-muted mb-4">
                                 Пока нет добавленных проектов
-                            </PautinaText>
+                            </p>
                             <Button
                                 variant="text"
                                 className="!text-brand !normal-case"

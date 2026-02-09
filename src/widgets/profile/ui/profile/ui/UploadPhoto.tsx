@@ -87,9 +87,9 @@ export default function UploadPhoto() {
                     <Heading variant="h5" className="font-bold text-text-main">
                         Настройка фото
                     </Heading>
-                    <PautinaText variant="secondary" className="text-text-muted mt-1">
+                    <p className="text-secondary text-text-muted mt-1">
                         Выберите область для аватара
-                    </PautinaText>
+                    </p>
                 </div>
 
                 <div className="relative w-full h-[50vh] md:h-auto md:flex-grow bg-[#1a1a1a] overflow-hidden">

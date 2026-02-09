@@ -60,15 +60,14 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                             return (
                                 <li key={i} className="relative group w-full lg:w-auto">
                                     <Link href={li?.link} onClick={closeMenu} className="block w-full">
-                                        <PautinaText
-                                            variant="small"
+                                        <p
                                             className={`
-                                                cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold text-[15px]
+                                                text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold text-[15px]
                                                 text-text-muted group-hover:text-text-main
                                             `}
                                         >
                                             {li?.text}
-                                        </PautinaText>
+                                        </p>
 
                                         {/* Индикатор активной ссылки (точка снизу на десктопе) */}
                                         <span className={`
@@ -89,9 +88,9 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                             <Button
                                 className="!w-full lg:!w-auto !py-2 !rounded-xl !px-5 !normal-case !text-text-main hover:!bg-border-default/50 transition-all border border-transparent hover:border-border-default/50"
                             >
-                                <PautinaText variant="button2" className="font-semibold">
+                                <p className="text-button-sm">
                                     Войти
-                                </PautinaText>
+                                </p>
                             </Button>
                         </Link>
 
@@ -100,9 +99,9 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                                 <Button
                                     className="!w-full lg:!w-auto !px-6 !py-2 !rounded-xl !normal-case !bg-brand hover:!bg-brand-hover !shadow-[0_4px_14px_0_rgba(14,165,233,0.39)] transition-all transform hover:-translate-y-0.5"
                                 >
-                                    <PautinaText variant="button2" className="text-white font-bold">
+                                    <p className="text-button-sm text-white font-bold">
                                         Регистрация
-                                    </PautinaText>
+                                    </p>
                                 </Button>
                             </ShadowWrapper>
                         </Link>

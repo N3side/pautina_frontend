@@ -77,9 +77,9 @@ export default function Email({email,  setEmail, next, setTimer, timer}) {
                 <Heading variant="h4" className="font-bold text-text-main">
                     Введите почту
                 </Heading>
-                <PautinaText variant="secondary" className="text-text-muted">
+                <p className="text-secondary text-text-muted">
                      Введите почту, к которой привязан ваш аккаунт. На нее будет отправлен одноразовый код
-                </PautinaText>
+                </p>
             </div>
             <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[20px] w-full ">
 

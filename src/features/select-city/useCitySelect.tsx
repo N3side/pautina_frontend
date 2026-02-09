@@ -3,6 +3,7 @@ import { Combobox, Transition } from '@headlessui/react'
 import { safeLocalStorage } from "@/shared/lib/utils/safeLocalStorage";
 import { $fetch } from "@/shared/api/fetch";
 import toast from "react-hot-toast";
+import {PautinaText} from "@/shared/styles/typography/text";
 
 // Утилита для безопасного экранирования спецсимволов в Regex
 function escapeRegExp(string: string) {
@@ -182,110 +183,115 @@ export default function useCitySelect({
     const [customMode, setCustomMode] = useState(false)
 
     const input = (
-        <Combobox
-            as="div"
-            className="flex flex-col gap-1.5 w-full"
-            value={selectedCity}
-            onChange={(item: CityOption | null) => {
-                // ВАЖНО: item может быть null при очистке через UI или Backspace в некоторых режимах
-                setSelectedCity(item);
-                // Если item есть - берем имя, если нет - оставляем текущее (или чистим, зависит от логики)
-                // Обычно при выборе из списка мы хотим жестко задать имя
-                if (item) {
-                    setCity(item.name);
-                }
-            }}
-            nullable
-        >
-            {/* ... Label и Icon остаются без изменений ... */}
 
-            <div className="relative group">
-                <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted group-focus-within:text-brand transition-colors duration-200">
-                    <SearchIcon className="w-5 h-5" />
-                </div>
+        <div>
+            <p className="text-label">Город</p>
+            <Combobox
+                as="div"
+                className="flex flex-col gap-1.5 w-full"
+                value={selectedCity}
+                onChange={(item: CityOption | null) => {
+                    // ВАЖНО: item может быть null при очистке через UI или Backspace в некоторых режимах
+                    setSelectedCity(item);
+                    // Если item есть - берем имя, если нет - оставляем текущее (или чистим, зависит от логики)
+                    // Обычно при выборе из списка мы хотим жестко задать имя
+                    if (item) {
+                        setCity(item.name);
+                    }
+                }}
+                nullable
+            >
+                {/* ... Label и Icon остаются без изменений ... */}
 
-                <Combobox.Input
-                    className={MODERN_INPUT_CLASSES}
-                    placeholder="Например: Москва"
-                    // Добавляем проверку на null для displayValue
-                    displayValue={(item: any) => {
-                        if (!item) return city;
-                        return typeof item === 'string' ? item : item.name;
-                    }}
-                    onChange={(event) => {
-                        const val = event.target.value;
-                        setCity(val);
-                        if (selectedCity && val !== selectedCity.name) {
-                            setSelectedCity(null);
-                        }
-                    }}
-                    autoComplete="off"
-                />
+                <div className="relative group">
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 pointer-events-none text-text-muted group-focus-within:text-brand transition-colors duration-200">
+                        <SearchIcon className="w-5 h-5" />
+                    </div>
 
-                {/* ... Индикаторы загрузки и очистки остаются без изменений ... */}
-                <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center">
-                    {loading ? (
-                        <div className="w-4 h-4 border-2 border-border-default border-t-brand rounded-full animate-spin"></div>
-                    ) : city.length > 0 ? (
-                        <button
-                            type="button"
-                            onClick={handleClear}
-                            className="text-gray-400 hover:text-text-main transition-colors p-1 rounded-full"
-                        >
-                            <XMarkIcon className="w-4 h-4" />
-                        </button>
-                    ) : null}
-                </div>
+                    <Combobox.Input
+                        className={MODERN_INPUT_CLASSES}
+                        placeholder="Например: Москва"
+                        // Добавляем проверку на null для displayValue
+                        displayValue={(item: any) => {
+                            if (!item) return city;
+                            return typeof item === 'string' ? item : item.name;
+                        }}
+                        onChange={(event) => {
+                            const val = event.target.value;
+                            setCity(val);
+                            if (selectedCity && val !== selectedCity.name) {
+                                setSelectedCity(null);
+                            }
+                        }}
+                        autoComplete="off"
+                    />
 
-                {/* ... Combobox.Options и Transition остаются без изменений ... */}
-                <Transition
-                    as={Fragment}
-                    leave="transition ease-in duration-100"
-                    leaveFrom="opacity-100"
-                    leaveTo="opacity-0"
-                    afterLeave={() => setCities([])}
-                >
-                    <Combobox.Options className={`absolute top-full left-0 z-50 w-full mt-2 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] focus:outline-none py-1.5 text-sm custom-scrollbar bg-surface`}>
-                        {/* Логика рендера опций та же */}
-                        {city.length > 1 && cities.length === 0 && !loading && !customMode ? (
-                            <div className="relative cursor-default select-none py-6 px-4 text-text-muted text-center flex flex-col items-center gap-3">
-                                <div className="p-3 bg-gray-50 rounded-full">
-                                    <MapPinIcon className="w-6 h-6 opacity-40" />
+                    {/* ... Индикаторы загрузки и очистки остаются без изменений ... */}
+                    <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center">
+                        {loading ? (
+                            <div className="w-4 h-4 border-2 border-border-default border-t-brand rounded-full animate-spin"></div>
+                        ) : city.length > 0 ? (
+                            <button
+                                type="button"
+                                onClick={handleClear}
+                                className="text-gray-400 hover:text-text-main transition-colors p-1 rounded-full"
+                            >
+                                <XMarkIcon className="w-4 h-4" />
+                            </button>
+                        ) : null}
+                    </div>
+
+                    {/* ... Combobox.Options и Transition остаются без изменений ... */}
+                    <Transition
+                        as={Fragment}
+                        leave="transition ease-in duration-100"
+                        leaveFrom="opacity-100"
+                        leaveTo="opacity-0"
+                        afterLeave={() => setCities([])}
+                    >
+                        <Combobox.Options className={`absolute top-full left-0 z-50 w-full mt-2 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] focus:outline-none py-1.5 text-sm custom-scrollbar bg-surface`}>
+                            {/* Логика рендера опций та же */}
+                            {city.length > 1 && cities.length === 0 && !loading && !customMode ? (
+                                <div className="relative cursor-default select-none py-6 px-4 text-text-muted text-center flex flex-col items-center gap-3">
+                                    <div className="p-3 bg-gray-50 rounded-full">
+                                        <MapPinIcon className="w-6 h-6 opacity-40" />
+                                    </div>
+                                    <span className="text-sm">Город <span className="font-medium text-text-main">{city}</span> не найден</span>
                                 </div>
-                                <span className="text-sm">Город <span className="font-medium text-text-main">{city}</span> не найден</span>
-                            </div>
-                        ) : (
-                            cities.map((person) => (
-                                <Combobox.Option
-                                    key={person.id}
-                                    value={person}
-                                    className={({ active, selected }) =>
-                                        `relative cursor-pointer select-none py-2.5 pl-10 pr-4 mx-1.5 rounded-lg transition-all duration-150 ${
-                                            active
-                                                ? 'bg-brand/10 text-brand font-medium'
-                                                : 'text-text-main hover:bg-gray-50'
-                                        }`
-                                    }
-                                >
-                                    {({ selected, active }) => (
-                                        <>
-                                            <span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
-                                                <HighlightedText text={person.name} highlight={city} />
-                                            </span>
-                                            {selected && (
-                                                <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand">
-                                                    <CheckIcon className="w-4 h-4" />
+                            ) : (
+                                cities.map((person) => (
+                                    <Combobox.Option
+                                        key={person.id}
+                                        value={person}
+                                        className={({ active, selected }) =>
+                                            `relative cursor-pointer select-none py-2.5 pl-10 pr-4 mx-1.5 rounded-lg transition-all duration-150 ${
+                                                active
+                                                    ? 'bg-brand/10 text-brand font-medium'
+                                                    : 'text-text-main hover:bg-gray-50'
+                                            }`
+                                        }
+                                    >
+                                        {({ selected, active }) => (
+                                            <>
+                                                <span className={`block truncate ${selected ? 'font-bold' : 'font-normal'}`}>
+                                                    <HighlightedText text={person.name} highlight={city} />
                                                 </span>
-                                            )}
-                                        </>
-                                    )}
-                                </Combobox.Option>
-                            ))
-                        )}
-                    </Combobox.Options>
-                </Transition>
-            </div>
-        </Combobox>
+                                                {selected && (
+                                                    <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-brand">
+                                                        <CheckIcon className="w-4 h-4" />
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                    </Combobox.Option>
+                                ))
+                            )}
+                        </Combobox.Options>
+                    </Transition>
+                </div>
+            </Combobox>
+        </div>
+
     );
 
     return {

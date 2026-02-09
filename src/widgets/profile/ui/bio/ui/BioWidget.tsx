@@ -59,15 +59,15 @@ export default function BioWidget() {
                 {/* --- BIO BLOCK --- */}
                 <div className="relative p-5 rounded-2xl bg-background border border-border-default">
 
-                    <PautinaText variant="tiny" className="uppercase tracking-widest text-text-muted font-bold mb-2">
+                    <p className="text-tiny uppercase tracking-widest text-text-muted font-bold mb-2">
                         Обо мне (Bio)
-                    </PautinaText>
+                    </p>
 
-                    <PautinaText variant="secondary" className="text-text-main leading-relaxed">
+                    <p className="text-secondary text-text-main leading-relaxed">
                         {user?.bio || (
                             <span className="text-text-muted italic">Информация не указана...</span>
                         )}
-                    </PautinaText>
+                    </p>
 
                 </div>
 
@@ -78,9 +78,9 @@ export default function BioWidget() {
                     <div className="flex flex-col gap-5">
                         <header className="flex items-center gap-2 mb-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-brand"></div>
-                            <PautinaText variant="small" className="text-text-muted font-bold uppercase tracking-wider">
+                            <p className="text-small text-text-muted font-bold uppercase tracking-wider">
                                 Деятельность
-                            </PautinaText>
+                            </p>
                         </header>
 
                         <ul className="flex flex-col gap-4">
@@ -97,9 +97,9 @@ export default function BioWidget() {
                     <div className="flex flex-col gap-5 lg:pl-8 lg:border-l lg:border-border-default/60">
                         <header className="flex items-center gap-2 mb-2">
                             <div className="w-1.5 h-1.5 rounded-full bg-green-main"></div>
-                            <PautinaText variant="small" className="text-text-muted font-bold uppercase tracking-wider">
+                            <p className="text-small text-text-muted font-bold uppercase tracking-wider">
                                 Контакты
-                            </PautinaText>
+                            </p>
                         </header>
 
                         <ul className="flex flex-col gap-4">

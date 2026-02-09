@@ -95,15 +95,15 @@ export default function Source({next}) {
                     Откуда вы узнали о Паутине? *
                 </Heading>
 
-                <PautinaText variant="secondary">
+                <p className="text-secondary">
                     Нам очень важно знать как развивается проект и понимать какие каналы продвижения являются эффективными. Поэтому, ответьте пожалуйста на эти вопросы
-                </PautinaText>
+                </p>
             </div>
 
             <div className="font-bold text-[14px] ml-1">
-                <PautinaText variant="secondary" style={{ fontWeight: 700 }}>
+                <p className="secondary" style={{ fontWeight: 700 }}>
                     Ответ
-                </PautinaText>
+                </p>
             </div>
 
             {/* Список вариантов */}

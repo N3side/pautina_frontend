@@ -30,9 +30,9 @@ export default function SettingsWidget() {
                         {/* Хедер меню */}
                         <div className="px-5 py-4 border-b border-border-default bg-surface/50">
                             {/* text-gray-500 -> text-text-muted */}
-                            <PautinaText variant="secondary" className="font-semibold text-text-muted text-xs uppercase tracking-wider">
+                            <p className="text-secondary font-semibold text-text-muted text-xs uppercase tracking-wider">
                                 Настройки
-                            </PautinaText>
+                            </p>
                         </div>
 
                         <nav className="flex flex-col p-2 gap-1">
@@ -61,9 +61,9 @@ export default function SettingsWidget() {
                         {/* text-gray-900 -> text-text-main */}
                         <Heading variant="h4" className="text-text-main mb-1 font-bold">Общие настройки</Heading>
                         {/* text-gray-500 -> text-text-muted */}
-                        <PautinaText variant="secondary" className="text-text-muted">
+                        <p className="text-secondary text-text-muted">
                             Управляйте основными параметрами вашего аккаунта и интерфейса.
-                        </PautinaText>
+                        </p>
                     </div>
 
                     <section className="flex flex-col gap-6">
@@ -82,9 +82,9 @@ export default function SettingsWidget() {
                                 </div>
                                 <div className="flex flex-col">
                                     <span className="font-medium text-text-main">Темная тема</span>
-                                    <PautinaText variant="small" className="text-text-muted text-sm">
+                                    <p className="text-small text-text-muted text-sm">
                                         Переключить интерфейс в ночной режим
-                                    </PautinaText>
+                                    </p>
                                 </div>
                             </div>
 

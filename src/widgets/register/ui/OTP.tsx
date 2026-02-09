@@ -90,9 +90,9 @@ export default function OTP({name, email, otp, setOtp, next, position, timer, se
                     <Heading variant="h4">
                         Проверка письма *
                     </Heading>
-                    <PautinaText variant="secondary">
+                    <p className="text-secondary">
                         {name}, если не видите письма на {email}, посмотрите пожайлуста папку "Спам". Если письма там нет, запросите код еще раз или напишите в поддержку
-                    </PautinaText>
+                    </p>
                 </div>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-[15px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 

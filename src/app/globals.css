@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800;900&display=swap');
 @tailwind utilities;
 @import "tailwindcss";
 
@@ -26,7 +27,13 @@
 	--color-glass-bg: var(--bg-glass);
 	--color-glass-border: var(--border-glass);
 
-    /* Твой кастомный цвет (теперь будет работать text-red52) */
+
+	 /*--- ШРИФТЫ --- */
+	--font-montserrat: "Montserrat", sans-serif;
+
+	 /*--- РАЗМЕРЫ ТЕКСТА (Clamp) --- */
+
+
 }
 
 /* 2. Определение CSS-переменных (Logic) */
@@ -78,9 +85,6 @@
 	--glass-highlight: rgba(255, 255, 255, 0.05); /* Легкое свечение внутри */
 }
 
-
-
-
 @layer utilities {
 
 	.dark .glass-effect {
@@ -126,6 +130,44 @@
 
 
 @layer base {
+
+	.text-large {
+		font-size: clamp(16px, 0.250vw + 15.200px, 20px);
+		@apply font-montserrat;
+	}
+	.text-default {
+		font-size: clamp(16px, 0.125vw + 15.600px, 18px);
+		@apply font-montserrat;
+	}
+	.text-secondary {
+		font-size: clamp(14px, 0.125vw + 13.600px, 16px);
+		@apply font-montserrat;
+	}
+	.text-small {
+		font-size: clamp(12px, 0.125vw + 11.600px, 14px);
+		@apply font-montserrat;
+	}
+	.text-tiny {
+		font-size: clamp(10px, 0.125vw + 9.600px, 12px);
+		@apply font-montserrat;
+	}
+
+
+	.text-button-lg {
+		font-size: clamp(14px, 0.250vw + 13.200px, 18px);
+		@apply text-white font-montserrat font-bold;
+
+	}
+	.text-button-sm {
+		font-size: clamp(12px, 0.125vw + 11.600px, 14px);
+		@apply text-white font-montserrat font-bold;
+	}
+
+	.text-label {
+		font-size: clamp(10px, 0.125vw + 9.600px, 12px);
+		@apply font-semibold font-montserrat uppercase tracking-wider text-text-muted ml-1 mb-0.5;
+	}
+
     * {
         margin: 0;
         padding: 0;
@@ -159,6 +201,8 @@
             @apply bg-gray-300 dark:bg-neutral-500;
         }
     }
+
+
 }
 
 body {
@@ -166,5 +210,3 @@ body {
 	position: relative;
 	width: 100%;
 }
-
-/* what*/

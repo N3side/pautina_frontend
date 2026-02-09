@@ -69,9 +69,9 @@ export default function Password() {
                     Пароль
                 </Heading>
 
-                <PautinaText variant="secondary">
+                <p className="text-secondary">
                     И завершающий штрих - безопасность. Придумайте пароль для входа в личный кабинет
-                </PautinaText>
+                </p>
             </div>
             <form onSubmit={handleSubmit} ref={form} className="flex flex-col gap-[25px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 

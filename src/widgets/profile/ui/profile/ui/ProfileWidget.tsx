@@ -43,9 +43,9 @@ export default function ProfileWidget() {
                         {user?.username}
                     </Heading>
 
-                    <PautinaText variant="secondary" className="text-text-muted line-clamp-2 px-2">
+                    <p className="text-secondary text-text-muted line-clamp-2 px-2">
                         {user?.surname} {user?.name} {user?.patronymic}
-                    </PautinaText>
+                    </p>
                 </div>
 
                 {/* --- Action Button --- */}
@@ -68,9 +68,9 @@ export default function ProfileWidget() {
 
                         {/* Documents */}
                         <div className="flex flex-col items-center justify-center px-4 hover:bg-text-main/5 transition-colors  cursor-default group">
-                            <PautinaText variant="large" className="font-bold text-text-main group-hover:text-brand transition-colors">
+                            <p className="text-large font-bold text-text-main group-hover:text-brand transition-colors">
                                 {user?.documents_count || 0}
-                            </PautinaText>
+                            </p>
                             <span className="text-[11px] uppercase tracking-wider font-semibold text-text-muted mt-1">
                                 Документов
                             </span>
@@ -78,9 +78,9 @@ export default function ProfileWidget() {
 
                         {/* Projects */}
                         <div className="flex flex-col items-center justify-center px-4 hover:bg-text-main/5 transition-colors cursor-default group">
-                            <PautinaText variant="large" className="font-bold text-text-main group-hover:text-brand transition-colors">
+                            <p className="text-large font-bold text-text-main group-hover:text-brand transition-colors">
                                 {user?.projects_count || 0}
-                            </PautinaText>
+                            </p>
                             <span className="text-[11px] uppercase tracking-wider font-semibold text-text-muted mt-1">
                                 Проектов
                             </span>

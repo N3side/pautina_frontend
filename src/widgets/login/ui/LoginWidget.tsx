@@ -73,9 +73,9 @@ export default function LoginWidget() {
                     <div className="flex justify-between">
                         <div className="flex justify-between items-center select-none font-regular">
 
-                            <PautinaText variant="small" className="text-text-main">
+                            <p className="text-small text-text-main">
                                 Или
-                            </PautinaText>
+                            </p>
 
                             {/*<Checkbox*/}
                             {/*    checked={isActive}*/}
@@ -94,9 +94,9 @@ export default function LoginWidget() {
                             {/*</label>*/}
                         </div>
                         <Link href="/otp_login" className="flex items-center">
-                            <PautinaText variant="small" className="text-text-main font-medium">
+                            <p className="text-small text-text-main font-medium">
                                 Вход по коду
-                            </PautinaText>
+                            </p>
                         </Link>
                     </div>
 
@@ -106,9 +106,9 @@ export default function LoginWidget() {
 
                 </form>
 
-                <PautinaText variant="small" className="mt-[10px] text-text-muted">
-                    Нет аккаунта ? <Link href="/register"><PautinaText component="span" variant="small" className="text-text-main font-medium">Регистрация</PautinaText></Link>
-                </PautinaText>
+                <p className="text-small mt-[10px] text-text-muted">
+                    Нет аккаунта ? <Link href="/register"><span className="text-small text-text-main font-medium">Регистрация</span></Link>
+                </p>
             </Card1>
         // </CheckIsNotUser>
     )

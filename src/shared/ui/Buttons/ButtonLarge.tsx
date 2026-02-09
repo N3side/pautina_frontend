@@ -26,20 +26,13 @@ export default function ButtonLarge({ children, className="", text="", ...props 
                         transform: "scale(0.97)",
                         background: colorStyles.buttons.brand.light, // Чтобы цвет не мигал при нажатии
                     },
-
-                    // Если хочешь совсем убрать "бульканье" эффекта волны:
-                    // disableRipple: true
                 }}
             >
 
                 {text ? (
-                    <PautinaText variant="button2" className="text-white font-bold">
-                        {text}
-                    </PautinaText>
+                    <p className="text-button-sm">{text}</p>
                 ) :
-                    <PautinaText variant="button2" className="text-white font-bold">
-                        {children}
-                    </PautinaText>
+                    <p className="text-button-sm">{children}</p>
                 }
 
             </Button>

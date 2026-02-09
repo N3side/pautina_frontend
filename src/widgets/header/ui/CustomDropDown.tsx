@@ -38,8 +38,8 @@ export default function CustomDropDown() {
                                 <div className="p-4 flex gap-3 items-center">
                                     <img src={user?.avatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover shrink-0 border border-border-default" />
                                     <div className="flex flex-col min-w-0">
-                                        <PautinaText variant="default" className="text-text-main font-bold truncate">{user?.name}</PautinaText>
-                                        {user?.username && <PautinaText variant="small" className="text-text-muted truncate">@{user?.username}</PautinaText>}
+                                        <p className="text-default text-text-main font-bold truncate">{user?.name}</p>
+                                        {user?.username && <p className="text-small text-text-muted truncate">@{user?.username}</p>}
                                     </div>
                                 </div>
 
@@ -55,7 +55,7 @@ export default function CustomDropDown() {
                                     <div className="px-2">
                                         <button className="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between hover:bg-border-default/30 transition-colors group">
                                             <div className="flex items-center gap-3">
-                                                <PautinaText variant="small" className="text-text-main font-medium">Темная тема</PautinaText>
+                                                <p className="text-small text-text-main font-medium">Темная тема</p>
                                             </div>
                                             <Switch size="small" checked={theme === "dark"} onClick={toggleTheme} />
                                         </button>
@@ -63,7 +63,7 @@ export default function CustomDropDown() {
                                         <Link href="/settings">
                                             <button className="w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-border-default/30 transition-colors group mt-1">
                                                 <SettingsIcon fontSize="small" className="text-text-muted group-hover:text-text-main transition-colors" />
-                                                <PautinaText variant="small" className="text-text-muted group-hover:text-text-main transition-colors">Настройки</PautinaText>
+                                                <p className="text-small text-text-muted group-hover:text-text-main transition-colors">Настройки</p>
                                             </button>
                                         </Link>
                                     </div>
@@ -74,7 +74,7 @@ export default function CustomDropDown() {
                                         <Link href="/logout">
                                             <button className="w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-red-500/10 transition-colors group">
                                                 <LogoutIcon fontSize="small" className="text-text-muted group-hover:text-red-500 transition-colors" />
-                                                <PautinaText variant="small" className="text-text-muted group-hover:text-red-500 transition-colors">Выйти</PautinaText>
+                                                <p className="text-small text-text-muted group-hover:text-red-500 transition-colors">Выйти</p>
                                             </button>
                                         </Link>
                                     </div>

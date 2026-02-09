@@ -24,9 +24,9 @@ export default function Option({ text, selected, className, style, ...props }: O
             `}
             {...props}
         >
-            <PautinaText variant="small">
+            <p className="text-small">
                 {text}
-            </PautinaText>
+            </p>
         </div>
     );
 }
