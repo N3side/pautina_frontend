@@ -7,7 +7,7 @@ import {unionFormData} from "@/shared/lib/utils/UnionFormData";
 
 export default function Source({next}) {
     const [errors, setErrors] = useState<Record<any, string> | null>(null)
-    const {sourceTsx,result} = useSelectSource({errors})
+    const {sourceTsx,result} = useSelectSource({errors, localSourceId: "source", localSource: "custom_text"})
 
     async function handleSubmit(e) {
 

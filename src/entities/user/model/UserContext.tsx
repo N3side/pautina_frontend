@@ -59,7 +59,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
             safeLocalStorage.removeItem("token")
             setUser(null)
         }
-    }, [token, getUser])
+    }, [token, getUser, router])
 
     useEffect(() => {
         if (user?.isGuest) {

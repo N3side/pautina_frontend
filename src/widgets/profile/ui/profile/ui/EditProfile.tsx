@@ -145,10 +145,14 @@ export default function useEditProfile() {
 
         setErrors(null)
 
+        const activityFormData = formRef.current
+            ? Object.fromEntries(new FormData(formRef.current))
+            : {};
+
         const formData = unionFormData(new FormData(form_.current!), [
             ...editCity(city, city_id),
             result,
-            formRef.current
+            activityFormData
         ])
 
         formData.set("status", `${statusValue}`);
@@ -158,8 +162,6 @@ export default function useEditProfile() {
         let changed = false
 
         for (const [key, value] of formData.entries()) {
-
-            console.log(value, user?.[key])
 
             if (value !== String(user?.[key] ?? '')) {
                 updates.append(key, value);

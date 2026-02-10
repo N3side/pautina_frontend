@@ -1,65 +1,65 @@
 import Option from "@/shared/ui/Inputs/Option";
 import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
-import React, {ChangeEvent, useEffect, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import {useSources} from "@/entities/sources/api/useSources";
+import {UserContext} from "@/entities/user";
 
-export default function useSelectSource({errors}) {
+export default function useSelectSource({ errors, localSourceId="", localSource=""}) {
 
-    const {sources} = useSources()
-    const [selectedSource, setSelectedSource] = useState<string | null>(safeLocalStorage.getItem("source"));
-    const [customText, setCustomText] = useState<string | null>(safeLocalStorage.getItem("custom_text"));
+    const {user} = useContext(UserContext)
+
+    const { sources } = useSources();
+    const [selectedSource, setSelectedSource] = useState<string | null>(user?.source_id || localSourceId && safeLocalStorage.getItem(`${localSourceId}`) || "");
+    const [customText, setCustomText] = useState<string>(user?.source || localSource && safeLocalStorage.getItem(`${localSource}`) || "");
 
     function handleCustomTextChange(e: ChangeEvent<HTMLInputElement>): void {
-        setCustomText(e.target?.value);
-        safeLocalStorage.setItem("custom_text", e.target?.value)
+        const val = e.target.value;
+        setCustomText(val);
+        safeLocalStorage.setItem("custom_text", val);
     }
 
     const result = {
-        source_id: selectedSource === "custom" ? "" : selectedSource,
+        ...(selectedSource && selectedSource !== "custom" && { source_id: selectedSource }),
         source: customText
-    }
+    };
 
     useEffect(() => {
-        safeLocalStorage.setItem("source", `${selectedSource}`)
+        if (selectedSource) {
+            safeLocalStorage.setItem("source", selectedSource);
+        }
     }, [selectedSource]);
 
-    const sourceTsx =
+    useEffect(() => {
+        console.log(sources)
+    }, [sources]);
+
+    const sourceTsx = (
         <div>
-            <div className="space-y-3">
+            <div className="space-y-3 mb-4">
                 {sources?.map((source) => (
                     <Option
-                        key={source?.id}
-                        selected={selectedSource == source?.id}
-                        text={source?.variant}
-                        onClick={() => setSelectedSource(`${source?.id}` )}
+                        key={source.id}
+                        selected={selectedSource == String(source.id)}
+                        text={source.variant}
+                        onClick={() => setSelectedSource(String(source.id))}
                     />
                 ))}
-
-                <span className="text-red-500 text-sm ml-1">{errors?.source_id}</span>
-
+                {errors?.source_id && <span className="text-red-500 text-sm ml-1">{errors.source_id}</span>}
             </div>
 
-
             <Input
-                label={"Свой вариант"}
+                label="Свой вариант"
                 error={errors?.source}
-                name={"source"}
-                placeholder={"Свой вариант ответа"}
-                selected={selectedSource==="custom"}
+                name="source"
+                placeholder="Свой вариант ответа"
+                selected={selectedSource === "custom"}
                 onChange={handleCustomTextChange}
                 onClick={() => setSelectedSource("custom")}
-                defaultValue={safeLocalStorage.getItem("custom_text") ?? undefined}
+                value={customText} // Используем стейт вместо defaultValue
             />
         </div>
+    );
 
-
-
-    return {
-        result,
-        sourceTsx,
-        selectedSource,
-        customText
-    }
-
+    return { result, sourceTsx, selectedSource, customText };
 }

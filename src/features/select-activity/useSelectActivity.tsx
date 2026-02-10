@@ -1,44 +1,59 @@
 import Option from "@/shared/ui/Inputs/Option";
 import Input from "@/shared/ui/Inputs/Input";
-import React, {ChangeEvent, useEffect, useRef, useState} from "react";
+import React, {ChangeEvent, useContext, useEffect, useRef, useState} from "react";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import {UserContext} from "@/entities/user";
 
-export function UseSelectActivity({errors}) {
+export function UseSelectActivity({
+  errors,
+  localSelectedStatus="",
+  localSchoolStudyStatus="",
+  localDepartment="",
+  localCourse="",
+  localOrganization="",
+  localPost=""
+}) {
+
+    const {user} = useContext(UserContext)
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const [selectedStatus, setSelectedStatus] = useState<string | null>(safeLocalStorage.getItem("selectedStatus"));
-    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(safeLocalStorage.getItem("schoolStudyStatus"));
-    const [department, setDepartment] = useState<string>(safeLocalStorage.getItem("department") || "")
-    const [course, setCourse] = useState<string>(safeLocalStorage.getItem("course") || "")
-    const [organization, setOrganization] = useState<string>(safeLocalStorage.getItem("organization") || "")
-    const [post, setPost] = useState<string>(safeLocalStorage.getItem("post") || "")
+    const [selectedStatus, setSelectedStatus] = useState<string | null>(user && user?.status || localSelectedStatus && safeLocalStorage.getItem(`${localSelectedStatus}`) || "");
+    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(user && user?.status || localSchoolStudyStatus && safeLocalStorage.getItem(`${localSchoolStudyStatus}`) || "");
+    const [department, setDepartment] = useState<string>(user && user?.department || localDepartment && safeLocalStorage.getItem(`${localDepartment}`) || "")
+    const [course, setCourse] = useState<string>(user && user?.course || localCourse && safeLocalStorage.getItem(`${localCourse}`) || "")
+    const [organization, setOrganization] = useState<string>(user && user?.organization || localOrganization && safeLocalStorage.getItem(`${localOrganization}`) || "")
+    const [post, setPost] = useState<string>(user && user?.post || localPost && safeLocalStorage.getItem(`${localPost}`) || "")
 
     useEffect(() => {
-        safeLocalStorage.setItem("selectedStatus", `${selectedStatus}`)
+        safeLocalStorage.setItem(localSelectedStatus, `${selectedStatus}`)
     }, [selectedStatus]);
 
     useEffect(() => {
-        safeLocalStorage.setItem("schoolStudyStatus", `${schoolStudyStatus}`)
+        safeLocalStorage.setItem(localSchoolStudyStatus, `${schoolStudyStatus}`)
     }, [schoolStudyStatus]);
 
     // ---
 
     useEffect(() => {
-        safeLocalStorage.setItem("department", department)
+        safeLocalStorage.setItem(localDepartment, department)
     }, [department]);
 
     useEffect(() => {
-        safeLocalStorage.setItem("course", course)
+        safeLocalStorage.setItem(localCourse, course)
     }, [course]);
 
     useEffect(() => {
-        safeLocalStorage.setItem("organization", organization)
+        safeLocalStorage.setItem(localOrganization, organization)
     }, [organization]);
 
     useEffect(() => {
-        safeLocalStorage.setItem("post", post)
+        safeLocalStorage.setItem(localPost, post)
     }, [post]);
+
+    useEffect(() => {
+        console.log({selectedStatus, schoolStudyStatus, department, course, organization, post})
+    }, [user]);
 
     const statusValue = selectedStatus === "null" || selectedStatus === "" ? null : selectedStatus;
 
@@ -65,12 +80,12 @@ export function UseSelectActivity({errors}) {
                         {/*</div>*/}
 
                         <Option
-                            selected={schoolStudyStatus === "Я школьник"}
+                            selected={schoolStudyStatus == "Я школьник"}
                             text={"Я школьник"}
                             onClick={() => setSchoolStudyStatus("Я школьник")}
                         />
                         <Option
-                            selected={schoolStudyStatus === "Я студент"}
+                            selected={schoolStudyStatus == "Я студент"}
                             text={"Я студент"}
                             onClick={() => setSchoolStudyStatus("Я студент")}
                         />

@@ -20,7 +20,7 @@ export default function Activity({ next }: ActivityProps) {
 
     const [errors, setErrors] = useState<FormErrors | null>(null);
 
-    const {activityTsx, formRef, statusValue} = UseSelectActivity({errors})
+    const {activityTsx, formRef, statusValue} = UseSelectActivity({errors, localSelectedStatus: "selectedStatus", localCourse: "course", localPost: "post", localOrganization: "organization", localSchoolStudyStatus: "schoolStudyStatus", localDepartment: "department"})
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 
