@@ -27,10 +27,15 @@ const Content = ({ children, className = "", ...props }) => (
 export default function AccordionLayout({ children }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
-    const childrenArray = React.Children.toArray(children);
-    // Ищем компоненты по типу
-    const header = childrenArray.find(child => child.type === Header);
-    const content = childrenArray.find(child => child.type === Content);
+    const childrenArray = React.Children.toArray(children)
+
+    const header = childrenArray.find(
+        (child): child is React.ReactElement => React.isValidElement(child) && child.type === Header
+    )
+
+    const content = childrenArray.find(
+        (child): child is React.ReactElement => React.isValidElement(child) && child.type === Content
+    )
 
     return (
         <Accordion

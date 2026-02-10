@@ -3,7 +3,7 @@ import {useEffect, useState} from "react";
 
 export function useSources() {
 
-    const [sources, setSources] = useState(null);
+    const [sources, setSources] = useState<Record<string, any>>([{}]);
 
     useEffect(() => {
         // Асинхронная логика внутри эффекта
