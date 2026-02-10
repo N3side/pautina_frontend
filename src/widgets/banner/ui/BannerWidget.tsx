@@ -1,13 +1,15 @@
 "use client"
 
-import { Container } from "@/shared/ui/wrappers/Container"
-import { Heading } from "@/shared/styles/typography/headings"
-import { PautinaText } from "@/shared/styles/typography/text"
-import { ShadowWrapper } from "@/shared/ui/wrappers/Shadow"
+import {Container} from "@/shared/ui/wrappers/Container"
+import {ShadowWrapper} from "@/shared/ui/wrappers/Shadow"
 import Image from "next/image"
 import Hero from "@/shared/assets/images/raster/hero.jpg"
-import { useTheme } from "@/shared/lib/providers/ThemeProvider"
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge"
+import {rise} from "@/shared/styles/animations";
+import Link from "next/link"
+import {useContext} from "react";
+import {UserContext} from "@/entities/user";
+
 
 // Простая CSS анимация для "парения" изображения
 const floatKeyframes = `
@@ -22,7 +24,8 @@ const floatKeyframes = `
 `
 
 export default function BannerWidget() {
-    const { theme } = useTheme()
+
+    const {user} = useContext(UserContext)
 
     return (
         <section className="relative w-full overflow-hidden py-[clamp(20px,5vw,80px)]">
@@ -55,8 +58,7 @@ export default function BannerWidget() {
                         </div>
 
                         {/* Заголовок H1 */}
-                        <Heading
-                            variant="h1"
+                        <h1
                             className="font-black text-text-main leading-[1.1] tracking-tight mt-4"
                         >
                             Создай портфолио,
@@ -72,31 +74,31 @@ export default function BannerWidget() {
                                 {/* Подчеркивание под градиентным текстом */}
                                 <svg className="absolute w-full h-3 -bottom-1 left-0 text-brand opacity-40" viewBox="0 0 200 9" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M2.00025 6.99997C25.7509 9.36164 124.846 11.2393 199.5 2.50001" stroke="currentColor" strokeWidth="3" strokeLinecap="round"/></svg>
                             </span>
-                        </Heading>
+                        </h1>
 
                         {/* Подзаголовок */}
                         <p
                             className="text-large mt-6 text-text-muted max-w-[500px] leading-relaxed"
                         >
                             Единая экосистема для хранения сертификатов, проектов и достижений.
-                            Специально для студентов
+                            Специально для студентов <span></span>
                             <span className="font-semibold text-text-main border-b border-brand/30 pb-0.5">
                                 ГАПОУ «МЦК-КТИТС»
-                            </span>.
+                            </span> <span></span>
+                            и не только
                         </p>
 
                         {/* Кнопка */}
-                        <div className="mt-10 flex flex-col sm:flex-row gap-4 w-full sm:w-auto">
-                            <ShadowWrapper className="w-full sm:w-auto">
-                                <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl transition-transform hover:-translate-y-1">
-                                    <span
-                                        className="text-button text-white font-bold text-lg"
-                                    >
-                                        Создать портфолио
-                                    </span>
-                                </ButtonLarge>
-                            </ShadowWrapper>
-                        </div>
+                        <ShadowWrapper className={`w-full sm:w-auto mt-10 ${rise}`}>
+                            <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl">
+                                <Link
+                                    href={`${user ? "/register" : "/register"}`}
+                                    className="text-button text-white font-bold text-lg"
+                                >
+                                    Создать портфолио
+                                </Link>
+                            </ButtonLarge>
+                        </ShadowWrapper>
 
                         {/* Social Proof / Stats (Опционально, для красоты низа) */}
                         <div className="mt-8 flex items-center gap-4 opacity-70">

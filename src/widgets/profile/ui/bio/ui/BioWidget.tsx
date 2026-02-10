@@ -34,9 +34,9 @@ export default function BioWidget() {
                         <AccountCircleIcon />
                     </div>
 
-                    <Heading variant="h6" className="text-text-main font-bold tracking-tight">
+                    <h6 className="text-text-main font-bold tracking-tight">
                         Основная информация
-                    </Heading>
+                    </h6>
                 </div>
 
                 <Button

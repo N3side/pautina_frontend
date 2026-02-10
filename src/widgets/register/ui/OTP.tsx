@@ -87,10 +87,10 @@ export default function OTP({name, email, otp, setOtp, next, position, timer, se
         // <CheckGuest>
             <div>
                 <div className="flex flex-col gap-[15px]">
-                    <Heading variant="h4">
+                    <h4 className="text-text-main font-bold">
                         Проверка письма *
-                    </Heading>
-                    <p className="text-secondary">
+                    </h4>
+                    <p className="text-secondary text-text-muted">
                         {name}, если не видите письма на {email}, посмотрите пожайлуста папку "Спам". Если письма там нет, запросите код еще раз или напишите в поддержку
                     </p>
                 </div>

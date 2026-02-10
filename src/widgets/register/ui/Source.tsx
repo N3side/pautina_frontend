@@ -1,75 +1,24 @@
-import { Heading } from "@/shared/styles/typography/headings";
-import { PautinaText } from "@/shared/styles/typography/text";
-import { ShadowWrapper } from "@/shared/ui/wrappers/Shadow";
-import { Button } from "@mui/material";
-import { COLORS, colorStyles } from "@/shared/styles/colors";
-import React, { useEffect, useState, ChangeEvent } from "react";
-import { $fetch } from "@/shared/api/fetch";
+import React, {useState} from "react";
+import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
-import Input from "@/shared/ui/Inputs/Input";
-import Option from "@/shared/ui/Inputs/Option";
-import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import useSelectSource from "@/features/select-source/useSelectSource";
+import {unionFormData} from "@/shared/lib/utils/UnionFormData";
 
-interface Source {
-    id: string | number;
-    variant: string;
-}
-
-interface SourcesResponse {
-    json?: {
-        sources?: Source[];
-    };
-}
-
-interface SourceResult {
-    source_id: string | number | null | undefined,
-    source: string | null
-}
 
 export default function Source({next}) {
-    const [sources, setSources] = useState<Source[] | null>(null);
-    const [selectedSource, setSelectedSource] = useState<string | null>(safeLocalStorage.getItem("source"));
-    const [customText, setCustomText] = useState<string | null>(safeLocalStorage.getItem("custom_text"));
-
     const [errors, setErrors] = useState<Record<any, string> | null>(null)
-
-    async function getSources(): Promise<void> {
-        const response = await $fetch("sources") as SourcesResponse;
-        const sources_ = response?.json?.sources;
-        setSources(sources_ || null);
-    }
-
-    useEffect(() => {
-        getSources()
-    }, []);
-
-    function handleCustomTextChange(e: ChangeEvent<HTMLInputElement>): void {
-
-        setCustomText(e.target?.value);
-
-        safeLocalStorage.setItem("custom_text", e.target?.value)
-
-    }
+    const {sourceTsx,result} = useSelectSource({errors})
 
     async function handleSubmit(e) {
 
         e.preventDefault()
-
         setErrors(null)
 
-        console.log(customText)
-
-        const result: SourceResult = {
-            source_id: selectedSource === "custom" ? "" : selectedSource,
-            source: customText
-        }
+        const formData = unionFormData(new FormData, [result])
 
         const response = await $fetch("onboarding/source", {
             method: "PATCH",
-            body: JSON.stringify(result),
-            headers: {
-                "Content-Type": "application/json"
-            }
+            body: formData,
         })
 
         const errors_ = response?.json?.errors
@@ -82,61 +31,28 @@ export default function Source({next}) {
         next()
     }
 
-    useEffect(() => {
-        console.log(selectedSource)
-        safeLocalStorage.setItem("source", `${selectedSource}`)
-    }, [selectedSource]);
-
     return (
         <form className="flex flex-col gap-6" onSubmit={handleSubmit}>
             {/* Заголовок и описание */}
             <div className="flex flex-col gap-4">
-                <Heading variant="h4">
+                <h4 className="text-text-main font-bold">
                     Откуда вы узнали о Паутине? *
-                </Heading>
+                </h4>
 
-                <p className="text-secondary">
+                <p className="text-secondary text-text-muted">
                     Нам очень важно знать как развивается проект и понимать какие каналы продвижения являются эффективными. Поэтому, ответьте пожалуйста на эти вопросы
                 </p>
             </div>
 
             <div className="font-bold text-[14px] ml-1">
-                <p className="secondary" style={{ fontWeight: 700 }}>
+                <p className="secondary font-bold text-text-muted">
                     Ответ
                 </p>
             </div>
 
-            {/* Список вариантов */}
+            {sourceTsx}
 
-            <div className="space-y-3">
-                {sources?.map((source: Source) => (
-                    <Option
-                        key={source?.id}
-                        selected={selectedSource == source?.id}
-                        text={source?.variant}
-                        onClick={() => setSelectedSource(`${source?.id}` )}
-                    />
-
-                ))}
-
-                <span className="text-red-500 text-sm ml-1">{errors?.source_id}</span>
-
-            </div>
-
-
-            <Input
-                label={"Свой вариант"}
-                error={errors?.source}
-                name={"source"}
-                placeholder={"Свой вариант ответа"}
-                selected={selectedSource==="custom"}
-                onChange={handleCustomTextChange}
-                onClick={() => setSelectedSource("custom")}
-                defaultValue={safeLocalStorage.getItem("custom_text") ?? undefined}
-            />
-
-            {/* Кнопка Далее */}
-            <ButtonLarge text={"Далее"}>
+            <ButtonLarge text="Далее">
                 <></>
             </ButtonLarge>
         </form>

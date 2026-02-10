@@ -39,9 +39,9 @@ export default function ProfileWidget() {
 
                 {/* --- User Info --- */}
                 <div className="flex flex-col items-center text-center space-y-2">
-                    <Heading variant="h5" className="text-text-main font-bold tracking-tight">
+                    <h5 className="text-text-main font-bold tracking-tight">
                         {user?.username}
-                    </Heading>
+                    </h5>
 
                     <p className="text-secondary text-text-muted line-clamp-2 px-2">
                         {user?.surname} {user?.name} {user?.patronymic}

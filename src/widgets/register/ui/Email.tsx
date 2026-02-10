@@ -77,10 +77,10 @@ export default function Email({name, email, setEmail, next, setTimer, position})
     return (
         <div>
             <div className="flex flex-col gap-[15px]">
-                <Heading variant="h4">
+                <h4 className="text-text-main font-bold">
                     Привет, {name?.charAt(0).toUpperCase() + name?.slice(1,) }, приятно познакомиться
-                </Heading>
-                <p className="secondary">
+                </h4>
+                <p className="secondary text-text-muted">
                     Чтобы система запомнила Вас, необходимо ввести свою электронную почту. На эту почту придет код подтверждения
                 </p>
             </div>

@@ -35,9 +35,9 @@ export default function Name({name, setName, next}) {
         <div className="w-full">
             {/* Заголовок и подзаголовок */}
             <div className="flex flex-col gap-3 lg:text-left">
-                <Heading variant="h4">
+                <h4 className="font-bold text-text-main">
                     Добро пожаловать на платформу Паутина
-                </Heading>
+                </h4>
                 <p className="text-secondary text-text-muted">
                     Для дальнейшей работы предлагаем познакомиться
                 </p>

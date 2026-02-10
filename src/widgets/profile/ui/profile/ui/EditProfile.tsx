@@ -1,7 +1,6 @@
 import Input from "@/shared/ui/Inputs/Input"
-import {useContext, useRef, useState} from "react";
+import React, {useContext, useRef, useState} from "react";
 import {useModal} from "@/shared/ui/Modals/Modal";
-import {Heading} from "@/shared/styles/typography/headings";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
@@ -9,7 +8,10 @@ import toast from "react-hot-toast";
 import useCitySelect from "@/features/select-city/useCitySelect";
 import {unionFormData} from "@/shared/lib/utils/UnionFormData";
 import {editCity} from "@/widgets/profile/ui/profile/api";
-import {printFormData} from "@/shared/lib/utils/formData";
+import AccordionLayout from "@/shared/ui/Inputs/AccordionLayout";
+import useSelectSource from "@/features/select-source/useSelectSource";
+import {UseSelectActivity} from "@/features/select-activity/useSelectActivity";
+import {autoReplace} from "@/shared/lib/utils/replace";
 
 export default function useEditProfile() {
 
@@ -24,17 +26,20 @@ export default function useEditProfile() {
         city_id_local: "city_id"
     })
 
-    const formRef = useRef(null)
+    const form_ = useRef(null)
+
+    const {sourceTsx,result} = useSelectSource({errors})
+    const {activityTsx, formRef, statusValue} = UseSelectActivity({errors})
 
     const form =
 
     <>
 
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit} ref={formRef}>
+        <form className="flex flex-col gap-5" onSubmit={handleSubmit} ref={form_}>
 
-            <Heading variant="h5">
+            <h5 className="font-bold">
                 Редактирование профиля
-            </Heading>
+            </h5>
 
             <Input
                 name="username"
@@ -42,6 +47,7 @@ export default function useEditProfile() {
                 defaultValue={user?.username}
                 error={errors?.username}
                 isUsername={true}
+                onInput={autoReplace}
             />
 
             <Input
@@ -79,6 +85,7 @@ export default function useEditProfile() {
                 defaultValue={user?.tg}
                 error={errors?.tg}
                 isUsername={true}
+                onInput={autoReplace}
             />
 
             <Input
@@ -87,6 +94,7 @@ export default function useEditProfile() {
                 defaultValue={user?.max}
                 error={errors?.max}
                 isUsername={true}
+                onInput={autoReplace}
             />
 
             {input}
@@ -99,15 +107,25 @@ export default function useEditProfile() {
                 error={errors?.bio}
             />
 
-            {/*<div>*/}
+            <AccordionLayout>
+                <AccordionLayout.Header className="px-1.25 py-4">
+                    <p className="text-text-default font-semibold">Откуда вы узнали о паутине?</p>
+                </AccordionLayout.Header>
 
-            {/*    <PautinaText variant="tiny" className="uppercase text-text-muted mb-1 ml-1 font-semibold">*/}
-            {/*        Откуда узнали о паутине?*/}
-            {/*    </PautinaText>*/}
+                <AccordionLayout.Content className="px-4 py-6">
+                    {sourceTsx}
+                </AccordionLayout.Content>
+            </AccordionLayout>
 
-            {/*    <SourceSelectionForm />*/}
+            <AccordionLayout>
+                <AccordionLayout.Header className="px-1.25 py-4">
+                    <p className="text-text-default font-semibold">Чем вы занимаетесь?</p>
+                </AccordionLayout.Header>
 
-            {/*</div>*/}
+                <AccordionLayout.Content className="px-4 py-6">
+                    {activityTsx}
+                </AccordionLayout.Content>
+            </AccordionLayout>
 
             <ButtonLarge type="submit">
                 Изменить
@@ -127,17 +145,18 @@ export default function useEditProfile() {
 
         setErrors(null)
 
-        const formData = unionFormData(new FormData(formRef.current!), [
-            ...editCity(city, city_id)
+        const formData = unionFormData(new FormData(form_.current!), [
+            ...editCity(city, city_id),
+            result,
+            formRef.current
         ])
 
-        printFormData(formData)
+        formData.set("status", `${statusValue}`);
 
         const updates = new FormData()
 
         let changed = false
 
-        // Проходим по всем полям из формы
         for (const [key, value] of formData.entries()) {
 
             console.log(value, user?.[key])

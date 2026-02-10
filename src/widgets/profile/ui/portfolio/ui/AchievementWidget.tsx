@@ -99,9 +99,9 @@ export function AchievementWidget({previewImage=null}) {
 
                     {/* Заголовок */}
                     <header>
-                        <Heading variant="h4" className="text-text-main font-black leading-tight">
+                        <h4 className="text-text-main font-black leading-tight">
                             ППК. Введение в алгоритмы: реализация на языке Python
-                        </Heading>
+                        </h4>
                         <div className="mt-4 flex items-center gap-2 text-text-muted">
                             <Temple />
                             <p className="text-default font-semibold text-text-main/80">

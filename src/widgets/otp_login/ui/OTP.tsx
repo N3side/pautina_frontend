@@ -93,9 +93,9 @@ export default function OTP({email, next, prev, timer, setTimer}) {
         // <CheckUser>
         <div>
             <div className="flex flex-col gap-[15px]">
-                <Heading variant="h4" className="text-text-main font-bold">
+                <h4 className="text-text-main font-bold">
                     Проверка одноразового кода
-                </Heading>
+                </h4>
                 <p className="text-secondary text-text-muted">
                     Eсли не видите письма на {email}, посмотрите пожайлуста папку "Спам". Если письма там нет, запросите
                     код еще раз или напишите в поддержку

@@ -1,9 +1,10 @@
 import React, { InputHTMLAttributes } from 'react';
 import { IMaskInput } from 'react-imask';
 import { PautinaText } from "@/shared/styles/typography/text";
+import {smooth} from "@/shared/styles/animations";
 
 const BASE_INPUT_CLASSES = `
-  w-full py-4 rounded-xl transition-all duration-300 outline-none
+  w-full py-4 rounded-xl ${smooth} outline-none
   border glass-effect text-text-main text-sm font-medium
   placeholder:text-text-muted/60
   focus:ring-4 focus:ring-brand/10 focus:bg-surface

@@ -44,17 +44,16 @@ export default function StatisticsWidget() {
             >
                 {model.map((obj, i) =>
                     <div key={i} className="flex flex-col gap-[5px] items-center">
-                        <Heading variant="h1" color={COLORS.white} style={{ fontWeight: 900 }}>
+                        <h1 color={COLORS.white} style={{ fontWeight: 900 }}>
                             {obj?.h}
-                        </Heading>
-                        <PautinaText color={`${colorStyles.text.p_tiny.light}`} variant="tiny"
-                            className="uppercase whitespace-nowrap"
+                        </h1>
+                        <p
+                            className="uppercase whitespace-nowrap text-tiny text-text-main font-bold"
                             style={{
-                                fontWeight: 700,
                                 letterSpacing: "1.2",
                             }}>
                             {obj?.p}
-                        </PautinaText>
+                        </p>
                     </div>
                 )}
             </Container>

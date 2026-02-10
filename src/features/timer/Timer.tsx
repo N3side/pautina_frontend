@@ -1,7 +1,7 @@
-import { PautinaText } from "@/shared/styles/typography/text";
-import { useEffect, useState } from "react";
-import { safeLocalStorage } from "@/shared/lib/utils/safeLocalStorage";
+import {useEffect, useState} from "react";
+import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {formatTime} from "@/shared/lib/utils/time";
+import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 interface Props {
     handleClick: () => void;
@@ -9,8 +9,6 @@ interface Props {
     timer: number | null; // Разрешаем null для типизации
     message: string
 }
-
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 export default function Timer({ handleClick, timer, setTimer, message }: Props) {
     const [isReady, setIsReady] = useState(false);

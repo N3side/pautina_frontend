@@ -61,9 +61,9 @@ export default function LoginWidget() {
     return (
         // <CheckIsNotUser>
             <Card1>
-                <Heading variant="h4" className="font-bold text-text-main">
+                <h4 className="font-bold text-text-main">
                     Вход в профиль
-                </Heading>
+                </h4>
                 <form onSubmit={handleSubmit} className="flex flex-col gap-[10px] mt-[20px] w-full ">
 
                     <Input label={"Почта"} placeholder={"ivanov@gmail.com"} name={"email"} error={errors?.email} />
@@ -100,7 +100,7 @@ export default function LoginWidget() {
                         </Link>
                     </div>
 
-                    <ButtonLarge text="Войти">
+                    <ButtonLarge text="Войти" className="!text-[white]">
                         <></>
                     </ButtonLarge>
 

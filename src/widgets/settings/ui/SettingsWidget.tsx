@@ -59,7 +59,7 @@ export default function SettingsWidget() {
                     {/* Заголовок секции */}
                     <div className="border-b border-border-default pb-5">
                         {/* text-gray-900 -> text-text-main */}
-                        <Heading variant="h4" className="text-text-main mb-1 font-bold">Общие настройки</Heading>
+                        <h4 className="text-text-main mb-1 font-bold">Общие настройки</h4>
                         {/* text-gray-500 -> text-text-muted */}
                         <p className="text-secondary text-text-muted">
                             Управляйте основными параметрами вашего аккаунта и интерфейса.
@@ -69,7 +69,7 @@ export default function SettingsWidget() {
                     <section className="flex flex-col gap-6">
 
                         <div className="flex items-center gap-3 mb-2">
-                            <Heading variant="h6" className="text-text-main font-semibold">Внешний вид</Heading>
+                            <h6 className="text-text-main font-semibold">Внешний вид</h6>
                         </div>
 
                         {/* Карточка переключения темы */}

@@ -1,5 +1,3 @@
-
-
 export function unionFormData(formData: FormData, extra): FormData {
 
     extra.map((obj) => {

@@ -65,11 +65,11 @@ export default function Password() {
     return (
         <div className="">
             <div className="flex flex-col gap-[15px] w-full">
-                <Heading variant="h4">
+                <h4 className="text-text-main font-bold">
                     Пароль
-                </Heading>
+                </h4>
 
-                <p className="text-secondary">
+                <p className="text-secondary text-text-muted">
                     И завершающий штрих - безопасность. Придумайте пароль для входа в личный кабинет
                 </p>
             </div>

@@ -84,9 +84,9 @@ export default function UploadPhoto() {
             <div className="flex flex-col h-full w-full glass-effect rounded-xl">
                 {/* --- 1. HEADER --- */}
                 <div className="flex-none px-6 pt-6 pb-4 md:pt-8 md:px-8 border-b border-border-default/40">
-                    <Heading variant="h5" className="font-bold text-text-main">
+                    <h5 className="font-bold text-text-main">
                         Настройка фото
-                    </Heading>
+                    </h5>
                     <p className="text-secondary text-text-muted mt-1">
                         Выберите область для аватара
                     </p>

@@ -44,9 +44,9 @@ export default function City({ next = () => {} }: { next: () => void }) {
     return (
         <div>
             <div className="flex flex-col gap-[15px] w-full">
-                <Heading variant="h4">Из какого вы города?</Heading>
+                <h4 className="text-text-main font-bold">Из какого вы города?</h4>
 
-                <p className="secondary">
+                <p className="secondary text-text-muted">
                     Напишите и выберите город из списка (если введеного города в списке нет, мы примем его)
                 </p>
             </div>

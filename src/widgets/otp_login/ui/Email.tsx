@@ -74,9 +74,9 @@ export default function Email({email,  setEmail, next, setTimer, timer}) {
     return (
         <div>
             <div className="flex flex-col gap-[15px]">
-                <Heading variant="h4" className="font-bold text-text-main">
+                <h4 className="font-bold text-text-main">
                     Введите почту
-                </Heading>
+                </h4>
                 <p className="text-secondary text-text-muted">
                      Введите почту, к которой привязан ваш аккаунт. На нее будет отправлен одноразовый код
                 </p>

@@ -1,7 +1,6 @@
-import {COLORS, colorStyles} from "@/shared/styles/colors";
-import {PautinaText} from "@/shared/styles/typography/text";
+import {colorStyles} from "@/shared/styles/colors";
 import {ShadowWrapper} from "@/shared/ui/wrappers/Shadow";
-import { Button } from "@mui/material"
+import {Button} from "@mui/material"
 
 export default function ButtonLarge({ children, className="", text="", ...props }) {
     return (
@@ -10,29 +9,23 @@ export default function ButtonLarge({ children, className="", text="", ...props 
                 {...props}
                 type="submit"
                 // sx — это стандарт для MUI, он работает лучше чем style
-                className={className}
+                className={`!mt-[15px] !py-[15px] !rounded-xl !w-full !transform-none !bg-[var(--color-brand)] ${className}`}
                 sx={{
-                    marginTop: "15px",
-                    background: colorStyles.buttons.brand.light,
-                    padding: "15px 0px",
-                    borderRadius: "12px",
-                    width: "100%",
                     textTransform: "none", // Чтобы текст не был капсом по умолчанию
-
                     // Убираем конфликт: анимируем только трансформацию
                     transition: "transform 0.1s ease-in-out !important",
 
-                    "&:active": {
+                    "&:hover": {
                         transform: "scale(0.97)",
-                        background: colorStyles.buttons.brand.light, // Чтобы цвет не мигал при нажатии
+                        background: colorStyles.buttons.brand.light,
                     },
                 }}
             >
 
                 {text ? (
-                    <p className="text-button-sm">{text}</p>
+                    <p className="text-button-sm text-white">{text}</p>
                 ) :
-                    <p className="text-button-sm">{children}</p>
+                    <p className="text-button-sm text-white">{children}</p>
                 }
 
             </Button>

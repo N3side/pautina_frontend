@@ -1,6 +1,4 @@
-import { colorStyles } from "@/shared/styles/colors";
-import { PautinaText } from "@/shared/styles/typography/text";
-import React, { HTMLAttributes } from "react";
+import React, {HTMLAttributes} from "react";
 
 // Наследуемся от стандартных атрибутов div, чтобы onClick и прочие пропсы подхватились автоматически
 interface OptionProps extends HTMLAttributes<HTMLDivElement> {
@@ -24,7 +22,7 @@ export default function Option({ text, selected, className, style, ...props }: O
             `}
             {...props}
         >
-            <p className="text-small">
+            <p className="text-small text-text-muted">
                 {text}
             </p>
         </div>

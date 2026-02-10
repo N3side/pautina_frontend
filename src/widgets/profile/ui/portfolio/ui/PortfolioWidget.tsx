@@ -1,12 +1,10 @@
-import { PautinaText } from "@/shared/styles/typography/text";
-import { Heading } from "@/shared/styles/typography/headings";
 import Book from "@/shared/assets/images/vector/Book"; // Убедись, что иконка поддерживает className или цвет через fill/stroke
-import { Button } from "@mui/material";
-import { CardProps, cards, categories, CategoriesProps } from "@/widgets/profile/ui/portfolio/model";
+import {Button} from "@mui/material";
+import {CardProps, cards, categories, CategoriesProps} from "@/widgets/profile/ui/portfolio/model";
 import Card from "@/widgets/profile/ui/portfolio/ui/Card";
-import { WheelXScrollProvider } from "@/shared/ui/wrappers/WheelScrollXWrapper";
-import { useModal } from "@/shared/ui/Modals/Modal";
-import { AchievementWidget } from "@/widgets/profile/ui/portfolio/ui/AchievementWidget";
+import {WheelXScrollProvider} from "@/shared/ui/wrappers/WheelScrollXWrapper";
+import {useModal} from "@/shared/ui/Modals/Modal";
+import {AchievementWidget} from "@/widgets/profile/ui/portfolio/ui/AchievementWidget";
 
 export default function PortfolioWidget() {
     const { modal, open } = useModal({ children: <AchievementWidget /> });
@@ -17,9 +15,9 @@ export default function PortfolioWidget() {
             {/* --- HEADER --- */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="flex flex-col gap-1">
-                    <Heading variant="h4" className="text-text-main font-bold tracking-tight">
+                    <h4 className="text-text-main font-bold tracking-tight">
                         Портфолио
-                    </Heading>
+                    </h4>
 
                     <p className="text-secondary text-text-muted">
                         Достижения, сертификаты и проекты

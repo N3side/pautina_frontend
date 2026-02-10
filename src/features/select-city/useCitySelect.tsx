@@ -1,9 +1,7 @@
-import { useState, useEffect, Fragment } from 'react'
-import { Combobox, Transition } from '@headlessui/react'
-import { safeLocalStorage } from "@/shared/lib/utils/safeLocalStorage";
-import { $fetch } from "@/shared/api/fetch";
-import toast from "react-hot-toast";
-import {PautinaText} from "@/shared/styles/typography/text";
+import {Fragment, useEffect, useState} from 'react'
+import {Combobox, Transition} from '@headlessui/react'
+import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import {$fetch} from "@/shared/api/fetch";
 
 // Утилита для безопасного экранирования спецсимволов в Regex
 function escapeRegExp(string: string) {
