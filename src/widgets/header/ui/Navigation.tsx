@@ -1,7 +1,6 @@
 "use client"
 
-import {PautinaText} from "@/shared/styles/typography/text"
-import {ShadowWrapper} from "@/shared/ui/wrappers/Shadow"
+import {ShadowWrapper} from "@/shared/ui/Wrappers/Shadow"
 import {Button} from "@mui/material"
 import {useContext} from "react"
 import {model} from "../model"

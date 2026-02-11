@@ -1,25 +1,16 @@
-import {useContext} from "react";
-import {UserContext} from "@/entities/user";
-
-// UI Components
 import {Button} from "@mui/material";
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
 import {Elem} from "@/widgets/profile/ui/bio/ui/Elem";
 
-// Icons
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
 
-// Logic
 import {Elems, getActivityElems, getContactElems} from "@/widgets/profile/ui/bio/model";
-import useEditProfile from "@/widgets/profile/ui/profile/ui/EditProfile";
+import useEditProfile from "@/features/edit-profile/ui/EditProfile";
 
-export default function BioWidget() {
-    const { user } = useContext(UserContext);
+export default function BioWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser: Record<string, any>}) {
 
-    const activityList = getActivityElems(user);
-    const contactList = getContactElems(user);
+    const activityList = getActivityElems(trueUser);
+    const contactList = getContactElems(trueUser);
 
     const {modalEdit, openEdit} = useEditProfile()
 
@@ -39,19 +30,22 @@ export default function BioWidget() {
                     </h6>
                 </div>
 
-                <Button
-                    className="
-                       !min-w-[40px] !w-10 !h-10 !rounded-xl
-                       !bg-transparent hover:!bg-brand/10
-                       !text-text-muted hover:!text-brand
-                       !transition-all
-                    "
+                {isMyProfile && (
+                    <Button
+                        className="
+                           !min-w-[40px] !w-10 !h-10 !rounded-xl
+                           !bg-transparent hover:!bg-brand/10
+                           !text-text-muted hover:!text-brand
+                           !transition-all
+                        "
 
-                    onClick={openEdit}
+                        onClick={openEdit}
 
-                >
-                    <EditIcon fontSize="small" />
-                </Button>
+                    >
+                        <EditIcon fontSize="small" />
+                    </Button>
+                )}
+
             </header>
 
             <main className="flex flex-col gap-8">
@@ -64,7 +58,7 @@ export default function BioWidget() {
                     </p>
 
                     <p className="text-secondary text-text-main leading-relaxed">
-                        {user?.bio || (
+                        {trueUser?.bio || (
                             <span className="text-text-muted italic">Информация не указана...</span>
                         )}
                     </p>

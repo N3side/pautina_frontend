@@ -17,6 +17,7 @@ import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import AnimationSlider from "@/shared/ui/Wrappers/AnimationSlider";
 
 export default function RegisterWidget() {
     const [name, setName] = useState<string | null>(null)
@@ -101,18 +102,11 @@ export default function RegisterWidget() {
                 </div>
 
                 <div className="relative w-full">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={position} // Важно! При смене ключа срабатывает анимация
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="w-full"
-                        >
-                            {currentStep?.component}
-                        </motion.div>
-                    </AnimatePresence>
+
+                    <AnimationSlider>
+                        {currentStep?.component}
+                    </AnimationSlider>
+                    
                 </div>
 
                 {position > 0 && (

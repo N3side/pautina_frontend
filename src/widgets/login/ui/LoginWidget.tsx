@@ -26,6 +26,7 @@ export default function LoginWidget() {
     const [isActive, setIsActive] = useState<boolean>(false)
     const [errors, setErrors] = useState<LoginErrors | null>(null)
     const router = useRouter()
+    const {user} = useContext(UserContext)
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
         e.preventDefault()
@@ -51,7 +52,7 @@ export default function LoginWidget() {
         DeleteAuthorizationInfo()
         safeLocalStorage.setItem("token", token_ )
         setToken(token_)
-        router.push("/profile")
+        router.push(`/profile/${user?.id}`)
     }
 
     // function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {

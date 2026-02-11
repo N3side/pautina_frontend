@@ -1,3 +1,5 @@
+"use client"
+
 import {$fetch} from "@/shared/api/fetch";
 import {useEffect, useState} from "react";
 

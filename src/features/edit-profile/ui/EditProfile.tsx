@@ -1,3 +1,5 @@
+"use client"
+
 import Input from "@/shared/ui/Inputs/Input"
 import React, {useContext, useRef, useState} from "react";
 import {useModal} from "@/shared/ui/Modals/Modal";
@@ -37,7 +39,7 @@ export default function useEditProfile() {
 
         <form className="flex flex-col gap-5" onSubmit={handleSubmit} ref={form_}>
 
-            <h5 className="font-bold">
+            <h5 className="font-bold text-text-main">
                 Редактирование профиля
             </h5>
 
@@ -198,6 +200,6 @@ export default function useEditProfile() {
     }
 
     return {
-        modalEdit: modal, openEdit: open, closeEdit: close
+        modalEdit: modal, openEdit: open, closeEdit: close, form
     }
 }

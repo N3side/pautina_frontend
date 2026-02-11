@@ -5,11 +5,10 @@ import {CheckIsNotUser} from "@/entities/user";
 import Email from "@/widgets/otp_login/ui/Email"
 import OTP from "@/widgets/otp_login/ui/OTP"
 import Card1 from "@/shared/ui/Sections/Card1";
-// Импортируем motion
-import {AnimatePresence, motion} from "framer-motion"
 import {Button} from "@mui/material";
 import {textSizes} from "@/shared/styles/typography/text";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import AnimationSlider from "@/shared/ui/Wrappers/AnimationSlider";
 
 export default function RegisterWidget() {
     const [email, setEmail] = useState<string | null>(safeLocalStorage.getItem("login_email"))
@@ -40,18 +39,10 @@ export default function RegisterWidget() {
             <Card1>
 
                 <div className="relative overflow-hidden w-full">
-                    <AnimatePresence mode="wait">
-                        <motion.div
-                            key={position} // Важно! При смене ключа срабатывает анимация
-                            initial={{ opacity: 0, x: 20 }}
-                            animate={{ opacity: 1, x: 0 }}
-                            exit={{ opacity: 0, x: -20 }}
-                            transition={{ duration: 0.2, ease: "easeOut" }}
-                            className="w-full"
-                        >
-                            {positions[position]}
-                        </motion.div>
-                    </AnimatePresence>
+
+                    <AnimationSlider position={position}>
+                        {positions[position]}
+                    </AnimationSlider>
                 </div>
 
                 {position > 0 && (

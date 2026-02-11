@@ -4,9 +4,6 @@ import {useContext, useEffect} from "react";
 import {useRouter} from "next/navigation";
 import {UserContext} from "@/entities/user";
 
-// ВНИМАНИЕ
-// он проверяет не пропускает не только неавторизованного, но и гостя
-
 export function CheckIsNotUser({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useContext(UserContext)
     const router = useRouter()
@@ -14,7 +11,7 @@ export function CheckIsNotUser({ children }: { children: React.ReactNode }) {
     useEffect(() => {
 
         if (!isLoading && user) {
-            router.replace("/profile")
+            router.replace(`/profile/${user?.id}`)
         }
     }, [isLoading, user, router])
 

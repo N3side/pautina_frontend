@@ -1,12 +1,11 @@
 import {useContext} from "react";
 import {UserContext} from "@/entities/user";
 import DropDown from "@/shared/ui/DropDown/DropDown"
-import { PautinaText } from "@/shared/styles/typography/text"
 import LogoutIcon from '@mui/icons-material/Logout'
 import SettingsIcon from '@mui/icons-material/Settings'
-import { Switch } from "@mui/material"
 import Link from "next/link"
 import {useTheme} from "@/shared/lib/providers/ThemeProvider";
+import {IOSSwitch} from "@/shared/ui/Inputs/IOSSwitch";
 
 
 export default function CustomDropDown() {
@@ -44,7 +43,7 @@ export default function CustomDropDown() {
                                 </div>
 
                                 <div className="px-4 pb-3">
-                                    <Link href="/profile" className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
+                                    <Link href={`/profile/${user?.id}`} className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
                                         Перейти в профиль
                                     </Link>
                                 </div>
@@ -57,7 +56,7 @@ export default function CustomDropDown() {
                                             <div className="flex items-center gap-3">
                                                 <p className="text-small text-text-main font-medium">Темная тема</p>
                                             </div>
-                                            <Switch size="small" checked={theme === "dark"} onClick={toggleTheme} />
+                                            <IOSSwitch scale={.7} size="small" checked={theme === "dark"} onClick={toggleTheme} />
                                         </button>
 
                                         <Link href="/settings">

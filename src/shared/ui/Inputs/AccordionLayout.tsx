@@ -1,3 +1,5 @@
+"use client"
+
 import { Accordion, AccordionDetails, AccordionSummary } from "@mui/material";
 import KeyboardArrowDownIcon from "@mui/icons-material/KeyboardArrowDown";
 import React, { useState } from "react";
@@ -22,9 +24,13 @@ const Content = ({ children, className = "", ...props }) => (
         {children}
     </div>
 );
+
+AccordionLayout.Header = Header;
+AccordionLayout.Content = Content;
+
 // -----------------------
 
-export default function AccordionLayout({ children }) {
+export default function AccordionLayout({ children, }) {
     const [isExpanded, setIsExpanded] = useState(false);
 
     const childrenArray = React.Children.toArray(children)
@@ -48,7 +54,7 @@ export default function AccordionLayout({ children }) {
                 boxShadow: 'none',
                 '&:before': { display: 'none' }
             }}
-            className={BASE_INPUT_CLASSES}
+            className={`${BASE_INPUT_CLASSES}`}
         >
             <AccordionSummary
                 expandIcon={
@@ -74,5 +80,3 @@ export default function AccordionLayout({ children }) {
     );
 }
 
-AccordionLayout.Header = Header;
-AccordionLayout.Content = Content;

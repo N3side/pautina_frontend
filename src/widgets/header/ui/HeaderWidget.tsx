@@ -1,7 +1,7 @@
 "use client"
 
 import LogoLight from "@/shared/assets/images/vector/logo/LogoLight"
-import {Container} from "@/shared/ui/wrappers/Container"
+import {Container} from "@/shared/ui/Wrappers/Container"
 import {useContext, useEffect, useState} from "react"
 import Navigation from "./Navigation"
 import {Burger} from "./Burger"
@@ -11,8 +11,7 @@ import Link from "next/link"
 import {useTheme} from "@/shared/lib/providers/ThemeProvider"
 import {ThemeSwitch} from "@/shared/ui/Buttons/ThemeSwitch";
 import CustomDropDown from "@/widgets/header/ui/CustomDropDown";
-import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
-import {rise, smooth} from "@/shared/styles/animations";
+import {smooth} from "@/shared/styles/animations";
 
 export default function HeaderWidget() {
     const { setIsBlocked } = useContext(BodyBlockContext)
@@ -47,7 +46,7 @@ export default function HeaderWidget() {
                         <ThemeSwitch
                             className="!z-[2000000] !relative "
                             size="small"
-                            checked={safeLocalStorage.getItem("theme") == "dark"}
+                            checked={theme == "dark"}
                             onClick={toggleTheme}
                         />
                     )}

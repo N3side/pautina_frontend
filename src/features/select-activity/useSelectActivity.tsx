@@ -1,3 +1,5 @@
+"use client"
+
 import Option from "@/shared/ui/Inputs/Option";
 import Input from "@/shared/ui/Inputs/Input";
 import React, {ChangeEvent, useContext, useEffect, useRef, useState} from "react";

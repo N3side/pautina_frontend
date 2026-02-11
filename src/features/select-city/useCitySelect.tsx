@@ -1,3 +1,5 @@
+"use client"
+
 import {Fragment, useEffect, useState} from 'react'
 import {Combobox, Transition} from '@headlessui/react'
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";

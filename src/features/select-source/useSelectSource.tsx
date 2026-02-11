@@ -1,3 +1,5 @@
+"use client"
+
 import Option from "@/shared/ui/Inputs/Option";
 import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";

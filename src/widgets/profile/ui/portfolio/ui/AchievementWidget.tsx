@@ -1,15 +1,13 @@
 "use client"
 
-import {PautinaText} from "@/shared/styles/typography/text";
-import {Heading} from "@/shared/styles/typography/headings";
 import Temple from "@/shared/assets/images/vector/Temple";
 import Calendar from "@/shared/assets/images/vector/Calendar";
 import Python from "@/shared/assets/images/vector/skills/python";
 import Frontend from "@/shared/assets/images/vector/skills/frontend";
-import {WheelXScrollProvider} from "@/shared/ui/wrappers/WheelScrollXWrapper";
+import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 import {Button} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
-import {ShadowWrapper} from "@/shared/ui/wrappers/Shadow";
+import {ShadowWrapper} from "@/shared/ui/Wrappers/Shadow";
 import VisibilityIcon from '@mui/icons-material/Visibility';
 import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';

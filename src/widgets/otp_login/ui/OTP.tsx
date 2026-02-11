@@ -42,7 +42,7 @@ export default function OTP({email, next, prev, timer, setTimer}) {
             setToken(token)
             DeleteAuthorizationInfo()
             DeleteRegistrationInfo()
-            router.push("profile")
+            router.push(`profile/${user?.id}`)
         }
 
         const timer_ = response?.json?.timer

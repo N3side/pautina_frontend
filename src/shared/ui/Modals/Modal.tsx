@@ -1,3 +1,5 @@
+"use client"
+
 import { createPortal } from "react-dom"
 import { useContext, useEffect, useRef, useState, ReactPortal } from "react"
 import { Button } from "@mui/material"
@@ -123,6 +125,7 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
                             
                             /* Desktop: Centered Modal */
                             md:max-w-[1024px] md:rounded-[24px] md:max-h-[740px] md:h-full
+                            max-[1024px]:min-h-[95vh]
                         `}
                         style={{
                             transform: `translateY(${translateY}px)`,

@@ -1,13 +1,10 @@
-import {useContext} from "react";
-import {UserContext} from "@/entities/user";
-import {PautinaText} from "@/shared/styles/typography/text";
-import {Heading} from "@/shared/styles/typography/headings";
+"use client"
+
 import {Button} from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadPhoto from "@/widgets/profile/ui/profile/ui/UploadPhoto";
 
-export default function ProfileWidget() {
-    const { user } = useContext(UserContext);
+export default function ProfileWidget({trueUser}: Record<string, any>) {
 
     return (
         <section
@@ -26,7 +23,7 @@ export default function ProfileWidget() {
                     <div className="relative w-[160px] h-[160px] rounded-full p-[6px] shadow-sm ring-1 ring-border-default/50">
 
                         <img
-                            src={user?.avatar}
+                            src={trueUser?.avatar}
                             alt="avatar"
                             className="!w-full !h-full rounded-full object-cover"
                             referrerPolicy="no-referrer"
@@ -40,11 +37,11 @@ export default function ProfileWidget() {
                 {/* --- User Info --- */}
                 <div className="flex flex-col items-center text-center space-y-2">
                     <h5 className="text-text-main font-bold tracking-tight">
-                        {user?.username}
+                        {trueUser?.username}
                     </h5>
 
                     <p className="text-secondary text-text-muted line-clamp-2 px-2">
-                        {user?.surname} {user?.name} {user?.patronymic}
+                        {trueUser?.surname} {trueUser?.name} {trueUser?.patronymic}
                     </p>
                 </div>
 
@@ -69,7 +66,7 @@ export default function ProfileWidget() {
                         {/* Documents */}
                         <div className="flex flex-col items-center justify-center px-4 hover:bg-text-main/5 transition-colors  cursor-default group">
                             <p className="text-large font-bold text-text-main group-hover:text-brand transition-colors">
-                                {user?.documents_count || 0}
+                                {trueUser?.documents_count || 0}
                             </p>
                             <span className="text-[11px] uppercase tracking-wider font-semibold text-text-muted mt-1">
                                 Документов
@@ -79,7 +76,7 @@ export default function ProfileWidget() {
                         {/* Projects */}
                         <div className="flex flex-col items-center justify-center px-4 hover:bg-text-main/5 transition-colors cursor-default group">
                             <p className="text-large font-bold text-text-main group-hover:text-brand transition-colors">
-                                {user?.projects_count || 0}
+                                {trueUser?.projects_count || 0}
                             </p>
                             <span className="text-[11px] uppercase tracking-wider font-semibold text-text-muted mt-1">
                                 Проектов

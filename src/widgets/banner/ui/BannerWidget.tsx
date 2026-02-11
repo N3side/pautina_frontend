@@ -1,7 +1,7 @@
 "use client"
 
-import {Container} from "@/shared/ui/wrappers/Container"
-import {ShadowWrapper} from "@/shared/ui/wrappers/Shadow"
+import {Container} from "@/shared/ui/Wrappers/Container"
+import {ShadowWrapper} from "@/shared/ui/Wrappers/Shadow"
 import Image from "next/image"
 import Hero from "@/shared/assets/images/raster/hero.jpg"
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge"

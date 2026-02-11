@@ -1,18 +1,19 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
-import {FormEvent, RefObject, useRef, useState} from "react";
+import {FormEvent, useContext, useRef, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {$fetch} from "@/shared/api/fetch";
 import {redirect} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
+import {UserContext} from "@/entities/user";
 
 export default function Password() {
 
     const [errors, setErrors] = useState<Record<any, string> | null>(null)
 
     const form = useRef<HTMLFormElement>(null)
+
+    const {user} = useContext(UserContext)
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 
@@ -56,8 +57,7 @@ export default function Password() {
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
 
-        redirect("/profile")
-
+        redirect(`/profile/${user?.id}`)
 
         e.preventDefault()
     }

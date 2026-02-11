@@ -2,7 +2,7 @@ import Book from "@/shared/assets/images/vector/Book"; // Убедись, что
 import {Button} from "@mui/material";
 import {CardProps, cards, categories, CategoriesProps} from "@/widgets/profile/ui/portfolio/model";
 import Card from "@/widgets/profile/ui/portfolio/ui/Card";
-import {WheelXScrollProvider} from "@/shared/ui/wrappers/WheelScrollXWrapper";
+import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 import {useModal} from "@/shared/ui/Modals/Modal";
 import {AchievementWidget} from "@/widgets/profile/ui/portfolio/ui/AchievementWidget";
 
