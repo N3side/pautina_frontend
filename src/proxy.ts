@@ -6,7 +6,7 @@ export function proxy(request: NextRequest) {
     const hostname = request.headers.get('host')
 
     // Пропускаем основной домен
-    if (!hostname || hostname === 'pautina.local' || hostname.includes('localhost')) {
+    if (!hostname || hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN || hostname.includes('localhost')) {
         return NextResponse.next()
     }
 
@@ -25,7 +25,7 @@ export function proxy(request: NextRequest) {
     // Если путь НЕ пустой и НЕ "/", значит юзер ввел что-то вроде /login
     if (url.pathname !== '/') {
         // Создаем URL для редиректа на основной домен
-        const mainDomainUrl = new URL(url.pathname, 'http://pautina.local')
+        const mainDomainUrl = new URL(url.pathname, `${process.env.NEXT_PUBLIC_ROOT_PROTOCOL}://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
         // Добавляем query параметры, если они были
         mainDomainUrl.search = url.search
 
