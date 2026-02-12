@@ -103,7 +103,7 @@ export default function RegisterWidget() {
 
                 <div className="relative w-full">
 
-                    <AnimationSlider>
+                    <AnimationSlider position={position}>
                         {currentStep?.component}
                     </AnimationSlider>
                     

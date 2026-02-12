@@ -7,7 +7,7 @@ import BackButton from "@/shared/ui/Buttons/BackButton";
 
 export default function EditProfilePage() {
 
-    const {form} = useEditProfile()
+    const {form} = useEditProfile({enabled: true})
 
     return (
 

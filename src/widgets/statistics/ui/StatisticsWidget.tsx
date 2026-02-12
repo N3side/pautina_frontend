@@ -1,11 +1,9 @@
 "use client"
 
-import { WindowContext } from "@/shared/lib/providers/WindowProvider"
-import { COLORS, colorStyles } from "@/shared/styles/colors"
-import { Heading } from "@/shared/styles/typography/headings"
-import { PautinaText } from "@/shared/styles/typography/text"
-import { Container } from "@/shared/ui/wrappers/Container"
-import { useContext } from "react"
+import {WindowContext} from "@/shared/lib/providers/WindowProvider"
+import {COLORS} from "@/shared/styles/colors"
+import {Container} from "@/shared/ui/Wrappers/Container"
+import {useContext} from "react"
 
 export default function StatisticsWidget() {
 

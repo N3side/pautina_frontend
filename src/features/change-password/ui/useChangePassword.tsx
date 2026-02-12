@@ -1,10 +1,12 @@
 import {useModal} from "@/shared/ui/Modals/Modal";
-import React, {useRef} from "react";
+import React, {useRef, useState} from "react";
 import Input from "@/shared/ui/Inputs/Input"
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import AnimationSlider from "@/shared/ui/Wrappers/AnimationSlider";
 
 export default function UseChangePassword() {
+
+    const [position, setPosition] = useState<number>(0)
 
     async function handleSubmit() {
 
@@ -15,7 +17,7 @@ export default function UseChangePassword() {
     const form =
     <form className="flex flex-col gap-5" onSubmit={handleSubmit} ref={form_}>
 
-        <AnimationSlider>
+        <AnimationSlider position={position}>
 
             <h5 className="font-bold text-text-main">
                 Изменить пароль
