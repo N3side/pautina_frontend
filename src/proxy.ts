@@ -3,10 +3,21 @@ import type { NextRequest } from 'next/server'
 
 export function proxy(request: NextRequest) {
     const url = request.nextUrl.clone()
-    const hostname = request.headers.get('host')
+    const hostname = request.headers.get('host')?.split(':')[0] // Берем чистый хост без порта
+
+    const rootDomain = process.env.NEXT_PUBLIC_ROOT_DOMAIN
+    const protocol = process.env.NEXT_PUBLIC_ROOT_PROTOCOL || 'https'
+
+    // ЛОГ ДЛЯ ОТЛАДКИ (увидишь в docker logs)
+    console.log(`Middleware Debug: host=${hostname}, root=${rootDomain}`);
+
+    // Если переменные не прокинулись, не мучаем редиректами, просто пускаем дальше
+    if (!rootDomain) {
+        return NextResponse.next()
+    }
 
     // Пропускаем основной домен
-    if (!hostname || hostname === process.env.NEXT_PUBLIC_ROOT_DOMAIN || hostname.includes('localhost')) {
+    if (!hostname || hostname === rootDomain || hostname.includes('localhost')) {
         return NextResponse.next()
     }
 
@@ -21,25 +32,19 @@ export function proxy(request: NextRequest) {
 
     const subdomain = hostname.split('.')[0]
 
-    // ЛОГИКА РЕДИРЕКТА:
-    // Если путь НЕ пустой и НЕ "/", значит юзер ввел что-то вроде /login
+    // Если путь НЕ "/" (например /login), кидаем на основной домен
     if (url.pathname !== '/') {
-        // Создаем URL для редиректа на основной домен
-        const mainDomainUrl = new URL(url.pathname, `${process.env.NEXT_PUBLIC_ROOT_PROTOCOL}://${process.env.NEXT_PUBLIC_ROOT_DOMAIN}`)
-        // Добавляем query параметры, если они были
-        mainDomainUrl.search = url.search
-
-        return NextResponse.redirect(mainDomainUrl)
+        try {
+            const mainDomainUrl = new URL(url.pathname, `${protocol}://${rootDomain}`)
+            mainDomainUrl.search = url.search
+            return NextResponse.redirect(mainDomainUrl)
+        } catch (e) {
+            console.error("URL Build Error:", e)
+            return NextResponse.next()
+        }
     }
 
-    // Если мы здесь, значит путь "/" — делаем rewrite на профиль
+    // Если мы здесь, значит это субдомен и путь "/" — делаем rewrite на профиль
     url.pathname = `/profile/${subdomain}`
-
     return NextResponse.rewrite(url)
 }
-
-export const config = {
-    matcher: ['/((?!api|_next/static|_next/image|favicon.ico).*)'],
-}
-
-// #2
