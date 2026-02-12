@@ -13,6 +13,8 @@ import Card1 from "@/shared/ui/Sections/Card1";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import {userLink} from "@/shared/lib/userLink";
+import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 
 interface LoginErrors {
@@ -50,9 +52,9 @@ export default function LoginWidget() {
 
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
-        safeLocalStorage.setItem("token", token_ )
+        safeCookieStorage.setItem("token", token_)
         setToken(token_)
-        router.push(`/profile/${user?.id}`)
+        router.push(userLink(user?.id))
     }
 
     // function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {

@@ -1,5 +1,3 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
 import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
@@ -11,6 +9,8 @@ import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInf
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
 import Timer from "@/features/timer/Timer"
+import {userLink} from "@/shared/lib/userLink";
+import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 export default function OTP({email, next, prev, timer, setTimer}) {
 
@@ -38,11 +38,11 @@ export default function OTP({email, next, prev, timer, setTimer}) {
         const token = response?.json?.credentials?.token
 
         if (token) {
-            safeLocalStorage.setItem("token", token)
+            safeCookieStorage.setItem("token", token)
             setToken(token)
             DeleteAuthorizationInfo()
             DeleteRegistrationInfo()
-            router.push(`profile/${user?.id}`)
+            router.push(userLink(user?.id))
         }
 
         const timer_ = response?.json?.timer

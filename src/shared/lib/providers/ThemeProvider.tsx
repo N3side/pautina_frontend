@@ -1,7 +1,7 @@
 "use client"
 
-import React, { createContext, useContext, useEffect, useState } from 'react';
-import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import React, {createContext, useContext, useEffect, useState} from 'react';
+import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 type Theme = 'light' | 'dark';
 
@@ -14,11 +14,11 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     // 1. Указываем конкретные строковые значения вместо null
     // Используем оператор ?? 'light', чтобы всегда была строка
     const [theme, setTheme] = useState<Theme>(
-        (safeLocalStorage.getItem("theme") as Theme) ?? 'light'
+        (safeCookieStorage.getItem("theme") as Theme) ?? 'light'
     );
 
     useEffect(() => {
-        const savedTheme = safeLocalStorage.getItem('theme') as Theme | null;
+        const savedTheme = safeCookieStorage.getItem('theme') as Theme | null;
         if (savedTheme) {
             setTheme(savedTheme);
             document.documentElement.classList.add(savedTheme);
@@ -35,7 +35,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
         document.documentElement.classList.add(newTheme);
 
         setTheme(newTheme);
-        safeLocalStorage.setItem('theme', newTheme);
+        safeCookieStorage.setItem('theme', newTheme);
     };
 
     return (

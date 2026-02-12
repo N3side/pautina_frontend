@@ -23,6 +23,14 @@ export default function HeaderWidget() {
         setIsBlocked(isActive)
     }, [isActive])
 
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    if (!isMounted) return null
+
     return (
         <header className="sticky glass-effect top-0 z-20 w-full">
             <Container className="flex items-center justify-between w-full py-4 md:py-5">

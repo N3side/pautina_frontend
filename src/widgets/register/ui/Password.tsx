@@ -6,6 +6,7 @@ import {redirect} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {UserContext} from "@/entities/user";
+import {userLink} from "@/shared/lib/userLink";
 
 export default function Password() {
 
@@ -57,7 +58,7 @@ export default function Password() {
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
 
-        redirect(`/profile/${user?.id}`)
+        redirect(userLink(user?.id))
 
         e.preventDefault()
     }

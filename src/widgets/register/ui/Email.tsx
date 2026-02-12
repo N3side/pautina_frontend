@@ -1,11 +1,10 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
-import {ChangeEvent, FormEvent, useContext, useEffect, useState} from "react";
+import {ChangeEvent, FormEvent, useContext, useState} from "react";
 import {$fetch} from "@/shared/api/fetch";
 import {UserContext} from "@/entities/user";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 interface FormErrors {
     email?: string;
@@ -58,7 +57,10 @@ export default function Email({name, email, setEmail, next, setTimer, position})
         const token = response?.json?.credentials?.token
 
         if (token) {
-            safeLocalStorage.setItem("token", token)
+            safeCookieStorage.setItem("token", token)
+
+            console.log(safeCookieStorage.getItem("token"))
+
             setToken(token)
         }
 

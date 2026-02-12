@@ -7,6 +7,7 @@ import {useRouter} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
+import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 export default function LogoutPage() {
 
@@ -20,7 +21,7 @@ export default function LogoutPage() {
 
         setToken(null)
         setUser(null)
-        safeLocalStorage.removeItem("token")
+        safeCookieStorage.removeItem("token")
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
 

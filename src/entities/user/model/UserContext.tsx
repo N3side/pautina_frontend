@@ -2,8 +2,8 @@
 
 import {createContext, ReactNode, useCallback, useEffect, useState} from "react";
 import {useRouter} from "next/navigation";
-import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {fetchMe} from "@/entities/user/api/fetchMe";
+import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 interface UserContextType {
     user: any;
@@ -40,7 +40,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 
     // Инициализация при первой загрузке
     useEffect(() => {
-        const savedToken = safeLocalStorage.getItem("token")
+        const savedToken = safeCookieStorage.getItem("token")
         if (savedToken) {
             setToken(savedToken) // Это вызовет срабатывание useEffect ниже
         } else {
@@ -52,11 +52,11 @@ export default function UserProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         if (token) {
-            safeLocalStorage.setItem("token", token)
+            safeCookieStorage.setItem("token", token)
             getUser()
         } else if (token === null && !isLoading) {
             // Если токен явно сбросили в null
-            safeLocalStorage.removeItem("token")
+            safeCookieStorage.removeItem("token")
             setUser(null)
         }
     }, [token, getUser, router])

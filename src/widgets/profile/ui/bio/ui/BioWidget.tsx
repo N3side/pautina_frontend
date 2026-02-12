@@ -12,7 +12,7 @@ export default function BioWidget({isMyProfile, trueUser}: {isMyProfile: boolean
     const activityList = getActivityElems(trueUser);
     const contactList = getContactElems(trueUser);
 
-    const {modalEdit, openEdit} = useEditProfile()
+    const {modalEdit, openEdit} = useEditProfile({enabled: isMyProfile})
 
     return (
         <section className="w-full h-full glass-effect border-border-default rounded-[24px] p-6 md:p-8  duration-300">
@@ -108,7 +108,7 @@ export default function BioWidget({isMyProfile, trueUser}: {isMyProfile: boolean
                 </div>
             </main>
 
-            {modalEdit}
+            {isMyProfile && modalEdit}
 
         </section>
     )

@@ -3,6 +3,7 @@
 import {useContext, useEffect} from "react";
 import {useRouter} from "next/navigation";
 import {UserContext} from "@/entities/user";
+import {userLink} from "@/shared/lib/userLink";
 
 export function CheckIsNotUser({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useContext(UserContext)
@@ -11,7 +12,7 @@ export function CheckIsNotUser({ children }: { children: React.ReactNode }) {
     useEffect(() => {
 
         if (!isLoading && user) {
-            router.replace(`/profile/${user?.id}`)
+            router.replace(userLink(user?.id))
         }
     }, [isLoading, user, router])
 

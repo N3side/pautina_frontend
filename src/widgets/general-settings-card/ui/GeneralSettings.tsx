@@ -8,7 +8,7 @@ import UseChangePassword from "@/features/change-password/ui/useChangePassword";
 
 export default function GeneralSettings() {
 
-    const {modalEdit, openEdit} = useEditProfile()
+    const {modalEdit, openEdit} = useEditProfile({enabled: true})
 
     const {modalPassword, openPassword} = UseChangePassword()
 

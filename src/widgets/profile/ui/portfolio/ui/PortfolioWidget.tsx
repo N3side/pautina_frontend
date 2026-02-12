@@ -6,7 +6,7 @@ import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 import {useModal} from "@/shared/ui/Modals/Modal";
 import {AchievementWidget} from "@/widgets/profile/ui/portfolio/ui/AchievementWidget";
 
-export default function PortfolioWidget() {
+export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser: Record<string, any>}) {
     const { modal, open } = useModal({ children: <AchievementWidget /> });
 
     return (
@@ -24,24 +24,27 @@ export default function PortfolioWidget() {
                     </p>
                 </div>
 
-                <Button
-                    variant="contained"
-                    disableElevation
-                    className="
-                        !bg-brand hover:!bg-brand-hover
-                        !text-white !font-medium !rounded-xl
-                        !py-2.5 !px-5 !shadow-lg !shadow-brand/25
-                        hover:!shadow-brand/40 !transition-all !normal-case
-                        w-full md:w-auto flex items-center gap-2
-                    "
-                    onClick={() => {}} // Добавь обработчик, если есть
-                >
-                    {/* Если Book это SVG компонент, можно добавить класс для цвета, если нужно */}
-                    <div className="w-5 h-5 flex items-center justify-center">
-                        <Book />
-                    </div>
-                    <span>Добавить документ</span>
-                </Button>
+                {isMyProfile && (
+                    <Button
+                        variant="contained"
+                        disableElevation
+                        className="
+                            !bg-brand hover:!bg-brand-hover
+                            !text-white !font-medium !rounded-xl
+                            !py-2.5 !px-5 !shadow-lg !shadow-brand/25
+                            hover:!shadow-brand/40 !transition-all !normal-case
+                            w-full md:w-auto flex items-center gap-2
+                        "
+                        onClick={() => {}} // Добавь обработчик, если есть
+                    >
+                        {/* Если Book это SVG компонент, можно добавить класс для цвета, если нужно */}
+                        <div className="w-5 h-5 flex items-center justify-center">
+                            <Book />
+                        </div>
+                        <span>Добавить документ</span>
+                    </Button>
+                )}
+
             </header>
 
             <main className="flex flex-col gap-8">

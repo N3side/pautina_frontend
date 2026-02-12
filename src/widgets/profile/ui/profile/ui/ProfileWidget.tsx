@@ -4,7 +4,7 @@ import {Button} from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import UploadPhoto from "@/widgets/profile/ui/profile/ui/UploadPhoto";
 
-export default function ProfileWidget({trueUser}: Record<string, any>) {
+export default function ProfileWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser: Record<string, any>}) {
 
     return (
         <section
@@ -29,7 +29,9 @@ export default function ProfileWidget({trueUser}: Record<string, any>) {
                             referrerPolicy="no-referrer"
                         />
 
-                        <UploadPhoto />
+                        {isMyProfile && (
+                            <UploadPhoto />
+                        )}
 
                     </div>
                 </div>

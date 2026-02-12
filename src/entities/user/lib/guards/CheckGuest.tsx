@@ -4,6 +4,7 @@ import {useContext, useEffect} from "react";
 import {useRouter} from "next/navigation";
 import toast from "react-hot-toast";
 import {UserContext} from "@/entities/user";
+import {userLink} from "@/shared/lib/userLink";
 
 export function CheckGuest({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useContext(UserContext)
@@ -12,7 +13,7 @@ export function CheckGuest({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (user && user?.isGuest === false) {
             toast.error("Вы уже зарегистрированы");
-            router.replace(`/profile/${user?.id}`);
+            router.replace(userLink(user?.id));
         }
     }, [user, router]);
 

@@ -15,7 +15,9 @@ import useSelectSource from "@/features/select-source/useSelectSource";
 import {UseSelectActivity} from "@/features/select-activity/useSelectActivity";
 import {autoReplace} from "@/shared/lib/utils/replace";
 
-export default function useEditProfile() {
+export default function useEditProfile({enabled=true}: {enabled?: boolean}) {
+
+    if (!enabled) return {}
 
     const [errors, setErrors] = useState<Record<string, any> | null>(null)
 

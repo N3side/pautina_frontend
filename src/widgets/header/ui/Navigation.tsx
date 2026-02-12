@@ -2,13 +2,14 @@
 
 import {ShadowWrapper} from "@/shared/ui/Wrappers/Shadow"
 import {Button} from "@mui/material"
-import {useContext} from "react"
+import {useContext, useEffect, useState} from "react"
 import {model} from "../model"
 import Link from "next/link"
 import {usePathname} from "next/navigation" // Добавляем хук для активной ссылки
 import {UserContext} from "@/entities/user";
 import {ThemeSwitch} from "@/shared/ui/Buttons/ThemeSwitch";
 import {useTheme} from "@/shared/lib/providers/ThemeProvider";
+import {IOSSwitch} from "@/shared/ui/Inputs/IOSSwitch";
 
 
 interface Props {
@@ -27,6 +28,14 @@ export default function Navigation({ isActive, setIsActive }: Props) {
     }
 
     const {theme, toggleTheme} = useTheme()
+
+    const [mounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, []);
+
+    if (!mounted) return null
 
     return (
         <>
@@ -108,7 +117,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                 )}
 
                 {!user && (
-                    <ThemeSwitch
+                    <IOSSwitch
                         size="small"
                         className="!absolute !top-[17px] !right-[0px] !z-50 !flex lg:!hidden"
                         checked={theme === "dark"}

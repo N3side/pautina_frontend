@@ -5,7 +5,6 @@ import ProfileWidget from "@/widgets/profile/ui/profile/ui/ProfileWidget";
 import BioWidget from "@/widgets/profile/ui/bio/ui/BioWidget";
 import PortfolioWidget from "@/widgets/profile/ui/portfolio/ui/PortfolioWidget";
 import {Container} from "@/shared/ui/Wrappers/Container";
-import {CheckUser} from "@/entities/user/lib/guards/CheckUser";
 import {useParams} from "next/navigation";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/entities/user";
@@ -27,28 +26,35 @@ export default function ProfilePage() {
     const [trueUser, setTrueUser] = useState(user)
 
     useEffect(() => {
-        setTrueUser(user)
+
+        if (user?.id === trueUser?.id) {
+            setTrueUser(user)
+        }
+
     }, [user]);
 
     useEffect(() => {
 
         async function getUser() {
-            const response = await $fetch(`user/${user?.id}`)
+            const response = await $fetch(`user/${id}`)
 
             const user_ = response?.json?.user
+
+
 
             if (user_) {
                 setTrueUser(user_)
             }
 
+            console.log(user_)
         }
 
-        isMyProfile && getUser()
+        !isMyProfile && getUser()
 
     }, [isMyProfile]);
 
     return (
-        <CheckUser>
+        <>
             <HeaderWidget />
             <Container className="mt-[clamp(20px,1.250vw_+_16.000px,40px)]">
 
@@ -57,8 +63,8 @@ export default function ProfilePage() {
                     <BioWidget isMyProfile={isMyProfile} trueUser={trueUser} />
                 </div>
 
-                <PortfolioWidget />
+                <PortfolioWidget isMyProfile={isMyProfile} trueUser={trueUser} />
             </Container>
-        </CheckUser>
+        </>
     )
 }
