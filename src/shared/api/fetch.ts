@@ -53,5 +53,4 @@ export async function $fetch(
     return {response,json}
 }
 
-// тут
-// мда хпхапххааха
+// так теперь все норм должно быть
