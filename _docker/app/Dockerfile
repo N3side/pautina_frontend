@@ -10,10 +10,15 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-ARG NEXT_PUBLIC_API_URL
-ARG ENVIROMENT_PRODUCTION
-ENV NEXT_PUBLIC_API_URL=$NEXT_PUBLIC_API_URL
-ENV ENVIROMENT_PRODUCTION=$ENVIROMENT_PRODUCTION
+# 1. Объявляем аргументы (именно те, что у тебя в .env и Secrets)
+ARG NEXT_PUBLIC_ROOT_PROTOCOL
+ARG NEXT_PUBLIC_ROOT_DOMAIN
+ARG NEXT_PUBLIC_ROOT_BACKEND
+
+# 2. Делаем их доступными для 'npm run build'
+ENV NEXT_PUBLIC_ROOT_PROTOCOL=$NEXT_PUBLIC_ROOT_PROTOCOL
+ENV NEXT_PUBLIC_ROOT_DOMAIN=$NEXT_PUBLIC_ROOT_DOMAIN
+ENV NEXT_PUBLIC_ROOT_BACKEND=$NEXT_PUBLIC_ROOT_BACKEND
 ENV NEXT_TELEMETRY_DISABLED 1
 
 RUN npm run build
@@ -27,6 +32,8 @@ ENV NEXT_TELEMETRY_DISABLED 1
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
+# В standalone режиме public и static копируем вручную
+COPY --from=builder /app/public ./public
 COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
 
