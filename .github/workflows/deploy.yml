@@ -39,6 +39,11 @@ jobs:
           # Важно: собираем под Linux/AMD64 (стандарт для VPS)
           platforms: linux/amd64
 
+          build-args: |
+            NEXT_PUBLIC_ROOT_PROTOCOL=${{ secrets.NEXT_PUBLIC_ROOT_PROTOCOL }}
+            NEXT_PUBLIC_ROOT_DOMAIN=${{ secrets.NEXT_PUBLIC_ROOT_DOMAIN }}
+            NEXT_PUBLIC_ROOT_BACKEND=${{ secrets.NEXT_PUBLIC_ROOT_BACKEND }}
+
       # 3. Подготовка к деплою (ставим sshpass)
       - name: Install sshpass
         run: sudo apt-get update && sudo apt-get install -y sshpass
