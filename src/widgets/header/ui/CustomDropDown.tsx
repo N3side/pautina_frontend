@@ -46,7 +46,7 @@ export default function CustomDropDown() {
                                 </div>
 
                                 <div className="px-4 pb-3">
-                                    <Link href={`$(userLink(user?.id)`} className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
+                                    <Link href={userLink(user?.id)} className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
                                         Перейти в профиль
                                     </Link>
                                 </div>
@@ -88,4 +88,5 @@ export default function CustomDropDown() {
             )}
         </>
     )
+
 }
