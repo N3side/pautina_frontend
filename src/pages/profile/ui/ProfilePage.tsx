@@ -20,7 +20,7 @@ export default function ProfilePage() {
     const [isMyProfile, setIsMyProfile] = useState<boolean>(false)
 
     useEffect(() => {
-        setIsMyProfile(user?.short_id === short_id)
+        setIsMyProfile(user?.short_id.toLowerCase() === short_id)
     }, [user]);
 
     const [trueUser, setTrueUser] = useState(user)
