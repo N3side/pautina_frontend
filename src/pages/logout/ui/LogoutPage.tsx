@@ -8,6 +8,7 @@ import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo"
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
+import {homeLink} from "@/shared/lib/userLink";
 
 export default function LogoutPage() {
 
@@ -25,7 +26,7 @@ export default function LogoutPage() {
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
 
-        router.push("/")
+        router.push(homeLink)
     }
 
     useEffect(() => {

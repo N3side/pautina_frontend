@@ -1,14 +1,16 @@
+import {homeLink} from "@/shared/lib/userLink";
+
 export const model = [
     {
         text: "О проекте",
-        link: "/"
+        link: homeLink
     },
     {
         text: "Преимущества",
-        link: "/"
+        link: homeLink
     },
     {
         text: "Интерфейс",
-        link: "/"
+        link: homeLink
     },
 ]

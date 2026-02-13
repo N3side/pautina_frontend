@@ -1,9 +1,7 @@
 "use client"
 
-import {Heading} from "@/shared/styles/typography/headings"
-import {PautinaText} from "@/shared/styles/typography/text"
 import Link from "next/link"
-import {ChangeEvent, FormEvent, useContext, useState} from "react"
+import {FormEvent, useContext, useState} from "react"
 import {$fetch} from "@/shared/api/fetch"
 import {useRouter} from "next/navigation"
 import {UserContext} from "@/entities/user";
@@ -12,7 +10,6 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Card1 from "@/shared/ui/Sections/Card1";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
-import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {userLink} from "@/shared/lib/userLink";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
@@ -48,13 +45,18 @@ export default function LoginWidget() {
             return
         }
 
+        if (!response?.response?.ok) {
+            console.log("ало")
+            return
+        }
+
         const token_ = response?.json?.credentials?.token
 
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
         safeCookieStorage.setItem("token", token_)
         setToken(token_)
-        router.push(userLink(user?.id))
+        router.push(userLink(user?.short_id))
     }
 
     // function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {

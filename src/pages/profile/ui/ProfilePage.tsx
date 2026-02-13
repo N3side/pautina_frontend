@@ -15,12 +15,12 @@ export default function ProfilePage() {
     const {user} = useContext(UserContext)
 
     const params = useParams()
-    const id = params?.id
+    const short_id = params?.id
 
     const [isMyProfile, setIsMyProfile] = useState<boolean>(false)
 
     useEffect(() => {
-        setIsMyProfile(user?.id === id)
+        setIsMyProfile(user?.short_id === short_id)
     }, [user]);
 
     const [trueUser, setTrueUser] = useState(user)
@@ -36,7 +36,7 @@ export default function ProfilePage() {
     useEffect(() => {
 
         async function getUser() {
-            const response = await $fetch(`user/${id}`)
+            const response = await $fetch(`user/${short_id}`)
 
             const user_ = response?.json?.user
 
