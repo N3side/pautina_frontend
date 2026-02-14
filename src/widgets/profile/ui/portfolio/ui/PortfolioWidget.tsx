@@ -6,7 +6,7 @@ import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 import {useModal} from "@/shared/ui/Modals/Modal";
 import {AchievementWidget} from "@/widgets/profile/ui/portfolio/ui/AchievementWidget";
 
-export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser: Record<string, any>}) {
+export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser?: Record<string, any>}) {
     const { modal, open } = useModal({ children: <AchievementWidget /> });
 
     return (

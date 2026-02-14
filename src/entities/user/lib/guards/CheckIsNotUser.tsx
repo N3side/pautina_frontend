@@ -12,7 +12,7 @@ export function CheckIsNotUser({ children }: { children: React.ReactNode }) {
     useEffect(() => {
 
         if (!isLoading && user) {
-            router.replace(userLink(user?.short_id))
+            router.replace(userLink(user?.public_url))
         }
     }, [isLoading, user, router])
 

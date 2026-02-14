@@ -39,7 +39,7 @@ export default function ProfileWidget({isMyProfile, trueUser}: {isMyProfile: boo
                 {/* --- User Info --- */}
                 <div className="flex flex-col items-center text-center space-y-2">
                     <h5 className="text-text-main font-bold tracking-tight">
-                        {trueUser?.username}
+                        {trueUser?.username && "@"}{trueUser?.username}
                     </h5>
 
                     <p className="text-secondary text-text-muted line-clamp-2 px-2">

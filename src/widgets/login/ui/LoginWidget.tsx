@@ -56,7 +56,7 @@ export default function LoginWidget() {
         DeleteAuthorizationInfo()
         safeCookieStorage.setItem("token", token_)
         setToken(token_)
-        router.push(userLink(user?.short_id))
+        router.push(userLink(user?.public_url))
     }
 
     // function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {
