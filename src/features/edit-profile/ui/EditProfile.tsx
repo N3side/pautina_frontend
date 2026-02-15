@@ -39,7 +39,7 @@ export default function useEditProfile({enabled=true}: {enabled?: boolean}) {
 
     <>
 
-        <form className="flex flex-col gap-5" onSubmit={handleSubmit} ref={form_}>
+        <form className="flex flex-col gap-5 w-full" onSubmit={handleSubmit} ref={form_}>
 
             <h5 className="font-bold text-text-main">
                 Редактирование профиля
@@ -142,7 +142,6 @@ export default function useEditProfile({enabled=true}: {enabled?: boolean}) {
     const {modal,open,close} = useModal({
         children:
         <>{form}</>,
-        sheetClassName: "!w-[900px]"
     })
 
     async function handleSubmit(e) {

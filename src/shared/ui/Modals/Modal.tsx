@@ -1,180 +1,110 @@
 "use client"
 
-import { createPortal } from "react-dom"
-import { useContext, useEffect, useRef, useState, ReactPortal } from "react"
-import { Button } from "@mui/material"
-import { Close } from "@/shared/assets/images/vector/Close"
-import { BodyBlockContext } from "@/shared/lib/providers/BodyBlockProvider"
-import {useTheme} from "@/shared/lib/providers/ThemeProvider";
+import {ReactNode, useState} from "react"
+import {Drawer} from "vaul" // Импортируем Vaul
+import {type ClassValue, clsx} from "clsx"
+import {twMerge} from "tailwind-merge"
+import {Close} from "@/shared/assets/images/vector/Close"
 
-// Используем CSS-переменные напрямую для скроллбара
+// Утилита для удобного объединения классов (можно вынести в отдельный файл lib/utils)
+function cn(...inputs: ClassValue[]) {
+    return twMerge(clsx(inputs))
+}
 
+interface UseModalProps {
+    children: ReactNode;
+    modalClassName?: string;
+    sheetClassName?: string;
+    onClose?: () => void;
+}
 
-export function useModal({ children, modalClassName = "", sheetClassName="", onClose = () => {} }) {
-    const [isOpen, setIsOpen] = useState(false)
-    const { setIsBlocked } = useContext(BodyBlockContext)
+export function useModal({
+         children,
+         modalClassName = "",
+         sheetClassName = "",
+         onClose = () => {}
+     }: UseModalProps) {
+    const [isOpen, setIsOpen] = useState(false);
 
-    const open = () => setIsOpen(true)
-    const close = () => {
-        onClose()
-        setIsOpen(false)
-        setTranslateY(0)
-    }
+    const open = () => setIsOpen(true);
 
-    const {theme} = useTheme()
-
-    // Блокировка скролла страницы
-    useEffect(() => {
-        setIsBlocked(isOpen)
-    }, [isOpen, setIsBlocked])
-
-    // Закрытие по Escape
-    useEffect(() => {
-        const handleKeyDown = (e: KeyboardEvent) => {
-            if (isOpen && e.key === "Escape") close()
+    // Vaul управляет состоянием сам, но нам нужно синхронизировать закрытие
+    const handleOpenChange = (open: boolean) => {
+        setIsOpen(open);
+        if (!open) {
+            onClose();
         }
-        if (window) {
-            window.addEventListener("keydown", handleKeyDown)
-        } else {
-            return
-        }
-        return () => window.removeEventListener("keydown", handleKeyDown)
-    }, [isOpen])
-
-    /* ------------------------------------------------------------------ */
-    /* Drag Logic                                                         */
-    /* ------------------------------------------------------------------ */
-    const [isDragging, setIsDragging] = useState(false)
-    const [translateY, setTranslateY] = useState(0)
-    const startY = useRef(0)
-    const currentY = useRef(0)
-
-    const onPointerDown = (e: React.PointerEvent) => {
-        setIsDragging(true)
-        startY.current = e.clientY
-    }
-
-    useEffect(() => {
-        if (!isDragging) return
-
-        const onPointerMove = (e: PointerEvent) => {
-            const delta = e.clientY - startY.current
-            if (delta < 0) {
-                setTranslateY(0)
-                return
-            }
-            setTranslateY(delta)
-            currentY.current = delta
-        }
-
-        const onPointerUp = () => {
-            setIsDragging(false)
-            if (currentY.current > 150) {
-                close()
-            } else {
-                setTranslateY(0)
-            }
-            currentY.current = 0
-        }
-
-        if (window) {
-            window.addEventListener("pointermove", onPointerMove)
-            window.addEventListener("pointerup", onPointerUp)
-            window.addEventListener("pointercancel", onPointerUp)
-        }
+    };
 
 
-        return () => {
+    const close = () => handleOpenChange(false);
 
-            if (window) {
-                window.removeEventListener("pointermove", onPointerMove)
-                window.removeEventListener("pointerup", onPointerUp)
-                window.removeEventListener("pointercancel", onPointerUp)
-            }
-        }
-    }, [isDragging])
+    const modal = (
+        <Drawer.Root
+            open={isOpen}
+            onOpenChange={handleOpenChange}
+            shouldScaleBackground={true} // Можно включить эффект отдаления фона как в iOS
+        >
+            <Drawer.Portal>
+                {/* Overlay (затемнение фона) */}
+                <Drawer.Overlay className="fixed inset-0 !w-full z-[1300] backdrop-blur-[2px] !w-full" />
 
-    /* ------------------------------------------------------------------ */
-    /* Render                                                             */
-    /* ------------------------------------------------------------------ */
-    const modal: ReactPortal | null = isOpen
-        ? createPortal(
-            <>
-                <div
-                    role="dialog"
-                    aria-modal="true"
-                    className={`fixed inset-0 z-[30] flex items-end justify-center md:items-center ${modalClassName}`}
+                {/* Content Wrapper */}
+                <Drawer.Content
+                    className={cn(
+                        // Базовые стили (Mobile Bottom Sheet)
+                        "fixed bottom-0 left-0 right-0 z-[1301] flex flex-col rounded-t-[24px] outline-none",
+                        "max-h-[95vh] h-full",
+
+                        // Glass Effect & Colors
+                        "glass-effect !text-text-main",
+
+                        "!after-hidden",
+
+                        // Desktop Adaptation (Центрирование как Modal)
+                        "md:bottom-1/2 md:left-1/2 md:transform md:-translate-x-1/2 md:translate-y-1/2",
+                        "md:max-w-[900px] w-full md:rounded-[24px] md:h-[740px]",
+
+                        sheetClassName
+                    )}
                 >
-                    {/* Overlay: Используем стандартный черный с прозрачностью, так как это затенение */}
-                    <div
-                        className="absolute inset-0 bg-black/60 backdrop-blur-[2px] transition-opacity"
-                        onClick={close}
-                    />
+                    {/* Header Area */}
+                    <div className="relative pt-4 flex-shrink-0">
+                        {/* Mobile Puller (Ручка) */}
+                        <div className="md:hidden w-full h-[30px] flex items-start justify-center cursor-grab touch-none" aria-hidden="true">
+                            <div className="w-12 h-[5px] bg-[var(--border-default)] rounded-full bg-gray-300" />
+                        </div>
 
-                    {/* Sheet / Modal Container */}
-                    <div
-                        className={`
-                            relative shadow-xl flex flex-col
-                             
-                            glass-effect
-                            text-text-main
-                            
-                            /* Mobile: Bottom Sheet */
-                            w-full rounded-t-[24px] rounded-b-none 
-                            max-h-[95vh] h-auto
-                            
-                            /* Desktop: Centered Modal */
-                            md:max-w-[1024px] md:rounded-[24px] md:max-h-[740px] md:h-full
-                            max-[1024px]:min-h-[95vh]
-                            
-                            ${sheetClassName}
-                            
-                        `}
-                        style={{
-                            transform: `translateY(${translateY}px)`,
-                            transition: isDragging ? "none" : "transform 0.3s cubic-bezier(0.32, 0.72, 0, 1)"
-                        }}
-                    >
-                        {/* 1. HEADER / DRAG HANDLE AREA */}
-                        <div className="relative flex-shrink-0">
-                            {/* Mobile Drag Handle */}
-                            <div
-                                onPointerDown={onPointerDown}
-                                className="w-full h-[30px] flex items-center justify-center cursor-grab active:cursor-grabbing touch-none"
+                        {/* Desktop Close Button */}
+                        <div className="hidden md:block absolute top-[15] bg-text-main/10 rounded-full right-[-40]">
+                            <button
+                                onClick={close}
+                                className="text-[var(--text-muted)] hover:text-[var(--text-main)] transition-colors p-2 rounded-full hover:bg-black/5"
                             >
-                                {/* THEME COLOR: bg-border-default вместо хардкода */}
-                                <div className="h-[5px] w-[48px] rounded-full bg-border-default" />
-                            </div>
-
-                            {/* Desktop Close Button */}
-                            <div className="hidden md:block absolute top-5 right-5 z-20">
-                                <Button
-                                    type="button"
-                                    onClick={close}
-                                    style={{ minWidth: 0, color: 'var(--text-muted)' }}
-                                >
-                                    {/*<IconWrapper style={{ padding: 8 }}>*/}
-                                        <Close />
-                                    {/*</IconWrapper>*/}
-                                </Button>
-                            </div>
+                                <Close />
+                            </button>
                         </div>
 
-                        {/* 2. SCROLLABLE CONTENT AREA */}
-                        <div className="flex-1 overflow-y-auto custom-scrollbar px-4 pb-8 pt-2 md:p-8 md:pt-2">
-                            {children}
-                        </div>
                     </div>
-                </div>
-            </>,
-            document.body
-        )
-        : null
+
+                    {/* Content Area */}
+                    <div
+                        className={cn(
+                            "overflow-y-auto custom-scrollbar px-4 pb-8 pt-2 md:px-8",
+                            modalClassName
+                        )}
+                    >
+                        {children}
+                    </div>
+                </Drawer.Content>
+            </Drawer.Portal>
+        </Drawer.Root>
+    );
 
     return {
         isOpen,
         open,
         close,
         modal,
-    }
+    };
 }
