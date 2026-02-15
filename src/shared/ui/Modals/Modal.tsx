@@ -10,7 +10,7 @@ import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 // Используем CSS-переменные напрямую для скроллбара
 
 
-export function useModal({ children, modalClassName = "", onClose = () => {} }) {
+export function useModal({ children, modalClassName = "", sheetClassName="", onClose = () => {} }) {
     const [isOpen, setIsOpen] = useState(false)
     const { setIsBlocked } = useContext(BodyBlockContext)
 
@@ -126,6 +126,9 @@ export function useModal({ children, modalClassName = "", onClose = () => {} }) 
                             /* Desktop: Centered Modal */
                             md:max-w-[1024px] md:rounded-[24px] md:max-h-[740px] md:h-full
                             max-[1024px]:min-h-[95vh]
+                            
+                            ${sheetClassName}
+                            
                         `}
                         style={{
                             transform: `translateY(${translateY}px)`,

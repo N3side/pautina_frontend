@@ -44,8 +44,6 @@ export default function ProfilePage() {
 
             const user_ = response?.json?.user
 
-
-
             if (user_) {
                 setTrueUser(user_)
             }

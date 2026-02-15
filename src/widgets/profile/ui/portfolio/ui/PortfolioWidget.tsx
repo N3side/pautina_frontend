@@ -9,6 +9,10 @@ import {AchievementWidget} from "@/widgets/profile/ui/portfolio/ui/AchievementWi
 export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser?: Record<string, any>}) {
     const { modal, open } = useModal({ children: <AchievementWidget /> });
 
+    if (!trueUser?.documents) {
+        return
+    }
+
     return (
         <section className="flex flex-col gap-8 mt-10 w-full">
 

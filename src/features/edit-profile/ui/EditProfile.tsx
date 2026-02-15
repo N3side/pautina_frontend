@@ -141,7 +141,8 @@ export default function useEditProfile({enabled=true}: {enabled?: boolean}) {
 
     const {modal,open,close} = useModal({
         children:
-        <>{form}</>
+        <>{form}</>,
+        sheetClassName: "!w-[900px]"
     })
 
     async function handleSubmit(e) {

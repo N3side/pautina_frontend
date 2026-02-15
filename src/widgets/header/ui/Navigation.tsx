@@ -7,9 +7,7 @@ import {model} from "../model"
 import Link from "next/link"
 import {usePathname} from "next/navigation" // Добавляем хук для активной ссылки
 import {UserContext} from "@/entities/user";
-import {ThemeSwitch} from "@/shared/ui/Buttons/ThemeSwitch";
 import {useTheme} from "@/shared/lib/providers/ThemeProvider";
-import {IOSSwitch} from "@/shared/ui/Inputs/IOSSwitch";
 
 
 interface Props {
