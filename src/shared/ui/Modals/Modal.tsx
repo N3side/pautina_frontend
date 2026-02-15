@@ -37,8 +37,8 @@ export function useModal({
 
     const matches = useMediaQuery(`(max-width: 968px)`)
 
-    const handleOpenChange = (open: boolean) => {
-        setIsOpen(open);
+    const handleOpenChange = () => {
+        setIsOpen(!isOpen);
         if (!open && onClose) onClose();
     }
 
@@ -58,7 +58,6 @@ export function useModal({
                     isOpen={isOpen}
                     handleOpenChange={handleOpenChange} // Добавляем onClose в Desktop
                     modalClassName={modalClassName}
-                    sheetClassName={sheetClassName}
                 >
                     {children}
                 </Desktop >
