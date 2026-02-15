@@ -1,3 +1,5 @@
+"use client"
+
 import Book from "@/shared/assets/images/vector/Book"; // Убедись, что иконка поддерживает className или цвет через fill/stroke
 import {Button} from "@mui/material";
 import {CardProps, cards, categories, CategoriesProps} from "@/widgets/profile/ui/portfolio/model";
@@ -5,6 +7,7 @@ import Card from "@/widgets/profile/ui/portfolio/ui/Card";
 import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 import {useModal} from "@/shared/ui/Modals/Modal";
 import {AchievementWidget} from "@/widgets/profile/ui/portfolio/ui/AchievementWidget";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser?: Record<string, any>}) {
     const { modal, open } = useModal({ children: <AchievementWidget /> });
@@ -14,7 +17,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: b
     }
 
     return (
-        <section className="flex flex-col gap-8 mt-10 w-full">
+        <section className="mt-[100px]">
 
             {/* --- HEADER --- */}
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
@@ -93,6 +96,32 @@ export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: b
 
                 {/* --- CARDS GRID --- */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
+
+                    <div className="group md:flex hidden h-full w-full min-h-[160px] flex-col justify-center items-center text-center cursor-pointer
+                        rounded-xl border-2 border-dashed border-[var(--color-border-default)] bg-transparent
+                        hover:border-[var(--color-brand)] hover:bg-[var(--color-brand)]/5
+                        transition-all duration-300 ease-in-out"
+                    >
+
+                        <div className="flex flex-col gap-3 justify-center items-center p-6">
+                            {/* Иконка: используем text-muted по умолчанию и text-brand при ховере */}
+                            <AddCircleIcon className="w-10 h-10 text-[var(--color-text-muted)]
+                                transition-all duration-500 ease-out
+                                group-hover:text-[var(--color-brand)] group-hover:scale-110 group-hover:rotate-90"
+                            />
+
+                            {/* Текст: используем твои классы типографики */}
+                            <div className="flex flex-col gap-1">
+                                <p className="text-button-lg text-[var(--color-text-muted)] transition-colors duration-300 group-hover:text-[var(--color-text-brand)]">
+                                    Загрузить
+                                </p>
+                                {/*<p className="text-tiny text-[var(--color-text-muted)] opacity-60 group-hover:opacity-100 transition-opacity duration-300">*/}
+                                {/*    Перетащите или нажмите*/}
+                                {/*</p>*/}
+                            </div>
+                        </div>
+                    </div>
+
                     {cards?.map((card: CardProps, i) => (
                         // Обертка для анимации появления (опционально)
                         <div key={i} className="h-full">

@@ -1,6 +1,7 @@
+"use client"
+
 import React from 'react';
 import { Button } from "@mui/material";
-// Импортируем иконки (предполагаем, что используем MUI Icons)
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import LockIcon from '@mui/icons-material/Lock';
@@ -32,7 +33,7 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
     const { modalEdit, openEdit } = useEditProfile({ enabled: isMyProfile });
 
     return (
-        <section className="relative w-full h-full flex flex-col glass-effect border-border-glass rounded-[24px] overflow-hidden transition-all duration-300 group">
+        <section className="w-full h-full flex flex-col glass-effect border-border-glass rounded-[24px] transition-all duration-300">
 
             {/* Декоративный градиент сверху (еле заметный) */}
             {/*<div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand/40 via-purple-500/40 to-brand/0 opacity-50"></div>*/}
@@ -72,7 +73,9 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                         >
                             <EditIcon fontSize="small" />
                         </Button>
+
                     )}
+
                 </header>
 
                 <main className="flex flex-col gap-8 flex-grow">
@@ -167,7 +170,8 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                 </main>
             </div>
 
-            {isMyProfile && modalEdit}
+            {modalEdit}
+
         </section>
     );
 }

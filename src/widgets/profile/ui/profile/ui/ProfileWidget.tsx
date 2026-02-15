@@ -107,15 +107,7 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
                     </>
                 ) : (
                     /* --- Private State Placeholder --- */
-                    <div className="mt-auto flex flex-col items-center justify-center py-6 px-4 bg-[var(--color-input)]/50 rounded-2xl border border-[var(--color-border-default)] border-dashed">
-                        <LockIcon
-                            className="text-[var(--color-text-muted)] mb-2 opacity-50"
-                            sx={{ fontSize: 32 }}
-                        />
-                        <p className="text-small text-[var(--color-text-muted)] text-center max-w-[200px]">
-                            Пользователь ограничил доступ к информации о портфолио.
-                        </p>
-                    </div>
+                    <div></div>
                 )}
             </main>
         </section>

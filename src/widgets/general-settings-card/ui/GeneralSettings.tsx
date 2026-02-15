@@ -4,6 +4,7 @@ import ToggleThemeSetting from "@/features/settings-toggle-theme/ToggleThemeSett
 import LinkSetting from "@/shared/ui/Sections/LinkSetting";
 import useEditProfile from "@/features/edit-profile/ui/EditProfile";
 import UseChangePassword from "@/features/change-password/ui/useChangePassword";
+import ToggleProfileVisibility from "@/features/settings-toggle-profile-visibility/ToggleProfileVisibility";
 
 
 export default function GeneralSettings() {
@@ -29,7 +30,10 @@ export default function GeneralSettings() {
             <section className="flex flex-col gap-12">
 
                 <div className="flex flex-col gap-6">
+
                     <ToggleThemeSetting />
+
+
                     {/*<EditProfileLink />*/}
 
                     <LinkSetting
@@ -44,10 +48,13 @@ export default function GeneralSettings() {
                 <div className="flex flex-col gap-6">
                     <h5 className="text-text-main font-bold">Настройки безопасности</h5>
 
+                    <ToggleProfileVisibility />
+
                     <LinkSetting
                         feature="Изменить пароль"
                         onClick={openPassword}
                     />
+
 
                     {modalPassword}
 

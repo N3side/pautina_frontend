@@ -231,9 +231,6 @@ body {
 	width: 100%;
 }
 
-[data-vaul-drawer] {
-	&::after {
-		display: none !important;
-		content: none !important;
-	}
+html {
+	scrollbar-gutter: stable;
 }
