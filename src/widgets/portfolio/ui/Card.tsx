@@ -7,7 +7,11 @@ import Tag from "@/shared/ui/Buttons/Tag";
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import Status from "@/shared/ui/Tiny/Status";
 import {download} from "@/shared/lib/utils/download";
-import {PDFFirstPage} from "@/shared/lib/utils/PDFViewer";
+import dynamic from 'next/dynamic';
+const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
+    ssr: false,
+    loading: () => <div></div>
+});
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
 interface Props {
@@ -35,7 +39,7 @@ export default function Card({document, ...props}) {
             <div className="relative aspect-[16/10] w-full overflow-hidden">
 
                 {file_extension === "pdf" ?
-                PDFFirstPage({file:document?.file_url})
+                <PDFFirstPage file={document?.file_url} />
                     :
                 <img
                     src={document?.file_url}

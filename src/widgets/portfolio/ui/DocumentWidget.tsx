@@ -1,6 +1,5 @@
 "use client"
 
-import Calendar from "@/shared/assets/images/vector/Calendar";
 import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 import {Button} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
@@ -10,7 +9,11 @@ import useTags from "@/entities/tags/ui/useTags";
 import Status from "@/shared/ui/Tiny/Status";
 import {download} from "@/shared/lib/utils/download";
 import DeleteIcon from '@mui/icons-material/Delete';
-import {PDFFirstPage} from "@/shared/lib/utils/PDFViewer";
+import dynamic from 'next/dynamic';
+const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
+    ssr: false,
+    loading: () => <div></div>
+});
 import {deleteDocument} from "@/entities/document/api/delete";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 
@@ -26,7 +29,7 @@ export function DocumentWidget({document, close, setDocuments}: { document: Reco
             <Status variant={document?.is_public ? "public" : "private"} className="absolute top-[40px] left-[40px]"/>
 
             {file_extension === "pdf" ?
-                PDFFirstPage({file: document?.file_url})
+                <PDFFirstPage file={document?.file_url} />
                 :
                 <img
                     src={document?.file_url}
