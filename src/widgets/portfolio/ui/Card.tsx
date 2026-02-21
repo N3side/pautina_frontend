@@ -18,7 +18,7 @@ import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 interface Props {
     document: Record<string, any>
     isMyProfile: boolean
-    props: any
+    [key: string]: any
 }
 
 export default function Card({document, isMyProfile, ...props}: Props) {

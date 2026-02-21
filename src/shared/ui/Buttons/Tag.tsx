@@ -1,7 +1,7 @@
 interface Props {
     tag?: string
     color?: string
-    onRemove?: () => null
+    onRemove?: (args?: any) => void
 }
 
 export default function Tag({tag="", color, onRemove}: Props) {
