@@ -2,7 +2,6 @@
 
 import Input from "@/shared/ui/Inputs/Input"
 import React, {useContext, useRef, useState} from "react";
-import {useModal} from "@/shared/ui/Modals/Modal";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
@@ -15,12 +14,16 @@ import useSelectSource from "@/features/select-source/useSelectSource";
 import {UseSelectActivity} from "@/features/select-activity/useSelectActivity";
 import {autoReplace} from "@/shared/lib/utils/replace";
 
-export default function useEditProfile({enabled=true}: {enabled?: boolean}) {
+interface Props {
+    enabled?: boolean
+    close: () => void
+}
 
-    if (!enabled) return {}
+export default function EditProfileForm({enabled=true, close}: Props) {
+
+    if (!enabled) return null
 
     const [errors, setErrors] = useState<Record<string, any> | null>(null)
-
     const {user, setUser} = useContext(UserContext)
 
     const {input, city, city_id} = useCitySelect({
@@ -30,15 +33,69 @@ export default function useEditProfile({enabled=true}: {enabled?: boolean}) {
         city_id_local: "city_id"
     })
 
-    const form_ = useRef(null)
+    const form_ = useRef<HTMLFormElement>(null)
 
     const {sourceTsx,result} = useSelectSource({errors})
     const {activityTsx, formRef, statusValue} = UseSelectActivity({errors})
 
-    const form =
+    async function handleSubmit(e) {
+        e.preventDefault();
 
-    <>
+        setErrors(null)
 
+        const activityFormData = formRef.current
+            ? Object.fromEntries(new FormData(formRef.current))
+            : {};
+
+        const formData = unionFormData(new FormData(form_.current!), [
+            ...editCity(city, city_id),
+            result,
+            activityFormData
+        ])
+
+        formData.set("status", `${statusValue}`);
+
+        const updates = new FormData()
+
+        let changed = false
+
+        for (const [key, value] of formData.entries()) {
+
+            if (value !== String(user?.[key] ?? '')) {
+                updates.append(key, value);
+                changed = true
+            }
+
+        }
+
+        if (!changed) {
+            close()
+            toast.success("Вы ничего не поменяли")
+            return
+        }
+
+        // Отправляем только измененные поля
+        const response = await $fetch("me/update", {
+            method: "PATCH",
+            body: updates
+        });
+
+        const errors_ = response?.json?.errors
+
+        if (errors_) {
+            setErrors(errors_)
+            return
+        }
+
+        const user_ = response?.json?.user
+
+        if (user_) {
+            setUser(user_)
+        }
+
+    }
+
+    return (
         <form className="flex flex-col gap-5 w-full" onSubmit={handleSubmit} ref={form_}>
 
             <h5 className="font-bold text-text-main">
@@ -136,72 +193,5 @@ export default function useEditProfile({enabled=true}: {enabled?: boolean}) {
             </ButtonLarge>
 
         </form>
-    </>
-
-
-    const {modal,open,close} = useModal({
-        children:
-        <>{form}</>,
-    })
-
-    async function handleSubmit(e) {
-        e.preventDefault();
-
-        setErrors(null)
-
-        const activityFormData = formRef.current
-            ? Object.fromEntries(new FormData(formRef.current))
-            : {};
-
-        const formData = unionFormData(new FormData(form_.current!), [
-            ...editCity(city, city_id),
-            result,
-            activityFormData
-        ])
-
-        formData.set("status", `${statusValue}`);
-
-        const updates = new FormData()
-
-        let changed = false
-
-        for (const [key, value] of formData.entries()) {
-
-            if (value !== String(user?.[key] ?? '')) {
-                updates.append(key, value);
-                changed = true
-            }
-
-        }
-
-        if (!changed) {
-            close()
-            toast.success("Вы ничего не поменяли")
-            return
-        }
-
-        // Отправляем только измененные поля
-        const response = await $fetch("me/update", {
-            method: "PATCH",
-            body: updates
-        });
-
-        const errors_ = response?.json?.errors
-
-        if (errors_) {
-            setErrors(errors_)
-            return
-        }
-
-        const user_ = response?.json?.user
-
-        if (user_) {
-            setUser(user_)
-        }
-
-    }
-
-    return {
-        modalEdit: modal, openEdit: open, closeEdit: close, form
-    }
+    )
 }

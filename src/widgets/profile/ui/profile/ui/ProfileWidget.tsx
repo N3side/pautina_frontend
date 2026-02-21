@@ -6,7 +6,6 @@ import LockIcon from '@mui/icons-material/Lock';
 import UploadPhoto from "@/widgets/profile/ui/profile/ui/UploadPhoto";
 import React from "react";
 
-// Вспомогательный компонент для статистики
 const StatItem = ({ count, label }: { count: number | string, label: string }) => (
     <div className="flex flex-col items-center justify-center p-3 transition-colors rounded-xl cursor-default group">
         <p className="text-large font-bold text-[var(--color-text-main)] group-hover:text-[var(--color-brand)] transition-colors">
@@ -22,7 +21,6 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
 
     const isPrivate = trueUser?.is_uploaded === false && !isMyProfile;
 
-    // Формируем полное имя
     const fullName = [trueUser?.surname, trueUser?.name, trueUser?.patronymic].filter(Boolean).join(" ");
 
     return (
@@ -36,15 +34,11 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
             "
         >
 
-            {/* --- Decorative Header (Gradient) --- */}
             <div className="absolute top-0 left-0 right-0 h-24 pointer-events-none" />
 
-            {/* --- Main Content --- */}
             <main className="relative flex flex-col flex-grow pt-8 px-6 pb-6 h-full z-10">
 
-                {/* --- Avatar Wrapper --- */}
                 <div className="relative flex justify-center mb-5">
-                    {/* Glow effect behind avatar */}
                     <div className="absolute inset-0 bg-[var(--color-brand)]/20 blur-2xl rounded-full transform scale-75" />
 
                     <div className="relative w-[140px] h-[140px] rounded-full p-1">
@@ -63,7 +57,6 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
                     </div>
                 </div>
 
-                {/* --- User Info --- */}
                 <div className="flex flex-col items-center text-center space-y-1 mb-6">
                     <h5 className="text-[var(--color-text-main)] font-extrabold tracking-tight">
                         {trueUser?.username ? `@${trueUser.username}` : "Username"}
@@ -73,7 +66,6 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
                         {fullName || "Без имени"}
                     </p>
 
-                    {/* Badge for Private State (Optional visibility hint) */}
                     {isPrivate && (
                         <div className="mt-2 inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[var(--color-input)] border border-[var(--color-border-default)]">
                             <LockIcon sx={{ fontSize: 14 }} className="text-[var(--color-text-muted)]" />
@@ -106,7 +98,6 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
                         </div>
                     </>
                 ) : (
-                    /* --- Private State Placeholder --- */
                     <div></div>
                 )}
             </main>

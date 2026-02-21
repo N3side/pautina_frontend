@@ -53,15 +53,12 @@ export function UseSelectActivity({
         safeLocalStorage.setItem(localPost, post)
     }, [post]);
 
-    useEffect(() => {
-        console.log({selectedStatus, schoolStudyStatus, department, course, organization, post})
-    }, [user]);
-
     const statusValue = selectedStatus === "null" || selectedStatus === "" ? null : selectedStatus;
 
     const activityTsx =
         <form className="flex flex-col gap-3" ref={formRef}>
-            <div className="flex flex-col gap-3">
+
+            <div className="flex flex-row justify-start gap-3">
                 <Option
                     selected={selectedStatus === "учусь"}
                     text={"учусь"}
@@ -74,77 +71,77 @@ export function UseSelectActivity({
                 />
             </div>
 
-            {selectedStatus === "учусь" && (
-                <>
-                    <div className="flex flex-col gap-3">
-                        {/*<div className="flex flex-col gap-3">*/}
-                        {/*    <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Кто вы?</PautinaText>*/}
-                        {/*</div>*/}
+            <div className="flex flex-row gap-3 mt-5">
+                {selectedStatus === "учусь" && (
+                    <div className="flex gap-3 flex-col w-full">
+                        <div className="flex flex-col gap-3 w-full">
+                            {/*<div className="flex flex-col gap-3">*/}
+                            {/*    <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Кто вы?</PautinaText>*/}
+                            {/*</div>*/}
 
-                        <Option
-                            selected={schoolStudyStatus == "Я школьник"}
-                            text={"Я школьник"}
-                            onClick={() => setSchoolStudyStatus("Я школьник")}
-                        />
-                        <Option
-                            selected={schoolStudyStatus == "Я студент"}
-                            text={"Я студент"}
-                            onClick={() => setSchoolStudyStatus("Я студент")}
-                        />
+                            <Option
+                                selected={schoolStudyStatus == "Я школьник"}
+                                text={"Я школьник"}
+                                onClick={() => setSchoolStudyStatus("Я школьник")}
+                            />
+                            <Option
+                                selected={schoolStudyStatus == "Я студент"}
+                                text={"Я студент"}
+                                onClick={() => setSchoolStudyStatus("Я студент")}
+                            />
 
-                        <span className="text-red-500 text-sm ml-1">
-                            {errors?.department && errors?.course && !schoolStudyStatus ? "Выберите вариант ответа" : ""}
-                        </span>
+                            <span className="text-red-500 text-sm ml-1">
+                                {errors?.department && errors?.course && !schoolStudyStatus ? "Выберите вариант ответа" : ""}
+                            </span>
+                        </div>
+
+                        {schoolStudyStatus && (
+                            <div className="flex flex-col gap-3">
+                                <Input
+                                    label={"Название учебного заведение"}
+                                    placeholder={schoolStudyStatus === "Я студент" ? "МЦК-КТИТС" : "Школа №169"}
+                                    name={"department"}
+                                    error={errors?.department}
+                                    defaultValue={department}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setDepartment(e?.target?.value)}
+                                />
+                                <Input
+                                    label={schoolStudyStatus === "Я студент" ? "Курс" : "Класс"}
+                                    placeholder={schoolStudyStatus === "Я студент" ? "3" : "9"}
+                                    name={"course"}
+                                    error={errors?.course}
+                                    defaultValue={course}
+                                    onChange={(e: ChangeEvent<HTMLInputElement>) => setCourse(e?.target?.value)}
+                                />
+                            </div>
+                        )}
                     </div>
+                )}
 
-                    {schoolStudyStatus && (
-                        <div className="flex flex-col gap-3">
+                {selectedStatus === "работаю" && (
+                    <div className="flex flex-col w-full">
+                        <div className="flex flex-col gap-3 mt-5">
                             <Input
-                                label={"Название учебного заведение"}
-                                placeholder={schoolStudyStatus === "Я студент" ? "МЦК-КТИТС" : "Школа №169"}
-                                name={"department"}
-                                error={errors?.department}
-                                defaultValue={department}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setDepartment(e?.target?.value)}
+                                label={"Организация"}
+                                placeholder={"Паутина"}
+                                name={"organization"}
+                                error={errors?.organization}
+                                defaultValue={organization}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => setOrganization(e?.target?.value)}
                             />
                             <Input
-                                label={schoolStudyStatus === "Я студент" ? "Курс" : "Класс"}
-                                placeholder={schoolStudyStatus === "Я студент" ? "3" : "9"}
-                                name={"course"}
-                                error={errors?.course}
-                                defaultValue={course}
-                                onChange={(e: ChangeEvent<HTMLInputElement>) => setCourse(e?.target?.value)}
+                                label={"Должность"}
+                                placeholder={"UX/UI designer"}
+                                name={"post"}
+                                error={errors?.post}
+                                defaultValue={post}
+                                onChange={(e: ChangeEvent<HTMLInputElement>) => setPost(e?.target?.value)}
                             />
                         </div>
-                    )}
-                </>
-            )}
-
-            {selectedStatus === "работаю" && (
-                <div>
-                    {/*<div className="flex flex-col gap-3">*/}
-                    {/*    <PautinaText variant={"default"} style={{ fontWeight: 700 }}></PautinaText>*/}
-                    {/*</div>*/}
-                    <div className="flex flex-col gap-3 mt-5">
-                        <Input
-                            label={"Организация"}
-                            placeholder={"Паутина"}
-                            name={"organization"}
-                            error={errors?.organization}
-                            defaultValue={organization}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setOrganization(e?.target?.value)}
-                        />
-                        <Input
-                            label={"Должность"}
-                            placeholder={"UX/UI designer"}
-                            name={"post"}
-                            error={errors?.post}
-                            defaultValue={post}
-                            onChange={(e: ChangeEvent<HTMLInputElement>) => setPost(e?.target?.value)}
-                        />
                     </div>
-                </div>
-            )}
+                )}
+            </div>
+
 
         </form>
 

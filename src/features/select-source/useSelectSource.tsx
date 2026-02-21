@@ -32,10 +32,6 @@ export default function useSelectSource({ errors, localSourceId="", localSource=
         }
     }, [selectedSource]);
 
-    useEffect(() => {
-        console.log(sources)
-    }, [sources]);
-
     const sourceTsx = (
         <div>
             <div className="space-y-3 mb-4">

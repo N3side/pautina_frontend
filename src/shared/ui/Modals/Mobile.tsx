@@ -2,14 +2,14 @@ import { Drawer } from "vaul";
 import { ReactNode } from "react";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import {bg, content, overlay} from "@/shared/ui/Modals/Modal";
+import {bg, content, overlay} from "@/shared/ui/Modals/useModal";
 
 interface UseModalProps {
     isOpen: boolean;
     children: ReactNode;
     modalClassName?: string;
     sheetClassName?: string;
-    handleOpenChange: () => void;
+    close: () => void;
 }
 
 function cn(...inputs: ClassValue[]) {
@@ -21,12 +21,12 @@ export default function Mobile({
        children,
        modalClassName = "",
        sheetClassName = "",
-       handleOpenChange,
+       close,
    }: UseModalProps) {
     return (
         <Drawer.Root
             open={isOpen}
-            onClose={handleOpenChange}
+            onClose={close}
             shouldScaleBackground={false}
             dismissible={true}
         >

@@ -1,17 +1,17 @@
 "use client"
 
 import React from 'react';
-import { Button } from "@mui/material";
+import {Button} from "@mui/material";
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import LockIcon from '@mui/icons-material/Lock';
 import HttpsIcon from '@mui/icons-material/Https';
+import {Elem} from "@/widgets/profile/ui/bio/ui/Elem";
+import {Elems, getActivityElems, getContactElems} from "@/widgets/profile/ui/bio/model";
+import EditProfileForm from "@/features/edit-profile/ui/EditProfileForm";
+import {useModal} from "@/shared/ui/Modals/useModal";
+import {Modal} from "@/shared/ui/Modals/Modal";
 
-import { Elem } from "@/widgets/profile/ui/bio/ui/Elem";
-import { Elems, getActivityElems, getContactElems } from "@/widgets/profile/ui/bio/model";
-import useEditProfile from "@/features/edit-profile/ui/EditProfile";
-
-// Вспомогательный компонент для заголовка секции
 const SectionTitle = ({ colorClass, title }: { colorClass: string, title: string }) => (
     <header className="flex items-center gap-3 mb-4">
         <div className={`w-1.5 h-1.5 rounded-full ${colorClass}`}></div>
@@ -23,20 +23,15 @@ const SectionTitle = ({ colorClass, title }: { colorClass: string, title: string
 
 export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: boolean, trueUser: Record<string, any> }) {
 
-    // Определяем, является ли профиль приватным (основываясь на флаге is_uploaded из PHP или отсутствии детальных данных)
-    // Если is_uploaded === false, считаем профиль приватным/неполным для публичного просмотра
     const isPrivate = trueUser?.is_uploaded === false && !isMyProfile;
 
     const activityList = getActivityElems(trueUser);
     const contactList = getContactElems(trueUser);
 
-    const { modalEdit, openEdit } = useEditProfile({ enabled: isMyProfile });
+    const {close, isOpen, open} = useModal()
 
     return (
         <section className="w-full h-full flex flex-col glass-effect border-border-glass rounded-[24px] transition-all duration-300">
-
-            {/* Декоративный градиент сверху (еле заметный) */}
-            {/*<div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand/40 via-purple-500/40 to-brand/0 opacity-50"></div>*/}
 
             <div className="p-6 md:p-8 flex flex-col h-full">
 
@@ -69,7 +64,7 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                                !text-text-muted hover:!text-brand
                                !transition-all !duration-300
                             "
-                            onClick={openEdit}
+                            onClick={open}
                         >
                             <EditIcon fontSize="small" />
                         </Button>
@@ -98,8 +93,6 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                         </p>
                     </div>
 
-
-                    {/* --- CONTENT AREA (Grid or Private Placeholder) --- */}
                     {isPrivate ? (
                         <div className="flex-grow flex flex-col items-center justify-center py-8 px-4 text-center rounded-2xl bg-background/50 border border-border-default border-dashed">
                             <div className="p-4 rounded-full bg-border-default/30 text-text-muted mb-3">
@@ -131,9 +124,7 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                                                 {elem?.Icon && <elem.Icon  />}
                                             </div>
                                             <div className="flex flex-col">
-                                                {/* Здесь предполагается, что Elem рендерит ключ и значение.
-                                                     Если Elem это сложный компонент, лучше использовать его как есть,
-                                                     но если есть возможность стилизовать - используем классы выше */}
+
                                                 <Elem Icon={null} k={elem?.k} value={elem?.value} />
                                             </div>
                                         </div>
@@ -170,7 +161,9 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                 </main>
             </div>
 
-            {modalEdit}
+            <Modal close={close} isOpen={isOpen}>
+                <EditProfileForm close={close} />
+            </Modal>
 
         </section>
     );

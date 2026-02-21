@@ -47,8 +47,6 @@ export default function OTP({email, next, prev, timer, setTimer}) {
 
         const timer_ = response?.json?.timer
 
-        console.log(timer_)
-
         if (timer_) setTimer(timer_)
 
         next()

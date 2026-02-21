@@ -1,4 +1,4 @@
-import {useModal} from "@/shared/ui/Modals/Modal";
+import {useModal} from "@/shared/ui/Modals/useModal";
 import React, {useRef, useState} from "react";
 import Input from "@/shared/ui/Inputs/Input"
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
@@ -41,12 +41,9 @@ export default function UseChangePassword() {
 
     </form>
 
-    const {modal,open,close} = useModal({
-        children:
-            <>{form}</>
-    })
+    const {open,close} = useModal()
 
     return {
-        modalPassword: modal, openPassword: open, closePassword: close
+        openPassword: open, closePassword: close
     }
 }

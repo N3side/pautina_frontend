@@ -1,7 +1,6 @@
 "use client"
 
-import { useEffect, useState } from "react"
-import { CheckGuest} from "@/entities/user/lib/guards/CheckGuest";
+import {useEffect, useState} from "react"
 import Name from "@/widgets/register/ui/Name"
 import Email from "@/widgets/register/ui/Email"
 import OTP from "@/widgets/register/ui/OTP"
@@ -10,9 +9,9 @@ import Source from "@/widgets/register/ui/Source"
 import Activity from "@/widgets/register/ui/Activity"
 import Password from "@/widgets/register/ui/Password"
 import Card1 from "@/shared/ui/Sections/Card1";
-import { Button } from "@mui/material";
-import {PautinaText, textSizes} from "@/shared/styles/typography/text";
-import { motion, AnimatePresence } from "framer-motion"
+import {Button} from "@mui/material";
+import {textSizes} from "@/shared/styles/typography/text";
+import {AnimatePresence, motion} from "framer-motion"
 import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 

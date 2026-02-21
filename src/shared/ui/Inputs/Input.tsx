@@ -1,6 +1,5 @@
-import React, { InputHTMLAttributes } from 'react';
-import { IMaskInput } from 'react-imask';
-import { PautinaText } from "@/shared/styles/typography/text";
+import React, {InputHTMLAttributes, ReactNode} from 'react';
+import {IMaskInput} from 'react-imask';
 import {smooth} from "@/shared/styles/animations";
 
 const BASE_INPUT_CLASSES = `
@@ -21,6 +20,8 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChan
     onAccept?: (value: string, maskRef: any) => void;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
     isUsername?: boolean;
+    Button?: ReactNode
+    ref?: React.Ref<HTMLInputElement>;
 }
 
 const Input = ({
@@ -35,6 +36,7 @@ const Input = ({
        isUsername,
        value,        // Выносим отдельно
        defaultValue, // Выносим отдельно
+       Button,
        ...props
    }: InputProps) => {
 
@@ -53,7 +55,7 @@ const Input = ({
                 <p className="text-label">
                     {label}
                 </p>
-                // <PautinaText variant="tiny" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
+                // <PautinaText variant="Tiny" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
                 //     {label}
                 // </PautinaText>
             )}
@@ -90,6 +92,10 @@ const Input = ({
                         placeholder={props?.placeholder || "Введите данные..."}
                     />
                 )}
+
+                <div className="absolute right-3 top-1/2 -translate-y-1/2">
+                    {Button}
+                </div>
 
                 {error && (
                     <div className="absolute right-4 top-1/2 -translate-y-1/2 text-red-500 animate-pulse">

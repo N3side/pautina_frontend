@@ -3,7 +3,7 @@
 import HeaderWidget from "@/widgets/header/ui/HeaderWidget";
 import ProfileWidget from "@/widgets/profile/ui/profile/ui/ProfileWidget";
 import BioWidget from "@/widgets/profile/ui/bio/ui/BioWidget";
-import PortfolioWidget from "@/widgets/profile/ui/portfolio/ui/PortfolioWidget";
+import PortfolioWidget from "@/widgets/portfolio/ui/PortfolioWidget";
 import {Container} from "@/shared/ui/Wrappers/Container";
 import {useParams} from "next/navigation";
 import {useContext, useEffect, useState} from "react";
@@ -48,7 +48,6 @@ export default function ProfilePage() {
                 setTrueUser(user_)
             }
 
-            console.log(user_)
         }
 
         !isMyProfile && getUser()

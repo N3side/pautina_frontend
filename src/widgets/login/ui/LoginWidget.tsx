@@ -46,7 +46,6 @@ export default function LoginWidget() {
         }
 
         if (!response?.response?.ok) {
-            console.log("ало")
             return
         }
 

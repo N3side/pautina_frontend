@@ -21,8 +21,6 @@ export default function City({ next = () => {} }: { next: () => void }) {
 
         const result = editCity(city, city_id)
 
-        console.log(result)
-
         const response = await $fetch("onboarding/city", {
             method: "PATCH",
             body: JSON.stringify(result[0]),

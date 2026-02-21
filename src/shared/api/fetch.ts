@@ -49,6 +49,8 @@ export async function $fetch(
         if (!response?.ok) toast.error(message)
         else toast.success(message)
     }
+
+    console.log({response,json})
     
     return {response,json}
 }

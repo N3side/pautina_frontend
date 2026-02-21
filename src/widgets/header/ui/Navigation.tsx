@@ -103,7 +103,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                         <Link href="/register" onClick={closeMenu} className="w-full lg:w-auto">
                             <ShadowWrapper className="w-full lg:w-auto">
                                 <Button
-                                    className="!w-full lg:!w-auto !px-6 !py-2 !rounded-xl !normal-case !bg-brand hover:!bg-brand-hover !shadow-[0_4px_14px_0_rgba(14,165,233,0.39)] transition-all transform hover:-translate-y-0.5"
+                                    className="!w-full lg:!w-auto !px-6 !py-2 !rounded-xl !normal-case !bg-brand hover:!bg-brand-hover !shadow-[0_4px_14px_0_rgba(14,165,233,0.39)] !transition-all !duration-300 transform hover:-translate-y-0.5"
                                 >
                                     <p className="text-button-sm text-white font-bold">
                                         Регистрация

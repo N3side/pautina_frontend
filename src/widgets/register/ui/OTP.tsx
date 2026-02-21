@@ -1,5 +1,3 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
 import {$fetch} from "@/shared/api/fetch";
 
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
@@ -14,9 +12,6 @@ export default function OTP({name, email, otp, setOtp, next, position, timer, se
 
     const {user, setUser} = useContext(UserContext)
 
-    useEffect(() => {
-        console.log(timer)
-    }, [timer]);
 
     async function handleSubmit(e) {
 

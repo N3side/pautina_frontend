@@ -59,7 +59,6 @@ export default function Email({name, email, setEmail, next, setTimer, position})
         if (token) {
             safeCookieStorage.setItem("token", token)
 
-            console.log(safeCookieStorage.getItem("token"))
 
             setToken(token)
         }

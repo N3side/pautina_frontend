@@ -1,16 +1,8 @@
-import {ReactNode} from "react";
 import {ClassValue, clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
-import {content, overlay} from "@/shared/ui/Modals/Modal";
+import {content, overlay} from "@/shared/ui/Modals/useModal";
 import CloseIcon from '@mui/icons-material/Close';
-import { motion, AnimatePresence } from "framer-motion";
-
-interface UseModalProps {
-    children: ReactNode;
-    modalClassName?: string;
-    handleOpenChange?: () => void;
-    isOpen: boolean; // Обязательно нужен isOpen
-}
+import {AnimatePresence, motion} from "framer-motion";
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
@@ -19,9 +11,9 @@ function cn(...inputs: ClassValue[]) {
 export default function Desktop({
         children,
         modalClassName = "",
-        handleOpenChange = () => { },
-        isOpen
-    }: UseModalProps) {
+        isOpen,
+        close = () => {}
+    }) {
 
     return (
         <AnimatePresence>
@@ -32,7 +24,7 @@ export default function Desktop({
                     animate={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
                     transition={{ duration: 0.2 }}
-                    onClick={() => handleOpenChange()}
+                    onClick={() => close()}
                 >
                     <motion.div
                         className={cn(
@@ -58,7 +50,7 @@ export default function Desktop({
                             className="absolute right-[20px] top-[20px] rounded-[50%] cursor-pointer glass-effect p-2 aspect-square w-[40px] flex justify-center align-center z-10"
                             onClick={(e) => {
                                 e.stopPropagation();
-                                handleOpenChange();
+                                close();
                             }}
                             whileHover={{ scale: 1.1, rotate: 90 }}
                             whileTap={{ scale: 0.9 }}

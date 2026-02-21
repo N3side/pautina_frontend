@@ -1,0 +1,13 @@
+import {$fetch} from "@/shared/api/fetch";
+
+export async function recognizeDocument({document_id, setIsLoading, setDocumentRecognized}) {
+
+    setIsLoading(true)
+
+    const response = await $fetch(`documents/${document_id}/recognize`)
+
+    const document_ = response?.json?.document
+    setDocumentRecognized(document_)
+
+    setIsLoading(false)
+}

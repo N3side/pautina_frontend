@@ -14,7 +14,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
     // 1. Указываем конкретные строковые значения вместо null
     // Используем оператор ?? 'light', чтобы всегда была строка
     const [theme, setTheme] = useState<Theme>(
-        (safeCookieStorage.getItem("theme") as Theme) ?? 'light'
+        (safeCookieStorage.getItem("theme") as Theme) ?? 'dark'
     );
 
     useEffect(() => {

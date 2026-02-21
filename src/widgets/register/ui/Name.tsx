@@ -1,5 +1,3 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
 import {useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";

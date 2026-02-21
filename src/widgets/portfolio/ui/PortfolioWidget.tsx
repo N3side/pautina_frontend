@@ -1,16 +1,55 @@
 "use client"
 
-import Book from "@/shared/assets/images/vector/Book"; // Убедись, что иконка поддерживает className или цвет через fill/stroke
+import Book from "@/shared/assets/images/vector/Book";
 import {Button} from "@mui/material";
-import {CardProps, cards, categories, CategoriesProps} from "@/widgets/profile/ui/portfolio/model";
-import Card from "@/widgets/profile/ui/portfolio/ui/Card";
+import {cards, categories, CategoriesProps} from "@/widgets/portfolio/model";
+import Card from "@/widgets/portfolio/ui/Card";
 import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
-import {useModal} from "@/shared/ui/Modals/Modal";
-import {AchievementWidget} from "@/widgets/profile/ui/portfolio/ui/AchievementWidget";
+import {DocumentWidget} from "@/widgets/portfolio/ui/DocumentWidget";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import useCreateDocument from "@/features/create-document/ui/CreateDocument";
+import {$fetch} from "@/shared/api/fetch";
+import {useEffect, useState} from "react";
+import Pagination from "@/features/pagination/ui/Pagination";
+import {Modal} from "@/shared/ui/Modals/Modal";
+import {useModal} from "@/shared/ui/Modals/useModal";
+import CreateDocumentForms from "@/features/create-document/ui/CreateDocument";
 
-export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: boolean, trueUser?: Record<string, any>}) {
-    const { modal, open } = useModal({ children: <AchievementWidget /> });
+interface Props {
+    isMyProfile: boolean,
+    trueUser?: Record<string, any>
+}
+
+export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
+
+    const [documents, setDocuments] = useState<Record<string, any>[] | null>(null)
+    const [currentDocument, setCurrentDocument] = useState<Record<string, any> | null>(null)
+    const [page, setPage] = useState<number>(0)
+    const [lastPage, setLastPage] = useState<number>(0)
+
+    const {close: closeDocument, open: openDocument, isOpen: isOpenDocument} = useModal()
+    const {close: closeCreateDocument, open: openCreateDocument, isOpen: isOpenCreateDocument} = useModal()
+
+
+    async function getDocuments() {
+
+        const response = await $fetch(`documents/user/${trueUser?.id}?page=${page}`)
+
+        const documents_ = response?.json?.documents
+        const page_ = response?.json?.current_page
+        const lastPage_ = response?.json?.last_page
+
+        setDocuments(documents_)
+        setPage(page_)
+        setLastPage(lastPage_)
+    }
+
+    useEffect(() => {
+        if (trueUser) {
+            getDocuments()
+        }
+
+    }, [trueUser, page]);
 
     if (!trueUser?.documents) {
         return
@@ -42,9 +81,8 @@ export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: b
                             hover:!shadow-brand/40 !transition-all !normal-case
                             w-full md:w-auto flex items-center gap-2
                         "
-                        onClick={() => {}} // Добавь обработчик, если есть
+                        onClick={openCreateDocument}
                     >
-                        {/* Если Book это SVG компонент, можно добавить класс для цвета, если нужно */}
                         <div className="w-5 h-5 flex items-center justify-center">
                             <Book />
                         </div>
@@ -97,10 +135,11 @@ export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: b
                 {/* --- CARDS GRID --- */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 
-                    <div className="group md:flex hidden h-full w-full min-h-[160px] flex-col justify-center items-center text-center cursor-pointer
+                    <div className="group md:flex hidden h-full w-full min-h-[313px] flex-col justify-center items-center text-center cursor-pointer
                         rounded-xl border-2 border-dashed border-[var(--color-border-default)] bg-transparent
                         hover:border-[var(--color-brand)] hover:bg-[var(--color-brand)]/5
                         transition-all duration-300 ease-in-out"
+                         onClick={openCreateDocument}
                     >
 
                         <div className="flex flex-col gap-3 justify-center items-center p-6">
@@ -115,24 +154,20 @@ export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: b
                                 <p className="text-button-lg text-[var(--color-text-muted)] transition-colors duration-300 group-hover:text-[var(--color-text-brand)]">
                                     Загрузить
                                 </p>
-                                {/*<p className="text-tiny text-[var(--color-text-muted)] opacity-60 group-hover:opacity-100 transition-opacity duration-300">*/}
-                                {/*    Перетащите или нажмите*/}
-                                {/*</p>*/}
+
                             </div>
                         </div>
                     </div>
 
-                    {cards?.map((card: CardProps, i) => (
+                    {documents && documents?.map((document, i) => (
                         // Обертка для анимации появления (опционально)
                         <div key={i} className="h-full">
                             <Card
-                                image={card.image}
-                                date={card.date}
-                                category={card.category}
-                                type={card.category}
-                                title={card.title}
-                                onClick={open}
-                                // Если Card принимает className, можно добавить hover эффекты снаружи
+                                document={document}
+                                onClick={() => {
+                                    setCurrentDocument(document)
+                                    openDocument()
+                                }}
                             />
                         </div>
                     ))}
@@ -152,9 +187,27 @@ export default function PortfolioWidget({isMyProfile, trueUser}: {isMyProfile: b
                         </div>
                     )}
                 </div>
+
+                {documents &&
+					<Pagination currentPage={page} totalPages={lastPage} setCurrentPage={setPage} />
+                }
             </main>
 
-            {modal}
+            <Modal isOpen={isOpenDocument} close={closeDocument}>
+                <DocumentWidget
+                    document={currentDocument}
+                    close={closeDocument}
+                    setDocuments={setDocuments}
+                />
+            </Modal>
+
+            <Modal close={closeCreateDocument} isOpen={isOpenCreateDocument}>
+                <CreateDocumentForms
+                    setDocuments={setDocuments}
+                    close={closeCreateDocument}
+                />
+            </Modal>
+
         </section>
     );
 }

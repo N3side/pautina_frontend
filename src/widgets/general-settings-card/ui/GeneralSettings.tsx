@@ -2,16 +2,17 @@
 
 import ToggleThemeSetting from "@/features/settings-toggle-theme/ToggleThemeSetting";
 import LinkSetting from "@/shared/ui/Sections/LinkSetting";
-import useEditProfile from "@/features/edit-profile/ui/EditProfile";
+import EditProfileForm from "@/features/edit-profile/ui/EditProfileForm";
 import UseChangePassword from "@/features/change-password/ui/useChangePassword";
 import ToggleProfileVisibility from "@/features/settings-toggle-profile-visibility/ToggleProfileVisibility";
-
+import {useModal} from "@/shared/ui/Modals/useModal";
+import {Modal} from "@/shared/ui/Modals/Modal";
 
 export default function GeneralSettings() {
 
-    const {modalEdit, openEdit} = useEditProfile({enabled: true})
+    const {open: openEdit, close: closeEdit, isOpen: isOpenEdit} = useModal()
 
-    const {modalPassword, openPassword} = UseChangePassword()
+    const {openPassword} = UseChangePassword()
 
     return (
         <div
@@ -33,15 +34,15 @@ export default function GeneralSettings() {
 
                     <ToggleThemeSetting />
 
-
-                    {/*<EditProfileLink />*/}
-
                     <LinkSetting
                         feature="Изменить информацию о себе"
                         onClick={openEdit}
                     />
 
-                    {modalEdit}
+                    <Modal isOpen={isOpenEdit} close={closeEdit}>
+                        <EditProfileForm close={closeEdit} />
+                    </Modal>
+
 
                 </div>
 
@@ -56,7 +57,7 @@ export default function GeneralSettings() {
                     />
 
 
-                    {modalPassword}
+                    {/*{modalPassword}*/}
 
                 </div>
 

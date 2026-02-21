@@ -22,16 +22,7 @@ const categories: CategoriesProps[] = [
     }
 ]
 
-export interface CardProps {
-    image?: string
-    date?: string
-    title?: string
-    category?: string
-    type?: string
-    onClick?: () => void
-}
-
-const cards: CardProps[] = [
+const cards = [
     {
         category: "Обучение",
         image: "https://ichef.bbci.co.uk/ace/ws/640/cpsprodpb/dff0/live/61c92860-24ce-11ee-941e-23d1e9ab75fa.jpg.webp",
@@ -42,5 +33,3 @@ const cards: CardProps[] = [
 ]
 
 export {categories, cards}
-
-// 1
