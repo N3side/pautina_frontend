@@ -1,6 +1,6 @@
 import {$fetch} from "@/shared/api/fetch";
 
-export async function updateDocument(e, setErrors, formRef, tags, checked, document_id) {
+export async function updateDocument({e, setErrors, formRef, tags, checked, document_id}) {
 
     e.preventDefault()
     setErrors(null)
@@ -8,7 +8,6 @@ export async function updateDocument(e, setErrors, formRef, tags, checked, docum
     const formData = new FormData(formRef.current)
 
     formData.set("categories", JSON.stringify(tags))
-
     formData.set("is_public", String(checked))
 
     const response = await $fetch(`documents/${document_id}`, {
@@ -24,8 +23,6 @@ export async function updateDocument(e, setErrors, formRef, tags, checked, docum
     }
 
     const documents = response?.json?.documents
-
-    console.log(documents)
 
     if (documents) {
         return documents

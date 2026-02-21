@@ -7,13 +7,12 @@ import Card from "@/widgets/portfolio/ui/Card";
 import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 import {DocumentWidget} from "@/widgets/portfolio/ui/DocumentWidget";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
-import useCreateDocument from "@/features/create-document/ui/CreateDocument";
+import CreateDocumentForms from "@/features/create-document/ui/CreateDocument";
 import {$fetch} from "@/shared/api/fetch";
 import {useEffect, useState} from "react";
 import Pagination from "@/features/pagination/ui/Pagination";
 import {Modal} from "@/shared/ui/Modals/Modal";
 import {useModal} from "@/shared/ui/Modals/useModal";
-import CreateDocumentForms from "@/features/create-document/ui/CreateDocument";
 
 interface Props {
     isMyProfile: boolean,
@@ -34,7 +33,6 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
     async function getDocuments() {
 
         const response = await $fetch(`documents/user/${trueUser?.id}?page=${page}`)
-
         const documents_ = response?.json?.documents
         const page_ = response?.json?.current_page
         const lastPage_ = response?.json?.last_page
@@ -161,9 +159,10 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
 
                     {documents && documents?.map((document, i) => (
                         // Обертка для анимации появления (опционально)
-                        <div key={i} className="h-full">
+                        <div key={i} className="h-full max-h-[400px]">
                             <Card
                                 document={document}
+                                isMyProfile={isMyProfile}
                                 onClick={() => {
                                     setCurrentDocument(document)
                                     openDocument()
@@ -195,6 +194,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
 
             <Modal isOpen={isOpenDocument} close={closeDocument}>
                 <DocumentWidget
+                    isMyProfile={isMyProfile}
                     document={currentDocument}
                     close={closeDocument}
                     setDocuments={setDocuments}

@@ -12,9 +12,9 @@ import EditProfileForm from "@/features/edit-profile/ui/EditProfileForm";
 import {useModal} from "@/shared/ui/Modals/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
 
-const SectionTitle = ({ colorClass, title }: { colorClass: string, title: string }) => (
+const SectionTitle = ({ title }: {title: string }) => (
     <header className="flex items-center gap-3 mb-4">
-        <div className={`w-1.5 h-1.5 rounded-full ${colorClass}`}></div>
+        <div className={`w-1.5 h-1.5 rounded-full`}></div>
         <p className="text-label text-text-muted">
             {title}
         </p>
@@ -106,47 +106,30 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                     ) : (
                         <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12 h-full">
 
-                            {/* Activity Column */}
                             <div className="flex flex-col gap-2">
-                                <SectionTitle colorClass="bg-brand" title="Деятельность" />
+                                <SectionTitle title="Деятальность" />
 
-                                <div className="flex flex-col gap-3">
+                                <ul className="flex flex-col gap-6">
                                     {activityList?.length > 0 ? activityList.map((elem: Elems, i: number) => (
-                                        <div
+                                        <li
                                             key={i}
-                                            className="
-                                                group flex items-center p-3 -mx-3 rounded-xl
-                                                hover:bg-text-main/5 transition-all duration-200 cursor-default
-                                            "
                                         >
-                                            <div className="text-text-muted group-hover:text-brand transition-colors duration-200 mr-3 opacity-80">
-                                                {/* Рендерим иконку внутри контейнера для контроля размера */}
-                                                {elem?.Icon && <elem.Icon  />}
-                                            </div>
-                                            <div className="flex flex-col">
-
-                                                <Elem Icon={null} k={elem?.k} value={elem?.value} />
-                                            </div>
-                                        </div>
+                                            <Elem Icon={elem?.Icon} k={elem?.k} value={elem?.value} />
+                                        </li>
                                     )) : (
-                                        <span className="text-small text-text-muted italic opacity-60 ml-2">Нет данных</span>
+                                        <span className="text-small text-text-muted italic opacity-60 ml-2">Скрыто или не указано</span>
                                     )}
-                                </div>
+                                </ul>
                             </div>
 
                             {/* Contact Column */}
                             <div className="flex flex-col gap-2 lg:pl-8 lg:border-l lg:border-border-default/60">
-                                <SectionTitle colorClass="bg-green-main" title="Контакты" />
+                                <SectionTitle title="Контакты" />
 
-                                <ul className="flex flex-col gap-3">
+                                <ul className="flex flex-col gap-6">
                                     {contactList?.length > 0 ? contactList.map((elem: Elems, i: number) => (
                                         <li
                                             key={i}
-                                            className="
-                                                group p-3 -mx-3 rounded-xl bg-surface border border-transparent
-                                                hover:border-border-default hover:shadow-sm hover:bg-background
-                                                transition-all duration-200
-                                            "
                                         >
                                             <Elem Icon={elem?.Icon} k={elem?.k} value={elem?.value} />
                                         </li>

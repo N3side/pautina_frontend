@@ -1,20 +1,20 @@
 import Tag from "@/shared/ui/Buttons/Tag";
-import { useState, useCallback, useMemo } from "react";
-import { v4 } from 'uuid';
+import {useCallback, useMemo, useState} from "react";
+import {v4} from 'uuid';
 import chroma from "chroma-js";
 
 interface Tag {
     id: string;
-    tag: string;
+    name: string;
     color: string;
 }
 
-interface UseTagsProps {
+interface Props {
     tagsInitial?: Tag[] | null;
 }
 
-export default function useTags({ tagsInitial = null }: UseTagsProps = {}) {
-    // Всегда инициализируем состояние, даже если tagsInitial null
+export default function useTags({tagsInitial = null}: Props) {
+
     const [tags, setTags] = useState<Tag[]>(() => {
         if (tagsInitial && Array.isArray(tagsInitial)) {
             return tagsInitial;
@@ -29,7 +29,7 @@ export default function useTags({ tagsInitial = null }: UseTagsProps = {}) {
         if (input.value?.trim()) {
             const newTag: Tag = {
                 id: v4(),
-                tag: input.value.trim(),
+                name: input.value.trim(),
                 color: chroma.random().brighten(1).hex()
             };
 
@@ -43,17 +43,19 @@ export default function useTags({ tagsInitial = null }: UseTagsProps = {}) {
         setTags(prev => prev.filter(tag => tag.id !== tagId));
     }, []);
 
-    // Мемоизируем рендер тегов
-    const Tags = useMemo(() => {
-        return tags.map((tag) => (
+    const Tags =
+    <div className="flex gap-3">
+    {
+        tags.map((tag) => (
             <Tag
                 key={tag.id}
                 color={tag.color}
-                tag={tag.tag}
+                tag={tag.name}
                 onRemove={(e) => deleteTag(e, tag.id)}
             />
-        ));
-    }, [tags, deleteTag]);
+        ))
+    }
+    </div>
 
     return {
         tags,

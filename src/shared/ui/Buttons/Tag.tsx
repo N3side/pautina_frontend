@@ -1,4 +1,10 @@
-export default function Tag({tag="", color, onRemove=(e) => {}}) {
+interface Props {
+    tag?: string
+    color?: string
+    onRemove?: () => null
+}
+
+export default function Tag({tag="", color, onRemove}: Props) {
     return (
         <span className="w-fit px-3 py-1 rounded-full inline-flex items-center gap-1 group" style={{background: `${color}10`, border: `1px solid ${color}20`}}>
             <p className="text-tiny font-bold" style={{color: color}}>

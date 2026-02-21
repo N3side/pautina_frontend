@@ -18,7 +18,7 @@ export default function UpdateDocument({setDocuments, document_id, close}) {
 
     const [document, setDocument] = useState<Record<string, any> | null>(null)
     const [documentRecognized, setDocumentRecognized] = useState<Record<string, any> | null>(null)
-    const {addTag, Tags, tags} = useTags(documentRecognized?.categories || [])
+    const {addTag, Tags, tags} = useTags({tagsInitial: documentRecognized?.categories || null})
     const [errors, setErrors] = useState<Record<string, any> | null>(null)
 
     const [isLoading, setIsLoading] = useState<boolean>(false)
@@ -31,13 +31,13 @@ export default function UpdateDocument({setDocuments, document_id, close}) {
     const inputRef = useRef<HTMLInputElement>(null)
     const formRef = useRef<HTMLFormElement>(null)
 
+    async function handleSubmit(e) {
+        const saved = await updateDocument({e,setErrors, formRef,tags,checked, document_id})
+        setDocuments(saved)
+    }
+
     return (
-        <form className="flex flex-col gap-4" onSubmit={async (e) => {
-
-            const saved = await updateDocument(e,setErrors, formRef,tags,checked, document_id)
-            setDocuments(saved)
-
-        }} ref={formRef}>
+        <form className="flex flex-col gap-4" onSubmit={handleSubmit} ref={formRef}>
 
             {isLoading && <LoadingOverlay />}
 

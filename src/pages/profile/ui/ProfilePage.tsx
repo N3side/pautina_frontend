@@ -64,7 +64,10 @@ export default function ProfilePage() {
                     <BioWidget isMyProfile={isMyProfile} trueUser={trueUser} />
                 </div>
 
-                <PortfolioWidget isMyProfile={isMyProfile} trueUser={trueUser} />
+                <PortfolioWidget
+                    isMyProfile={isMyProfile}
+                    trueUser={trueUser}
+                />
             </Container>
         </>
     )

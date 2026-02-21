@@ -13,13 +13,15 @@ const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(m
     loading: () => <div></div>
 });
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
 
 interface Props {
     document: Record<string, any>
+    isMyProfile: boolean
     props: any
 }
 
-export default function Card({document, ...props}) {
+export default function Card({document, isMyProfile, ...props}: Props) {
 
     const file_extension = document?.file_url.split(".").pop()
 
@@ -47,7 +49,10 @@ export default function Card({document, ...props}) {
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />}
 
-                <Status variant={document?.is_public ? "public" : "private"} />
+                {isMyProfile && (
+                    <Status variant={document?.is_public ? "public" : "private"} />
+                )}
+
 
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
@@ -58,7 +63,7 @@ export default function Card({document, ...props}) {
                 {/* Мета-данные (Дата и Тип) */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 opacity-70">
-                        <CalendarTodayIcon className="w-4 h-4 text-brand" />
+                        <CalendarTodayIcon className="w-4 h-4 text-brand" sx={{fontSize: "18px"}} />
                         <span className="text-[12px] font-medium text-text-muted">{document?.date}</span>
                     </div>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand/10 text-brand font-bold uppercase tracking-tighter">
@@ -87,18 +92,19 @@ export default function Card({document, ...props}) {
                 )}
 
                 {/* Категории (Теги) - Горизонтальный скролл если их много */}
-                {document?.categories?.length > 0 && (
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                        {document?.categories.map((cat: Record<string, any>) => (
-                            <Tag
-                                key={cat.id || cat.tag}
-                                tag={cat.tag}
-                                color={cat.color || '#6366f1'}
-                                // Убираем onRemove, так как это карточка просмотра
-                            />
-                        ))}
-                    </div>
-                )}
+                <WheelXScrollProvider>
+                    {document?.categories?.length > 0 && (
+                        <div className="flex gap-1.5">
+                            {document?.categories.map((cat: Record<string, any>) => (
+                                <Tag
+                                    key={cat.id || cat.tag}
+                                    tag={cat.name}
+                                    color={cat.color || '#6366f1'}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </WheelXScrollProvider>
 
                 {/* Футер */}
 
