@@ -83,7 +83,7 @@ export default function Card({document, ...props}) {
                 )}
 
                 {/* Категории (Теги) - Горизонтальный скролл если их много */}
-                {document?.categories.length > 0 && (
+                {document?.categories?.length > 0 && (
                     <div className="flex flex-wrap gap-1.5 mt-1">
                         {document?.categories.map((cat: Record<string, any>) => (
                             <Tag
