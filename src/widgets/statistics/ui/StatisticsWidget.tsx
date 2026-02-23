@@ -2,7 +2,7 @@
 
 import {WindowContext} from "@/shared/lib/providers/WindowProvider"
 import {COLORS} from "@/shared/styles/colors"
-import {Container} from "@/shared/ui/Wrappers/Container"
+import {Container} from "@/shared/ui/Container/Container"
 import {useContext} from "react"
 
 export default function StatisticsWidget() {

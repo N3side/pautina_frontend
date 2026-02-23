@@ -3,7 +3,7 @@ import "./globals.css";
 import Providers from "@/shared/lib/providers/Providers"
 
 import {Toaster} from "react-hot-toast";
-import ClientOnly from "@/shared/ui/ClientOnly";
+import ClientOnly from "@/shared/ui/ClientOnly/ClientOnly";
 
 export const metadata: Metadata = {
     title: "Паутина",

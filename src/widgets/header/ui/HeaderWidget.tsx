@@ -1,7 +1,7 @@
 "use client"
 
 import LogoLight from "@/shared/assets/images/vector/logo/LogoLight"
-import {Container} from "@/shared/ui/Wrappers/Container"
+import {Container} from "@/shared/ui/Container/Container"
 import {useContext, useEffect, useState} from "react"
 import Navigation from "./Navigation"
 import {Burger} from "./Burger"

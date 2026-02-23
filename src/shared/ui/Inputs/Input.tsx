@@ -1,6 +1,8 @@
-import React, {InputHTMLAttributes, ReactNode} from 'react';
+import React, {Dispatch, InputHTMLAttributes, ReactNode, SetStateAction, useState} from 'react';
 import {IMaskInput} from 'react-imask';
 import {smooth} from "@/shared/styles/animations";
+import Eye from "@/shared/ui/Buttons/Eye";
+
 
 const BASE_INPUT_CLASSES = `
   w-full py-4 rounded-xl ${smooth} outline-none
@@ -12,6 +14,9 @@ const BASE_INPUT_CLASSES = `
 
 // Исправляем интерфейс: явно указываем, что value — это строка
 interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChange' | 'value'> {
+    isOpen?: boolean
+    setIsOpen?: Dispatch<SetStateAction<any>>
+    type_?: string
     value?: string;
     label?: string | null;
     error?: string | null;
@@ -25,6 +30,9 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChan
 }
 
 const Input = ({
+       isOpen,
+       setIsOpen,
+       type_,
        label,
        error,
        selected,
@@ -49,13 +57,19 @@ const Input = ({
         ...style,
     };
 
+    const toggle = () => setIsOpen && setIsOpen(prev => !prev)
+
+    if (type_ === "password") {
+        Button = <Eye isOpen={isOpen} className="cursor-pointer text-text-muted" onClick={toggle} />
+    }
+
     return (
         <div className={`flex flex-col gap-1.5 w-full ${className || ''}`}>
             {label && (
                 <p className="text-label">
                     {label}
                 </p>
-                // <PautinaText variant="Tiny" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
+                // <PautinaText variant="Status" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
                 //     {label}
                 // </PautinaText>
             )}
@@ -74,8 +88,11 @@ const Input = ({
                         mask={mask}
                         unmask={false}
                         onAccept={onAccept}
-                        // Если передан value — используем его,
-                        // если нет — передаем defaultValue, чтобы маска его подхватила
+                        inputOptions={{
+                            type: type_ === "password" ? (isOpen ? "text" : "password") : props.type
+                        }}
+                        // ВАЖНО: для IMask используем отдельную логику
+                        type={props.type === "password" ? (isOpen ? "text" : "password") : props.type}
                         value={(value as string) ?? (defaultValue as string)}
                         className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
                         style={dynamicInputStyle}
@@ -86,6 +103,8 @@ const Input = ({
                         className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
                         style={dynamicInputStyle}
                         onChange={onChange}
+                        // Для обычного input работает как раньше
+                        type={type_ === "password" ? (isOpen ? "text" : "password") : props.type}
                         value={value}
                         defaultValue={defaultValue}
                         {...props}
@@ -97,12 +116,14 @@ const Input = ({
                     {Button}
                 </div>
 
-                {error && (
-                    <div className="absolute right-4 top-1/2 -translate-y-1/2 text-red-500 animate-pulse">
-                        <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
-                    </div>
+                {!Button && (
+                    error && (
+                        <div className="absolute right-4 top-1/2 -translate-y-1/2 text-red-500 animate-pulse">
+                            <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </div>
+                    )
                 )}
             </div>
 

@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useState} from "react"
+import {useEffect, useMemo, useState} from "react"
 import Name from "@/widgets/register/ui/Name"
 import Email from "@/widgets/register/ui/Email"
 import OTP from "@/widgets/register/ui/OTP"
@@ -16,15 +16,15 @@ import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import AnimationSlider from "@/shared/ui/Wrappers/AnimationSlider";
+import Stepper from "@/shared/ui/Stepper/Stepper";
+import SkipButton from "@/shared/ui/Buttons/SkipButton";
+import ProgressBar from "@/shared/ui/ProgressBar/ProgressBar";
+import UseStepper from "@/shared/lib/hooks/useStepper/UseStepper";
 
 export default function RegisterWidget() {
     const [name, setName] = useState<string | null>(null)
     const [email, setEmail] = useState<string | null>(null)
-    const [position, setPosition] = useState<number>(0)
     const [otp, setOtp] = useState<string | null>(null)
-    const {theme} = useTheme()
-
     const [timer, setTimer] = useState(null)
 
     useEffect(() => {
@@ -34,78 +34,39 @@ export default function RegisterWidget() {
         setOtp(safeLocalStorage.getItem("email_otp"))
     }, [])
 
-    const handlers = {
-        next: (): void => setPosition((p: number) => p + 1),
-        prev: (): void => setPosition((p: number) => p > 0 ? p - 1 : p),
-    }
+    const dictionary = ["name", "email", "otp", "city", "source", "activity", "password"]
+    const {handlers, position, setPosition, progress} = UseStepper({dictionary})
 
     const steps = [
-        { component: position === 0 && <Name key="name" name={name} setName={setName} {...handlers} />, required: true},
-        { component: position === 1 && <Email key="email" name={name} email={email} setEmail={setEmail} {...handlers} setTimer={setTimer} position={position} />, required: true },
-        { component: position === 2 && <OTP key="otp" name={name} email={email} {...handlers} otp={otp} setOtp={setOtp} position={position} timer={timer} setTimer={setTimer} />, required: true },
-        { component: position === 3 && <City key="city" {...handlers} />, required: false },
-        { component: position === 4 && <Source key="source" {...handlers} />, required: true },
-        { component: position === 5 && <Activity key="activity" {...handlers} />, required: false },
-        { component: position === 6 && <Password key="password" />, required: true },
+        { component: <Name key="name" name={name} setName={setName} {...handlers} />, required: true },
+        { component: <Email key="email" name={name} email={email} setEmail={setEmail} {...handlers} setTimer={setTimer} position={position} />, required: true },
+        { component: <OTP key="otp" name={name} email={email} {...handlers} otp={otp} setOtp={setOtp} position={position} timer={timer} setTimer={setTimer} />, required: true },
+        { component: <City key="city" {...handlers} />, required: false },
+        { component: <Source key="source" {...handlers} />, required: true },
+        { component: <Activity key="activity" {...handlers} />, required: false },
+        { component: <Password key="password" />, required: true },
     ];
-
-    const currentStep = steps[position]
-    const isRequired = currentStep?.required
 
     useEffect(() => {
         safeLocalStorage.setItem("register_position", position.toString())
     }, [position])
 
-    const progress = ((position) / steps.length) * 100;
-
+    const currentStep = steps[position]
+    const isRequired = currentStep?.required
 
     return (
 
         <div>
             <Card1>
                 {/* Прогресс-бар тоже можно сделать через motion для плавности */}
-                <div className={`w-full h-1.5 rounded-full mb-8 bg-${ theme === "light" ? "text-main" : "text-muted" } relative`}>
-                    <motion.div
-                        className="h-full relative"
-                        initial={{ width: 0 }}
-                        animate={{ width: `${progress}%` }}
-                        transition={{ duration: 0.5, ease: "easeInOut" }}
-                        style={{
-                            background: "var(--color-brand)",
-                            backgroundSize: '200% 100%', // Растягиваем, чтобы было куда двигать блик
-                        }}
-                    >
-                        {/* Анимированный слой с блеском */}
-                        <motion.div
-                            className="absolute inset-0"
-                            animate={{
-                                backgroundPosition: ['200% 0%', '-200% 0%'],
-                            }}
-                            transition={{
-                                duration: 3, // Скорость блеска (3 секунды)
-                                repeat: Infinity,
-                                ease: "linear",
-                            }}
-                            style={{
-                                backgroundImage: `linear-gradient(
-                                    90deg, 
-                                    transparent, 
-                                    rgba(255,255,255,0.3), 
-                                    transparent
-                                )`,
-                                backgroundSize: '50% 100%',
-                                backgroundRepeat: 'no-repeat'
-                            }}
-                        />
-                    </motion.div>
-                </div>
+                <ProgressBar progress={progress} />
 
                 <div className="relative w-full">
 
-                    <AnimationSlider position={position}>
+                    <Stepper position={position}>
                         {currentStep?.component}
-                    </AnimationSlider>
-                    
+                    </Stepper>
+
                 </div>
 
                 {position > 0 && (
@@ -122,50 +83,9 @@ export default function RegisterWidget() {
 
             </Card1>
 
-            <AnimatePresence>
-                {!isRequired && (
-                    <motion.div
-                        key="skip-button"
-                        initial={{ opacity: 0, y: 20, scale: 0.9 }}
-                        animate={{ opacity: 1, y: 0, scale: 1 }}
-                        exit={{ opacity: 0, y: 20, scale: 0.9 }}
-                        transition={{ duration: 0.3, ease: "backOut" }}
-                        className="fixed right-[4%] bottom-[4%] z-50"
-                    >
-                        <Button
-                            onClick={handlers?.next}
-                            // Стилизация кнопки
-                            className={`
-                                !rounded-2xl !px-5 !py-3 !normal-case
-                                !text-slate-600 dark:!text-slate-300
-                                hover:glass-effect
-                                hover:!scale-[1.02] 
-                                active:!scale-[0.98]
-                                !transition-all !duration-300
-                                flex gap-2 items-center
-                            `}
-                        >
-                            <p
-                                className="text-tiny font-medium opacity-80 group-hover:opacity-100 transition-opacity"
-                            >
-                                Пропустить
-                            </p>
-
-                            <motion.div
-                                animate={{ x: [0, 3, 0] }}
-                                transition={{
-                                    repeat: Infinity,
-                                    duration: 1.5,
-                                    repeatDelay: 1,
-                                    ease: "easeInOut"
-                                }}
-                            >
-                                <ChevronRightIcon className="!w-5 !h-5 opacity-70" />
-                            </motion.div>
-                        </Button>
-                    </motion.div>
-                )}
-            </AnimatePresence>
+            {!isRequired && (
+                <SkipButton handlers={handlers} />
+            )}
         </div>
 
     )

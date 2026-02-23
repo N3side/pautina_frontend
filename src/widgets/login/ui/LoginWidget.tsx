@@ -12,6 +12,7 @@ import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo"
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {userLink} from "@/shared/lib/userLink";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
+import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 
 
 interface LoginErrors {
@@ -58,9 +59,7 @@ export default function LoginWidget() {
         router.push(userLink(user?.public_url))
     }
 
-    // function handleCheckboxChange(e: ChangeEvent<HTMLInputElement>) {
-    //     setIsActive(e.target.checked)
-    // }
+    const [isOpen, setIsOpen] = useState<boolean>(false)
 
     return (
         // <CheckIsNotUser>
@@ -68,11 +67,27 @@ export default function LoginWidget() {
                 <h4 className="font-bold text-text-main">
                     Вход в профиль
                 </h4>
-                <form onSubmit={handleSubmit} className="flex flex-col gap-[10px] mt-[20px] w-full ">
 
-                    <Input label={"Почта"} placeholder={"ivanov@gmail.com"} name={"email"} error={errors?.email} />
+                {/*<MonkeyAnimation type={isOpen ? "peek" : "close"} width={120} height={120} />*/}
 
-                    <Input label={"Пароль"} placeholder={"*******"} name={"password"} error={errors?.password} type={"password"} />
+
+                <form onSubmit={handleSubmit} className="flex flex-col gap-[10px] mt-[20px] w-full">
+
+                    <Input
+                        label={"Почта"}
+                        placeholder={"ivanov@gmail.com"}
+                        name={"email"}
+                        error={errors?.email}
+                    />
+
+                    <Input
+                        label={"Пароль"}
+                        type_="password"
+                        name={"password"}
+                        error={errors?.password}
+                        isOpen={isOpen}
+                        setIsOpen={setIsOpen}
+                    />
 
                     <div className="flex justify-between">
                         <div className="flex justify-between items-center select-none font-regular">

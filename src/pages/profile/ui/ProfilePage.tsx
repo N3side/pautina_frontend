@@ -4,7 +4,7 @@ import HeaderWidget from "@/widgets/header/ui/HeaderWidget";
 import ProfileWidget from "@/widgets/profile/ui/profile/ui/ProfileWidget";
 import BioWidget from "@/widgets/profile/ui/bio/ui/BioWidget";
 import PortfolioWidget from "@/widgets/portfolio/ui/PortfolioWidget";
-import {Container} from "@/shared/ui/Wrappers/Container";
+import {Container} from "@/shared/ui/Container/Container";
 import {useParams} from "next/navigation";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/entities/user";

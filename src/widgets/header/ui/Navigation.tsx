@@ -1,6 +1,6 @@
 "use client"
 
-import {ShadowWrapper} from "@/shared/ui/Wrappers/Shadow"
+import {ShadowWrapper} from "@/shared/ui/Shadow/Shadow"
 import {Button} from "@mui/material"
 import {useContext, useEffect, useState} from "react"
 import {model} from "../model"

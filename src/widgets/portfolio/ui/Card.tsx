@@ -5,7 +5,7 @@ import DownloadIcon from '@mui/icons-material/Download';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
 import Tag from "@/shared/ui/Buttons/Tag";
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
-import Status from "@/shared/ui/Tiny/Status";
+import Status from "@/shared/ui/Status/Status";
 import {download} from "@/shared/lib/utils/download";
 import dynamic from 'next/dynamic';
 const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
@@ -13,7 +13,7 @@ const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(m
     loading: () => <div></div>
 });
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
+import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollXWrapper";
 
 interface Props {
     document: Record<string, any>

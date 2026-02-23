@@ -8,7 +8,7 @@ import Card1 from "@/shared/ui/Sections/Card1";
 import {Button} from "@mui/material";
 import {textSizes} from "@/shared/styles/typography/text";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
-import AnimationSlider from "@/shared/ui/Wrappers/AnimationSlider";
+import Stepper from "@/shared/ui/Stepper/Stepper";
 
 export default function RegisterWidget() {
     const [email, setEmail] = useState<string | null>(safeLocalStorage.getItem("login_email"))
@@ -40,9 +40,9 @@ export default function RegisterWidget() {
 
                 <div className="relative overflow-hidden w-full">
 
-                    <AnimationSlider position={position}>
+                    <Stepper position={position}>
                         {positions[position]}
-                    </AnimationSlider>
+                    </Stepper>
                 </div>
 
                 {position > 0 && (

@@ -1,6 +1,6 @@
 "use client"
 
-import {Container} from "@/shared/ui/Wrappers/Container";
+import {Container} from "@/shared/ui/Container/Container";
 import Sidebar from "@/widgets/settings-sidebar/ui/Sidebar";
 import GeneralSettings from "@/widgets/general-settings-card/ui/GeneralSettings";
 

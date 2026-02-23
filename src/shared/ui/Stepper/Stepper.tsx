@@ -1,6 +1,22 @@
 import {AnimatePresence, motion} from "framer-motion";
+import {ReactNode, useMemo} from "react";
 
-export default function AnimationSlider({children, position}) {
+interface Props {
+    children?: ReactNode
+    position: number
+    steps?: ReactNode[]
+}
+
+export default function Stepper({children, position, steps}: Props) {
+
+    const form = useMemo(() => {
+
+        return (
+            steps && steps[position] || null
+        )
+
+    }, [position])
+
     return (
         <AnimatePresence mode="wait">
             <motion.div

@@ -3,16 +3,16 @@
 import ToggleThemeSetting from "@/features/settings-toggle-theme/ToggleThemeSetting";
 import LinkSetting from "@/shared/ui/Sections/LinkSetting";
 import EditProfileForm from "@/features/edit-profile/ui/EditProfileForm";
-import UseChangePassword from "@/features/change-password/ui/useChangePassword";
+import VerifyUser from "@/features/verify-user/ui/VerifyUser";
 import ToggleProfileVisibility from "@/features/settings-toggle-profile-visibility/ToggleProfileVisibility";
 import {useModal} from "@/shared/ui/Modals/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
+import NewPassword from "@/features/verify-user/ui/components/NewPassword";
 
 export default function GeneralSettings() {
 
     const {open: openEdit, close: closeEdit, isOpen: isOpenEdit} = useModal()
-
-    const {openPassword} = UseChangePassword()
+    const {open: openChangePassword, close: closeChangePassword, isOpen: isOpenChangePassword} = useModal()
 
     return (
         <div
@@ -53,14 +53,16 @@ export default function GeneralSettings() {
 
                     <LinkSetting
                         feature="Изменить пароль"
-                        onClick={openPassword}
+                        onClick={openChangePassword}
                     />
 
-
-                    {/*{modalPassword}*/}
+                    <Modal isOpen={isOpenChangePassword} close={closeChangePassword}>
+                        <VerifyUser
+                            additionalSteps={[<NewPassword key="new-password" />]}
+                        />
+                    </Modal>
 
                 </div>
-
 
             </section>
 

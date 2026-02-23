@@ -52,6 +52,7 @@ export default function Name({name, setName, next}) {
                     placeholder={"Имя"}
                     error={errors?.name}
                     onChange={handleChange}
+                    value={name}
                     defaultValue={safeLocalStorage.getItem("user_name") ?? undefined}
                 />
 

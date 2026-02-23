@@ -1,12 +1,12 @@
 "use client"
 
-import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
+import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollXWrapper";
 import {Button} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
 import useTags from "@/entities/tags/ui/useTags";
-import Status from "@/shared/ui/Tiny/Status";
+import Status from "@/shared/ui/Status/Status";
 import {download} from "@/shared/lib/utils/download";
 import DeleteIcon from '@mui/icons-material/Delete';
 import dynamic from 'next/dynamic';

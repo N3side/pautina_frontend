@@ -4,7 +4,7 @@ import Book from "@/shared/assets/images/vector/Book";
 import {Button} from "@mui/material";
 import {cards, categories, CategoriesProps} from "@/widgets/portfolio/model";
 import Card from "@/widgets/portfolio/ui/Card";
-import {WheelXScrollProvider} from "@/shared/ui/Wrappers/WheelScrollXWrapper";
+import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollXWrapper";
 import {DocumentWidget} from "@/widgets/portfolio/ui/DocumentWidget";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
 import CreateDocumentForms from "@/features/create-document/ui/CreateDocument";
@@ -48,10 +48,6 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
         }
 
     }, [trueUser, page]);
-
-    if (!trueUser?.documents) {
-        return
-    }
 
     return (
         <section className="mt-[100px]">

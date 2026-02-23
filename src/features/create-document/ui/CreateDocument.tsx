@@ -1,4 +1,4 @@
-import AnimationSlider from "@/shared/ui/Wrappers/AnimationSlider";
+import Stepper from "@/shared/ui/Stepper/Stepper";
 import {useContext, useEffect, useMemo, useState} from "react";
 import UploadFile from "@/features/create-document/ui/UploadFile";
 import {UserContext} from "@/entities/user";
@@ -41,9 +41,9 @@ export default function CreateDocumentForms({setDocuments, close}) {
         ];
 
         return (
-            <AnimationSlider position={position}>
+            <Stepper position={position}>
                 {steps[position] || null}
-            </AnimationSlider>
+            </Stepper>
         );
     }, [position, documentId]);
 

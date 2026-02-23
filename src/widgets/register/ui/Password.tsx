@@ -7,6 +7,7 @@ import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo"
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {UserContext} from "@/entities/user";
 import {userLink} from "@/shared/lib/userLink";
+import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 
 export default function Password() {
 
@@ -63,20 +64,36 @@ export default function Password() {
         e.preventDefault()
     }
 
+    const [isOpen, setIsOpen] = useState<boolean>(false)
+
     return (
         <div className="">
+
             <div className="flex flex-col gap-[15px] w-full">
                 <h4 className="text-text-main font-bold">
                     Пароль
                 </h4>
 
-                <p className="text-secondary text-text-muted">
-                    И завершающий штрих - безопасность. Придумайте пароль для входа в личный кабинет
-                </p>
+                {/*<p className="text-secondary text-text-muted">*/}
+                {/*    И завершающий штрих - безопасность. Придумайте пароль для входа в личный кабинет*/}
+                {/*</p>*/}
             </div>
+
+            <div className="flex w-full">
+                <MonkeyAnimation type={isOpen ? "peek" : "close"} />
+            </div>
+
             <form onSubmit={handleSubmit} ref={form} className="flex flex-col gap-[25px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
 
-                <Input label={"Пароль *"} placeholder={"*******"} name={"password"} type={"password"} error={errors?.password} />
+                <Input
+                    label={"Пароль *"}
+                    placeholder={"*******"}
+                    name={"password"}
+                    type_="password"
+                    isOpen={isOpen}
+                    setIsOpen={setIsOpen}
+                    error={errors?.password}
+                />
                 <Input label={"Подтвердите пароль *"} placeholder={"*******"} name={"password_repeat"} type={"password"} error={errors?.password_repeat} />
 
                 <ButtonLarge text={"Перейти в профиль"}>
