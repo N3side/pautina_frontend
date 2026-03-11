@@ -21,7 +21,7 @@ export default function ProfilePage() {
 
     useEffect(() => {
         if (url_base && user?.publication?.url_base) {
-            setIsMyProfile(user?.publication?.url_base?.toLowerCase() === url_base)
+            setIsMyProfile(user?.publication?.url_base?.toLowerCase() === url_base || user?.main?.username?.toLowerCase() === url_base)
         }
     }, [user, url_base]);
 
