@@ -12,8 +12,8 @@ export default function useSelectSource({ errors, localSourceId="", localSource=
     const {user} = useContext(UserContext)
 
     const { sources } = useSources();
-    const [selectedSource, setSelectedSource] = useState<string | null>(user?.source_id || localSourceId && safeLocalStorage.getItem(`${localSourceId}`) || "");
-    const [customText, setCustomText] = useState<string>(user?.source || localSource && safeLocalStorage.getItem(`${localSource}`) || "");
+    const [selectedSource, setSelectedSource] = useState<string | null>(user?.contacts?.source_id || localSourceId && safeLocalStorage.getItem(`${localSourceId}`) || "");
+    const [customText, setCustomText] = useState<string>(user?.contacts?.source || localSource && safeLocalStorage.getItem(`${localSource}`) || "");
 
     function handleCustomTextChange(e: ChangeEvent<HTMLInputElement>): void {
         const val = e.target.value;

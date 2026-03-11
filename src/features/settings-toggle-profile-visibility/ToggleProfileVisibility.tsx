@@ -6,25 +6,18 @@ import {UserContext} from "@/entities/user";
 
 export default function ToggleProfileVisibility() {
     const { user, setUser } = useContext(UserContext);
+    const [isNotVisible, setIsNotVisible] = useState<boolean>(!user?.publication?.is_uploaded);
 
-    // Используем состояние напрямую из user, чтобы не плодить лишние стейты,
-    // либо синхронизируем их строго.
-    const [isNotVisible, setIsNotVisible] = useState<boolean>(!user?.is_uploaded);
-
-    // Синхронизируем стейт с данными пользователя (если они прилетели позже)
     useEffect(() => {
-        setIsNotVisible(!!!user?.is_uploaded);
-    }, [user?.is_uploaded]);
+        setIsNotVisible(!!!user?.publication?.is_uploaded);
+    }, [user?.publication?.is_uploaded]);
 
     async function toggleVisibility() {
-        // Вычисляем новое состояние ПЕРЕД отправкой
         const newValue = !isNotVisible;
 
         // Оптимистичное обновление (опционально, для скорости интерфейса)
         setIsNotVisible(newValue);
-
         const formData = new FormData();
-
         formData.append("is_uploaded", String(!newValue));
 
         const response = await $fetch(`settings/visibility`, {
@@ -32,8 +25,8 @@ export default function ToggleProfileVisibility() {
             method: "PATCH"
         });
 
-        if (response?.json?.is_uploaded) {
-            setUser({ ...user, is_uploaded: response.json.is_uploaded });
+        if (response?.json?.publication?.is_uploaded) {
+            setUser(response?.json?.user);
         }
     }
 

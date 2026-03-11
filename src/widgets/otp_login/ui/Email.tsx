@@ -1,5 +1,3 @@
-import {Heading} from "@/shared/styles/typography/headings";
-import {PautinaText} from "@/shared/styles/typography/text";
 import {ChangeEvent, FormEvent, useContext, useEffect, useState} from "react";
 import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
@@ -22,7 +20,7 @@ export default function Email({email,  setEmail, next, setTimer, timer}) {
 
         setErrors(null)
 
-        if (user?.email) {
+        if (user?.contact?.email) {
             next()
             return
         }
@@ -66,7 +64,7 @@ export default function Email({email,  setEmail, next, setTimer, timer}) {
     }
 
     useEffect(() => {
-        if (user?.email) {
+        if (user?.contact?.email) {
             next()
         }
     }, [user]);

@@ -1,12 +1,14 @@
 import {ClassValue, clsx} from "clsx";
 import {twMerge} from "tailwind-merge";
-import {content, overlay} from "@/shared/ui/Modals/useModal";
 import CloseIcon from '@mui/icons-material/Close';
 import {AnimatePresence, motion} from "framer-motion";
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs))
 }
+
+export const overlay = `fixed inset-0 z-[1300] bg-black/40 backdrop-blur-[2px]`
+export const content = `overflow-y-auto h-full custom-scrollbar p-6 md:p-8`
 
 export default function Desktop({
         children,

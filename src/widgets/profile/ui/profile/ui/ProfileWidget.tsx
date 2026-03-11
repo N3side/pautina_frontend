@@ -4,7 +4,13 @@ import { Button } from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import LockIcon from '@mui/icons-material/Lock';
 import UploadPhoto from "@/widgets/profile/ui/profile/ui/UploadPhoto";
-import React from "react";
+import React, {useContext, useEffect} from "react";
+import {Modal} from "@/shared/ui/Modals/Modal";
+import {useModal} from "@/shared/lib/hooks/useModal";
+import SubscriptionOffer from "@/widgets/SubscriptionOffer/SubscriptionOffer";
+import BrandThin from "@/shared/ui/IconContainers/BrandThin";
+import LockOutlineIcon from '@mui/icons-material/LockOutline';
+import {UserContext} from "@/entities/user";
 
 const StatItem = ({ count, label }: { count: number | string, label: string }) => (
     <div className="flex flex-col items-center justify-center p-3 transition-colors rounded-xl cursor-default group">
@@ -19,9 +25,11 @@ const StatItem = ({ count, label }: { count: number | string, label: string }) =
 
 export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: boolean, trueUser: Record<string, any> }) {
 
-    const isPrivate = trueUser?.is_uploaded === false && !isMyProfile;
+    const isPrivate = trueUser?.publication?.is_uploaded == false && !isMyProfile;
 
-    const fullName = [trueUser?.surname, trueUser?.name, trueUser?.patronymic].filter(Boolean).join(" ");
+    const fullName = [trueUser?.main?.surname, trueUser?.main?.name, trueUser?.main?.patronymic].filter(Boolean).join("");
+
+    const {isOpen, close, open} = useModal()
 
     return (
         <section
@@ -43,7 +51,7 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
 
                     <div className="relative w-[140px] h-[140px] rounded-full p-1">
                         <img
-                            src={trueUser?.avatar}
+                            src={trueUser?.main?.avatar}
                             alt="avatar"
                             className="!w-full !h-full rounded-full object-cover"
                             referrerPolicy="no-referrer"
@@ -58,9 +66,26 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
                 </div>
 
                 <div className="flex flex-col items-center text-center space-y-1 mb-6">
-                    <h5 className="text-[var(--color-text-main)] font-extrabold tracking-tight">
-                        {trueUser?.username ? `@${trueUser.username}` : "Username"}
-                    </h5>
+
+                    <div className="flex gap-3 items-center">
+                        <h5 className="text-[var(--color-text-main)] font-extrabold tracking-tight">
+                            {trueUser?.main?.username ? `@${trueUser.main?.username}` : "Username"}
+                        </h5>
+                        {isMyProfile && trueUser?.access?.subscription?.name !== "premium" && (
+                            <BrandThin onClick={open}>
+                                <LockOutlineIcon className="text-text-brand" style={{fontSize: "20px"}} />
+                            </BrandThin>
+                        )}
+                    </div>
+
+
+                    <Modal
+                        isOpen={isOpen}
+                        close={close}
+                        modalClassName="max-w-[700px]"
+                    >
+                        <SubscriptionOffer />
+                    </Modal>
 
                     <p className="text-secondary font-medium text-[var(--color-text-muted)] line-clamp-2 px-2">
                         {fullName || "Без имени"}
@@ -93,8 +118,8 @@ export default function ProfileWidget({ isMyProfile, trueUser }: { isMyProfile: 
 
                         {/* Stats Footer */}
                         <div className="w-full grid grid-cols-2 gap-px rounded-2xl overflow-hidden ">
-                            <StatItem count={trueUser?.documents_count || 0} label="Документов" />
-                            <StatItem count={trueUser?.projects_count || 0} label="Проектов" />
+                            <StatItem count={trueUser?.main?.documents_count || 0} label="Документов" />
+                            <StatItem count={trueUser?.main?.projects_count || 0} label="Проектов" />
                         </div>
                     </>
                 ) : (

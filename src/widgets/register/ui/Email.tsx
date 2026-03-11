@@ -21,7 +21,7 @@ export default function Email({name, email, setEmail, next, setTimer, position})
 
         setErrors(null)
 
-        if (user?.email) {
+        if (user?.contact?.email) {
             next()
             return
         }

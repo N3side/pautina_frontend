@@ -7,7 +7,11 @@ export async function recognizeDocument({document_id, setIsLoading, setDocumentR
     const response = await $fetch(`documents/${document_id}/recognize`)
 
     const document_ = response?.json?.document
-    setDocumentRecognized(document_)
+
+    if (document_) {
+        setDocumentRecognized(document_)
+    }
+
 
     setIsLoading(false)
 }

@@ -27,7 +27,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
     const {user, setUser} = useContext(UserContext)
 
     const {input, city, city_id} = useCitySelect({
-        default_city: user?.translated_city || user?.city,
+        default_city: user?.contacts?.translated_city || user?.contacts?.city,
         default_city_id: user?.city_id,
         city_local: "city",
         city_id_local: "city_id"
@@ -61,7 +61,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
 
         for (const [key, value] of formData.entries()) {
 
-            if (value !== String(user?.[key] ?? '')) {
+            if (value !== String((user?.main?.[key] ?? '') || (user?.contact?.[key] ?? "") || (user?.access?.[key] ?? ""))) {
                 updates.append(key, value);
                 changed = true
             }
@@ -105,7 +105,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
             <Input
                 name="username"
                 label="Юзернейм в системе"
-                defaultValue={user?.username}
+                defaultValue={user?.main?.username}
                 error={errors?.username}
                 isUsername={true}
                 onInput={autoReplace}
@@ -114,21 +114,21 @@ export default function EditProfileForm({enabled=true, close}: Props) {
             <Input
                 name="name"
                 label="Имя"
-                defaultValue={user?.name}
+                defaultValue={user?.main?.name}
                 error={errors?.name}
             />
 
             <Input
                 name="surname"
                 label="Фамилия"
-                defaultValue={user?.surname}
+                defaultValue={user?.main?.surname}
                 error={errors?.surname}
             />
 
             <Input
                 name="patronymic"
                 label="Отчество"
-                defaultValue={user?.patronymic}
+                defaultValue={user?.main?.patronymic}
                 error={errors?.patronymic}
             />
 
@@ -136,14 +136,14 @@ export default function EditProfileForm({enabled=true, close}: Props) {
                 name="phone"
                 label="Номер телефона"
                 mask="+7 (000) 000-00-00"
-                defaultValue={user?.phone}
+                defaultValue={user?.contacts?.phone}
                 error={errors?.phone}
             />
 
             <Input
                 name="tg"
                 label="Телеграм юзернейм"
-                defaultValue={user?.tg}
+                defaultValue={user?.contacts?.tg}
                 error={errors?.tg}
                 isUsername={true}
                 onInput={autoReplace}
@@ -152,7 +152,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
             <Input
                 name="max"
                 label="Макс юзернейм"
-                defaultValue={user?.max}
+                defaultValue={user?.contacts?.max}
                 error={errors?.max}
                 isUsername={true}
                 onInput={autoReplace}
@@ -164,7 +164,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
             <Input
                 name="bio"
                 label="О себе"
-                defaultValue={user?.bio}
+                defaultValue={user?.main?.bio}
                 error={errors?.bio}
             />
 

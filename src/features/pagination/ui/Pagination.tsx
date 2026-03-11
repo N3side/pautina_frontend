@@ -3,7 +3,6 @@
 import React from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import MoreHorizIcon from '@mui/icons-material/MoreHoriz';
 import {Button} from "@mui/material";
 
 

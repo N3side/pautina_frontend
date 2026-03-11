@@ -26,11 +26,11 @@ export default function Sidebar() {
                         icon={<SecurityIcon />}
                         label="Безопасность"
                     />
-                    <NavItem
-                        icon={<NotificationsIcon  />}
-                        label="Уведомления"
-                        badge={2}
-                    />
+                    {/*<NavItem*/}
+                    {/*    icon={<NotificationsIcon  />}*/}
+                    {/*    label="Уведомления"*/}
+                    {/*    badge={2}*/}
+                    {/*/>*/}
                 </nav>
             </div>
         </aside>

@@ -84,6 +84,26 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                                 </li>
                             )
                         })}
+                        {
+                            user?.access?.role === "admin" &&
+                            <Link href="/admin" onClick={closeMenu} className="block w-full">
+								<p
+									className={`
+                                        text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold text-[15px]
+                                        text-text-muted group-hover:text-text-main
+                                    `}
+								>
+									Админ-панель
+								</p>
+
+                                {/* Индикатор активной ссылки (точка снизу на десктопе) */}
+								<span className={`
+                                    hidden lg:block absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand transition-all duration-300
+                                    "opacity-100 scale-100" : "opacity-0 scale-0 group-hover:opacity-50 group-hover:scale-75"}
+                                `}></span>
+							</Link>
+                        }
+
                     </ul>
                 </nav>
 

@@ -59,7 +59,7 @@ export default function Password() {
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
 
-        redirect(userLink(user?.public_url))
+        redirect(userLink(user?.main?.public_url))
 
         e.preventDefault()
     }

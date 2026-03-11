@@ -25,7 +25,7 @@ export default function CustomDropDown() {
                                 <div className="w-full h-full rounded-full overflow-hidden relative">
                                     <img
                                         className="w-full h-full object-cover transition-opacity group-hover:opacity-90"
-                                        src={user?.avatar}
+                                        src={user?.main?.avatar}
                                         alt="avatar"
                                     />
                                 </div>
@@ -36,15 +36,15 @@ export default function CustomDropDown() {
                             <div className="w-[280px] rounded-2xl overflow-hidden font-sans glass-effect">
 
                                 <div className="p-4 flex gap-3 items-center">
-                                    <img src={user?.avatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover shrink-0 border border-border-default" />
+                                    <img src={user?.main?.avatar} alt="Avatar" className="w-12 h-12 rounded-full object-cover shrink-0 border border-border-default" />
                                     <div className="flex flex-col min-w-0">
-                                        <p className="text-default text-text-main font-bold truncate">{user?.name}</p>
-                                        {user?.username && <p className="text-small text-text-muted truncate">@{user?.username}</p>}
+                                        <p className="text-default text-text-main font-bold truncate">{user?.main?.name}</p>
+                                        {user?.main?.username && <p className="text-small text-text-muted truncate">@{user?.main?.username}</p>}
                                     </div>
                                 </div>
 
                                 <div className="px-4 pb-3">
-                                    <Link href={userLink(user?.public_url)} className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
+                                    <Link href={userLink(user?.main?.public_url)} className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
                                         Перейти в профиль
                                     </Link>
                                 </div>

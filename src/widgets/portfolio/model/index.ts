@@ -1,9 +1,4 @@
-export interface CategoriesProps {
-    text?: string
-    count?: string
-}
-
-const categories: CategoriesProps[] = [
+const categories = [
     {
         text: "Все",
         count: "5"

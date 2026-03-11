@@ -4,8 +4,8 @@ import Role from "@/shared/assets/images/vector/activity/Role"
 import Phone from "@/shared/assets/images/vector/contacts/Phone"
 import Tg from "@/shared/assets/images/vector/contacts/Tg"
 import Link from "@/shared/assets/images/vector/contacts/Link"
-import { ComponentType } from "react"
-import {userLink, userLinkWithoutProtocol} from "@/shared/lib/userLink";
+import {ComponentType} from "react"
+import {userLinkWithoutProtocol} from "@/shared/lib/userLink";
 
 export interface Elems {
     Icon: ComponentType;
@@ -18,17 +18,17 @@ export const getActivityElems = (data: any): Elems[] => [
     {
         Icon: Organization,
         k: "Работаю в",
-        value: data?.organization || "Не указано"
+        value: data?.contacts?.organization || "Не указано"
     },
     {
         Icon: Role,
         k: "Роль в организации",
-        value: data?.role || "Не указано"
+        value: data?.contacts?.post || "Не указано"
     },
     {
         Icon: Department,
         k: "Обучаюсь в",
-        value: data?.department || "Не указано"
+        value: data?.contacts?.department || "Не указано"
     },
 ]
 
@@ -37,16 +37,16 @@ export const getContactElems = (data: any): Elems[] => [
     {
         Icon: Phone,
         k: "Телефон",
-        value: data?.phone || "не указано"
+        value: data?.contacts?.phone || "не указано"
     },
     {
         Icon: Tg,
         k: "Telegram",
-        value: data?.tg || "не указано"
+        value: data?.contacts?.tg || "не указано"
     },
     {
         Icon: Link,
         k: "Ссылка на профиль",
-        value: userLinkWithoutProtocol(data?.public_url)
+        value: userLinkWithoutProtocol(data?.publication?.url_base)
     },
 ]

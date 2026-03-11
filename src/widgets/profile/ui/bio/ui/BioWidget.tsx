@@ -1,7 +1,6 @@
 "use client"
 
-import React from 'react';
-import {Button} from "@mui/material";
+import React, {useContext} from 'react';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import EditIcon from '@mui/icons-material/Edit';
 import LockIcon from '@mui/icons-material/Lock';
@@ -9,8 +8,10 @@ import HttpsIcon from '@mui/icons-material/Https';
 import {Elem} from "@/widgets/profile/ui/bio/ui/Elem";
 import {Elems, getActivityElems, getContactElems} from "@/widgets/profile/ui/bio/model";
 import EditProfileForm from "@/features/edit-profile/ui/EditProfileForm";
-import {useModal} from "@/shared/ui/Modals/useModal";
+import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
+import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
+import toast from "react-hot-toast";
 
 const SectionTitle = ({ title }: {title: string }) => (
     <header className="flex items-center gap-3 mb-4">
@@ -23,12 +24,53 @@ const SectionTitle = ({ title }: {title: string }) => (
 
 export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: boolean, trueUser: Record<string, any> }) {
 
-    const isPrivate = trueUser?.is_uploaded === false && !isMyProfile;
+    const isPrivate = trueUser?.publication?.is_uploaded == false && !isMyProfile;
 
     const activityList = getActivityElems(trueUser);
     const contactList = getContactElems(trueUser);
 
     const {close, isOpen, open} = useModal()
+
+    const copyToClipboard = async ({text, message}: {text: string, message?: string}) => {
+        // Пробуем современный API
+        if (navigator?.clipboard?.writeText) {
+            try {
+                await navigator.clipboard.writeText(text);
+                message && toast.success(message);
+                return;
+            } catch (err) {
+                console.warn('Clipboard API failed, trying fallback', err);
+            }
+        }
+
+        // Fallback для старых браузеров и не-https
+        try {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+
+            // Делаем элемент невидимым
+            textArea.style.position = "fixed";
+            textArea.style.left = "-999999px";
+            textArea.style.top = "-999999px";
+            document.body.appendChild(textArea);
+
+            textArea.focus();
+            textArea.select();
+
+            // Пробуем execCommand (старый метод)
+            const successful = document.execCommand('copy');
+            document.body.removeChild(textArea);
+
+            if (successful) {
+                message && toast.success(message);
+            } else {
+                toast.error("Не удалось скопировать. Попробуйте выделить текст вручную");
+            }
+        } catch (err) {
+            console.error('Fallback copy failed', err);
+            toast.error("Не удалось скопировать ссылку");
+        }
+    };
 
     return (
         <section className="w-full h-full flex flex-col glass-effect border-border-glass rounded-[24px] transition-all duration-300">
@@ -56,19 +98,9 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                     </div>
 
                     {isMyProfile && (
-                        <Button
-                            className="
-                               !min-w-[44px] !w-11 !h-11 !rounded-xl
-                               !bg-surface hover:!bg-brand/10
-                               !border !border-border-default hover:!border-brand/30
-                               !text-text-muted hover:!text-brand
-                               !transition-all !duration-300
-                            "
-                            onClick={open}
-                        >
+                        <IconWrapper onClick={open}>
                             <EditIcon fontSize="small" />
-                        </Button>
-
+                        </IconWrapper>
                     )}
 
                 </header>
@@ -77,14 +109,14 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
 
                     {/* --- BIO BLOCK --- */}
                     {/* Делаем его более интегрированным, без жестких рамок */}
-                    <div className={`relative pl-4 border-l-4 ${trueUser?.bio ? 'border-brand' : 'border-border-default'} py-1 transition-colors duration-300`}>
+                    <div className={`relative pl-4 border-l-4 ${trueUser?.main?.bio ? 'border-brand' : 'border-border-default'} py-1 transition-colors duration-300`}>
                         <p className="text-label mb-2 opacity-80">
                             Обо мне
                         </p>
 
                         <p className="text-secondary text-text-main/90 leading-relaxed whitespace-pre-line font-medium">
-                            {trueUser?.bio ? (
-                                trueUser.bio
+                            {trueUser?.main?.bio ? (
+                                trueUser?.main?.bio
                             ) : (
                                 <span className="text-text-muted font-normal italic opacity-70">
                                     Пользователь предпочел не рассказывать о себе...
@@ -111,11 +143,12 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
 
                                 <ul className="flex flex-col gap-6">
                                     {activityList?.length > 0 ? activityList.map((elem: Elems, i: number) => (
-                                        <li
+                                        <Elem
+                                            Icon={elem?.Icon}
+                                            k={elem?.k}
+                                            value={elem?.value}
                                             key={i}
-                                        >
-                                            <Elem Icon={elem?.Icon} k={elem?.k} value={elem?.value} />
-                                        </li>
+                                        />
                                     )) : (
                                         <span className="text-small text-text-muted italic opacity-60 ml-2">Скрыто или не указано</span>
                                     )}
@@ -131,7 +164,12 @@ export default function BioWidget({ isMyProfile, trueUser }: { isMyProfile: bool
                                         <li
                                             key={i}
                                         >
-                                            <Elem Icon={elem?.Icon} k={elem?.k} value={elem?.value} />
+                                            <Elem
+                                                Icon={elem?.Icon}
+                                                k={elem?.k}
+                                                value={elem?.value}
+                                                onCopy={() => copyToClipboard({text: elem.value || "скопировать", message: "Контакт успешно скопирован"})}
+                                            />
                                         </li>
                                     )) : (
                                         <span className="text-small text-text-muted italic opacity-60 ml-2">Скрыто или не указано</span>

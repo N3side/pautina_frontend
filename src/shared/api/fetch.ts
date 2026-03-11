@@ -1,5 +1,4 @@
 import toast from "react-hot-toast"
-import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 export interface FetchResult {
@@ -50,7 +49,11 @@ export async function $fetch(
         else toast.success(message)
     }
 
-    console.log({response,json})
+    if (json && json?.offer_subscription) {
+        if (typeof window !== 'undefined') {
+            window.dispatchEvent(new CustomEvent("subscription-required"))
+        }
+    }
     
     return {response,json}
 }

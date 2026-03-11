@@ -1,6 +1,6 @@
 "use client"
 
-import {useEffect, useMemo, useState} from "react"
+import {useEffect, useState} from "react"
 import Name from "@/widgets/register/ui/Name"
 import Email from "@/widgets/register/ui/Email"
 import OTP from "@/widgets/register/ui/OTP"
@@ -11,15 +11,11 @@ import Password from "@/widgets/register/ui/Password"
 import Card1 from "@/shared/ui/Sections/Card1";
 import {Button} from "@mui/material";
 import {textSizes} from "@/shared/styles/typography/text";
-import {AnimatePresence, motion} from "framer-motion"
-import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
-
-import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 import Stepper from "@/shared/ui/Stepper/Stepper";
 import SkipButton from "@/shared/ui/Buttons/SkipButton";
 import ProgressBar from "@/shared/ui/ProgressBar/ProgressBar";
-import UseStepper from "@/shared/lib/hooks/useStepper/UseStepper";
+import UseStepper from "@/shared/lib/hooks/UseStepper";
 
 export default function RegisterWidget() {
     const [name, setName] = useState<string | null>(null)

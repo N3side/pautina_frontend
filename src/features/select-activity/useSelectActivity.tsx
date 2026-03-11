@@ -20,12 +20,12 @@ export function UseSelectActivity({
 
     const formRef = useRef<HTMLFormElement>(null);
 
-    const [selectedStatus, setSelectedStatus] = useState<string | null>(user && user?.status || localSelectedStatus && safeLocalStorage.getItem(`${localSelectedStatus}`) || "");
-    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(user && user?.status || localSchoolStudyStatus && safeLocalStorage.getItem(`${localSchoolStudyStatus}`) || "");
-    const [department, setDepartment] = useState<string>(user && user?.department || localDepartment && safeLocalStorage.getItem(`${localDepartment}`) || "")
-    const [course, setCourse] = useState<string>(user && user?.course || localCourse && safeLocalStorage.getItem(`${localCourse}`) || "")
-    const [organization, setOrganization] = useState<string>(user && user?.organization || localOrganization && safeLocalStorage.getItem(`${localOrganization}`) || "")
-    const [post, setPost] = useState<string>(user && user?.post || localPost && safeLocalStorage.getItem(`${localPost}`) || "")
+    const [selectedStatus, setSelectedStatus] = useState<string | null>(user && user?.contacts?.status || localSelectedStatus && safeLocalStorage.getItem(`${localSelectedStatus}`) || "");
+    const [schoolStudyStatus, setSchoolStudyStatus] = useState<string | null>(user && user?.contacts?.status || localSchoolStudyStatus && safeLocalStorage.getItem(`${localSchoolStudyStatus}`) || "");
+    const [department, setDepartment] = useState<string>(user && user?.contacts?.department || localDepartment && safeLocalStorage.getItem(`${localDepartment}`) || "")
+    const [course, setCourse] = useState<string>(user && user?.contacts?.course || localCourse && safeLocalStorage.getItem(`${localCourse}`) || "")
+    const [organization, setOrganization] = useState<string>(user && user?.contacts?.organization || localOrganization && safeLocalStorage.getItem(`${localOrganization}`) || "")
+    const [post, setPost] = useState<string>(user && user?.contacts?.post || localPost && safeLocalStorage.getItem(`${localPost}`) || "")
 
     useEffect(() => {
         safeLocalStorage.setItem(localSelectedStatus, `${selectedStatus}`)
@@ -34,8 +34,6 @@ export function UseSelectActivity({
     useEffect(() => {
         safeLocalStorage.setItem(localSchoolStudyStatus, `${schoolStudyStatus}`)
     }, [schoolStudyStatus]);
-
-    // ---
 
     useEffect(() => {
         safeLocalStorage.setItem(localDepartment, department)

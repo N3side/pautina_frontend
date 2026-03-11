@@ -1,9 +1,10 @@
-import type { Metadata } from "next";
+import type {Metadata} from "next";
 import "./globals.css";
 import Providers from "@/shared/lib/providers/Providers"
 
 import {Toaster} from "react-hot-toast";
 import ClientOnly from "@/shared/ui/ClientOnly/ClientOnly";
+import SubscriptionResponseListener from "@/features/subscription-response-listener/subscriptionResponseListener";
 
 export const metadata: Metadata = {
     title: "Паутина",
@@ -22,7 +23,6 @@ export default function RootLayout({
     //     const intercept = minValue - slope * minScreenWidth
     //     console.log(`clamp(${minValue}px, ${vw.toFixed(3)}vw + ${intercept.toFixed(3)}px, ${maxValue}px);`)
     // }
-
     // clampGenerator(320, 1920, 30, 40)
 
     return (
@@ -34,6 +34,7 @@ export default function RootLayout({
                 <ClientOnly>
                     <Toaster />
                 </ClientOnly>
+                <SubscriptionResponseListener />
             </body>
         </html>
     );

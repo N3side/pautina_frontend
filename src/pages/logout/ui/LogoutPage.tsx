@@ -5,7 +5,6 @@ import {useContext, useEffect} from "react";
 import {UserContext} from "@/entities/user";
 import {useRouter} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
-import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 import {homeLink} from "@/shared/lib/userLink";

@@ -2,7 +2,7 @@
 
 import Book from "@/shared/assets/images/vector/Book";
 import {Button} from "@mui/material";
-import {cards, categories, CategoriesProps} from "@/widgets/portfolio/model";
+import {cards} from "@/widgets/portfolio/model";
 import Card from "@/widgets/portfolio/ui/Card";
 import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollXWrapper";
 import {DocumentWidget} from "@/widgets/portfolio/ui/DocumentWidget";
@@ -12,7 +12,9 @@ import {$fetch} from "@/shared/api/fetch";
 import {useEffect, useState} from "react";
 import Pagination from "@/features/pagination/ui/Pagination";
 import {Modal} from "@/shared/ui/Modals/Modal";
-import {useModal} from "@/shared/ui/Modals/useModal";
+import {useModal} from "@/shared/lib/hooks/useModal";
+import Category from "@/shared/ui/Category/Category"
+import usePaginate from "@/shared/lib/hooks/usePaginate"
 
 interface Props {
     isMyProfile: boolean,
@@ -23,31 +25,40 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
 
     const [documents, setDocuments] = useState<Record<string, any>[] | null>(null)
     const [currentDocument, setCurrentDocument] = useState<Record<string, any> | null>(null)
-    const [page, setPage] = useState<number>(0)
-    const [lastPage, setLastPage] = useState<number>(0)
+
+    const {page, setPage, lastPage, setLastPage} = usePaginate()
 
     const {close: closeDocument, open: openDocument, isOpen: isOpenDocument} = useModal()
     const {close: closeCreateDocument, open: openCreateDocument, isOpen: isOpenCreateDocument} = useModal()
 
+    const [categories, setCategories] = useState<Record<string, any>[] | null>(null)
+    const [filters, setFilters] = useState({})
 
     async function getDocuments() {
-
-        const response = await $fetch(`documents/user/${trueUser?.id}?page=${page}`)
+        const params = new URLSearchParams(filters).toString()
+        const response = await $fetch(`documents/user/${trueUser?.main?.id}?page=${page}&${params}`)
         const documents_ = response?.json?.documents
         const page_ = response?.json?.current_page
         const lastPage_ = response?.json?.last_page
-
+        const categories_ = response?.json?.categories
+        setCategories(categories_)
         setDocuments(documents_)
         setPage(page_)
         setLastPage(lastPage_)
     }
 
     useEffect(() => {
+        console.log(trueUser?.main?.id)
         if (trueUser) {
             getDocuments()
         }
+    }, [trueUser]);
 
-    }, [trueUser, page]);
+    useEffect(() => {
+        if (trueUser) {
+            getDocuments()
+        }
+    }, [filters]);
 
     return (
         <section className="mt-[100px]">
@@ -88,43 +99,24 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
 
             <main className="flex flex-col gap-8">
 
-                {/* --- CATEGORIES (Chips) --- */}
-                {/* Добавил -mx-4 px-4, чтобы на мобилках скролл уходил за край экрана красиво */}
-                <div className="-mx-4 px-4 md:mx-0 md:px-0">
+
+                <div className="px-4 md:mx-0 md:px-0">
                     <WheelXScrollProvider>
                         <ul className="flex items-center gap-3 py-2">
-                            {categories?.map((category: CategoriesProps, i) => (
-                                <li
+                            {categories && categories?.length > 0 && <Category category={{name: "Все"}} onClick={() => setFilters(prev => ({...prev, name: "all"}))} />}
+                            {categories?.map((category, i) => (
+                                <Category
                                     key={i}
-                                    className="
-                                        group flex items-center gap-2.5
-                                        py-2 px-4 rounded-full
-                                        glass-effect border border-border-default
-                                        cursor-pointer select-none
-                                        transition-all duration-300
-                                        hover:border-brand/50 hover:shadow-md hover:-translate-y-0.5
-                                        active:scale-95
-                                    "
-                                >
-                                    <p
-                                        className="text-small font-medium text-text-main group-hover:text-brand transition-colors whitespace-nowrap"
-                                    >
-                                        {category.text}
-                                    </p>
-
-                                    {/* Badge с количеством */}
-                                    <div className="flex items-center justify-center px-2 py-0.5 rounded-full group-hover:bg-brand/10 transition-colors">
-                                        <p
-                                            className="text-tiny font-bold text-text-muted group-hover:text-brand transition-colors"
-                                        >
-                                            {category.count}
-                                        </p>
-                                    </div>
-                                </li>
+                                    category={category}
+                                    onClick={() => {
+                                        setFilters(prev => ({ ...prev, name: category?.name }))
+                                    }}
+                                />
                             ))}
                         </ul>
                     </WheelXScrollProvider>
                 </div>
+
 
                 {/* --- CARDS GRID --- */}
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">

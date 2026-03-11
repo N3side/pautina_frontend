@@ -15,6 +15,7 @@ interface Props {
 export default function Providers({ children }: Props) {
     return (
         <WindowProvider>
+
             <BodyBlockProvider>
                 <UserProvider>
                     <ThemeProvider>
@@ -22,7 +23,9 @@ export default function Providers({ children }: Props) {
                     </ThemeProvider>
                 </UserProvider>
             </BodyBlockProvider>
+
             <Toaster />
+
         </WindowProvider>
     )
 }

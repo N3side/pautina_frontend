@@ -1,6 +1,6 @@
 import {Button} from "@mui/material";
 import {ChangeEvent, useCallback, useContext, useRef, useState} from "react";
-import {useModal} from "@/shared/ui/Modals/useModal";
+import {useModal} from "@/shared/lib/hooks/useModal";
 import AddAPhotoIcon from "@mui/icons-material/AddAPhoto";
 import {$fetch} from "@/shared/api/fetch";
 import {getCroppedImg} from "@/shared/lib/utils/cropUtil";

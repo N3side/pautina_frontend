@@ -1,5 +1,5 @@
 import Tag from "@/shared/ui/Buttons/Tag";
-import {useCallback, useMemo, useState} from "react";
+import {useCallback, useState} from "react";
 import {v4} from 'uuid';
 import chroma from "chroma-js";
 

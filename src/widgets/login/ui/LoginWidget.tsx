@@ -56,7 +56,7 @@ export default function LoginWidget() {
         DeleteAuthorizationInfo()
         safeCookieStorage.setItem("token", token_)
         setToken(token_)
-        router.push(userLink(user?.public_url))
+        router.push(userLink(user?.main?.public_url))
     }
 
     const [isOpen, setIsOpen] = useState<boolean>(false)

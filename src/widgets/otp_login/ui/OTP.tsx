@@ -42,7 +42,7 @@ export default function OTP({email, next, prev, timer, setTimer}) {
             setToken(token)
             DeleteAuthorizationInfo()
             DeleteRegistrationInfo()
-            router.push(userLink(user?.public_url))
+            router.push(userLink(user?.main?.public_url))
         }
 
         const timer_ = response?.json?.timer
@@ -62,7 +62,7 @@ export default function OTP({email, next, prev, timer, setTimer}) {
 
     useEffect(() => {
 
-        if (Boolean(user?.confirmed_email)) {
+        if (Boolean(user?.access?.confirmed_email)) {
             next()
         }
     }, [user]);

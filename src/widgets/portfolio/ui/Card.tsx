@@ -64,7 +64,7 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 opacity-70">
                         <CalendarTodayIcon className="w-4 h-4 text-brand" sx={{fontSize: "18px"}} />
-                        <span className="text-[12px] font-medium text-text-muted">{document?.date}</span>
+                        <span className="text-[12px] font-medium text-text-muted">{document?.date || "Дата не указана"}</span>
                     </div>
                     <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand/10 text-brand font-bold uppercase tracking-tighter">
                         {document?.type}
@@ -92,8 +92,8 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                 )}
 
                 {/* Категории (Теги) - Горизонтальный скролл если их много */}
-                <WheelXScrollProvider>
-                    {document?.categories?.length > 0 && (
+                {document?.categories?.length > 0 && (
+                    <WheelXScrollProvider>
                         <div className="flex gap-1.5">
                             {document?.categories.map((cat: Record<string, any>) => (
                                 <Tag
@@ -103,8 +103,8 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                                 />
                             ))}
                         </div>
-                    )}
-                </WheelXScrollProvider>
+                    </WheelXScrollProvider>
+                )}
 
                 {/* Футер */}
 

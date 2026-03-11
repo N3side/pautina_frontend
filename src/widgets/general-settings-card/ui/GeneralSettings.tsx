@@ -5,7 +5,7 @@ import LinkSetting from "@/shared/ui/Sections/LinkSetting";
 import EditProfileForm from "@/features/edit-profile/ui/EditProfileForm";
 import VerifyUser from "@/features/verify-user/ui/VerifyUser";
 import ToggleProfileVisibility from "@/features/settings-toggle-profile-visibility/ToggleProfileVisibility";
-import {useModal} from "@/shared/ui/Modals/useModal";
+import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
 import NewPassword from "@/features/verify-user/ui/components/NewPassword";
 

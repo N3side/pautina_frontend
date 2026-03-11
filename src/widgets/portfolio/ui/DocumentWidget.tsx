@@ -5,19 +5,25 @@ import {Button} from "@mui/material";
 import DownloadIcon from "@mui/icons-material/Download";
 import ShareIcon from '@mui/icons-material/Share';
 import EditIcon from '@mui/icons-material/Edit';
-import useTags from "@/entities/tags/ui/useTags";
 import Status from "@/shared/ui/Status/Status";
 import {download} from "@/shared/lib/utils/download";
 import DeleteIcon from '@mui/icons-material/Delete';
 import dynamic from 'next/dynamic';
+import {deleteDocument} from "@/entities/document/api/delete";
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import Tag from "@/shared/ui/Buttons/Tag";
+import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOperation";
+import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
+import {Modal} from "@/shared/ui/Modals/Modal";
+import {useModal} from "@/shared/lib/hooks/useModal";
+import {useCallback} from "react";
+import UpdateDocument from "@/features/create-document/ui/UpdateDocument";
+import ActionButton from "@/shared/ui/Buttons/ActionButton";
+
 const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
     ssr: false,
     loading: () => <div></div>
 });
-import {deleteDocument} from "@/entities/document/api/delete";
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import Tag from "@/shared/ui/Buttons/Tag";
-
 
 interface Props {
     document: Record<string, any> | null
@@ -30,6 +36,21 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
 
     const file_extension = document?.file_url.split(".").pop()
 
+    const handleDeleteDocument = useCallback(async () => {
+        if (!document?.id) return;
+        const saved = await deleteDocument({document_id: document?.id, callBack: close});
+        setDocuments(saved);
+        close();
+    }, [document, close, setDocuments]);
+
+    const {close: closeModalConfirmOperation, open: openModalConfirmOperation, isOpen: isOpenModalConfirmOperation} = useModal()
+    const {confirm, decline} = UseConfirmOperation({
+        close:closeModalConfirmOperation,
+        callback: handleDeleteDocument
+    })
+
+    const {close: closeModalUpdateDocument, open: openModalUpdateDocument, isOpen: isOpenModalUpdateDocument} = useModal()
+
     return (
         <div className="w-full flex flex-col">
 
@@ -37,13 +58,12 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
                 <Status variant={document?.is_public ? "public" : "private"} className="absolute top-[40px] left-[40px]"/>
             )}
 
-
             {file_extension === "pdf" ?
                 <PDFFirstPage file={document?.file_url} />
                 :
                 <img
                     src={document?.file_url}
-                    className="w-full h-full object-cover max-h-[500px] transition-transform duration-700 group-hover:scale-110"
+                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
                 />}
 
             {/* Правая часть: Информация */}
@@ -69,7 +89,7 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
                             <Tag
                                 key={cat.id || cat.tag}
                                 tag={cat.name}
-                                color={cat.color || '#6366f1'}
+                                color={cat.color}
                             />
                         ))}
                     </div>
@@ -127,50 +147,56 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
                     <div className="flex gap-[10px] min-w-max">
 
                         {isMyProfile && (
-                            <Button
-                                className="!rounded-xl !px-6 !py-2.5 !normal-case !text-text-muted !border-border-default hover:!bg-input transition-all"
-                                variant="outlined"
-                                startIcon={<EditIcon className="text-text-muted"/>}
-                            >
-                                <p className="text-small font-semibold">Редактировать</p>
-                            </Button>
+
+                            <>
+                                <ActionButton text="Редактировать" Icon={EditIcon} onClick={openModalUpdateDocument} />
+                                <Modal
+                                    isOpen={isOpenModalUpdateDocument}
+                                    close={closeModalUpdateDocument}
+                                >
+                                    <UpdateDocument
+                                        document_values={document}
+                                        setDocuments={setDocuments}
+                                        document_id={document?.id}
+                                        close={closeModalUpdateDocument}
+                                    />
+                                </Modal>
+                            </>
+
                         )}
 
+                        {isMyProfile && (
+                            <>
+                                <ActionButton text="Удалить" Icon={DeleteIcon} onClick={openModalConfirmOperation} />
 
-                        <div className="flex items-center gap-3 ml-auto">
-                            <Button
-                                className="!min-w-0 !h-full !rounded-xl !border-border-default !text-text-muted transition-all"
-                                variant="outlined"
-                            >
-                                <ShareIcon />
-                            </Button>
-
-                            <Button
-                                onClick={() => download(document?.file_url)}
-                                className="!rounded-xl !px-8 !h-full !normal-case !bg-brand hover:!bg-brand-hover !text-white transition-all"
-                                variant="contained"
-                                startIcon={<DownloadIcon className="w-5 h-5 text-text-white"/>}
-                            >
-                                <p className="text-small font-bold">Скачать</p>
-                            </Button>
-
-                            {isMyProfile && (
-                                <Button
-                                    className="!rounded-xl !px-8 !py-3 !normal-case !bg-[transparent] !border !border-[red]"
-                                    variant="contained"
-                                    startIcon={<DeleteIcon className="w-5 h-5 text-white !text-[red]"/>}
-                                    onClick={async () => {
-                                        const saved = await deleteDocument({document_id: document?.id, callBack: close})
-                                        setDocuments(saved)
-                                        close()
-                                    }}
+                                <Modal
+                                    isOpen={isOpenModalConfirmOperation}
+                                    close={closeModalConfirmOperation}
+                                    modalClassName="max-w-[500px] max-h-[350px]"
                                 >
-                                    <span className="text-small text-[red] font-bold">Удалить</span>
-                                </Button>
-                            )}
+                                    <ConfirmationForm confirm={confirm} decline={decline} />
+                                </Modal>
+
+                            </>
+                        )}
+
+                        {/*<Button*/}
+                        {/*    className="!min-w-0 !h-full !rounded-xl !border-border-default !text-text-muted transition-all"*/}
+                        {/*    variant="outlined"*/}
+                        {/*>*/}
+                        {/*    <ShareIcon />*/}
+                        {/*</Button>*/}
+
+                        <Button
+                            onClick={() => download(document?.file_url)}
+                            className="!rounded-xl !px-8 !h-full !normal-case !bg-brand hover:!bg-brand-hover !text-white transition-all"
+                            variant="contained"
+                            startIcon={<DownloadIcon className="w-5 h-5 text-text-white"/>}
+                        >
+                            <p className="text-small font-bold">Скачать</p>
+                        </Button>
 
 
-                        </div>
                     </div>
                 </WheelXScrollProvider>
 

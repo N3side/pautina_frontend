@@ -93,8 +93,3 @@ export default function PasswordForm({next, prev, timer, setTimer, skipNext}: Pr
         </form>
     )
 }
-
-
-
-
-

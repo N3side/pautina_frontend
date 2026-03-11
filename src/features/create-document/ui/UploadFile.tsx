@@ -2,6 +2,7 @@ import FileInput from "@/shared/ui/Inputs/FileInput";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {$fetch} from "@/shared/api/fetch";
 import {Dispatch, SetStateAction, useRef} from "react";
+import WarningProgressBar from "@/shared/ui/ProgressBar/WarningProgressBar";
 
 
 interface UploadFileProps {
@@ -46,6 +47,8 @@ export default function UploadFile({setDocuments, setDocumentId, next, close}: U
         <form className="flex flex-col gap-5 h-full" onSubmit={handleSubmit} ref={ref}>
 
             <h5 className="text-text-main font-bold">Прикрепите файл</h5>
+
+            {/*<WarningProgressBar />*/}
 
             <div className="flex-1 flex items-center">
                 <FileInput onChange={() => {}} name="file" className="h-full" />

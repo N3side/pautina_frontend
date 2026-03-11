@@ -15,43 +15,33 @@ export default function ProfilePage() {
     const {user} = useContext(UserContext)
 
     const params = useParams()
-    const public_url = params?.id
+    const url_base = params?.id
 
     const [isMyProfile, setIsMyProfile] = useState<boolean>(false)
 
     useEffect(() => {
-
-        if (public_url && user?.public_url) {
-            setIsMyProfile(user?.public_url?.toLowerCase() === public_url)
+        if (url_base && user?.publication?.url_base) {
+            setIsMyProfile(user?.publication?.url_base?.toLowerCase() === url_base)
         }
-
-    }, [user]);
+    }, [user, url_base]);
 
     const [trueUser, setTrueUser] = useState(user)
 
     useEffect(() => {
-
-        if (user?.id === trueUser?.id) {
+        if (user && user?.main?.id === trueUser?.main?.id) {
             setTrueUser(user)
         }
-
     }, [user]);
 
     useEffect(() => {
-
         async function getUser() {
-            const response = await $fetch(`user/${public_url}`)
-
+            const response = await $fetch(`user/${url_base}`)
             const user_ = response?.json?.user
-
             if (user_) {
                 setTrueUser(user_)
             }
-
         }
-
         !isMyProfile && getUser()
-
     }, [isMyProfile]);
 
     return (

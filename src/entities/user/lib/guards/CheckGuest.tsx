@@ -11,13 +11,13 @@ export function CheckGuest({ children }: { children: React.ReactNode }) {
     const router = useRouter()
 
     useEffect(() => {
-        if (user && user?.isGuest === false) {
+        if (user && user?.access?.isGuest === false) {
             toast.error("Вы уже зарегистрированы");
-            router.replace(userLink(user?.public_url));
+            router.replace(userLink(user?.main?.public_url));
         }
     }, [user, router]);
 
-    if (!user || user.isGuest === true) {
+    if (!user || user?.access?.isGuest === true) {
         return <>{children}</>;
     }
 

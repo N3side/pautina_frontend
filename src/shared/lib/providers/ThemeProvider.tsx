@@ -23,7 +23,7 @@ export const ThemeProvider = ({ children }: { children: React.ReactNode }) => {
             setTheme(savedTheme);
             document.documentElement.classList.add(savedTheme);
         } else {
-            document.documentElement.classList.add('light');
+            document.documentElement.classList.add('dark');
         }
     }, []);
 

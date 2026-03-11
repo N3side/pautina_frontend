@@ -3,7 +3,7 @@ import Stepper from "@/shared/ui/Stepper/Stepper";
 import PasswordForm from "@/features/verify-user/ui/components/PasswordForm";
 import CheckOtp from "@/features/verify-user/ui/components/CheckOTP";
 import {UserContext} from "@/entities/user";
-import UseStepper from "@/shared/lib/hooks/useStepper/UseStepper";
+import UseStepper from "@/shared/lib/hooks/UseStepper";
 import {IsVerifiedUser} from "@/features/verify-user/api/is-verified-user";
 
 interface Props {
@@ -34,7 +34,7 @@ export default function VerifyUser({additionalSteps}: Props) {
     }, [])
 
     const {user, setUser} = useContext(UserContext)
-    const [verified, setVerified] = useState<boolean>(responseVerified ? responseVerified : user?.is_verified)
+    const [verified, setVerified] = useState<boolean>(responseVerified ? responseVerified : user?.access?.is_verified)
 
     const [timer, setTimer] = useState(null)
     const {position, setPosition, handlers} = UseStepper({dictionary})
@@ -49,7 +49,7 @@ export default function VerifyUser({additionalSteps}: Props) {
             timer={timer}
             setTimer={setTimer}
             {...handlers}
-            skipNext={() => setPosition(position + 1)}
+            skipNext={() => setPosition(position + 2)}
         />,
         !verified && <CheckOtp
             key="check-otp"

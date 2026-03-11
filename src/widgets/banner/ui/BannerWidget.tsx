@@ -51,9 +51,9 @@ export default function BannerWidget() {
                               <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-green-main"></span>
                             </span>
                             <p
-                                className="text-tiny uppercase font-bold tracking-wider text-text-muted group-hover:text-text-main transition-colors"
+                                className="text-tiny  font-bold tracking-wider text-text-muted group-hover:text-text-main transition-colors"
                             >
-                                Официальная платформа
+                                ОФИЦИАЛЬНАЯ ПЛАТФОРМА
                             </p>
                         </div>
 
@@ -80,16 +80,11 @@ export default function BannerWidget() {
                         <p
                             className="text-large mt-6 text-text-muted max-w-[500px] leading-relaxed"
                         >
-                            Единая экосистема для хранения сертификатов, проектов и достижений.
-                            Специально для студентов <span></span>
-                            <span className="font-semibold text-text-main border-b border-brand/30 pb-0.5">
-                                ГАПОУ «МЦК-КТИТС»
-                            </span> <span></span>
-                            и не только
+                            Единая экосистема для хранения сертификатов, проектов и достижений
                         </p>
 
                         {/* Кнопка */}
-                        <ShadowWrapper className={`w-full sm:w-auto mt-10 ${rise}`}>
+                        <ShadowWrapper className={`w-full sm:w-auto mt-5 ${rise}`}>
                             <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl">
                                 <Link
                                     href={`${user ? "/register" : "/register"}`}
@@ -99,13 +94,6 @@ export default function BannerWidget() {
                                 </Link>
                             </ButtonLarge>
                         </ShadowWrapper>
-
-                        {/* Social Proof / Stats (Опционально, для красоты низа) */}
-                        <div className="mt-8 flex items-center gap-4 opacity-70">
-                            <p className="text-tiny text-text-muted">
-                                🚀 Уже более 1000 студентов с нами
-                            </p>
-                        </div>
                     </div>
 
                     {/* --- Правая часть: Изображение --- */}
@@ -116,7 +104,7 @@ export default function BannerWidget() {
                         <div className="relative rounded-[20px] overflow-hidden border border-white/20 shadow-2xl ring-1 ring-black/5 dark:ring-white/10">
                             <Image
                                 src={Hero}
-                                alt="Hero Platform Preview"
+                                alt="Hero Preview"
                                 className="w-full h-auto object-cover transform transition-transform duration-700 hover:scale-105"
                                 priority
                             />
@@ -126,15 +114,14 @@ export default function BannerWidget() {
                         </div>
 
                         {/* Плавающие элементы декора (Floating Cards) - для "вау" эффекта */}
-                        <div className={`absolute -bottom-6 -left-6 p-4 rounded-xl glass-effect hidden sm:block animate-bounce`} style={{ animationDuration: '3s' }}>
-                            <div className="flex items-center gap-3">
-                                <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-2xl">🏆</div>
-                                <div>
-                                    <p className="text-small font-bold text-text-main">Топ 10</p>
-                                    <p className="text-small text-text-muted">Рейтинг студентов</p>
-                                </div>
-                            </div>
-                        </div>
+                        {/*<div className={`absolute -bottom-6 -left-6 p-4 rounded-xl glass-effect hidden sm:block animate-bounce`} style={{ animationDuration: '3s' }}>*/}
+                        {/*    <div className="flex items-center gap-3">*/}
+                        {/*        <div className="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-2xl">🏆</div>*/}
+                        {/*        <div>*/}
+                        {/*            */}
+                        {/*        </div>*/}
+                        {/*    </div>*/}
+                        {/*</div>*/}
                     </div>
 
                 </main>

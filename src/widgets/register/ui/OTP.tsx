@@ -51,7 +51,7 @@ export default function OTP({name, email, otp, setOtp, next, position, timer, se
 
     useEffect(() => {
 
-        if (user?.confirmed_email) {
+        if (user?.access?.confirmed_email) {
             next()
         }
 

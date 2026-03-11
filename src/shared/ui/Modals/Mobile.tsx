@@ -2,7 +2,6 @@ import { Drawer } from "vaul";
 import { ReactNode } from "react";
 import { type ClassValue, clsx } from "clsx";
 import { twMerge } from "tailwind-merge";
-import {bg, content, overlay} from "@/shared/ui/Modals/useModal";
 
 interface UseModalProps {
     isOpen: boolean;
@@ -11,6 +10,10 @@ interface UseModalProps {
     sheetClassName?: string;
     close: () => void;
 }
+
+export const overlay = `fixed inset-0 z-[1300] bg-black/40 backdrop-blur-[2px]`
+export const bg = `fixed z-[1301] flex flex-col outline-none glass-effect`
+export const content = `overflow-y-auto h-full custom-scrollbar p-6 md:p-8`
 
 function cn(...inputs: ClassValue[]) {
     return twMerge(clsx(inputs));

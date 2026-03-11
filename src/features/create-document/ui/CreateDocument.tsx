@@ -8,12 +8,12 @@ export default function CreateDocumentForms({setDocuments, close}) {
 
     const { user } = useContext(UserContext);
 
-    const [documentId, setDocumentId] = useState<string | null>(user?.last_created_document_id || null);
-    const [position, setPosition] = useState<number>(user?.last_created_document_id ? 1 : 0);
+    const [documentId, setDocumentId] = useState<string | null>(user?.main?.last_created_document_id || null);
+    const [position, setPosition] = useState<number>(user?.main?.last_created_document_id ? 1 : 0);
 
     useEffect(() => {
-        if (user?.last_created_document_id && !documentId) {
-            setDocumentId(user.last_created_document_id);
+        if (user?.main?.last_created_document_id && !documentId) {
+            setDocumentId(user.main?.last_created_document_id);
             setPosition(1);
         }
     }, [user, documentId]);
@@ -35,7 +35,8 @@ export default function CreateDocumentForms({setDocuments, close}) {
             <UpdateDocument
                 setDocuments={setDocuments}
                 key="update"
-                document_id={documentId}
+                // @ts-ignore
+                document_id={+documentId}
                 close={close}
             />,
         ];

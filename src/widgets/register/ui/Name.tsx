@@ -23,9 +23,7 @@ export default function Name({name, setName, next}) {
 
     async function handleChange(e) {
         const name_ = e.target.value
-
         setName(name_)
-
         safeLocalStorage.setItem("user_name", name_)
     }
 
@@ -53,6 +51,7 @@ export default function Name({name, setName, next}) {
                     error={errors?.name}
                     onChange={handleChange}
                     value={name}
+                    name="name"
                     defaultValue={safeLocalStorage.getItem("user_name") ?? undefined}
                 />
 
