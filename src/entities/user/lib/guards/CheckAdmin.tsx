@@ -4,20 +4,21 @@ import {useContext, useEffect} from "react";
 import {useRouter} from "next/navigation";
 import toast from "react-hot-toast";
 import {UserContext} from "@/entities/user";
-import {userLink} from "@/shared/lib/utils/userLink";
 
-export function CheckGuest({ children }: { children: React.ReactNode }) {
+export function CheckAdmin({ children }: { children: React.ReactNode }) {
     const { user, isLoading } = useContext(UserContext)
     const router = useRouter()
 
     useEffect(() => {
-        if (user && user?.access?.isGuest === false) {
-            toast.error("Вы уже зарегистрированы");
-            router.replace(userLink(user?.publication?.public_url));
+
+        if (isLoading) return
+        if (user && user?.access?.role !== "admin") {
+            router.back();
+            toast.error("Вам сюда нельзя :)");
         }
     }, [user, router]);
 
-    if (!user || user?.access?.isGuest === true) {
+    if (user && user?.access?.role === "admin") {
         return <>{children}</>;
     }
 

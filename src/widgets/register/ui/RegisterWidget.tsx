@@ -37,7 +37,7 @@ export default function RegisterWidget() {
         { component: <Name key="name" name={name} setName={setName} {...handlers} />, required: true },
         { component: <Email key="email" name={name} email={email} setEmail={setEmail} {...handlers} setTimer={setTimer} position={position} />, required: true },
         { component: <OTP key="otp" name={name} email={email} {...handlers} otp={otp} setOtp={setOtp} position={position} timer={timer} setTimer={setTimer} />, required: true },
-        { component: <City key="city" {...handlers} />, required: false },
+        { component: <City key="city" {...handlers} />, required: false, can_come_back: false },
         { component: <Source key="source" {...handlers} />, required: true },
         { component: <Activity key="activity" {...handlers} />, required: false },
         { component: <Password key="password" />, required: true },
@@ -65,7 +65,7 @@ export default function RegisterWidget() {
 
                 </div>
 
-                {position > 0 && (
+                {currentStep?.can_come_back && position > 0 && (
                     <Button
                         style={{
                             fontSize: textSizes.tiny,

@@ -125,7 +125,8 @@ export default function SubscriptionOffer() {
                                 }
                             }
                         `}</style>
-                        Оформить подписку 199 р/месяц
+                        В разработке
+                        {/*Оформить подписку 199 р/месяц*/}
                     </ButtonLarge>
                     <Button className=" !text-label !w-full !mt-2 !rounded-xl">
                         <p className="text-text-muted lowercase text-small">

@@ -62,6 +62,9 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     }, [token, getUser, router])
 
     useEffect(() => {
+
+        console.log(user)
+
         if (user?.access?.isGuest) {
             router.push("/register")
         }

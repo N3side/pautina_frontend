@@ -10,7 +10,7 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Card1 from "@/shared/ui/Sections/Card1";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
-import {userLink} from "@/shared/lib/userLink";
+import {userLink} from "@/shared/lib/utils/userLink";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 
@@ -56,7 +56,7 @@ export default function LoginWidget() {
         DeleteAuthorizationInfo()
         safeCookieStorage.setItem("token", token_)
         setToken(token_)
-        router.push(userLink(user?.main?.public_url))
+        router.push(userLink(user?.publication?.public_url))
     }
 
     const [isOpen, setIsOpen] = useState<boolean>(false)

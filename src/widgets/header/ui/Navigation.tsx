@@ -5,27 +5,21 @@ import {Button} from "@mui/material"
 import {useContext, useEffect, useState} from "react"
 import {model} from "../model"
 import Link from "next/link"
-import {usePathname} from "next/navigation" // Добавляем хук для активной ссылки
 import {UserContext} from "@/entities/user";
-import {useTheme} from "@/shared/lib/providers/ThemeProvider";
+import NavigationLink from "@/shared/ui/Navigation/NavigationLink";
 
 
 interface Props {
     isActive?: boolean
-    setIsActive?: (v: boolean) => void // Добавил, чтобы закрывать меню при клике на ссылку
+    setIsActive?: (v: boolean) => void
 }
 
 export default function Navigation({ isActive, setIsActive }: Props) {
     const { user } = useContext(UserContext)
-    const pathname = usePathname() // Получаем текущий путь
 
-
-    // Функция закрытия меню (для мобильных)
     const closeMenu = () => {
         if (setIsActive) setIsActive(false)
     }
-
-    const {theme, toggleTheme} = useTheme()
 
     const [mounted, setIsMounted] = useState(false)
 
@@ -58,53 +52,26 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                 `}
             >
                 <nav className="w-full lg:w-auto">
-                    <ul className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:gap-8">
-                        {model.map((li, i) => {
-                            // Проверка на активную ссылку
-                            const isLinkActive = pathname === li?.link;
+                    <div className="flex flex-col items-start gap-6 lg:flex-row lg:items-center lg:gap-8">
 
-                            return (
-                                <li key={i} className="relative group w-full lg:w-auto">
-                                    <Link href={li?.link} onClick={closeMenu} className="block w-full">
-                                        <p
-                                            className={`
-                                                text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold text-[15px]
-                                                text-text-muted group-hover:text-text-main
-                                            `}
-                                        >
-                                            {li?.text}
-                                        </p>
+                        {model.map((li, i) =>
+                            <NavigationLink key={i} href={li?.link} onClick={closeMenu}>
+                                {li?.text}
+                            </NavigationLink>
+                        )}
 
-                                        {/* Индикатор активной ссылки (точка снизу на десктопе) */}
-                                        <span className={`
-                                            hidden lg:block absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand transition-all duration-300
-                                            "opacity-100 scale-100" : "opacity-0 scale-0 group-hover:opacity-50 group-hover:scale-75"}
-                                        `}></span>
-                                    </Link>
-                                </li>
-                            )
-                        })}
+                        <NavigationLink>
+                            Сервис находится в разработке
+                        </NavigationLink>
+
                         {
                             user?.access?.role === "admin" &&
-                            <Link href="/admin" onClick={closeMenu} className="block w-full">
-								<p
-									className={`
-                                        text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold text-[15px]
-                                        text-text-muted group-hover:text-text-main
-                                    `}
-								>
-									Админ-панель
-								</p>
-
-                                {/* Индикатор активной ссылки (точка снизу на десктопе) */}
-								<span className={`
-                                    hidden lg:block absolute -bottom-2 left-1/2 -translate-x-1/2 w-1 h-1 rounded-full bg-brand transition-all duration-300
-                                    "opacity-100 scale-100" : "opacity-0 scale-0 group-hover:opacity-50 group-hover:scale-75"}
-                                `}></span>
-							</Link>
+							<NavigationLink href={"/admin"} onClick={closeMenu}>
+								Админ-панель
+							</NavigationLink>
                         }
 
-                    </ul>
+                    </div>
                 </nav>
 
                 {!user && (

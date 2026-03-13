@@ -7,7 +7,7 @@ import {useRouter} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
-import {homeLink} from "@/shared/lib/userLink";
+import {homeLink} from "@/shared/lib/utils/userLink";
 
 export default function LogoutPage() {
 
@@ -17,15 +17,18 @@ export default function LogoutPage() {
 
     async function logout() {
 
-        const response = await $fetch("auth/logout")
-
         setToken(null)
         setUser(null)
-        safeCookieStorage.removeItem("token")
-        DeleteRegistrationInfo()
-        DeleteAuthorizationInfo()
+        $fetch("auth/logout")
 
-        router.push(homeLink)
+        await safeCookieStorage.removeItem("token")
+        await DeleteRegistrationInfo()
+        await DeleteAuthorizationInfo()
+
+        await setTimeout(() => {
+            router.push(homeLink)
+        }, 100)
+
     }
 
     useEffect(() => {

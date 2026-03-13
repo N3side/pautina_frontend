@@ -7,8 +7,9 @@ import Hero from "@/shared/assets/images/raster/hero.jpg"
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge"
 import {rise} from "@/shared/styles/animations";
 import Link from "next/link"
-import {useContext} from "react";
+import {useContext, useEffect} from "react";
 import {UserContext} from "@/entities/user";
+import {userLink} from "@/shared/lib/utils/userLink";
 
 
 // Простая CSS анимация для "парения" изображения
@@ -26,6 +27,10 @@ const floatKeyframes = `
 export default function BannerWidget() {
 
     const {user} = useContext(UserContext)
+
+    useEffect(() => {
+        console.log(user && !user?.access?.isGuest)
+    }, [user]);
 
     return (
         <section className="relative w-full overflow-hidden py-[clamp(20px,5vw,80px)]">
@@ -87,7 +92,7 @@ export default function BannerWidget() {
                         <ShadowWrapper className={`w-full sm:w-auto mt-5 ${rise}`}>
                             <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl">
                                 <Link
-                                    href={`${user ? "/register" : "/register"}`}
+                                    href={user && !user?.access?.isGuest ? userLink(user?.publication?.public_url) : "/register" }
                                     className="text-button text-white font-bold text-lg"
                                 >
                                     Создать портфолио

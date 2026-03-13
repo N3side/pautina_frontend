@@ -17,13 +17,13 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
 
-    // function clampGenerator(minScreenWidth: number, maxScreenWidth: number, minValue: number, maxValue: number) {
-    //     const slope = (maxValue - minValue) / (maxScreenWidth - minScreenWidth)
-    //     const vw = slope * 100
-    //     const intercept = minValue - slope * minScreenWidth
-    //     console.log(`clamp(${minValue}px, ${vw.toFixed(3)}vw + ${intercept.toFixed(3)}px, ${maxValue}px);`)
-    // }
-    // clampGenerator(320, 1920, 30, 40)
+    function clampGenerator(minScreenWidth: number, maxScreenWidth: number, minValue: number, maxValue: number) {
+        const slope = (maxValue - minValue) / (maxScreenWidth - minScreenWidth)
+        const vw = slope * 100
+        const intercept = minValue - slope * minScreenWidth
+        console.log(`clamp(${minValue}px,${vw.toFixed(3)}vw+${intercept.toFixed(3)}px,${maxValue}px)`)
+    }
+    clampGenerator(320, 1920, 16, 40)
 
     return (
         <html lang="en">

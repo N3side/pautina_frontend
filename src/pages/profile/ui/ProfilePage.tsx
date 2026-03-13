@@ -9,6 +9,7 @@ import {useParams} from "next/navigation";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
+import FooterWidget from "@/widgets/footer/ui/FooterWidget";
 
 export default function ProfilePage() {
 
@@ -20,8 +21,8 @@ export default function ProfilePage() {
     const [isMyProfile, setIsMyProfile] = useState<boolean>(false)
 
     useEffect(() => {
-        if (url_base && user?.publication?.url_base) {
-            setIsMyProfile(user?.publication?.url_base?.toLowerCase() === url_base || user?.main?.username?.toLowerCase() === url_base)
+        if (url_base && user?.publication?.public_url) {
+            setIsMyProfile(user?.publication?.public_url?.toLowerCase() === url_base || user?.main?.username?.toLowerCase() === url_base)
         }
     }, [user, url_base]);
 
@@ -33,16 +34,17 @@ export default function ProfilePage() {
         }
     }, [user]);
 
-    useEffect(() => {
-        async function getUser() {
-            const response = await $fetch(`user/${url_base}`)
-            const user_ = response?.json?.user
-            if (user_) {
-                setTrueUser(user_)
-            }
+    async function getUser() {
+        const response = await $fetch(`user/${url_base}`)
+        const user_ = response?.json?.user
+        if (user_) {
+            setTrueUser(user_)
         }
-        !isMyProfile && getUser()
-    }, [isMyProfile]);
+    }
+
+    useEffect(() => {
+        !user || !isMyProfile && getUser()
+    }, [user, isMyProfile]);
 
     return (
         <>
@@ -59,6 +61,7 @@ export default function ProfilePage() {
                     trueUser={trueUser}
                 />
             </Container>
+            <FooterWidget />
         </>
     )
 }

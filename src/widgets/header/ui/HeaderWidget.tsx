@@ -12,7 +12,7 @@ import {useTheme} from "@/shared/lib/providers/ThemeProvider"
 import {ThemeSwitch} from "@/shared/ui/Buttons/ThemeSwitch";
 import CustomDropDown from "@/widgets/header/ui/CustomDropDown";
 import {smooth} from "@/shared/styles/animations";
-import {homeLink} from "@/shared/lib/userLink";
+import {homeLink} from "@/shared/lib/utils/userLink";
 
 export default function HeaderWidget() {
     const { setIsBlocked } = useContext(BodyBlockContext)

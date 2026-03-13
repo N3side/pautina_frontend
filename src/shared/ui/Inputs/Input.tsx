@@ -59,7 +59,7 @@ const Input = ({
 
     const toggle = () => setIsOpen && setIsOpen(prev => !prev)
 
-    if (type_ === "password") {
+    if (type_ == "password") {
         Button = <Eye isOpen={isOpen} className="cursor-pointer text-text-muted" onClick={toggle} />
     }
 

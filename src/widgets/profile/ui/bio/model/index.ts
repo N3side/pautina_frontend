@@ -5,7 +5,7 @@ import Phone from "@/shared/assets/images/vector/contacts/Phone"
 import Tg from "@/shared/assets/images/vector/contacts/Tg"
 import Link from "@/shared/assets/images/vector/contacts/Link"
 import {ComponentType} from "react"
-import {userLinkWithoutProtocol} from "@/shared/lib/userLink";
+import {userLinkWithoutProtocol} from "@/shared/lib/utils/userLink";
 
 export interface Elems {
     Icon: ComponentType;
@@ -47,6 +47,6 @@ export const getContactElems = (data: any): Elems[] => [
     {
         Icon: Link,
         k: "Ссылка на профиль",
-        value: userLinkWithoutProtocol(data?.publication?.url_base)
+        value: userLinkWithoutProtocol(data?.publication?.public_url)
     },
 ]

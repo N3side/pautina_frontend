@@ -1,4 +1,4 @@
-import {homeLink} from "@/shared/lib/userLink";
+import {homeLink} from "@/shared/lib/utils/userLink";
 
 export const model = [
     {

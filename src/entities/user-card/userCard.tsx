@@ -4,7 +4,7 @@ import MailRoundedIcon from '@mui/icons-material/MailRounded';
 import OpenInNewRoundedIcon from '@mui/icons-material/OpenInNewRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import VerifiedRoundedIcon from '@mui/icons-material/VerifiedRounded';
-import {userLink} from "@/shared/lib/userLink";
+import {userLink} from "@/shared/lib/utils/userLink";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import {$fetch} from "@/shared/api/fetch";
 import {useModal} from "@/shared/lib/hooks/useModal";

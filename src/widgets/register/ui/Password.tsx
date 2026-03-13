@@ -1,4 +1,4 @@
-import {FormEvent, useContext, useRef, useState} from "react";
+import {FormEvent, useContext, useEffect, useRef, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {$fetch} from "@/shared/api/fetch";
@@ -6,8 +6,9 @@ import {redirect} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {UserContext} from "@/entities/user";
-import {userLink} from "@/shared/lib/userLink";
+import {userLink} from "@/shared/lib/utils/userLink";
 import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
+import PasswordRequirements from "@/entities/password-requirements/PasswordRequirements";
 
 export default function Password() {
 
@@ -16,6 +17,8 @@ export default function Password() {
     const form = useRef<HTMLFormElement>(null)
 
     const {user} = useContext(UserContext)
+
+    const [password, setPassword] = useState("")
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 
@@ -59,12 +62,13 @@ export default function Password() {
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
 
-        redirect(userLink(user?.main?.public_url))
+        redirect(userLink(user?.publication?.public_url))
 
         e.preventDefault()
     }
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false)
 
     return (
         <div className="">
@@ -73,17 +77,15 @@ export default function Password() {
                 <h4 className="text-text-main font-bold">
                     Пароль
                 </h4>
-
-                {/*<p className="text-secondary text-text-muted">*/}
-                {/*    И завершающий штрих - безопасность. Придумайте пароль для входа в личный кабинет*/}
-                {/*</p>*/}
             </div>
 
             <div className="flex w-full">
-                <MonkeyAnimation type={isOpen ? "peek" : "close"} />
+                <MonkeyAnimation type={isConfirmOpen || isOpen ? "peek" : "close"} />
             </div>
 
             <form onSubmit={handleSubmit} ref={form} className="flex flex-col gap-[25px] mt-[clamp(20px,1.250vw_+_16.000px,40px)] w-full ">
+
+                <PasswordRequirements password={password} />
 
                 <Input
                     label={"Пароль *"}
@@ -93,8 +95,18 @@ export default function Password() {
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     error={errors?.password}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
-                <Input label={"Подтвердите пароль *"} placeholder={"*******"} name={"password_repeat"} type={"password"} error={errors?.password_repeat} />
+
+                <Input
+                    label={"Подтвердите пароль *"}
+                    placeholder={"*******"}
+                    name="password_repeat"
+                    type_="password"
+                    error={errors?.password_repeat}
+                    isOpen={isConfirmOpen}
+                    setIsOpen={setIsConfirmOpen}
+                />
 
                 <ButtonLarge text={"Перейти в профиль"}>
                     <></>

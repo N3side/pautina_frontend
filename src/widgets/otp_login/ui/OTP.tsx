@@ -9,7 +9,7 @@ import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInf
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
 import Timer from "@/features/timer/Timer"
-import {userLink} from "@/shared/lib/userLink";
+import {userLink} from "@/shared/lib/utils/userLink";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 
 export default function OTP({email, next, prev, timer, setTimer}) {
@@ -42,7 +42,7 @@ export default function OTP({email, next, prev, timer, setTimer}) {
             setToken(token)
             DeleteAuthorizationInfo()
             DeleteRegistrationInfo()
-            router.push(userLink(user?.main?.public_url))
+            router.push(userLink(user?.publication?.public_url))
         }
 
         const timer_ = response?.json?.timer

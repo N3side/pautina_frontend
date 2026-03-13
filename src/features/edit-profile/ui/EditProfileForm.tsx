@@ -149,14 +149,14 @@ export default function EditProfileForm({enabled=true, close}: Props) {
                 onInput={autoReplace}
             />
 
-            <Input
-                name="max"
-                label="Макс юзернейм"
-                defaultValue={user?.contacts?.max}
-                error={errors?.max}
-                isUsername={true}
-                onInput={autoReplace}
-            />
+            {/*<Input*/}
+            {/*    name="max"*/}
+            {/*    label="Макс юзернейм"*/}
+            {/*    defaultValue={user?.contacts?.max}*/}
+            {/*    error={errors?.max}*/}
+            {/*    isUsername={true}*/}
+            {/*    onInput={autoReplace}*/}
+            {/*/>*/}
 
             {input}
 
