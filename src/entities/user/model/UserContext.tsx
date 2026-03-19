@@ -42,7 +42,7 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     useEffect(() => {
         const savedToken = safeCookieStorage.getItem("token")
         if (savedToken) {
-            setToken(savedToken) // Это вызовет срабатывание useEffect ниже
+            setToken(savedToken)
         } else {
             setIsLoading(false)
         }
@@ -62,8 +62,6 @@ export default function UserProvider({ children }: { children: ReactNode }) {
     }, [token, getUser, router])
 
     useEffect(() => {
-
-        console.log(user)
 
         if (user?.access?.isGuest) {
             router.push("/register")

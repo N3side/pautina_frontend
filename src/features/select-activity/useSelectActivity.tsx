@@ -6,6 +6,16 @@ import React, {ChangeEvent, useContext, useEffect, useRef, useState} from "react
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import {UserContext} from "@/entities/user";
 
+interface Props {
+    errors?: Record<string, any> | null
+    localSelectedStatus?: any
+    localSchoolStudyStatus?: any
+    localDepartment?: any
+    localCourse?: any
+    localOrganization?: any
+    localPost?: any
+}
+
 export function UseSelectActivity({
   errors,
   localSelectedStatus="",
@@ -14,7 +24,7 @@ export function UseSelectActivity({
   localCourse="",
   localOrganization="",
   localPost=""
-}) {
+}: Props) {
 
     const {user} = useContext(UserContext)
 
@@ -80,6 +90,7 @@ export function UseSelectActivity({
                             <Option
                                 selected={schoolStudyStatus == "Я школьник"}
                                 text={"Я школьник"}
+
                                 onClick={() => setSchoolStudyStatus("Я школьник")}
                             />
                             <Option

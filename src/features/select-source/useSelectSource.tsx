@@ -7,7 +7,13 @@ import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import {useSources} from "@/entities/sources/api/useSources";
 import {UserContext} from "@/entities/user";
 
-export default function useSelectSource({ errors, localSourceId="", localSource=""}) {
+interface Props {
+    errors?: Record<string, any> | null
+    localSourceId?: string
+    localSource?: string
+}
+
+export default function useSelectSource({ errors, localSourceId="", localSource=""}: Props) {
 
     const {user} = useContext(UserContext)
 

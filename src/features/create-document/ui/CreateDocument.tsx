@@ -32,13 +32,6 @@ export default function CreateDocumentForms({setDocuments, close}) {
                 prev={prev}
                 close={close}
             />,
-            <UpdateDocument
-                setDocuments={setDocuments}
-                key="update"
-                // @ts-ignore
-                document_id={+documentId}
-                close={close}
-            />,
         ];
 
         return (

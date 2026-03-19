@@ -12,16 +12,14 @@ import {Modal} from "@/shared/ui/Modals/Modal";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input"
 import {useRef} from "react";
-
+import {fullName} from "@/shared/lib/utils/fullName";
 
 interface Props {
     user: Record<string, any>
 }
 
 export default function UserCard({ user }: Props) {
-    const fullName = [user.surname, user.name, user.patronymic]
-        .filter(Boolean)
-        .join(" ") || user.username;
+
 
     async function ban() {
         await $fetch(`admin/users/${user?.id}/ban`, {method: "PATCH"})
@@ -73,8 +71,8 @@ export default function UserCard({ user }: Props) {
                 <div className="flex-1 min-w-0 pt-1">
                     <div className="flex justify-between items-start gap-2">
                         <div className="truncate">
-                            <h4 className="text-default font-bold text-text-main truncate" title={fullName}>
-                                {fullName}
+                            <h4 className="text-default font-bold text-text-main truncate" title={fullName(user)}>
+                                {fullName(user)}
                             </h4>
                             <p className="text-secondary text-text-muted truncate">
                                 @{user.username}

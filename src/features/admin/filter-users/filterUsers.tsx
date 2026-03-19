@@ -3,6 +3,7 @@
 import SearchRoundedIcon from '@mui/icons-material/SearchRounded';
 import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import RestartAltRoundedIcon from '@mui/icons-material/RestartAltRounded';
+import BrandActionButton from "@/shared/ui/Buttons/BrandActionButton";
 
 interface Props {
     getUsers: any
@@ -68,12 +69,11 @@ export default function filterUsers({getUsers, filters, handleReset, handleChang
 
                 {/* Кнопки действий */}
                 <div className="flex items-center gap-2">
-                    <button
+                    <BrandActionButton
                         type="submit"
-                        className="text-button-sm h-11 px-6 bg-brand text-white rounded-xl hover:bg-brand-hover transition-all shadow-lg shadow-brand/20 active:scale-95"
                     >
                         Применить
-                    </button>
+                    </BrandActionButton>
 
                     <button
                         onClick={handleReset}

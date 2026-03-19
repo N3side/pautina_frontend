@@ -8,7 +8,7 @@ import {$fetch} from "@/shared/api/fetch";
 import toast from "react-hot-toast";
 import useCitySelect from "@/features/select-city/useCitySelect";
 import {unionFormData} from "@/shared/lib/utils/UnionFormData";
-import {editCity} from "@/widgets/profile/ui/profile/api";
+import {editCity} from "@/widgets/user/profile/ui/profile/api";
 import AccordionLayout from "@/shared/ui/Inputs/AccordionLayout";
 import useSelectSource from "@/features/select-source/useSelectSource";
 import {UseSelectActivity} from "@/features/select-activity/useSelectActivity";
@@ -35,7 +35,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
 
     const form_ = useRef<HTMLFormElement>(null)
 
-    const {sourceTsx,result} = useSelectSource({errors})
+    const {sourceTsx,result} = useSelectSource({errors: errors || undefined})
     const {activityTsx, formRef, statusValue} = UseSelectActivity({errors})
 
     async function handleSubmit(e) {
@@ -61,7 +61,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
 
         for (const [key, value] of formData.entries()) {
 
-            if (value !== String((user?.main?.[key] ?? '') || (user?.contact?.[key] ?? "") || (user?.access?.[key] ?? ""))) {
+            if (value !== String((user?.main?.[key] ?? '') || (user?.contacts?.[key] ?? "") || (user?.access?.[key] ?? ""))) {
                 updates.append(key, value);
                 changed = true
             }

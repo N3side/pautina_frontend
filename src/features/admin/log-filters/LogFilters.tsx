@@ -5,6 +5,7 @@ import FilterAltRoundedIcon from '@mui/icons-material/FilterAltRounded';
 import Input from "@/shared/ui/Inputs/Input"
 import Date from "@/shared/ui/Inputs/Date"
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
+import BrandActionButton from "@/shared/ui/Buttons/BrandActionButton";
 
 interface Props {
     getLogs: () => void;
@@ -91,16 +92,13 @@ export default function LogFilters({ getLogs, filters, handleReset, handleChange
 
                 {/* Кнопки действий */}
                 <div className="flex items-center gap-3">
-
                     <ActionButton text="Сбросить" Icon={RestartAltRoundedIcon} onClick={handleReset} />
 
-                    <button
+                    <BrandActionButton
                         type="submit"
-                        className="text-button-sm h-11 px-6 bg-brand text-white rounded-xl hover:bg-brand-hover transition-all shadow-lg shadow-brand/20 active:scale-95"
                     >
                         Применить
-                    </button>
-
+                    </BrandActionButton>
                 </div>
             </form>
         </div>

@@ -1,7 +1,7 @@
-import HeaderWidget from "@/widgets/header/ui/HeaderWidget";
-import LoginWidget from "@/widgets/login/ui/LoginWidget";
+import HeaderWidget from "@/widgets/user/header/ui/HeaderWidget";
+import LoginWidget from "@/widgets/user/login/ui/LoginWidget";
 import {CheckIsNotUser} from "@/entities/user";
-import FooterWidget from "@/widgets/footer/ui/FooterWidget";
+import FooterWidget from "@/widgets/user/footer/ui/FooterWidget";
 
 export default function LoginPage() {
     return (

@@ -3,6 +3,7 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {$fetch} from "@/shared/api/fetch";
 import {Dispatch, SetStateAction, useRef} from "react";
 import WarningProgressBar from "@/shared/ui/ProgressBar/WarningProgressBar";
+import {useRouter} from "next/navigation";
 
 
 interface UploadFileProps {
@@ -16,6 +17,8 @@ interface UploadFileProps {
 export default function UploadFile({setDocuments, setDocumentId, next, close}: UploadFileProps) {
 
     const ref = useRef<HTMLFormElement>(null)
+
+    const router = useRouter()
 
     async function handleSubmit(e) {
 
@@ -39,7 +42,7 @@ export default function UploadFile({setDocuments, setDocumentId, next, close}: U
 
         if (document_id) {
             setDocumentId(document_id)
-            next()
+            router.push(`/edit/document/${document_id}`)
         }
     }
 

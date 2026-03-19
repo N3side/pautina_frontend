@@ -11,11 +11,12 @@ interface FetchOptions {
     body?: BodyInit | null
     isToast?: boolean
     headers?: Record<string, string>
+    onLoadingChange?: (loading: boolean) => void
 }
 
 export async function $fetch(
     route: string,
-    {method = "GET", body = null, isToast = true, headers = {}}: FetchOptions = {}
+    {method = "GET", body = null, isToast = true, headers = {}, onLoadingChange}: FetchOptions = {}
 ): Promise<FetchResult> {
 
     headers.Accept = "application/json"
@@ -54,8 +55,8 @@ export async function $fetch(
             window.dispatchEvent(new CustomEvent("subscription-required"))
         }
     }
-    
+
+    await onLoadingChange?.(false)
+
     return {response,json}
 }
-
-// так теперь все норм должно быть

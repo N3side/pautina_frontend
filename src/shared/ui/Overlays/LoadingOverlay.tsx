@@ -3,7 +3,7 @@ import { CircularProgress } from "@mui/material";
 export default function LoadingOverlay({ text = "ИИ анализирует документ...", subText="Пожалуйста, подождите, магия в процессе..." }) {
     return (
         <div className="absolute inset-0 z-50 flex flex-col items-center justify-center rounded-xl overflow-hidden">
-            <div className="absolute inset-0 glass-effect" />
+            <div className="absolute inset-0" />
 
             <div className="relative flex flex-col items-center">
                 <div className="relative mb-6">

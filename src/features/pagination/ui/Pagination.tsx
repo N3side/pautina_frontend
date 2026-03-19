@@ -3,22 +3,37 @@
 import React from 'react';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
-import {Button} from "@mui/material";
+import { Button } from "@mui/material";
 
-
-
-// <div key={i} className="flex items-end justify-center w-8 text-text-muted">
-//     <MoreHorizIcon fontSize="small" />
-// </div>
-
-export default function Pagination({ currentPage = 0, totalPages = 0, setCurrentPage=(page: number)=> {} }) {
+export default function Pagination({ currentPage = 1, totalPages = 0, setCurrentPage = (page: number) => { } }) {
 
     if (totalPages < 2) {
-        return
+        return null;
     }
 
+    // Логика расчета видимых страниц (максимум 4)
+    const getVisiblePages = () => {
+        const half = Math.floor(4 / 2);
+        let start = Math.max(currentPage - half, 1);
+        let end = start + 3; // 4 кнопки всего
+
+        if (end > totalPages) {
+            end = totalPages;
+            start = Math.max(end - 3, 1);
+        }
+
+        const pages: number[] = [];
+        for (let i = start; i <= end; i++) {
+            pages.push(i)
+        }
+        return pages;
+    };
+
+    const visiblePages = getVisiblePages();
+
     return (
-        <nav className="flex items-center justify-center gap-2 py-8">
+        <nav className="flex items-center justify-center gap-2">
+            {/* Кнопка "Назад" */}
             <button
                 disabled={currentPage === 1}
                 onClick={() => setCurrentPage(currentPage - 1)}
@@ -33,23 +48,24 @@ export default function Pagination({ currentPage = 0, totalPages = 0, setCurrent
             </button>
 
             <div className="flex items-center gap-2">
-                {Array(totalPages).keys().map(e =>
+                {visiblePages.map((page) => (
                     <Button
-                        key={e + 1}
-                        onClick={() => setCurrentPage(e + 1)}
+                        key={page}
+                        onClick={() => setCurrentPage(page)}
                         className={`
                             !relative !min-w-[40px] !h-[40px] !px-2 !flex !items-center !justify-center !rounded-xl
                             !text-button-sm !transition-all !duration-300
-                            ${currentPage === e + 1
-                            ? '!bg-brand !text-white !shadow-lg !shadow-brand/30 !scale-110 z-10'
-                            : '!glass-effect !text-text-main !hover:border-brand/50 !hover:text-brand'}
+                            ${currentPage === page
+                                                ? '!bg-brand !text-white !shadow-lg !shadow-brand/30 !scale-110 z-10'
+                                                : '!glass-effect !text-text-main !hover:border-brand/50 !hover:text-brand'}
                         `}
                     >
-                        {e + 1}
+                        {page.toString()} {/* Преобразуем число в строку */}
                     </Button>
-                )}
+                ))}
             </div>
 
+            {/* Кнопка "Вперед" */}
             <button
                 disabled={currentPage === totalPages}
                 onClick={() => setCurrentPage(currentPage + 1)}

@@ -1,15 +1,15 @@
 "use client"
 
-import HeaderWidget from "@/widgets/header/ui/HeaderWidget";
-import ProfileWidget from "@/widgets/profile/ui/profile/ui/ProfileWidget";
-import BioWidget from "@/widgets/profile/ui/bio/ui/BioWidget";
-import PortfolioWidget from "@/widgets/portfolio/ui/PortfolioWidget";
+import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
+import PortfolioWidget from "@/widgets/user/portfolio/ui/PortfolioWidget";
 import {Container} from "@/shared/ui/Container/Container";
 import {useParams} from "next/navigation";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
-import FooterWidget from "@/widgets/footer/ui/FooterWidget";
+import Layout from "@/widgets/user/layout-h-s-f/Layout";
+import {PrivateProfileWidget} from "@/widgets/user/profile/ui/profile/ui/PrivateProfileWidget";
+
 
 export default function ProfilePage() {
 
@@ -43,25 +43,33 @@ export default function ProfilePage() {
     }
 
     useEffect(() => {
-        !user || !isMyProfile && getUser()
+        !user && getUser()
     }, [user, isMyProfile]);
+
+    const isPrivate = trueUser?.publication?.is_uploaded == false && !isMyProfile;
 
     return (
         <>
-            <HeaderWidget />
-            <Container className="mt-[clamp(20px,1.250vw_+_16.000px,40px)]">
+            <Layout>
+                <div className="flex flex-col w-full">
 
-                <div className={`flex gap-[15px] max-[1000px]:flex-col`}>
-                    <ProfileWidget isMyProfile={isMyProfile} trueUser={trueUser} />
-                    <BioWidget isMyProfile={isMyProfile} trueUser={trueUser} />
+                    <ProfileWidget isMyProfile={isMyProfile} isPrivate={isPrivate} trueUser={trueUser} />
+
+                    {!isPrivate &&
+                        <PortfolioWidget
+                            isMyProfile={isMyProfile}
+                            trueUser={trueUser}
+                        />
+                    }
+
+                    {isPrivate &&
+                        <div className="mt-4">
+                            <PrivateProfileWidget />
+                        </div>
+                    }
+
                 </div>
-
-                <PortfolioWidget
-                    isMyProfile={isMyProfile}
-                    trueUser={trueUser}
-                />
-            </Container>
-            <FooterWidget />
+            </Layout>
         </>
     )
 }

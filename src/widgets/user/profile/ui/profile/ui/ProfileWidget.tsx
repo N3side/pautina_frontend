@@ -1,0 +1,93 @@
+"use client"
+
+import React, {useContext} from "react";
+import User from "@/entities/user/ui/User"
+import ActionButton from "@/shared/ui/Buttons/ActionButton";
+import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
+import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
+import SettingsIcon from "@mui/icons-material/Settings";
+import Link from "next/link";
+import {UserContext} from "@/entities/user";
+import {$fetch} from "@/shared/api/fetch";
+import UploadPhoto from "@/widgets/user/profile/ui/profile/ui/UploadPhoto";
+import UserSkeleton from "@/widgets/user/edit-user-info/ui/user-skeleton";
+
+interface Props {
+    isMyProfile: boolean
+    isPrivate: boolean
+    trueUser: Record<string, any>
+}
+
+export default function ProfileWidget({ isMyProfile, isPrivate, trueUser }: Props) {
+
+    const {setUser} = useContext(UserContext)
+
+    async function changeHeader(blob) {
+        const formData = new FormData()
+        formData.set("header", blob)
+
+        const response = await $fetch("me/update", {
+            method: "PATCH",
+            body: formData
+        })
+
+        const user = response?.json?.user
+        if (user) {
+            setUser(user)
+        }
+    }
+
+    if (!trueUser) return <UserSkeleton />
+
+    return (
+        <div className="relative w-full">
+
+            <div className="left-0 absolute h-[230px] w-full glass-effect rounded-t-[18px] overflow-hidden" style={{
+                backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2394a3b8' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3C/g%3E%3C/svg%3E")`,
+            }}>
+
+                {isMyProfile &&
+                    <div className="!absolute !top-[20px] !right-[20px]">
+                        <UploadPhoto
+                            onSave={changeHeader}
+                            cropShape="rect"
+                            aspect={448 / 100}
+                        >
+                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="!bg-input"  />
+                        </UploadPhoto>
+                    </div>
+                }
+
+                <img className={`w-full h-full object-cover  ${!trueUser?.main?.header && "hidden" }`} src={trueUser?.main?.header} alt=""/>
+            </div>
+
+            <div className={`w-full mt-[215px] relative glass-effect p-8 rounded-[18px] flex justify-between items-center flex-col lg:flex-row`}>
+                <User user={trueUser} isMyProfile={isMyProfile} isPrivate={isPrivate} />
+                {isMyProfile &&
+                    <div>
+                        <div className="flex gap-2 hidden lg:flex">
+                            <Link href="/edit">
+                                <ActionButton className="h-fit" text="Редактировать профиль" />
+                            </Link>
+                            <Link href="/settings">
+                                <ActionButton className="h-fit" text="Настройки" />
+                            </Link>
+                        </div>
+                        <div className="absolute top-4 right-4 flex lg:hidden gap-2 flex-col">
+                            <Link href="/edit">
+                                <IconWrapper>
+                                    <EditOutlinedIcon className="!text-[18px]" />
+                                </IconWrapper>
+                            </Link>
+                            <Link href="/settings">
+                                <IconWrapper>
+                                    <SettingsIcon className="!text-[18px]" />
+                                </IconWrapper>
+                            </Link>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    );
+}
