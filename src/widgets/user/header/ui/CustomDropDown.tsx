@@ -8,10 +8,13 @@ import {IOSSwitch} from "@/shared/ui/Inputs/IOSSwitch";
 import {userLink} from "@/shared/lib/utils/userLink";
 import Avatar from "@/shared/ui/user/avatar/Avatar";
 import {Capitalize} from "@/shared/lib/utils/capitalize";
+import {useTheme} from "next-themes";
 
 export default function CustomDropDown() {
 
     const {user} = useContext(UserContext)
+
+    const {theme, setTheme} = useTheme()
 
     return (
         <>
@@ -47,7 +50,7 @@ export default function CustomDropDown() {
                                             <div className="flex items-center gap-3">
                                                 <p className="text-small text-text-main font-medium">Темная тема</p>
                                             </div>
-                                            {/*<IOSSwitch scale={.7} size="small" checked={theme === "dark"} onClick={toggleTheme} />*/}
+                                            <IOSSwitch scale={.7} size="small" checked={theme === "dark"} onClick={() => theme === "dark" ? setTheme("light") : setTheme("dark")} />
                                         </button>
 
                                         <Link href="/settings">

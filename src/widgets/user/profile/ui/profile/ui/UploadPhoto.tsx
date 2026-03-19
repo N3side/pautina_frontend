@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import { ReactNode, useId } from "react";
 import { useModal } from "@/shared/lib/hooks/useModal";
 import { Modal } from "@/shared/ui/Modals/Modal";
 import { useImageSelection } from "@/shared/lib/hooks/useImageSelection";
@@ -30,6 +30,8 @@ export default function UploadPhoto({
         handleClose();
     };
 
+    const id = useId()
+
     return (
         <>
             <div className="relative inline-block cursor-pointer">
@@ -37,10 +39,10 @@ export default function UploadPhoto({
                     type="file"
                     accept="image/*"
                     className="hidden"
-                    id="universal-upload-input"
+                    id={`universal-upload-input-${id}`}
                     {...inputProps}
                 />
-                <label htmlFor="universal-upload-input" className="cursor-pointer">
+                <label htmlFor={`universal-upload-input-${id}`} className="cursor-pointer">
                     {children}
                 </label>
             </div>

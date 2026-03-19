@@ -47,9 +47,9 @@ export default function BigAvatar({
 
             {isMyProfile && (
                 <div className="absolute bottom-1 right-1">
-                    <UploadPhoto onSave={changeAvatar}>
+                    <UploadPhoto onSave={changeAvatar} aspect={1} cropShape="round">
                         <Button component="div" className="!rounded-full !w-[60px] !h-[30px] !bg-brand">
-                            <AddAPhotoIcon sx={{fontSize: "16px"}} className="text-text-main" />
+                            <AddAPhotoIcon sx={{fontSize: "16px"}} className="text-white" />
                         </Button>
                     </UploadPhoto>
                 </div>

@@ -49,17 +49,6 @@ export default function ProfilePage() {
     // ХИРУРГИЧЕСКОЕ ИСПРАВЛЕНИЕ: защита от undefined перед проверкой is_uploaded
     const isPrivate = !isMyProfile && trueUser?.publication?.is_uploaded === false;
 
-    // Добавляем защиту от рендера с undefined
-    if (!trueUser) {
-        return (
-            <Layout>
-                <div className="flex flex-col w-full">
-                    <div className="animate-pulse">Loading profile...</div>
-                </div>
-            </Layout>
-        )
-    }
-
     return (
         <>
             <Layout>
