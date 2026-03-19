@@ -26,7 +26,7 @@ export default function ProfilePage() {
         }
     }, [user, url_base]);
 
-    const [trueUser, setTrueUser] = useState(user)
+    const [trueUser, setTrueUser] = useState(user) // 1111
 
     useEffect(() => {
         if (user && user?.main?.id === trueUser?.main?.id) {
