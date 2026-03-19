@@ -2,7 +2,6 @@
 
 import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
 import PortfolioWidget from "@/widgets/user/portfolio/ui/PortfolioWidget";
-import {Container} from "@/shared/ui/Container/Container";
 import {useParams} from "next/navigation";
 import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/entities/user";
@@ -46,8 +45,16 @@ export default function ProfilePage() {
         !user && getUser()
     }, [user, isMyProfile]);
 
-    // ХИРУРГИЧЕСКОЕ ИСПРАВЛЕНИЕ: защита от undefined перед проверкой is_uploaded
     const isPrivate = !isMyProfile && trueUser?.publication?.is_uploaded === false;
+
+    const [isMounted, setIsMounted] = useState<boolean>(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, []);
+
+    if (!isMounted) return
+
 
     return (
         <>
