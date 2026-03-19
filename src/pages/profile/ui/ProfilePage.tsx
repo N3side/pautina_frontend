@@ -46,7 +46,19 @@ export default function ProfilePage() {
         !user && getUser()
     }, [user, isMyProfile]);
 
-    const isPrivate = trueUser?.publication?.is_uploaded == false && !isMyProfile;
+    // ХИРУРГИЧЕСКОЕ ИСПРАВЛЕНИЕ: защита от undefined перед проверкой is_uploaded
+    const isPrivate = !isMyProfile && trueUser?.publication?.is_uploaded === false;
+
+    // Добавляем защиту от рендера с undefined
+    if (!trueUser) {
+        return (
+            <Layout>
+                <div className="flex flex-col w-full">
+                    <div className="animate-pulse">Loading profile...</div>
+                </div>
+            </Layout>
+        )
+    }
 
     return (
         <>
@@ -56,16 +68,16 @@ export default function ProfilePage() {
                     <ProfileWidget isMyProfile={isMyProfile} isPrivate={isPrivate} trueUser={trueUser} />
 
                     {!isPrivate &&
-                        <PortfolioWidget
-                            isMyProfile={isMyProfile}
-                            trueUser={trueUser}
-                        />
+						<PortfolioWidget
+							isMyProfile={isMyProfile}
+							trueUser={trueUser}
+						/>
                     }
 
                     {isPrivate &&
-                        <div className="mt-4">
-                            <PrivateProfileWidget />
-                        </div>
+						<div className="mt-4">
+							<PrivateProfileWidget />
+						</div>
                     }
 
                 </div>
