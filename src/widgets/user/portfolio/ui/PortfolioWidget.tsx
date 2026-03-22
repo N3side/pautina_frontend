@@ -87,12 +87,12 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
                 {/*    </ul>*/}
                 {/*</WheelXScrollProvider>*/}
 
-                {trueUser && !isMyProfile && !isLoading && !trueUser?.access?.is_uploaded &&
+                {trueUser && !isMyProfile && !isLoading && !Boolean(trueUser?.publication?.is_uploaded) &&
                     <div className="mt-3">
 						<PrivateProfileWidget />
 					</div>
                 }
-                {!(trueUser && !isMyProfile && !isLoading && !trueUser?.access?.is_uploaded) &&
+                {!(trueUser && !isMyProfile && !isLoading && !trueUser?.publication?.is_uploaded) &&
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
                         {!isLoading ? documents?.map((document, i) => (
                             <div key={i} className="h-full max-h-[400px]">
