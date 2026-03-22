@@ -1,6 +1,8 @@
 import {$fetch} from "@/shared/api/fetch";
 
-export async function recognizeDocument({document_id, setIsLoading, setDocumentRecognized}) {
+export async function recognizeDocument({document_id, setIsLoading, setDocumentRecognized, setRecognitions}) {
+
+    setRecognitions(prev => prev > 0 ? prev - 1 : prev)
 
     setIsLoading(true)
 

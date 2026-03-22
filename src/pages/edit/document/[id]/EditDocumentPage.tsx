@@ -10,7 +10,7 @@ export default function EditDocumentPage() {
 
     return (
         <Layout>
-            <div className="glass-effect rounded-[18px] p-8">
+            <div className="glass-effect rounded-[18px] p-8 w-full">
                 {id && <UpdateDocument document_id={id} />}
             </div>
         </Layout>

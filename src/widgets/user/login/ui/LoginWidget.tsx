@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import {FormEvent, useContext, useState} from "react"
+import {FormEvent, useContext, useEffect, useState} from "react"
 import {$fetch} from "@/shared/api/fetch"
 import {useRouter} from "next/navigation"
 import {UserContext} from "@/entities/user";
@@ -56,8 +56,13 @@ export default function LoginWidget() {
         DeleteAuthorizationInfo()
         safeCookieStorage.setItem("token", token_)
         setToken(token_)
-        router.push(userLink(user?.publication?.public_url))
     }
+
+    useEffect(() => {
+        if (user?.publication?.public_url) {
+            router.push(userLink(user?.publication?.public_url))
+        }
+    }, [user]);
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
 

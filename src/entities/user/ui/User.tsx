@@ -28,7 +28,7 @@ export default function User({user, isMyProfile, isPrivate}: Props) {
             text: user?.contacts?.translated_city,
             Icon: PlaceOutlinedIcon
         },
-        {
+        !["undefined", "null"].includes(user?.contacts?.status) && {
             text: user?.contacts?.status,
             Icon: LightbulbOutlinedIcon
         },
@@ -59,14 +59,14 @@ export default function User({user, isMyProfile, isPrivate}: Props) {
             <div className="relative flex flex-col gap-2 items-center lg:items-start">
                 <h5 className="text-text-main font-bold">{fullName}</h5>
                 {/*<p className="text-text-main text-small font-semibold">Был в сети:</p>*/}
-                <WheelXScrollProvider className="justify-center lg:justify-start !max-w-[340px] gap-4 !mt-0">
+                <WheelXScrollProvider className="justify-start !max-w-[340px] gap-4 !mt-0 max-[400px]:!max-w-[250px]">
                     <IconText
                         className="cursor-pointer"
                         Icon={InfoOutlinedIcon}
                         text="Подробнее"
                         onClick={open}
                     />
-                    {parts?.map((part, i) =>
+                    {parts?.map((part: any, i) =>
                         part?.text &&
 						<IconText
 							key={i}

@@ -6,7 +6,7 @@ interface Props {
 
 export default function Tag({tag="", color="#6366f1", onRemove}: Props) {
     return (
-        <span className="w-fit px-3 py-1 rounded-full inline-flex items-center gap-1 group" style={{background: `${color}10`, border: `1px solid ${color}20`}}>
+        <span className="w-fit px-3 py-1 rounded-full inline-flex items-center gap-1 group " style={{background: `${color}10`, border: `1px solid ${color}20`}}>
             <p className="text-tiny font-bold" style={{color: color}}>
                 {tag}
             </p>

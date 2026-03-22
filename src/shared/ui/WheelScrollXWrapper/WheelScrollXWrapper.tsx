@@ -49,7 +49,7 @@ export function WheelXScrollProvider({ children, className = "", style }: WheelX
         <div
             ref={ref}
             onMouseDown={onMouseDown}
-            className={`w-fit gap-[5px] mt-5 select-none flex w-full overflow-x-scroll overflow-x-hidden [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className}`}
+            className={`gap-[5px] select-none flex w-full overflow-x-scroll [scrollbar-width:none] [&::-webkit-scrollbar]:hidden ${className}`}
             style={style}
         >
             {children}

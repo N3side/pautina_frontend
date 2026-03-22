@@ -3,17 +3,18 @@
 import {Button} from "@mui/material";
 import DownloadIcon from '@mui/icons-material/Download';
 import ArrowOutwardIcon from '@mui/icons-material/ArrowOutward';
-import Tag from "@/shared/ui/Buttons/Tag";
 import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 import Status from "@/shared/ui/Status/Status";
 import {download} from "@/shared/lib/utils/download";
 import dynamic from 'next/dynamic';
+import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
+import ShowTags from "@/entities/tags/ui/showTags";
+import useTags from "@/entities/tags/lib/useTags";
+
 const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
     ssr: false,
     loading: () => <div></div>
 });
-import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollXWrapper";
 
 interface Props {
     document: Record<string, any>
@@ -24,6 +25,8 @@ interface Props {
 export default function Card({document, isMyProfile, ...props}: Props) {
 
     const file_extension = document?.file_url.split(".").pop()
+
+    const {tags} = useTags({tagsInitial: document?.categories})
 
     return (
         <div
@@ -36,8 +39,7 @@ export default function Card({document, isMyProfile, ...props}: Props) {
             "
             {...props}
         >
-            {/* Контейнер изображения */}
-            <div className="relative max-h-[300px] aspect-[16/10] w-full overflow-hidden">
+            <div className="relative h-full max-h-[160px] w-full">
 
                 {file_extension === "pdf" ?
                     <PDFFirstPage file={document?.file_url} />
@@ -45,7 +47,7 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                     <img
                         src={document?.file_url}
                         alt={document?.name}
-                        className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
+                        className="w-full h-full object-cover transition-transform duration-700"
                     />}
 
                 {isMyProfile && (
@@ -56,10 +58,8 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
 
-            {/* Контент */}
             <div className="flex flex-col flex-grow p-5 gap-3">
 
-                {/* Мета-данные (Дата и Тип) */}
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-1.5 opacity-70">
                         <CalendarTodayIcon className="w-4 h-4 text-brand" sx={{fontSize: "18px"}} />
@@ -70,7 +70,6 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                     </span>
                 </div>
 
-                {/* Заголовок и Организация */}
                 <div className="space-y-1">
                     <h3 className="text-lg text-text-main font-bold leading-tight line-clamp-2">
                         {document?.name}
@@ -83,30 +82,13 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                     )}
                 </div>
 
-                {/* Описание */}
                 {document?.description && (
                     <p className="text-small text-text-muted line-clamp-2 leading-relaxed">
                         {document?.description}
                     </p>
                 )}
 
-                {/* Категории (Теги) - Горизонтальный скролл если их много */}
-                {document?.categories?.length > 0 && (
-                    <WheelXScrollProvider className="!mt-1">
-                        <div className="flex gap-1.5">
-                            {document?.categories.map((cat: Record<string, any>) => (
-                                <Tag
-                                    key={cat.id || cat.tag}
-                                    tag={cat.name}
-                                    color={cat.color || '#6366f1'}
-                                />
-                            ))}
-                        </div>
-                    </WheelXScrollProvider>
-                )}
-
-                {/* Футер */}
-
+                <ShowTags tags={tags} />
 
                 <div className="pt-4 mt-auto border-t border-border-default/30 flex items-center justify-between">
 

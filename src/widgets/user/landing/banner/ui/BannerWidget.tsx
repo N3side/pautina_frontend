@@ -89,16 +89,17 @@ export default function BannerWidget() {
                         </p>
 
                         {/* Кнопка */}
-                        <ShadowWrapper className={`w-full sm:w-auto mt-5 ${rise}`}>
-                            <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl">
-                                <Link
-                                    href={user && !user?.access?.isGuest ? userLink(user?.publication?.public_url) : "/register" }
-                                    className="text-button text-white font-bold text-lg"
-                                >
-                                    Создать портфолио
-                                </Link>
-                            </ButtonLarge>
-                        </ShadowWrapper>
+                        <Link
+                            href={user && !user?.access?.isGuest ? userLink(user?.publication?.public_url) : "/register" }
+                        >
+                            <ShadowWrapper className={`w-full sm:w-auto mt-5 ${rise}`}>
+                                <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl">
+                                    <p className="text-secondary">
+                                        Создать портфолио
+                                    </p>
+                                </ButtonLarge>
+                            </ShadowWrapper>
+                        </Link>
                     </div>
 
                     {/* --- Правая часть: Изображение --- */}

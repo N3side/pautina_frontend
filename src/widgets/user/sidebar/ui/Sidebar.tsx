@@ -35,7 +35,7 @@ export default function Sidebar({className}: Props) {
     ]
 
     return (
-        <div className={`flex flex-col max-w-[180px] w-full gap-1 ${className}`}>
+        <div className={`flex flex-col max-w-full w-full gap-1 lg:max-w-[180px] ${className}`}>
             {elems?.map((elem, key) =>
                 elem && <Elem
                     Icon={elem?.Icon}

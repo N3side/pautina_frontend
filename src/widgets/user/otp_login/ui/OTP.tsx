@@ -42,7 +42,6 @@ export default function OTP({email, next, prev, timer, setTimer}) {
             setToken(token)
             DeleteAuthorizationInfo()
             DeleteRegistrationInfo()
-            router.push(userLink(user?.publication?.public_url))
         }
 
         const timer_ = response?.json?.timer
@@ -51,6 +50,12 @@ export default function OTP({email, next, prev, timer, setTimer}) {
 
         next()
     }
+
+    useEffect(() => {
+        if (user?.publication?.public_url) {
+            router.push(userLink(user?.publication?.public_url))
+        }
+    }, [user])
 
     async function handleChange(e) {
         const otp_ = e.target.value
@@ -61,7 +66,6 @@ export default function OTP({email, next, prev, timer, setTimer}) {
     }
 
     useEffect(() => {
-
         if (Boolean(user?.access?.confirmed_email)) {
             next()
         }

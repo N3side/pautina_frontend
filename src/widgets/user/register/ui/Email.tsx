@@ -98,7 +98,7 @@ export default function Email({name, email, setEmail, next, setTimer, position})
                         checked={checked}
                         className="!text-text-main !rounded-[4px] !p-0.5"
                     />
-                    <p className="text-text-muted font-medium">Согласен с <Link href="https://google.com" target="_blank" className="text-text-main" onClick={(e) => e.stopPropagation()}>обработкой персональных данных</Link></p>
+                    <p className="text-text-muted font-medium">Согласен с <Link href="https://docs.google.com/document/d/1l0Vqo7sirSn4_dqWWlq-Y58pQ2u9p8EtcsInNhQy5m0/edit?usp=sharing" target="_blank" className="text-text-main" onClick={(e) => e.stopPropagation()}>обработкой персональных данных</Link></p>
                 </div>
 
                 <ButtonLarge text={"Далее"}>

@@ -28,7 +28,7 @@ export default function UserDetailed({user, isPrivate}: Props) {
             v: user?.contacts?.translated_city,
             Icon: PlaceOutlinedIcon
         },
-        !isPrivate && {
+        !isPrivate && !["undefined", "null"].includes(user?.contacts?.status) && {
             k: "Чем занимаюсь",
             v: user?.contacts?.status,
             Icon: LightbulbOutlinedIcon
@@ -70,7 +70,8 @@ export default function UserDetailed({user, isPrivate}: Props) {
         {
             k: "Ссылка на профиль",
             v: userLinkWithoutProtocol(user?.publication?.public_url),
-            Icon: LinkIcon
+            Icon: LinkIcon,
+            shouldCopy: true
         }
     ]
 
@@ -115,6 +116,7 @@ export default function UserDetailed({user, isPrivate}: Props) {
                                 Icon={elem?.Icon}
                                 k={elem?.k}
                                 v={elem?.v}
+                                shouldCopy={elem?.shouldCopy}
                             />
                         )}
                     </div>

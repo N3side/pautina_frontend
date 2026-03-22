@@ -1,5 +1,4 @@
-import Tag from "@/shared/ui/Buttons/Tag";
-import {useCallback, useState} from "react";
+import {useCallback, useEffect, useState} from "react";
 import {v4} from 'uuid';
 import chroma from "chroma-js";
 
@@ -15,14 +14,18 @@ interface Props {
 
 export default function useTags({tagsInitial = null}: Props) {
 
-    const [tags, setTags] = useState<Tag[]>(() => {
+    const [tags, setTags] = useState<Tag[] | null>(() => {
         if (tagsInitial && Array.isArray(tagsInitial)) {
             return tagsInitial;
         }
         return [];
     });
 
-    const addTag = useCallback((e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent) => {
+    useEffect(() => {
+        setTags(tagsInitial)
+    }, [tagsInitial]);
+
+    const addTag = ((e: React.KeyboardEvent<HTMLInputElement> | React.MouseEvent) => {
         e.preventDefault();
         const input = e.target as HTMLInputElement;
 
@@ -33,34 +36,19 @@ export default function useTags({tagsInitial = null}: Props) {
                 color: chroma.random().brighten(1).hex()
             };
 
-            setTags(prev => [...prev, newTag]);
+            setTags(prev => [...prev || [], newTag]);
             input.value = '';
         }
-    }, []);
+    });
 
-    const deleteTag = useCallback((e: React.MouseEvent, tagId: string) => {
+    const deleteTag = ((e: React.MouseEvent, tagId: string) => {
         e.preventDefault();
-        setTags(prev => prev.filter(tag => tag.id !== tagId));
-    }, []);
-
-    const Tags =
-    <div className="flex gap-3">
-    {
-        tags.map((tag) => (
-            <Tag
-                key={tag.id}
-                color={tag.color}
-                tag={tag.name}
-                onRemove={(e) => deleteTag(e, tag.id)}
-            />
-        ))
-    }
-    </div>
+        setTags(prev => prev && prev.filter(tag => tag.id !== tagId));
+    });
 
     return {
         tags,
         setTags,
-        Tags,
         addTag,
         deleteTag
     };

@@ -2,16 +2,15 @@
 
 import Card from "@/widgets/user/portfolio/ui/Card";
 import {DocumentWidget} from "@/widgets/user/portfolio/ui/DocumentWidget";
-import CreateDocumentForms from "@/features/create-document/ui/CreateDocument";
 import {$fetch} from "@/shared/api/fetch";
-import {useContext, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import Pagination from "@/features/pagination/ui/Pagination";
 import {Modal} from "@/shared/ui/Modals/Modal";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import usePaginate from "@/shared/lib/hooks/usePaginate"
 import BrandActionButton from "@/shared/ui/Buttons/BrandActionButton";
 import CardSkeleton from "@/widgets/user/portfolio/ui/CardSkeleton";
-import {UserContext} from "@/entities/user";
+import UploadFile from "@/features/create-document/ui/UploadFile";
 
 interface Props {
     isMyProfile: boolean,
@@ -19,8 +18,6 @@ interface Props {
 }
 
 export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
-
-    const {user} = useContext(UserContext)
 
     const [documents, setDocuments] = useState<Record<string, any>[] | null>(null)
     const [currentDocument, setCurrentDocument] = useState<Record<string, any> | null>(null)
@@ -77,15 +74,15 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
                 {/*<WheelXScrollProvider>*/}
                 {/*    <ul className="flex items-center gap-3 py-2">*/}
                 {/*        {categories && categories?.length > 0 && <Category category={{name: "Документы"}} onClick={() => setFilters(prev => ({...prev, name: "all"}))} />}*/}
-                {/*        /!*{categories?.map((category, i) => (*!/*/}
-                {/*        /!*    <Category*!/*/}
-                {/*        /!*        key={i}*!/*/}
-                {/*        /!*        category={category}*!/*/}
-                {/*        /!*        onClick={() => {*!/*/}
-                {/*        /!*            setFilters(prev => ({ ...prev, name: category?.name }))*!/*/}
-                {/*        /!*        }}*!/*/}
-                {/*        /!*    />*!/*/}
-                {/*        /!*))}*!/*/}
+                {/*        {categories?.map((category, i) => (*/}
+                {/*            <Category*/}
+                {/*                key={i}*/}
+                {/*                category={category}*/}
+                {/*                onClick={() => {*/}
+                {/*                    setFilters(prev => ({ ...prev, name: category?.name }))*/}
+                {/*                }}*/}
+                {/*            />*/}
+                {/*        ))}*/}
                 {/*    </ul>*/}
                 {/*</WheelXScrollProvider>*/}
 
@@ -102,7 +99,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
                             />
                         </div>
                     )) :
-                        Array(5).keys().map((e, key) =>
+                        [...Array(5)].map((e, key) =>
                             <CardSkeleton key={key} />
                         )
                     }
@@ -126,10 +123,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
             </Modal>
 
             <Modal close={closeCreateDocument} isOpen={isOpenCreateDocument}>
-                <CreateDocumentForms
-                    setDocuments={setDocuments}
-                    close={closeCreateDocument}
-                />
+                <UploadFile setDocuments={setDocuments} />
             </Modal>
 
         </section>

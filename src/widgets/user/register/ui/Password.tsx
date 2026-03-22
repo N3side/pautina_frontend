@@ -2,23 +2,23 @@ import {FormEvent, useContext, useEffect, useRef, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {$fetch} from "@/shared/api/fetch";
-import {redirect} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {UserContext} from "@/entities/user";
 import {userLink} from "@/shared/lib/utils/userLink";
 import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 import PasswordRequirements from "@/entities/password-requirements/PasswordRequirements";
+import {useRouter} from "next/navigation";
 
 export default function Password() {
 
     const [errors, setErrors] = useState<Record<any, string> | null>(null)
-
     const form = useRef<HTMLFormElement>(null)
-
+    const router = useRouter()
     const {user} = useContext(UserContext)
-
     const [password, setPassword] = useState("")
+
+    const [registered, setRegistered] = useState<boolean>(false)
 
     async function handleSubmit(e: FormEvent<HTMLFormElement>) {
 
@@ -62,10 +62,14 @@ export default function Password() {
         DeleteRegistrationInfo()
         DeleteAuthorizationInfo()
 
-        redirect(userLink(user?.publication?.public_url))
-
-        e.preventDefault()
+        setRegistered(true)
     }
+
+    useEffect(() => {
+        if (registered && user?.publication?.public_url) {
+            router.replace(userLink(user?.publication?.public_url))
+        }
+    }, [registered, user]);
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)

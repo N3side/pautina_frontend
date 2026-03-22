@@ -232,3 +232,37 @@ body {
 html {
 	scrollbar-gutter: stable;
 }
+
+
+/* Глобальный стиль для всех тостов */
+.custom-hot-toast {
+	background: #054A8B !important;
+	border: 2px solid var(--text-brand) !important;
+	border-radius: 12px !important;
+	padding: 12px 24px !important;
+	padding-right: 100px !important;
+	color: white !important;
+	display: flex !important;
+	flex-direction: column !important;
+	align-items: flex-start !important;
+	box-shadow: 0 10px 40px -10px rgba(0, 0, 0, 0.3) !important;
+	font-weight: 600;
+}
+
+.custom-hot-toast [role="status"] {
+	margin: 0;
+}
+
+.custom-hot-toast::before {
+	content: 'ⓘ СООБЩЕНИЕ';
+	display: block;
+	font-size: 10px;
+	font-weight: 900;
+	opacity: 0.6;
+	margin-bottom: 4px;
+	letter-spacing: 0.15em;
+}
+
+.custom-hot-toast > div:first-child {
+	display: none !important;
+}

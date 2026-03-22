@@ -10,10 +10,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     k?: string
     v: string
     className?: string
+    shouldCopy?: boolean
     onCopy?: (value: any) => void;
 }
 
-export default function IconKeyValue({ Icon, k, v, className, onCopy, ...props }: Props) {
+export default function IconKeyValue({ Icon, k, v, className, onCopy, shouldCopy=false, ...props }: Props) {
     const [isHovered, setIsHovered] = useState(false);
     const [showSuccess, setShowSuccess] = useState(false);
 
@@ -21,12 +22,12 @@ export default function IconKeyValue({ Icon, k, v, className, onCopy, ...props }
         <div
             className={`relative cursor-pointer group flex gap-3 items-center transition-all ${className}`}
             {...props}
-            onMouseEnter={() => setIsHovered(true)}
+            onMouseEnter={shouldCopy ? () => setIsHovered(true) : () => {}}
             onMouseLeave={() => {
                 setIsHovered(false);
                 setShowSuccess(false);
             }}
-            onClick={() => copyToClipboard({text: v, message: "успешно скопировано"})}
+            onClick={shouldCopy ? () => copyToClipboard({text: v, message: "успешно скопировано"}) : () => {}}
         >
             {/* Обертка для иконки с анимацией смены */}
             <div className="relative flex items-center justify-center w-5 h-5 overflow-hidden">

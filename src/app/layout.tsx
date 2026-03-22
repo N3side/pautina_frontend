@@ -1,9 +1,6 @@
 import type {Metadata} from "next";
-import "./globals.css";
 import Providers from "@/shared/lib/providers/Providers"
 
-import {Toaster} from "react-hot-toast";
-import ClientOnly from "@/shared/ui/ClientOnly/ClientOnly";
 import SubscriptionResponseListener from "@/features/subscription-response-listener/subscriptionResponseListener";
 
 export const metadata: Metadata = {
@@ -26,14 +23,11 @@ export default function RootLayout({
     clampGenerator(320, 1920, 16, 40)
 
     return (
-        <html lang="en">
+        <html lang="en" suppressHydrationWarning>
             <body>
                 <Providers>
                     {children}
                 </Providers>
-                <ClientOnly>
-                    <Toaster />
-                </ClientOnly>
                 <SubscriptionResponseListener />
             </body>
         </html>

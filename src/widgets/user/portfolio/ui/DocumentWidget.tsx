@@ -11,7 +11,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import dynamic from 'next/dynamic';
 import {deleteDocument} from "@/entities/document/api/delete";
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
-import Tag from "@/shared/ui/Buttons/Tag";
+import Tag from "@/entities/tags/ui/Tag";
 import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOperation";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
 import {Modal} from "@/shared/ui/Modals/Modal";
@@ -19,6 +19,8 @@ import {useModal} from "@/shared/lib/hooks/useModal";
 import {useCallback} from "react";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import Link from "next/link"
+import useTags from "@/entities/tags/lib/useTags";
+import ShowTags from "@/entities/tags/ui/showTags";
 
 const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
     ssr: false,
@@ -49,6 +51,8 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
         callback: handleDeleteDocument
     })
 
+    const {tags} = useTags({tagsInitial: document?.categories})
+
     return (
         <div className="w-full flex flex-col">
 
@@ -78,15 +82,7 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
                         </h4>
                     </header>
 
-                    <div className="flex flex-wrap gap-1.5 mt-1">
-                        {document?.categories.map((cat: Record<string, any>) => (
-                            <Tag
-                                key={cat.id || cat.tag}
-                                tag={cat.name}
-                                color={cat.color}
-                            />
-                        ))}
-                    </div>
+                    <ShowTags tags={tags} />
 
                     <div className="mt-4 flex flex-col gap-3">
                         <p className="text-small text-text-muted font-bold uppercase tracking-wider">
