@@ -11,6 +11,7 @@ import usePaginate from "@/shared/lib/hooks/usePaginate"
 import BrandActionButton from "@/shared/ui/Buttons/BrandActionButton";
 import CardSkeleton from "@/widgets/user/portfolio/ui/CardSkeleton";
 import UploadFile from "@/features/create-document/ui/UploadFile";
+import {PrivateProfileWidget} from "@/widgets/user/profile/ui/profile/ui/PrivateProfileWidget";
 
 interface Props {
     isMyProfile: boolean,
@@ -86,24 +87,33 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
                 {/*    </ul>*/}
                 {/*</WheelXScrollProvider>*/}
 
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                    {!isLoading ? documents?.map((document, i) => (
-                        <div key={i} className="h-full max-h-[400px]">
-                            <Card
-                                document={document}
-                                isMyProfile={isMyProfile}
-                                onClick={() => {
-                                    setCurrentDocument(document)
-                                    openDocument()
-                                }}
-                            />
-                        </div>
-                    )) :
-                        [...Array(5)].map((e, key) =>
-                            <CardSkeleton key={key} />
-                        )
-                    }
-                </div>
+                {trueUser && !isMyProfile && !isLoading && !trueUser?.access?.is_uploaded &&
+                    <div className="mt-3">
+						<PrivateProfileWidget />
+					</div>
+                }
+                {!(trueUser && !isMyProfile && !isLoading && !trueUser?.access?.is_uploaded) &&
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                        {!isLoading ? documents?.map((document, i) => (
+                            <div key={i} className="h-full max-h-[400px]">
+                                <Card
+                                    document={document}
+                                    isMyProfile={isMyProfile}
+                                    onClick={() => {
+                                        setCurrentDocument(document)
+                                        openDocument()
+                                    }}
+                                />
+                            </div>
+                        )) :
+                            [...Array(5)].map((e, key) =>
+                                <CardSkeleton key={key} />
+                            )
+                        }
+                    </div>
+                }
+
+
                 {
                     documents && documents?.length === 0 && <p className="text-text-main font-semibold">{`${isMyProfile ? "Вы не загрузили ни одного документа :(" : "Пользователь не загрузил ни одного документа :("}`}</p>
                 }
