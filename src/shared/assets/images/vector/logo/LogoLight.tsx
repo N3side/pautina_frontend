@@ -1,5 +1,5 @@
 import * as React from "react";
-import {useTheme} from "next-themes";
+import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import {useEffect, useState} from "react";
 
 type IconProps = React.SVGProps<SVGSVGElement>;

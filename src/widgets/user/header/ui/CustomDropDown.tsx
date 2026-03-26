@@ -8,7 +8,7 @@ import {IOSSwitch} from "@/shared/ui/Inputs/IOSSwitch";
 import {userLink} from "@/shared/lib/utils/userLink";
 import Avatar from "@/shared/ui/user/avatar/Avatar";
 import {Capitalize} from "@/shared/lib/utils/capitalize";
-import {useTheme} from "next-themes";
+import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 
 export default function CustomDropDown() {
 

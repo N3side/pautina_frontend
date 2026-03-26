@@ -113,7 +113,6 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
                     </div>
                 }
 
-
                 {
                     documents && documents?.length === 0 && <p className="text-text-main font-semibold">{`${isMyProfile ? "Вы не загрузили ни одного документа :(" : "Пользователь не загрузил ни одного документа :("}`}</p>
                 }

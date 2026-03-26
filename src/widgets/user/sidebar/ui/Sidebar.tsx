@@ -17,7 +17,7 @@ export default function Sidebar({className}: Props) {
     const {user} = useContext(UserContext)
 
     const elems = [
-        {
+        !user && {
             Icon: HomeOutlinedIcon,
             text: "Главная",
             link: homeLink

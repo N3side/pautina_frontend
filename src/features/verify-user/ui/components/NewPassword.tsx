@@ -3,12 +3,14 @@ import Input from "@/shared/ui/Inputs/Input";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import React, {useRef, useState} from "react";
 import {$fetch} from "@/shared/api/fetch";
+import PasswordRequirements from "@/entities/password-requirements/PasswordRequirements";
 
 export default function NewPassword() {
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
     const [errors, setErrors] = useState<Record<string, any> | null>(null)
     const form_ = useRef<HTMLFormElement>(null)
+    const [password, setPassword] = useState<string>("")
 
     async function handleSubmit(e) {
 
@@ -43,6 +45,8 @@ export default function NewPassword() {
             <div className="flex flex-col gap-2 items-center w-full">
                 <MonkeyAnimation type={isOpen ? "peek" : "close"} />
 
+                <PasswordRequirements password={password} />
+
                 <Input
                     label="Новый пароль"
                     className="w-full"
@@ -51,6 +55,8 @@ export default function NewPassword() {
                     isOpen={isOpen}
                     setIsOpen={setIsOpen}
                     error={errors?.secret}
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
                 />
             </div>
 

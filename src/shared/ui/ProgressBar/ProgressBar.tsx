@@ -1,5 +1,5 @@
 import {motion} from "framer-motion";
-import {useTheme} from "next-themes";
+import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 
 export default function ProgressBar({progress}) {
 

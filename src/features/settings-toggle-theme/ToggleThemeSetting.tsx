@@ -1,4 +1,4 @@
-import {useTheme} from "next-themes";
+import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import Setting from "@/shared/ui/Sections/Setting";
 import {IOSSwitch} from "@/shared/ui/Inputs/IOSSwitch";
 

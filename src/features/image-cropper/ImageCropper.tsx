@@ -69,7 +69,7 @@ export function ImageCropper({
             {/* Кнопки управления */}
             <div className="flex justify-end gap-2">
                 <ActionButton text="отмена" onClick={onCancel} />
-                <BrandActionButton onClick={handleSave}>Сохранить обрезку</BrandActionButton >
+                <BrandActionButton onClick={handleSave}>Загрузить фото</BrandActionButton>
             </div>
         </div>
     );

@@ -69,9 +69,6 @@ const Input = ({
                 <p className="text-label">
                     {label}
                 </p>
-                // <PautinaText variant="Status" className="font-semibold uppercase tracking-wider text-text-muted ml-1 mb-0.5">
-                //     {label}
-                // </PautinaText>
             )}
 
             <div className="relative group">
@@ -85,18 +82,19 @@ const Input = ({
 
                 {mask ? (
                     <IMaskInput
-                        mask={mask}
-                        unmask={false}
-                        onAccept={onAccept}
+                        className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
+                        style={dynamicInputStyle}
+                        // onAccept={onAccept}
                         inputOptions={{
                             type: type_ === "password" ? (isOpen ? "text" : "password") : props.type
                         }}
-                        // ВАЖНО: для IMask используем отдельную логику
+                        prepare={(str) => str.replace(/\D/g, '')}
                         type={props.type === "password" ? (isOpen ? "text" : "password") : props.type}
-                        value={(value as string) ?? (defaultValue as string)}
-                        className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
-                        style={dynamicInputStyle}
-                        {...(props as any)}
+                        value={(value as string)}
+                        defaultValue={defaultValue}
+                        {...(props)}
+                        mask={mask}
+                        unmask={false}
                     />
                 ) : (
                     <input

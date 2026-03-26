@@ -44,7 +44,7 @@ export default function Profile({heading}) {
                 <div className='glass-effect py-4 px-6 rounded-t-[18px]'>
                     <p className="text-text-main text-secondary font-bold">{heading}</p>
                 </div>
-                <div className="relative h-[300px] w-full bg-slate-100 dark:bg-slate-900 mt-0.1 glass-effect border-y-0"
+                <div className="relative h-[300px] w-full mt-0.1 glass-effect border-y-0"
                      style={{
                          backgroundImage: `url(${!user?.main?.header && "data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2394a3b8' fill-opacity='0.15' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3C/g%3E%3C/svg%3E"})`,
                      }}

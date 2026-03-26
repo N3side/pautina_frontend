@@ -2,6 +2,7 @@ import type {Metadata} from "next";
 import Providers from "@/shared/lib/providers/Providers"
 
 import SubscriptionResponseListener from "@/features/subscription-response-listener/subscriptionResponseListener";
+import {ThemeScript} from "@/shared/lib/providers/ThemeProvider";
 
 export const metadata: Metadata = {
     title: "Паутина",
@@ -24,6 +25,9 @@ export default function RootLayout({
 
     return (
         <html lang="en" suppressHydrationWarning>
+            <head>
+                <ThemeScript />
+            </head>
             <body>
                 <Providers>
                     {children}

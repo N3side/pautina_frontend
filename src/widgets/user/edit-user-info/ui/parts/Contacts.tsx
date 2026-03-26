@@ -63,15 +63,15 @@ export default function Contacts({heading}) {
                             onInput={autoReplace}
                         />
 
-                        <AccordionLayout>
-                            <AccordionLayout.Header className="px-1.25 py-4">
-                                <p className="text-text-default font-semibold">Откуда вы узнали о паутине?</p>
-                            </AccordionLayout.Header>
+                        {/*<AccordionLayout>*/}
+                        {/*    <AccordionLayout.Header className="px-1.25 py-4">*/}
+                        {/*        <p className="text-text-default font-semibold">Откуда вы узнали о паутине?</p>*/}
+                        {/*    </AccordionLayout.Header>*/}
 
-                            <AccordionLayout.Content className="px-4 py-6">
-                                {sourceTsx}
-                            </AccordionLayout.Content>
-                        </AccordionLayout>
+                        {/*    <AccordionLayout.Content className="px-4 py-6">*/}
+                        {/*        {sourceTsx}*/}
+                        {/*    </AccordionLayout.Content>*/}
+                        {/*</AccordionLayout>*/}
 
                         <AccordionLayout>
                             <AccordionLayout.Header className="px-1.25 py-4">

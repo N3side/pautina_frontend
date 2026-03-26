@@ -17,7 +17,6 @@ export default function SettingsWidget() {
         <div
             className="
             flex-1 glass-effect rounded-2xl p-6 sm:p-8 flex flex-col gap-4 w-full
-            max-[1024px]:rounded-[0]
         ">
 
             <div className="pb-4">

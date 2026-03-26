@@ -28,6 +28,7 @@ export default function CheckOtp({timer, setTimer, next, prev}: Props) {
 
         const response = await $fetch("auth/verify/otp/check", {method: "POST", body: formData})
         const errors_ = response?.json?.errors
+
         if (errors_) {
             setErrors(errors_)
             return

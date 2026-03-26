@@ -15,6 +15,7 @@ export default function PasswordRequirements({checkRequirements=true, password})
         {text: "одна строчная буква", pattern: "/[a-z]/"},
         {text: "одна цифра", pattern: "/[0-9]/"},
         {text: "один спецсимвол", pattern: "/[^A-Za-z0-9]/"},
+        {text: "Латинские буквы", pattern: "/^[\x00-\x7F]+$/"}
     ]
 
     const validateRequirement = (pattern, password) => {

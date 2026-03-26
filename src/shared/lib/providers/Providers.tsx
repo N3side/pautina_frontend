@@ -1,25 +1,25 @@
 "use client"
 
 import "@/app/globals.css";
-import { ReactNode } from "react"
-import { WindowProvider } from "./WindowProvider"
-import { BodyBlockProvider } from "@/shared/lib/providers/BodyBlockProvider";
-import { UserProvider } from "@/entities/user";
-import { ThemeProvider } from "@/shared/lib/providers/ThemeProvider";
-import { ToastListener } from "@/shared/lib/providers/ToastListener";
+import {ReactNode} from "react"
+import {WindowProvider} from "./WindowProvider"
+import {BodyBlockProvider} from "@/shared/lib/providers/BodyBlockProvider";
+import {UserProvider} from "@/entities/user";
+import {ThemeProvider} from "@/shared/lib/providers/ThemeProvider";
+import {ToastListener} from "@/shared/lib/providers/ToastListener";
 // Импортируем ToastBar
-import toast, { Toaster, ToastBar } from "react-hot-toast";
+import toast, {Toaster, ToastBar} from "react-hot-toast";
 
 interface Props {
     children: ReactNode
 }
 
-export default function Providers({ children }: Props) {
+export default function Providers({children}: Props) {
     return (
-        <WindowProvider>
-            <BodyBlockProvider>
-                <UserProvider>
-                    <ThemeProvider>
+        <ThemeProvider>
+            <WindowProvider>
+                <BodyBlockProvider>
+                    <UserProvider>
                         <ToastListener>
                             {children}
                         </ToastListener>
@@ -49,13 +49,13 @@ export default function Providers({ children }: Props) {
                                     }}
                                 >
                                     {/* ToastBar вернет стандартный вид (иконки, стили, текст) */}
-                                    <ToastBar toast={t} />
+                                    <ToastBar toast={t}/>
                                 </div>
                             )}
                         </Toaster>
-                    </ThemeProvider>
-                </UserProvider>
-            </BodyBlockProvider>
-        </WindowProvider>
+                    </UserProvider>
+                </BodyBlockProvider>
+            </WindowProvider>
+        </ThemeProvider>
     )
 }

@@ -41,6 +41,9 @@ export default function UploadPhoto({
                     className="hidden"
                     id={`universal-upload-input-${id}`}
                     {...inputProps}
+                    onClick={(e) => {
+                        (e.target as HTMLInputElement).value = '';
+                    }}
                 />
                 <label htmlFor={`universal-upload-input-${id}`} className="cursor-pointer">
                     {children}

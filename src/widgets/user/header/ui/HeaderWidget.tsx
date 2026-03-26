@@ -8,7 +8,7 @@ import {Burger} from "./Burger"
 import {BodyBlockContext} from "@/shared/lib/providers/BodyBlockProvider"
 import {UserContext} from "@/entities/user";
 import Link from "next/link"
-import {useTheme} from "next-themes";
+import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import {ThemeSwitch} from "@/shared/ui/Buttons/ThemeSwitch";
 import CustomDropDown from "@/widgets/user/header/ui/CustomDropDown";
 import {smooth} from "@/shared/styles/animations";
