@@ -54,7 +54,7 @@ export function useTheme() {
 
     const toggleTheme = () => {
         const next = context.theme === "dark" ? "light" : "dark";
-        context.setTheme(next);
+        context.setTheme(next); //
     };
 
     return { ...context, toggleTheme };
