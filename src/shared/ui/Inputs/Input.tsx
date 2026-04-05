@@ -84,12 +84,8 @@ const Input = ({
                     <IMaskInput
                         className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
                         style={dynamicInputStyle}
-                        // onAccept={onAccept}
-                        inputOptions={{
-                            type: type_ === "password" ? (isOpen ? "text" : "password") : props.type
-                        }}
                         prepare={(str) => str.replace(/\D/g, '')}
-                        type={props.type === "password" ? (isOpen ? "text" : "password") : props.type}
+                        type={type_ === "password" ? (isOpen ? "text" : "password") : props.type}
                         value={(value as string)}
                         defaultValue={defaultValue}
                         {...(props)}

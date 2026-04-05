@@ -32,7 +32,13 @@ export function proxy(request: NextRequest) {
         return NextResponse.next()
     }
 
+    const reservedSubdomains = ["blog", "event", "company"]
+
     const subdomain = hostname.split('.')[0]
+
+    if (reservedSubdomains.includes(subdomain)) {
+        return NextResponse.next()
+    }
 
     if (url.pathname !== '/') {
         try {
