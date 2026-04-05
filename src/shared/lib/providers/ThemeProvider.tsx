@@ -49,7 +49,7 @@ export function useTheme() {
             theme: "dark" as Theme,
             setTheme: () => {},
             toggleTheme: () => {}
-        };
+        }; //1
     }
 
     const toggleTheme = () => {
