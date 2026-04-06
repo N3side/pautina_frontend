@@ -28,10 +28,6 @@ export default function BannerWidget() {
 
     const {user} = useContext(UserContext)
 
-    useEffect(() => {
-        console.log(user && !user?.access?.isGuest)
-    }, [user]);
-
     return (
         <section className="relative w-full overflow-hidden py-[clamp(20px,5vw,80px)]">
             {/* Вставка стилей анимации */}
@@ -94,7 +90,7 @@ export default function BannerWidget() {
                         >
                             <ShadowWrapper className={`w-full sm:w-auto mt-5 ${rise}`}>
                                 <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl">
-                                    <p className="text-secondary">
+                                    <p className="text-secondary text-white font-bold">
                                         Создать портфолио
                                     </p>
                                 </ButtonLarge>

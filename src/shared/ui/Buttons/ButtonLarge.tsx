@@ -24,7 +24,7 @@ export default function ButtonLarge({ children, className="", text="", ...props 
             {text ? (
                 <p className="text-button-sm text-white">{text}</p>
             ) :
-                <p className="text-button-sm text-white">{children}</p>
+                children
             }
 
         </Button>

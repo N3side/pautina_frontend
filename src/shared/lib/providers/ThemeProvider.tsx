@@ -14,8 +14,14 @@ export const ThemeScript = () => (
     <script dangerouslySetInnerHTML={{ __html: `
         (function() {
             var theme = document.cookie.match(/theme=([^;]+)/)?.[1] || "dark";
-            document.documentElement.setAttribute('data-theme', theme);
-            document.documentElement.style.colorScheme = theme;
+            console.log("тема: ", theme) // выводит 'dark'
+            if (theme == 'dark') {
+                console.log("добавить класс")
+                document.documentElement.classList.add('dark');
+            } else {
+                console.log("убрать класс")
+                // document.documentElement.classList.remove('dark');
+            }
         })()
     `}} suppressHydrationWarning />
 );
@@ -26,17 +32,19 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
     const [theme, setThemeState] = useState<Theme | undefined>(undefined);
 
     useEffect(() => {
-        const root = document.documentElement;
-        const current = root.getAttribute('data-theme') as Theme || "dark";
-        setThemeState(current);
+        const isDark = document.documentElement.classList.contains('dark');
+        setThemeState(isDark ? 'dark' : 'light');
     }, []);
 
     const setTheme = (newTheme: Theme) => {
         setThemeState(newTheme);
         safeCookieStorage.setItem("theme", newTheme);
-        const root = document.documentElement;
-        root.setAttribute('data-theme', newTheme);
-        root.style.colorScheme = newTheme;
+
+        if (newTheme === "dark") {
+            document.documentElement.classList.add("dark");
+        } else {
+            document.documentElement.classList.remove("dark");
+        }
     };
 
     return <ThemeContext.Provider value={{ theme, setTheme }}>{children}</ThemeContext.Provider>;
@@ -49,12 +57,12 @@ export function useTheme() {
             theme: "dark" as Theme,
             setTheme: () => {},
             toggleTheme: () => {}
-        }; //1
+        };
     }
 
     const toggleTheme = () => {
         const next = context.theme === "dark" ? "light" : "dark";
-        context.setTheme(next); //
+        context.setTheme(next);
     };
 
     return { ...context, toggleTheme };

@@ -28,7 +28,7 @@ export default function RootLayout({
             <head>
                 <ThemeScript />
             </head>
-            <body>
+            <body>  
                 <Providers>
                     {children}
                 </Providers>
