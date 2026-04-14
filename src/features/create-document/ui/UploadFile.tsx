@@ -1,7 +1,7 @@
 import FileInput from "@/shared/ui/Inputs/FileInput";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {$fetch} from "@/shared/api/fetch";
-import {Dispatch, SetStateAction, useRef} from "react";
+import {useRef} from "react";
 import {useRouter} from "next/navigation";
 
 
@@ -29,7 +29,10 @@ export default function UploadFile({setDocuments}) {
         const document_id = response?.json?.document_id
 
         const documents = response?.json?.documents
-        setDocuments(documents)
+
+        if (document_id.length > 0) {
+            setDocuments(documents)
+        }
 
         if (document_id) {
             router.push(`/edit/document/${document_id}`)
@@ -43,8 +46,8 @@ export default function UploadFile({setDocuments}) {
 
             {/*<WarningProgressBar />*/}
 
-            <div className="flex-1 flex items-center">
-                <FileInput onChange={() => {}} name="file" className="h-full" />
+            <div className="flex-1 flex items-center h-full">
+                <FileInput onChange={() => {}} name="file" />
             </div>
 
             <ButtonLarge>

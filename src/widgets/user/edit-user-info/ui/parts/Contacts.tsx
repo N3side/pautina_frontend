@@ -55,12 +55,17 @@ export default function Contacts({heading}) {
                         />
 
                         <Input
-                            name="tg"
-                            label="Телеграм юзернейм"
-                            defaultValue={user?.contacts?.tg}
-                            error={errors?.tg}
-                            isUsername={true}
-                            onInput={autoReplace}
+                            name="vk"
+                            label="Ссылка на вконтакте"
+                            defaultValue={user?.contacts?.vk}
+                            error={errors?.vk}
+                        />
+d
+                        <Input
+                            name="extra_link"
+                            label="Ваш сайт"
+                            defaultValue={user?.contacts?.extra_link}
+                            error={errors?.extra_link}
                         />
 
                         {/*<AccordionLayout>*/}

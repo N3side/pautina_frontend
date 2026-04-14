@@ -140,23 +140,23 @@ export default function EditProfileForm({enabled=true, close}: Props) {
                 error={errors?.phone}
             />
 
-            <Input
-                name="tg"
-                label="Телеграм юзернейм"
-                defaultValue={user?.contacts?.tg}
-                error={errors?.tg}
-                isUsername={true}
-                onInput={autoReplace}
-            />
-
             {/*<Input*/}
-            {/*    name="max"*/}
-            {/*    label="Макс юзернейм"*/}
-            {/*    defaultValue={user?.contacts?.max}*/}
-            {/*    error={errors?.max}*/}
+            {/*    name="tg"*/}
+            {/*    label="Телеграм юзернейм"*/}
+            {/*    defaultValue={user?.contacts?.tg}*/}
+            {/*    error={errors?.tg}*/}
             {/*    isUsername={true}*/}
             {/*    onInput={autoReplace}*/}
             {/*/>*/}
+
+            <Input
+                name="max"
+                label="Макс юзернейм"
+                defaultValue={user?.contacts?.max}
+                error={errors?.max}
+                isUsername={true}
+                onInput={autoReplace}
+            />
 
             {input}
 

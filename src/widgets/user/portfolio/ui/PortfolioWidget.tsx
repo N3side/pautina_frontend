@@ -43,7 +43,11 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
         const lastPage_ = response?.json?.last_page
         const categories_ = response?.json?.categories
         setCategories(categories_)
-        setDocuments(documents_)
+
+        if (documents_.length > 0) {
+            setDocuments(documents_)
+        }
+
         setPage(page_)
         setLastPage(lastPage_)
     }

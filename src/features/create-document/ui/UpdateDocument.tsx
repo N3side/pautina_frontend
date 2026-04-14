@@ -174,7 +174,7 @@ export default function UpdateDocument({document_values, document_id}: Props) {
                        defaultValue={document?.name || documentRecognized?.name}/>
                 <Textarea name="description" label="Описание документа" placeholder="3 место в региональном этапе"
                           error={errors?.description}
-                          defaultValue={document?.descriptioni || documentRecognized?.description}/>
+                          defaultValue={document?.description || documentRecognized?.description}/>
                 <Input name="event" label="Мероприятие" placeholder="Соревнование" error={errors?.event}
                        defaultValue={document?.event || documentRecognized?.event}/>
                 <Input name="organization" label="Организация" placeholder="Профессионалы"

@@ -12,16 +12,17 @@ interface FileInputProps {
 }
 
 const FileInput = ({
-        name,
-        label,
-        error,
-        onChange,
-        accept = "image/*,application/pdf",
-        className,
-        placeholder = "Нажмите или перетащите файл сюда"
-   }: FileInputProps) => {
+                       name,
+                       label,
+                       error,
+                       onChange,
+                       accept = "image/*,application/pdf",
+                       className,
+                       placeholder = "Нажмите или перетащите файл сюда"
+                   }: FileInputProps) => {
     const [isDragging, setIsDragging] = useState(false);
     const [fileName, setFileName] = useState<string | null>(null);
+    const [preview, setPreview] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
     // Обработка выбора через проводник
@@ -54,10 +55,35 @@ const FileInput = ({
         if (file) {
             setFileName(file.name);
             onChange(file);
+
+            // Создать preview только для изображений
+            if (file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                    setPreview(reader.result as string);
+                };
+                reader.readAsDataURL(file);
+            } else {
+                setPreview(null);
+            }
+        } else {
+            setPreview(null);
+            setFileName(null);
+            onChange(null);
         }
     };
 
     const triggerInput = () => fileInputRef.current?.click();
+
+    const handleRemove = (e: React.MouseEvent) => {
+        e.stopPropagation();
+        setPreview(null);
+        setFileName(null);
+        onChange(null);
+        if (fileInputRef.current) {
+            fileInputRef.current.value = '';
+        }
+    };
 
     return (
         <div className={`flex flex-col gap-1.5 w-full h-full ${className || ''}`}>
@@ -91,25 +117,48 @@ const FileInput = ({
                     className="hidden"
                 />
 
-                {/* Иконка */}
-                <div className={`
-                    p-2 rounded-full transition-colors duration-200
-                    ${isDragging ? 'bg-brand/20 text-brand' : 'bg-surface/50 text-text-muted group-hover:text-brand'}
-                `}>
-                    <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                    </svg>
-                </div>
+                {preview ? (
+                    // Показать изображение
+                    <div className="relative w-full h-full flex flex-col items-center gap-2">
+                        <img
+                            src={preview}
+                            alt="Preview"
+                            className="w-full h-full object-contain rounded-lg"
+                        />
+                        <p className="text-sm text-text-muted">
+                            {fileName}
+                        </p>
+                        <button
+                            onClick={handleRemove}
+                            className="absolute -top-2 -right-2 p-1.5 bg-red-500 rounded-full text-white hover:bg-red-600 transition-colors"
+                        >
+                            <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
+                    </div>
+                ) : (
+                    // Показать иконку и текст
+                    <>
+                        <div className={`
+                            p-2 rounded-full transition-colors duration-200
+                            ${isDragging ? 'bg-brand/20 text-brand' : 'bg-surface/50 text-text-muted group-hover:text-brand'}
+                        `}>
+                            <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                            </svg>
+                        </div>
 
-                {/* Текст */}
-                <div className="text-center">
-                    <p className="text-sm font-medium text-text-main">
-                        {fileName ? fileName : placeholder}
-                    </p>
-                    <p className="text-xs text-text-muted/60 mt-1">
-                        {fileName ? 'Файл распознан. Нажмите, чтобы заменить' : 'PNG, JPG, JPEG, WEBP, PDF до 5МБ'}
-                    </p>
-                </div>
+                        <div className="text-center">
+                            <p className="text-sm font-medium text-text-main">
+                                {fileName ? fileName : placeholder}
+                            </p>
+                            <p className="text-xs text-text-muted/60 mt-1">
+                                {fileName ? 'Файл распознан. Нажмите, чтобы заменить' : 'PNG, JPG, JPEG, WEBP, PDF до 5МБ'}
+                            </p>
+                        </div>
+                    </>
+                )}
 
                 {/* Индикатор ошибки внутри зоны */}
                 {error && (
