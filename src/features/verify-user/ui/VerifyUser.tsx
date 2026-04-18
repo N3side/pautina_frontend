@@ -44,14 +44,16 @@ export default function VerifyUser({additionalSteps}: Props) {
     }, [verified]);
 
     const steps = [
-        !verified && <PasswordForm
+        !verified &&
+        <PasswordForm
             key="check-password"
             timer={timer}
             setTimer={setTimer}
             {...handlers}
             skipNext={() => setPosition(position + 2)}
         />,
-        !verified && <CheckOtp
+        !verified &&
+        <CheckOtp
             key="check-otp"
             timer={timer}
             setTimer={setTimer}
@@ -68,7 +70,7 @@ export default function VerifyUser({additionalSteps}: Props) {
             </Stepper>
         )
 
-    }, [position])
+    }, [position, timer])
 
     return form
 }

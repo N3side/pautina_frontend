@@ -12,14 +12,14 @@ interface FileInputProps {
 }
 
 const FileInput = ({
-                       name,
-                       label,
-                       error,
-                       onChange,
-                       accept = "image/*,application/pdf",
-                       className,
-                       placeholder = "Нажмите или перетащите файл сюда"
-                   }: FileInputProps) => {
+       name,
+       label,
+       error,
+       onChange,
+       accept = "image/*,application/pdf",
+       className,
+       placeholder = "Нажмите или перетащите файл сюда"
+   }: FileInputProps) => {
     const [isDragging, setIsDragging] = useState(false);
     const [fileName, setFileName] = useState<string | null>(null);
     const [preview, setPreview] = useState<string | null>(null);

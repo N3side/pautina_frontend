@@ -9,6 +9,8 @@ import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import LinkIcon from '@mui/icons-material/Link';
 import {userLink, userLinkWithoutProtocol} from "@/shared/lib/utils/userLink";
+import VkIcon from "@/shared/assets/images/vector/vk/VkIcon";
+import LanguageIcon from '@mui/icons-material/Language';
 
 interface Props {
     user: Record<string, any>
@@ -63,9 +65,16 @@ export default function UserDetailed({user, isPrivate}: Props) {
 
     const contacts = [
         {
-            k: "Телеграмм",
-            v: user?.contacts?.tg,
-            Icon:TelegramIcon
+            k: "Вконтакте",
+            v: user?.contacts?.vk,
+            Icon: VkIcon,
+            link: `https://vk.com/${user?.contacts?.vk}`
+        },
+        {
+            k: "Сайт",
+            v: user?.contacts?.extra_link,
+            Icon: LanguageIcon,
+            link: `https://${user?.contacts?.extra_link}`
         },
         {
             k: "Ссылка на профиль",
@@ -113,6 +122,7 @@ export default function UserDetailed({user, isPrivate}: Props) {
                             elem?.v &&
                             <IconKeyValue
                                 key={elemKey}
+                                link={elem?.link}
                                 Icon={elem?.Icon}
                                 k={elem?.k}
                                 v={elem?.v}

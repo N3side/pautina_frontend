@@ -3,6 +3,7 @@ import Timer from "@/features/timer/Timer";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import React, {Dispatch, SetStateAction, useRef, useState} from "react";
 import {$fetch} from "@/shared/api/fetch";
+import ActionButton from "@/shared/ui/Buttons/ActionButton";
 
 interface Props {
     timer: any
@@ -64,11 +65,17 @@ export default function CheckOtp({timer, setTimer, next, prev}: Props) {
                 />
             </div>
 
-            <Timer handleClick={handleClick} setTimer={setTimer} timer={timer} message="Отправить заново" />
+            <div className="flex flex-col gap-3">
+                <ButtonLarge>
+                    <p className="text-white text-small font-bold">Подтвердить</p>
+                </ButtonLarge>
 
-            <ButtonLarge>
-                Подтвердить
-            </ButtonLarge>
+                <ActionButton onClick={handleClick}>
+                    <p className="text-small font-bold" style={{color: timer > 0 ? "var(--text-muted)" : "white"}}>Отправить заново</p>
+                    <Timer handleClick={handleClick} setTimer={setTimer} timer={timer} />
+                </ActionButton>
+            </div>
+
         </form>
     )
 }

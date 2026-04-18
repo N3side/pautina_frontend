@@ -1,4 +1,4 @@
-import React, {Dispatch, InputHTMLAttributes, ReactNode, SetStateAction, useState} from 'react';
+import React, {Dispatch, InputHTMLAttributes, ReactNode, SetStateAction, useEffect, useRef, useState} from 'react';
 import {IMaskInput} from 'react-imask';
 import {smooth} from "@/shared/styles/animations";
 import Eye from "@/shared/ui/Buttons/Eye";
@@ -22,9 +22,9 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChan
     error?: string | null;
     selected?: boolean;
     mask?: any;
-    onAccept?: (value: string, maskRef: any) => void;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    isUsername?: boolean;
+    leftAdditional?: string;
+    additionalGap?: number;
     Button?: ReactNode
     ref?: React.Ref<HTMLInputElement>;
 }
@@ -39,20 +39,28 @@ const Input = ({
        className,
        style,
        mask,
-       onAccept,
        onChange,
-       isUsername,
+       leftAdditional,
+       additionalGap,
        value,        // Выносим отдельно
        defaultValue, // Выносим отдельно
        Button,
        ...props
    }: InputProps) => {
 
+    const [isMounted, setIsMounted] = useState(false)
+
+    useEffect(() => {
+        setIsMounted(true)
+    }, [])
+
+    const leftAdditionalRef = useRef<HTMLDivElement>(null)
+
     const dynamicInputStyle = {
         borderColor: error
             ? '#ef4444'
             : (selected ? 'var(--color-brand)' : 'var(--color-border-default)'),
-        paddingLeft: isUsername ? "2.75rem" : "1.25rem",
+        paddingLeft: isMounted && leftAdditional ? (leftAdditionalRef?.current?.offsetWidth ?? 0) + (additionalGap ?? 24) : "1.25rem",
         paddingRight: "1.25rem",
         ...style,
     };
@@ -63,6 +71,7 @@ const Input = ({
         Button = <Eye isOpen={isOpen} className="cursor-pointer text-text-muted" onClick={toggle} />
     }
 
+
     return (
         <div className={`flex flex-col gap-1.5 w-full ${className || ''}`}>
             {label && (
@@ -72,10 +81,10 @@ const Input = ({
             )}
 
             <div className="relative group">
-                {isUsername && (
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-10">
+                {leftAdditional && (
+                    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-10" ref={leftAdditionalRef}>
                         <span className={`text-base transition-colors duration-200 ${error ? 'text-red-400' : 'text-text-muted group-focus-within:text-brand'}`}>
-                            @
+                            {leftAdditional}
                         </span>
                     </div>
                 )}

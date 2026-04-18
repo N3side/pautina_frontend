@@ -34,6 +34,9 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
     async function getDocuments() {
+
+        setIsLoading(true)
+
         const params = new URLSearchParams(filters).toString()
         const response = await $fetch(`documents/user/${trueUser?.main?.id}?page=${page}&${params}`,
             {onLoadingChange: setIsLoading}
@@ -99,7 +102,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
                 {!(trueUser && !isMyProfile && !isLoading && !trueUser?.publication?.is_uploaded) &&
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
                         {!isLoading ? documents?.map((document, i) => (
-                            <div key={i} className="h-full max-h-[400px]">
+                            <div key={i} className="h-full max-h-[440px]">
                                 <Card
                                     document={document}
                                     isMyProfile={isMyProfile}
@@ -110,7 +113,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
                                 />
                             </div>
                         )) :
-                            [...Array(5)].map((e, key) =>
+                            [...Array(3)].map((e, key) =>
                                 <CardSkeleton key={key} />
                             )
                         }

@@ -107,7 +107,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
                 label="Юзернейм в системе"
                 defaultValue={user?.main?.username}
                 error={errors?.username}
-                isUsername={true}
+                leftAdditional="@"
                 onInput={autoReplace}
             />
 
@@ -154,7 +154,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
                 label="Макс юзернейм"
                 defaultValue={user?.contacts?.max}
                 error={errors?.max}
-                isUsername={true}
+                leftAdditional="@"
                 onInput={autoReplace}
             />
 

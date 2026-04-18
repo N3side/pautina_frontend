@@ -82,7 +82,7 @@ export default function Profile({heading}) {
                     label="Юзернейм в системе"
                     defaultValue={user?.main?.username}
                     error={errors?.username}
-                    isUsername={true}
+                    leftAdditional="@"
                     onInput={autoReplace}
                 />
                 <Input
@@ -92,7 +92,7 @@ export default function Profile({heading}) {
                     error={errors?.bio}
                 />
 
-                <ButtonLarge type="submit">
+                <ButtonLarge type="submit" className="!text-white !font-bold !text-small">
                     Сохранить
                 </ButtonLarge>
 

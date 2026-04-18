@@ -7,7 +7,7 @@ interface Props {
     handleClick: () => void;
     setTimer: React.Dispatch<React.SetStateAction<number | null>>;
     timer: number | null; // Разрешаем null для типизации
-    message: string
+    message?: string
 }
 
 export default function Timer({ handleClick, timer, setTimer, message }: Props) {

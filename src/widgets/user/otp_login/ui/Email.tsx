@@ -4,6 +4,8 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {UserContext} from "@/entities/user";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import Link from "next/link";
+import ActionButton from "@/shared/ui/Buttons/ActionButton";
 
 interface FormErrors {
     email?: string;
@@ -90,9 +92,17 @@ export default function Email({email,  setEmail, next, setTimer, timer}) {
                     defaultValue={email}
                 />
 
+                <Link href="/password" className="w-full text-white font-bold text-small">
+                    Вход по паролю
+                </Link>
+
                 <ButtonLarge text={"Далее"}>
                     <></>
                 </ButtonLarge>
+
+                <Link href="/register" className="w-full">
+                    <ActionButton text="Регистрация" className="w-full" />
+                </Link>
 
             </form>
         </div>

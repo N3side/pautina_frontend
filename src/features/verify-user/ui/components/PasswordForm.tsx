@@ -4,6 +4,7 @@ import React, {Dispatch, SetStateAction, useRef, useState} from "react";
 import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 import {$fetch} from "@/shared/api/fetch";
 import Timer from "@/features/timer/Timer"
+import ActionButton from "@/shared/ui/Buttons/ActionButton";
 
 
 interface Props {
@@ -85,11 +86,17 @@ export default function PasswordForm({next, prev, timer, setTimer, skipNext}: Pr
                 />
             </div>
 
-            <Timer handleClick={handleClick} setTimer={setTimer} timer={timer} message="не помню пароль" />
+            <div className="flex flex-col gap-2">
+                <ButtonLarge className="!text-white !text-small !font-bold">
+                    Дальше
+                </ButtonLarge>
 
-            <ButtonLarge>
-                Дальше
-            </ButtonLarge>
+                <ActionButton text="не помню пароль" onClick={handleClick}>
+                    <Timer timer={timer} handleClick={handleClick} setTimer={setTimer}/>
+                </ActionButton>
+            </div>
+
+
         </form>
     )
 }

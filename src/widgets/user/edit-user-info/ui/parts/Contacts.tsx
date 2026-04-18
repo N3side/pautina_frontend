@@ -56,16 +56,21 @@ export default function Contacts({heading}) {
 
                         <Input
                             name="vk"
-                            label="Ссылка на вконтакте"
+                            label="Юзернейм вконтакте"
                             defaultValue={user?.contacts?.vk}
                             error={errors?.vk}
+                            leftAdditional="https://vk.com/"
+                            additionalGap={16}
+                            onInput={autoReplace}
                         />
-d
+
                         <Input
                             name="extra_link"
-                            label="Ваш сайт"
+                            label="Сайт"
                             defaultValue={user?.contacts?.extra_link}
                             error={errors?.extra_link}
+                            leftAdditional="https://"
+                            additionalGap={16}
                         />
 
                         {/*<AccordionLayout>*/}
@@ -88,7 +93,7 @@ d
                             </AccordionLayout.Content>
                         </AccordionLayout>
 
-                        <ButtonLarge type="submit">
+                        <ButtonLarge type="submit" className="!text-white !font-bold !text-small">
                             Сохранить
                         </ButtonLarge>
                     </div>

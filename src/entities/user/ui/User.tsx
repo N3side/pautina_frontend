@@ -12,6 +12,8 @@ import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
 import UserDetailed from "@/entities/user/ui/UserDetailed";
 import BigAvatar from "@/shared/ui/user/avatar/BigAvatar";
+import VkIcon from "@/shared/assets/images/vector/vk/VkIcon";
+import LanguageIcon from "@mui/icons-material/Language";
 
 interface Props {
     user: Record<string, any>
@@ -48,6 +50,16 @@ export default function User({user, isMyProfile, isPrivate}: Props) {
             text: user?.contacts?.post,
             Icon: PersonOutlineOutlinedIcon
         },
+        {
+            text: user?.contacts?.vk,
+            Icon: VkIcon,
+            link: `https://vk.com/${user?.contacts?.vk}`
+        },
+        {
+            text: user?.contacts?.extra_link,
+            Icon: LanguageIcon,
+            link: `https://${user?.contacts?.extra_link}`
+        },
     ]
 
     const {isOpen, open, close} = useModal()
@@ -72,6 +84,7 @@ export default function User({user, isMyProfile, isPrivate}: Props) {
 							key={i}
 							Icon={part?.Icon}
 							text={part?.text}
+                            link={part?.link}
 						/>
                     )}
                 </WheelXScrollProvider>

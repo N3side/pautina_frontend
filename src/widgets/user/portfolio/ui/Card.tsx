@@ -31,15 +31,14 @@ export default function Card({document, isMyProfile, ...props}: Props) {
     return (
         <div
             className="
-                group relative flex flex-col h-full
-                rounded-2xl overflow-hidden
+                group relative flex flex-col h-full rounded-2xl
                 transition-all duration-500 ease-out
                 shadow-2xl shadow-brand/5 hover:-translate-y-1
-                cursor-pointer
+                cursor-pointer overflow-hidden
             "
             {...props}
         >
-            <div className="relative h-full max-h-[160px] w-full">
+            <div className="relative h-full max-h-40 w-full">
 
                 {file_extension === "pdf" ?
                     <PDFFirstPage file={document?.file_url} />
@@ -47,7 +46,7 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                     <img
                         src={document?.file_url}
                         alt={document?.name}
-                        className="w-full h-full object-cover transition-transform duration-700"
+                        className="w-full h-[160px] object-cover transition-transform duration-700"
                     />}
 
                 {isMyProfile && (
@@ -58,14 +57,14 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
             </div>
 
-            <div className="flex flex-col flex-grow p-5 gap-3">
+            <div className="flex flex-col gap-3 h-full p-5">
 
-                <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3 justify-between">
                     <div className="flex items-center gap-1.5 opacity-70">
                         <CalendarTodayIcon className="w-4 h-4 text-brand" sx={{fontSize: "18px"}} />
-                        <span className="text-[12px] font-medium text-text-muted">{document?.date || "Дата не указана"}</span>
+                        <span className="text-[12px] font-medium text-text-muted whitespace-nowrap">{document?.date || "Дата не указана"}</span>
                     </div>
-                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand/10 text-brand font-bold uppercase tracking-tighter">
+                    <span className="text-[10px] px-2 py-0.5 rounded-full bg-brand/10 text-brand font-bold uppercase tracking-tighter whitespace-nowrap line-clamp-2">
                         {document?.type}
                     </span>
                 </div>
