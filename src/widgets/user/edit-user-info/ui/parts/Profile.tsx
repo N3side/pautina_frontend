@@ -70,9 +70,9 @@ export default function Profile({heading}) {
                     </div>
 
                     <div className="flex-1 grid grid-cols-[repeat(auto-fit,minmax(190px,1fr))] gap-2">
-                        <Input label="имя" defaultValue={user?.main?.name} placeholder="Ваше имя" name="name" />
-                        <Input label="фамилия" defaultValue={user?.main?.surname} placeholder="Ваша фамилия" name="surname" />
-                        <Input label="отчество" defaultValue={user?.main?.patronymic} placeholder="Ваше отчество" name="patronymic" />
+                        <Input label="имя" defaultValue={user?.main?.name} placeholder="Ваше имя" name="name" error={errors?.name} />
+                        <Input label="фамилия" defaultValue={user?.main?.surname} placeholder="Ваша фамилия" name="surname" error={errors?.surname} />
+                        <Input label="отчество" defaultValue={user?.main?.patronymic} placeholder="Ваше отчество" name="patronymic" error={errors?.patronymic} />
                     </div>
                 </div>
             </div>

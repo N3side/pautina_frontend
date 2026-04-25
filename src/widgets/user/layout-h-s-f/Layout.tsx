@@ -14,7 +14,9 @@ export default function Layout({children, className}: Props) {
         <div>
             <HeaderWidget />
             <Container className={`flex gap-4 items-start mt-6 flex-row h-full min-h-[40vh] ${className}`}>
-                <Sidebar className="hidden lg:flex" />
+                <div className="lg:max-w-[180px] w-full hidden lg:flex">
+                    <Sidebar />
+                </div>
                 {children}
             </Container>
             <FooterWidget />

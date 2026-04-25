@@ -8,7 +8,7 @@ export default function ButtonLarge({ children, className="", text="", ...props 
             {...props}
             type="submit"
             // sx — это стандарт для MUI, он работает лучше чем style
-            className={`!mt-[15px] !py-[15px] !rounded-xl !w-full !transform-none !bg-[var(--color-brand)] ${className}`}
+            className={`!mt-[15px] !py-[15px] !rounded-xl !w-full !transform-none !bg-[var(--color-brand)] !text-button-sm !text-white !font-bold ${className}`}
             sx={{
                 textTransform: "none", // Чтобы текст не был капсом по умолчанию
                 // Убираем конфликт: анимируем только трансформацию
@@ -22,7 +22,7 @@ export default function ButtonLarge({ children, className="", text="", ...props 
         >
 
             {text ? (
-                <p className="text-button-sm text-white">{text}</p>
+                <p className="text-button-sm text-white font-bold">{text}</p>
             ) :
                 children
             }
