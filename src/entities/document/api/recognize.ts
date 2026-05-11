@@ -1,12 +1,17 @@
 import {$fetch} from "@/shared/api/fetch";
+import toast from "react-hot-toast";
 
-export async function recognizeDocument({document_id, setIsLoading, setDocumentRecognized, setRecognitions}) {
 
-    setRecognitions(prev => prev > 0 ? prev - 1 : prev)
+export async function recognizeDocument({document, isLoading, setIsLoading, setDocumentRecognized, setRecognitions}) {
+
+    if (isLoading) {
+        toast.success("Документ распознается, подождите...")
+        return
+    }
 
     setIsLoading(true)
 
-    const response = await $fetch(`documents/${document_id}/recognize`)
+    const response = await $fetch(`documents/${document?.id}/recognize`)
 
     const document_ = response?.json?.document
 
@@ -14,6 +19,9 @@ export async function recognizeDocument({document_id, setIsLoading, setDocumentR
         setDocumentRecognized(document_)
     }
 
-
     setIsLoading(false)
+
+    setRecognitions(prev => prev > 0 ? prev - 1 : prev)
+
+    return document_
 }

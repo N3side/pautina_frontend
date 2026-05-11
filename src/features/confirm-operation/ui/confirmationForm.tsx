@@ -1,18 +1,22 @@
 import {Button} from "@mui/material";
 
-interface ConfirmationFormProps {
+interface Props {
     confirm: () => void;
     decline: () => void;
     title?: string;
     description?: string;
+    submitText?: string
+    declineText?: string
 }
 
 export default function ConfirmationForm({
-         confirm,
-         decline,
-         title = "Подтверждение действия",
-         description = "Вы уверены? Это действие нельзя отменить."
-     }: ConfirmationFormProps) {
+        confirm,
+        decline,
+        title = "Подтверждение действия",
+        description = "Вы уверены? Это действие нельзя отменить.",
+        submitText = "Выполнить",
+        declineText = "Отмена",
+    }: Props) {
     return (
         <div
             className="w-full"
@@ -54,7 +58,7 @@ export default function ConfirmationForm({
                         className="!flex-1 !rounded-xl !px-6 !py-3 !normal-case !text-text-muted !border-border-default hover:!bg-input/80 transition-all"
                         variant="outlined"
                     >
-                        <p className="text-button-sm font-semibold">Отмена</p>
+                        <p className="text-button-sm font-semibold">{declineText}</p>
                     </Button>
 
                     <Button
@@ -62,7 +66,7 @@ export default function ConfirmationForm({
                         className="!flex-1 !rounded-xl !px-6 !py-3 !normal-case !bg-red-500 hover:!bg-red-600 !text-white transition-all"
                         variant="contained"
                     >
-                        <p className="text-button-sm font-bold">Выполнить</p>
+                        <p className="text-button-sm font-bold">{submitText}</p>
                     </Button>
                 </div>
 

@@ -5,7 +5,7 @@ import SettingsOutlinedIcon from '@mui/icons-material/SettingsOutlined';
 import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Elem from "@/widgets/user/sidebar/ui/Elem";
 import {homeLink, userLink} from "@/shared/lib/utils/userLink";
-import {useContext} from "react";
+import {useContext, useEffect, useState} from "react";
 import {UserContext} from "@/entities/user";
 
 interface Props {
@@ -15,6 +15,8 @@ interface Props {
 export default function Sidebar({className}: Props) {
 
     const {user} = useContext(UserContext)
+    const [scrolled, setScrolled] = useState(true);
+
 
     const elems = [
         !user && {
@@ -35,14 +37,22 @@ export default function Sidebar({className}: Props) {
     ]
 
     return (
-        <div className={`flex flex-col max-w-full w-full gap-1 lg:max-w-[180px] ${className}`}>
+        <div
+            className={`
+                flex flex-col w-full gap-1
+                transition-all duration-300 ease-in-out
+                lg:fixed
+            }
+                ${className}
+            `}
+        >
             {elems?.map((elem, key) =>
-                elem && <Elem
-                    Icon={elem?.Icon}
-                    text={elem?.text}
-                    href={elem?.link}
-                    key={key}
-                />
+                    elem && <Elem
+                        Icon={elem?.Icon}
+                        text={elem?.text}
+                        href={elem?.link}
+                        key={key}
+                    />
             )}
         </div>
     )

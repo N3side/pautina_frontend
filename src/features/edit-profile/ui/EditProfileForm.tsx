@@ -81,9 +81,11 @@ export default function EditProfileForm({enabled=true, close}: Props) {
         });
 
         const errors_ = response?.json?.errors
+        console.log(errors_)
 
         if (errors_) {
             setErrors(errors_)
+
             return
         }
 

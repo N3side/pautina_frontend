@@ -3,17 +3,15 @@
 import {Button, Checkbox} from "@mui/material";
 import Input from "@/shared/ui/Inputs/Input"
 import Textarea from "@/shared/ui/Inputs/Textarea";
-import {useCallback, useContext, useEffect, useRef, useState} from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import Date from "@/shared/ui/Inputs/Date";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import useTags from "@/entities/tags/lib/useTags";
 import Circle from "@/shared/ui/Buttons/Circle"
 import AddIcon from '@mui/icons-material/Add';
 import LoadingOverlay from "@/shared/ui/Overlays/LoadingOverlay";
-import {textSizes} from "@/shared/styles/typography/text";
 import {deleteDocument} from "@/entities/document/api/delete"
 import {updateDocument} from "@/entities/document/api/update";
-import {recognizeDocument} from "@/entities/document/api/recognize";
 import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOperation";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
@@ -24,6 +22,9 @@ import {useRouter} from "next/navigation";
 import {homeLink, userLink} from "@/shared/lib/utils/userLink";
 import ShowTags from "@/entities/tags/ui/showTags";
 import {DraggableWrapper} from "@/shared/ui/DraggableWrapper/DragableWrapper";
+import RecognizeButton from "@/shared/ui/Buttons/RecognizeButton";
+import toast from "react-hot-toast";
+import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 
 interface Props {
     document_values?: Record<string, any> | null
@@ -37,7 +38,61 @@ export default function UpdateDocument({document_values, document_id}: Props) {
     const {user} = useContext(UserContext)
 
     const [document, setDocument] = useState<Record<string, any> | null>(null)
+    const key = `draft;${document_id}`
+    const [draftDocument, setDraftDocument] = useState<Record<string, any> | null>(null)
     const [documentRecognized, setDocumentRecognized] = useState<Record<string, any> | null>(null)
+    const [documentRecognizesCount, setDocumentRecognizesCount] = useState<number>(document?.recognizes?.count || 0)
+
+    function deleteDraft() {
+        safeLocalStorage.removeItem(key)
+        toast.success("Черновик удален")
+    }
+
+    useEffect(() => {
+        if (document) {
+            const draft = safeLocalStorage.getItem(key)
+            if (draft) {
+                const parsedDraft = JSON.parse(draft)
+
+                if (JSON.stringify(parsedDraft) != JSON.stringify(document)) {
+                    openModalLoadDraft()
+                }
+
+                setDraftDocument(parsedDraft)
+            } else {
+                setDraftDocument(document)
+            }
+        }
+    }, [document, key]);
+
+    const {
+        close: closeModalLoadDraft,
+        open: openModalLoadDraft,
+        isOpen: isOpenModalLoadDraft
+    } = useModal()
+    const {confirm: confirmLoadDraft, decline: declineLoadDraft} = UseConfirmOperation({
+        close: closeModalLoadDraft,
+        callback: () => setDocument(draftDocument)
+    })
+
+    function handleChangeDocument(e) {
+        const {name, value} = e.target
+
+        // ✅ Берем текущий черновик или оригинальный документ
+        const currentDraft = draftDocument || document
+
+        // ✅ Создаем обновленный черновик
+        const updatedDraft = {
+            ...currentDraft,
+            [name]: value
+        }
+
+        // ✅ Сохраняем полный объект
+        safeLocalStorage.setItem(key, JSON.stringify(updatedDraft))
+
+        // ✅ Обновляем состояние
+        setDraftDocument(updatedDraft)
+    }
 
     const {
         addTag,
@@ -72,17 +127,19 @@ export default function UpdateDocument({document_values, document_id}: Props) {
 
     async function handleSubmit(e) {
         const response = await updateDocument({e, setErrors, formRef, tags, checked, document_id})
+        safeLocalStorage.removeItem(key)
         if (response?.response?.ok) {
-            router.replace(userLink(user?.publiccation?.public_url))
+            router.replace(userLink(user?.publication?.public_url))
         }
     }
 
-    const handleDeleteDocument = useCallback(async () => {
+    async function handleDeleteDocument() {
         const response = await deleteDocument({document_id: document_id})
+        safeLocalStorage.removeItem(key)
         if (response?.response?.ok) {
-            router.replace(userLink(user?.publiccation?.public_url))
+            router.replace(userLink(user?.publication?.public_url))
         }
-    }, [])
+    }
 
     const {
         close: closeModalConfirmOperation,
@@ -96,9 +153,41 @@ export default function UpdateDocument({document_values, document_id}: Props) {
 
     const [recognitions, setRecognitions] = useState<number>(user?.access?.recognizes_left || 0)
 
+    const {
+        close: closeModalRecognizeDocument,
+        open: openModalRecognizeDocument,
+        isOpen: isOpenModalRecognizeDocument
+    } = useModal()
+    const {confirm: confirmRecognize, decline: declineRecognize} = UseConfirmOperation({
+        close: closeModalRecognizeDocument,
+        callback: () => recognizeDocument()
+    })
+
+    async function recognizeDocument() {
+        if (isLoading) {
+            toast.success("Документ распознается, подождите...")
+            return
+        }
+        setIsLoading(true)
+        const response = await $fetch(`documents/${document?.id}/recognize`)
+        const document_ = response?.json?.document
+        if (document_) {
+            setDocumentRecognized(document_)
+        }
+        safeLocalStorage.setItem(key, JSON.stringify(document_))
+        setIsLoading(false)
+        setRecognitions(prev => prev > 0 ? prev - 1 : prev)
+    }
+
     useEffect(() => {
         setRecognitions(user?.access?.recognizes_left || 0)
     }, [user]);
+
+    useEffect(() => {
+        if (documentRecognized) {
+            setDocumentRecognizesCount(prev => prev + 1)
+        }
+    }, [documentRecognized]);
 
     return (
         <form className="relative flex flex-col w-full" onSubmit={handleSubmit} ref={formRef}>
@@ -108,60 +197,25 @@ export default function UpdateDocument({document_values, document_id}: Props) {
             <h5 className="text-text-main font-bold mb-6">Изменить информацию о документе</h5>
 
             <DraggableWrapper>
-
-                <div
-                    className="
-                        relative z-[100]
-                        w-[calc(100vw-2rem)] max-w-[500px]
-                        flex items-center justify-between
-                        p-4
-                        rounded-2xl
-                        backdrop-blur-2xl
-                        border-2 border-brand/40
-                        shadow-[0_20px_50px_rgba(var(--brand-rgb),0.3)]
-                        hover:border-brand hover:scale-[1.02]
-                        active:scale-[0.98]
-                        transition-all duration-300
-                        group
-                        overflow-hidden
-                    "
-                    onClick={(e) => {
-                        e.preventDefault()
-                        recognizeDocument({document_id, setIsLoading, setDocumentRecognized, setRecognitions})
-                    }}
-                >
-                    {/* Эффект сканирующего блика (пролетает при наведении) */}
-                    <div className="absolute inset-0 bg-gradient-to-r from-transparent via-brand/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-1000"/>
-
-                    <div className="relative z-10 flex items-center gap-4">
-                        {/* Иконка с пульсацией */}
-                        <div
-                            className="p-2.5 rounded-xl bg-brand/20 text-brand shadow-[inset_0_0_10px_rgba(var(--brand-rgb),0.2)]">
-                            <svg className="w-6 h-6 animate-pulse" fill="currentColor" viewBox="0 0 24 24">
-                                <path
-                                    d="M11.5,2L9,6.5L4.5,9L9,11.5L11.5,16L14,11.5L18.5,9L14,6.5L11.5,2M11.5,18L10.25,20.25L8,21.5L10.25,22.75L11.5,25L12.75,22.75L15,21.5L12.75,20.25L11.5,18M19,14L17.75,16.25L15.5,17.5L17.75,18.75L19,21L20.25,18.75L22.5,17.5L20.25,16.25L19,14Z"/>
-                            </svg>
-                        </div>
-
-                        <div className="flex flex-col items-start leading-tight">
-                            <p className="font-bold text-white text-base group-hover:text-brand transition-colors">
-                                Авто-заполнение
-                            </p>
-                        </div>
-                    </div>
-
-                    <div className="relative z-10 flex flex-col items-end gap-1.5">
-                    <span
-                        className="text-[10px] px-2.5 py-1 rounded-lg bg-brand text-white font-black uppercase tracking-wider shadow-lg shadow-brand/40">
-                        BETA
-                    </span>
-                    <span className="text-[11px] text-zinc-400">
-                        Лимит: <b className="text-white font-mono">{recognitions}</b>
-                    </span>
-                    </div>
-
-                </div>
+                <RecognizeButton
+                    limit={recognitions}
+                    callback={ document && document.constructor === Object && Array.isArray(document?.recognizes) && document?.recognizes.length > 0 || documentRecognizesCount > 0 ? openModalRecognizeDocument : recognizeDocument}
+                />
             </DraggableWrapper>
+
+            <Modal
+                isOpen={isOpenModalRecognizeDocument}
+                close={closeModalRecognizeDocument}
+                modalClassName="lg:max-w-[500px] max-h-[350px]"
+            >
+                <ConfirmationForm
+                    confirm={confirmRecognize}
+                    decline={declineRecognize}
+                    title="Вы уже распознали данный документ"
+                    description="Хотите распознать заново?"
+                    submitText="Распознать"
+                />
+            </Modal>
 
 
             <div className="flex flex-col gap-3 pb-8 w-full">
@@ -169,24 +223,25 @@ export default function UpdateDocument({document_values, document_id}: Props) {
                 <img src={document?.file_url} alt="" className="max-w-full object-cover"/>
 
                 <Input name="type" label="Тип документа" placeholder="Сертификат" error={errors?.type}
-                       defaultValue={document?.type || documentRecognized?.type}/>
+                       defaultValue={documentRecognized?.type || document?.type} onChange={handleChangeDocument}/>
                 <Input name="name" label="Имя документа" placeholder="веб профессионалы 2026" error={errors?.name}
-                       defaultValue={document?.name || documentRecognized?.name}/>
+                       defaultValue={documentRecognized?.name || document?.name} onChange={handleChangeDocument}/>
                 <Textarea name="description" label="Описание документа" placeholder="3 место в региональном этапе"
                           error={errors?.description}
-                          defaultValue={document?.description || documentRecognized?.description}/>
+                          defaultValue={documentRecognized?.description || document?.description} onChange={handleChangeDocument}/>
                 <Input name="event" label="Мероприятие" placeholder="Соревнование" error={errors?.event}
-                       defaultValue={document?.event || documentRecognized?.event}/>
+                       defaultValue={documentRecognized?.event || document?.event} onChange={handleChangeDocument}/>
                 <Input name="organization" label="Организация" placeholder="Профессионалы"
                        error={errors?.organization}
-                       defaultValue={document?.organization || documentRecognized?.organization}/>
+                       defaultValue={documentRecognized?.organization || document?.organization} onChange={handleChangeDocument}/>
                 <Date name="date" label="Дата выдачи" error={errors?.date}
-                      defaultValue={document?.date || documentRecognized?.date}/>
+                      defaultValue={documentRecognized?.date || document?.date} onChange={handleChangeDocument}/>
 
                 <Input
                     ref={inputRef}
                     label="Добавить категорию"
                     placeholder="Например, обучение"
+                    onChange={handleChangeDocument}
                     Button={
                         <Circle
                             onClick={() => {
@@ -222,10 +277,7 @@ export default function UpdateDocument({document_values, document_id}: Props) {
                 </ButtonLarge>
 
                 <Button
-                    style={{
-                        fontSize: textSizes.tiny,
-                    }}
-                    className="!text-text-muted !rounded-xl !w-full"
+                    className="!text-text-muted !text-[12px] !font-bold !rounded-xl !w-full"
                     onClick={openModalConfirmOperation}
                 >
                     Удалить документ
@@ -234,9 +286,30 @@ export default function UpdateDocument({document_values, document_id}: Props) {
                 <Modal
                     isOpen={isOpenModalConfirmOperation}
                     close={closeModalConfirmOperation}
-                    modalClassName="max-w-[500px] max-h-[350px]"
+                    modalClassName="lg:max-w-[500px] max-h-[350px]"
                 >
-                    <ConfirmationForm confirm={confirm} decline={decline}/>
+                    <ConfirmationForm
+                        confirm={confirm}
+                        decline={decline}
+                    />
+                </Modal>
+
+                <Modal
+                    isOpen={isOpenModalLoadDraft}
+                    close={closeModalLoadDraft}
+                    modalClassName="lg:max-w-[500px] max-h-[350px]"
+                >
+                    <ConfirmationForm
+                        confirm={confirmLoadDraft}
+                        decline={() => {
+                            declineLoadDraft()
+                            deleteDraft()
+                        }}
+                        title="Обнаружен черновик, загрузить?"
+                        description="вы изменяли документ, но не сохранили изменения"
+                        submitText="Загрузить"
+                        declineText="Удалить черновик"
+                    />
                 </Modal>
 
             </div>
