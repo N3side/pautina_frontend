@@ -51,7 +51,7 @@ export default function UpdateDocument({document_values, document_id}: Props) {
     useEffect(() => {
         if (document) {
             const draft = safeLocalStorage.getItem(key)
-            if (draft) {
+            if (draft && draft !== "undefined") {
                 const parsedDraft = JSON.parse(draft)
 
                 if (JSON.stringify(parsedDraft) != JSON.stringify(document)) {
