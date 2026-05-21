@@ -4,6 +4,8 @@ import LogoLight from "@/shared/assets/images/vector/logo/LogoLight";
 import {Container} from "@/shared/ui/Container/Container";
 import NavigationLink from "@/shared/ui/Navigation/NavigationLink";
 
+
+
 function Heading({text}) {
     return <p className="text-text-main text-large font-semibold">{text}</p>
 }

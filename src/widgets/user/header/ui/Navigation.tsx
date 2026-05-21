@@ -7,6 +7,7 @@ import {model} from "../model"
 import Link from "next/link"
 import {UserContext} from "@/entities/user";
 import NavigationLink from "@/shared/ui/Navigation/NavigationLink";
+import PromoTimer from "@/entities/promo-timer/PromoTimer";
 
 
 interface Props {
@@ -61,7 +62,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                         )}
 
                         <NavigationLink>
-                            Сервис находится в разработке
+                            Платформа находится в разработке
                         </NavigationLink>
 
                         {
@@ -70,6 +71,8 @@ export default function Navigation({ isActive, setIsActive }: Props) {
 								Админ-панель
 							</NavigationLink>
                         }
+
+                        <PromoTimer />
 
                     </div>
                 </nav>

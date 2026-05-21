@@ -86,7 +86,7 @@ export default function BannerWidget() {
 
                         {/* Кнопка */}
                         <Link
-                            href={user && !user?.access?.isGuest ? userLink(user?.publication?.public_url) : "/register" }
+                            href={user && !user?.access?.isGuest ? userLink(user?.publication?.public_url) : "/src/app/register" }
                         >
                             <ShadowWrapper className={`w-full sm:w-auto mt-5 ${rise}`}>
                                 <ButtonLarge className="!w-full sm:!w-fit !px-10 !py-4 !rounded-2xl">

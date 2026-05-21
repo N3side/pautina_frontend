@@ -1,5 +1,12 @@
-import AdminLogsPage from "@/pages/admin/logs/AdminLogsPage";
+import AdminLayout from "@/widgets/admin/admin-layout/ui/AdminLayout";
+import ShowLogs from "@/features/admin/show-logs/ShowLogs"
+
+export const dynamic = 'force-dynamic'
 
 export default function Page() {
-    return <AdminLogsPage />
+    return (
+        <AdminLayout>
+            <ShowLogs />
+        </AdminLayout>
+    )
 }

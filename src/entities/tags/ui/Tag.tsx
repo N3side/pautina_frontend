@@ -1,8 +1,12 @@
+import RoundedIconWrapper from "@/shared/ui/Buttons/RoundedIconWrapper";
+
 interface Props {
     tag?: string
     color?: string
     onRemove?: (args?: any) => void
 }
+
+import CloseIcon from '@mui/icons-material/Close';
 
 export default function Tag({tag="", color="#6366f1", onRemove}: Props) {
     return (
@@ -11,16 +15,13 @@ export default function Tag({tag="", color="#6366f1", onRemove}: Props) {
                 {tag}
             </p>
             {onRemove && (
-                <button
+                <RoundedIconWrapper
+                    style={{
+                        background: color
+                    }}
+                    Icon={CloseIcon}
                     onClick={onRemove}
-                    className="rounded-full hover:bg-black/5 p-0.5 transition-all duration-300 hover:rotate-90"
-                    style={{background: color}}
-                    type="button"
-                >
-                    <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+                />
             )}
         </span>
     )

@@ -20,17 +20,15 @@ export default function AdminLayout({children}: Props) {
     const { isExpanded } = useSidebarStore();
 
     return (
-        <ThemeProvider>
-            <div className="flex max-w-[100vw]">
-                {matches ? <BurgerWidget isOpen={isExpanded} /> : <SidebarWidget />}
+        <div className="flex max-w-[100vw]">
+            {matches ? <BurgerWidget isOpen={isExpanded} /> : <SidebarWidget />}
 
-                <div className="flex flex-col gap-[30px] w-full">
-                    <AdminContainer className="flex flex-col gap-8">
-                        <AdminHeader />
-                        {children}
-                    </AdminContainer>
-                </div>
+            <div className="flex flex-col gap-[30px] w-full">
+                <AdminContainer className="flex flex-col gap-8">
+                    <AdminHeader />
+                    {children}
+                </AdminContainer>
             </div>
-        </ThemeProvider>
+        </div>
     )
 }

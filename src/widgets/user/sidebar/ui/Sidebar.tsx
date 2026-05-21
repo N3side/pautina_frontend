@@ -47,12 +47,12 @@ export default function Sidebar({className}: Props) {
             `}
         >
             {elems?.map((elem, key) =>
-                    elem && <Elem
-                        Icon={elem?.Icon}
-                        text={elem?.text}
-                        href={elem?.link}
-                        key={key}
-                    />
+                elem && <Elem
+                    Icon={elem?.Icon}
+                    text={elem?.text}
+                    href={elem?.link}
+                    key={key}
+                />
             )}
         </div>
     )

@@ -1,7 +1,14 @@
-import RegisterPage from "@/pages/register/ui/RegisterPage";
+import HeaderWidget from "@/widgets/user/header/ui/HeaderWidget";
+import RegisterWidget from "@/widgets/user/register/ui/RegisterWidget";
+import {CheckGuest} from "@/entities/user";
+import FooterWidget from "@/widgets/user/footer/ui/FooterWidget";
 
 export default function Page() {
     return (
-        <RegisterPage />
+        <CheckGuest>
+            <HeaderWidget />
+            <RegisterWidget />
+            <FooterWidget />
+        </CheckGuest>
     )
 }

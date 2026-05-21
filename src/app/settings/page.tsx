@@ -1,12 +1,13 @@
-import SettingsPage from "@/pages/settings/ui/SettingsPage";
+import SettingsWidget from "@/widgets/user/settings/ui/SettingsWidget";
 import {CheckUser} from "@/entities/user";
-
-export const dynamic = 'force-dynamic'
+import Layout from "@/widgets/user/layout-h-s-f/Layout";
 
 export default function Page() {
     return (
         <CheckUser>
-            <SettingsPage />
+            <Layout>
+                <SettingsWidget />
+            </Layout>
         </CheckUser>
     )
 }

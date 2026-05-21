@@ -1,7 +1,14 @@
-import AdminDocumentsPage from "@/pages/admin/documents/AdminDocumentsPage";
+"use client"
 
-export const dynamic = 'force-dynamic'
+import AdminLayout from "@/widgets/admin/admin-layout/ui/AdminLayout";
+import ShowDocuments from "@/features/admin/show-documents/showDocuments"
 
 export default function Page() {
-    return <AdminDocumentsPage />
+    return (
+        <>
+            <AdminLayout>
+                <ShowDocuments />
+            </AdminLayout>
+        </>
+    )
 }

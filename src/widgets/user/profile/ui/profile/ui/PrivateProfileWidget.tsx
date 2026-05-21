@@ -46,7 +46,7 @@ export const PrivateProfileWidget = () => {
                 <p
                     className="text-secondary text-text-muted"
                 >
-                    Этот аккаунт имеет статус частного
+                    Пользователь сделал этот аккаунт приватным
                 </p>
             </div>
         </div>

@@ -5,8 +5,9 @@ import {Button} from "@mui/material"
 export default function ButtonLarge({ children, className="", text="", ...props }) {
     return (
         <Button
-            {...props}
             type="submit"
+            onClick={(e) => e.stopPropagation()}
+            {...props}
             // sx — это стандарт для MUI, он работает лучше чем style
             className={`!mt-[15px] !py-[15px] !rounded-xl !w-full !transform-none !bg-[var(--color-brand)] !text-button-sm !text-white !font-bold ${className}`}
             sx={{

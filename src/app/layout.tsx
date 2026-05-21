@@ -5,8 +5,8 @@ import SubscriptionResponseListener from "@/features/subscription-response-liste
 import {ThemeScript} from "@/shared/lib/providers/ThemeProvider";
 
 export const metadata: Metadata = {
-    title: "Паутина",
-    description: "Единая система хранения сертификатов, проектов и достижений",
+    title: "Паутина Топ",
+    description: "Единая система хранения сертификатов, проектов и достижений. Pautina.top",
 };
 
 export default function RootLayout({
@@ -21,6 +21,7 @@ export default function RootLayout({
         const intercept = minValue - slope * minScreenWidth
         console.log(`clamp(${minValue}px,${vw.toFixed(3)}vw+${intercept.toFixed(3)}px,${maxValue}px)`)
     }
+
     clampGenerator(320, 1920, 16, 40)
 
     return (

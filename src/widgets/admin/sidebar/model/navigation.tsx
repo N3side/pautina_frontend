@@ -2,6 +2,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import BookOutlinedIcon from '@mui/icons-material/BookOutlined';
 import FindInPageOutlinedIcon from '@mui/icons-material/FindInPageOutlined';
+import StorageIcon from '@mui/icons-material/Storage';
 
 export type NavItem = {
     name: string;
@@ -30,6 +31,11 @@ export const mainNavItems: NavItem[] = [
         icon: <FindInPageOutlinedIcon />,
         name: "Документы",
         path: "/admin/documents"
-    }
+    },
+    {
+        icon: <StorageIcon />,
+        name: "Стеки",
+        path: "/admin/stacks"
+    },
 
 ];
