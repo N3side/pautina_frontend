@@ -62,7 +62,7 @@ export default function EditUserInfo() {
     };
 
     if (!isClient) {
-        return null; // В Next.js лучше возвращать null вместо пустого return
+        return null; // В Next.js лучше возвращать null вместо пустого returnd
     }
 
     return (

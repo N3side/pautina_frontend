@@ -47,7 +47,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
         // setCategories(categories_)
 
         if (documents_.length > 0) {
-            console.log(documents_)
+            setDocuments(documents_)
         }
 
         setPage(page_)

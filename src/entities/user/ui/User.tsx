@@ -18,6 +18,8 @@ import SubscriptionIcon from "@/shared/ui/user/subscription/SubscriptionIcon";
 import SubscriptionOffer from "@/widgets/user/SubscriptionOffer/SubscriptionOffer";
 import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 import toast from "react-hot-toast";
+import {useContext} from "react";
+import {UserContext} from "@/entities/user";
 
 interface Props {
     user: Record<string, any>
@@ -71,6 +73,8 @@ export default function User({user, isMyProfile, isPrivate, showModals}: Props) 
 
     const {isOpen: isOpenSub, open: openSub, close: closeSub} = useModal()
 
+    const {user: authUser} = useContext(UserContext)
+
     return (
         <div className="flex gap-5 items-center flex-col lg:flex-row">
             <BigAvatar className="w-[160px] h-[160px] !absolute !top-[-80px] glass-effect" isMyProfile={isMyProfile} avatar={user?.main?.avatar} />
@@ -91,7 +95,7 @@ export default function User({user, isMyProfile, isPrivate, showModals}: Props) 
                     {
                         HasUserSubscription({user}) &&
                         <div className="cursor-pointer" onClick={() =>
-                            !HasUserSubscription({user}) ?
+                            !HasUserSubscription({user: authUser}) ?
                             openSub() : toast.success("Кастомизация иконок в разработке")
                         }>
                             <SubscriptionIcon />

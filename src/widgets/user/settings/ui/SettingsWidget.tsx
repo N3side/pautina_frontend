@@ -51,7 +51,6 @@ export default function SettingsWidget() {
                         />
                     </Link>}
 
-
                 </div>
 
                 <div className="flex flex-col gap-6">

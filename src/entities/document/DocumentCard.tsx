@@ -25,18 +25,18 @@ export default function DocumentCard({ document }) {
                 <div className="absolute top-0 left-0 w-full h-1 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"/>
             )}
 
-            <img src={document?.file_url} alt=""/>
+            <img className="h-[400px]" src={document?.file_url} alt=""/>
 
-            <SyntaxHighlighter
-                language="json"
-                style={dracula}
-                customStyle={{
-                    width: "100%",
-                    background: "transparent"
-                }}
-            >
-                {JSON.stringify(document, null, 2)}
-            </SyntaxHighlighter>
+            {/*<SyntaxHighlighter*/}
+            {/*    language="json"*/}
+            {/*    style={dracula}*/}
+            {/*    customStyle={{*/}
+            {/*        width: "100%",*/}
+            {/*        background: "transparent"*/}
+            {/*    }}*/}
+            {/*>*/}
+            {/*    {JSON.stringify(document, null, 2)}*/}
+            {/*</SyntaxHighlighter>*/}
 
             <div className="flex gap-3">
                 <ActionButton text="Принять" onClick={approve} />
