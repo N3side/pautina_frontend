@@ -3,7 +3,7 @@ services:
     image: ghcr.io/n3side/pautina_frontend:latest
     container_name: my-app
     ports:
-      - "8080:3000"
+      - "8080:52552"
     restart: unless-stopped
     environment:
       - NODE_ENV=production

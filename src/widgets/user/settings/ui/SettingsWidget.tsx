@@ -8,8 +8,13 @@ import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
 import NewPassword from "@/features/verify-user/ui/components/NewPassword"
 import Link from "next/link"
+import {useContext} from "react";
+import {UserContext} from "@/entities/user";
+import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 
 export default function SettingsWidget() {
+
+    const {user} = useContext(UserContext)
 
     const {open: openChangePassword, close: closeChangePassword, isOpen: isOpenChangePassword} = useModal()
 
@@ -38,6 +43,13 @@ export default function SettingsWidget() {
                             feature="Изменить информацию о себе"
                         />
                     </Link>
+
+                    {HasUserSubscription({user}) &&
+                    <Link href="/edit?step=subscription">
+                        <LinkSetting
+                            feature="Управление подпиской"
+                        />
+                    </Link>}
 
 
                 </div>

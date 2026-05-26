@@ -33,10 +33,15 @@ export default function GeneralSettings() {
 
                     <ToggleThemeSetting/>
 
-
                     <Link href="/edit">
                         <LinkSetting
                             feature="Изменить информацию о себе"
+                        />
+                    </Link>
+
+                    <Link href="/edit">
+                        <LinkSetting
+                            feature="Управление подпиской"
                         />
                     </Link>
 

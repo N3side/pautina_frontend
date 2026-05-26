@@ -1,13 +1,20 @@
 "use client"
 
-import React, {useEffect} from "react";
+import React, {useContext, useEffect} from "react";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
 import SubscriptionOffer from "@/widgets/user/SubscriptionOffer/SubscriptionOffer";
+import {UserContext} from "@/entities/user";
 
 export default function SubscriptionResponseListener() {
 
     const {isOpen, open, close} = useModal()
+
+    const {user} = useContext(UserContext)
+
+    useEffect(() => {
+        console.log(user)
+    }, [user]);
 
     useEffect(() => {
         const handler = () => {
@@ -18,8 +25,8 @@ export default function SubscriptionResponseListener() {
     }, [])
 
     return (
-        <Modal isOpen={isOpen} close={close} modalClassName="max-w-[700px]">
-            <SubscriptionOffer />
+        <Modal isOpen={isOpen} close={close} modalClassName="max-w-[1000px]">
+            <SubscriptionOffer user={user} />
         </Modal>
     )
 }

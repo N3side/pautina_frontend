@@ -24,6 +24,12 @@
 	--bg-glass: rgba(255, 255, 255, 1);
 	--border-glass: rgba(209, 213, 219, 0.4);
 	--glass-highlight: rgba(255, 255, 255, 0.5);
+
+	--subscription-color: linear-gradient(
+		180deg,
+		rgba(148, 139, 250, 1),
+		rgba(14, 165, 233, 1)
+	);
 }
 
 .dark {

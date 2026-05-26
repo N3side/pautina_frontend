@@ -32,8 +32,8 @@ export default function RootLayout({
             <body>  
                 <Providers>
                     {children}
+                    <SubscriptionResponseListener />
                 </Providers>
-                <SubscriptionResponseListener />
             </body>
         </html>
     );

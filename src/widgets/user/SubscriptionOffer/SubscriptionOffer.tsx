@@ -1,15 +1,17 @@
-import React from 'react';
+import React, {useContext, useEffect} from 'react';
 import LanguageIcon from '@mui/icons-material/Language';
 import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import BlockIcon from '@mui/icons-material/Block';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
-import {Button} from "@mui/material";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Gradient from "@/shared/ui/IconContainers/Gradient";
+import {UserContext} from "@/entities/user";
+import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
 
 // 1. Отдельный компонент для каждого преимущества
 const BenefitItem = ({ title, description, Icon }) => {
+
     return (
         <div className="!flex !items-start !gap-4 !p-3 !rounded-2xl !transition-colors !duration-300">
 
@@ -30,8 +32,14 @@ const BenefitItem = ({ title, description, Icon }) => {
     );
 };
 
+interface Props {
+    user?: Record<string, any> | null
+}
+
 // 2. Главный компонент формы подписки
-export default function SubscriptionOffer() {
+export default function SubscriptionOffer({user}: Props) {
+
+
     const benefits = [
         {
             title: "Кастомный поддомен",
@@ -49,16 +57,26 @@ export default function SubscriptionOffer() {
             Icon: BlockIcon
         },
         {
-            title: "Расширенное хранилище",
+            title: "Расширенное хранилище для документов",
             description: "Загрузка до 100 документов.",
             Icon: CloudUploadIcon
         },
         {
+            title: "Расширенное хранилище для проектов",
+            description: "Загрузка до 30 проектов.",
+            Icon: CloudUploadIcon
+        },
+        {
             title: "Эмодзи-статусы",
-            description: "Выделяйтесь среди других с помощью уникальных статусов.",
+            description: "Выделяйтесь среди других с иконкой около вашего имени.",
             Icon: EmojiEmotionsIcon
-        }
+        },
+
     ];
+
+    useEffect(() => {
+        console.log(user)
+    }, [user]);
 
     return (
         <section className="flex items-center justify-center">
@@ -75,17 +93,21 @@ export default function SubscriptionOffer() {
             </style>
 
             {/* Карточка подписки с использованием твоего класса glass-effect */}
-            <div className="w-full flex flex-col gap-6 relative overflow-hidden">
+            <div className="w-full flex flex-col gap-2 relative overflow-hidden">
 
                 {/* Заголовок */}
-                <div className="text-center z-10">
-                    <h5 className="text-text-main font-bold mb-3">
-                        Перейдите на <span className="text-text-brand">PRO</span> уровень
+                <div className=" mb-3 flex gap-2 justify-center items-center">
+                    <h5 className="text-text-main font-bold">
+                        Подписка
                     </h5>
-                    <p className="text-small text-text-muted">
-                        Получите максимум возможностей от платформы с эксклюзивными функциями.
-                    </p>
+                    <h5
+                        className="bg-[image:var(--subscription-color)] bg-clip-text text-transparent font-black"
+                        style={{ WebkitBackgroundClip: 'text' }}
+                    >
+                        Артефакт
+                    </h5>
                 </div>
+
 
                 {/* Список преимуществ */}
                 <div className="flex flex-col gap-2 z-10">
@@ -98,6 +120,15 @@ export default function SubscriptionOffer() {
                         />
                     ))}
                 </div>
+
+                {user &&
+
+                    <div className="flex flex-col gap-2 mt-4">
+                        <h6 className="text-text-main font-bold">Ваш профиль с подпиской:</h6>
+                        <ProfileWidget isMyProfile={false} isPrivate={false} trueUser={user} showModals={false} />
+                    </div>
+
+                }
 
                 {/* Кнопка покупки */}
                 <div className="z-10 flex flex-col items-center">

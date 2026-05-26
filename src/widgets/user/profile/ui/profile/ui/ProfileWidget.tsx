@@ -16,9 +16,10 @@ interface Props {
     isMyProfile: boolean
     isPrivate: boolean
     trueUser: Record<string, any>
+    showModals?: boolean
 }
 
-export default function ProfileWidget({ isMyProfile, isPrivate, trueUser }: Props) {
+export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showModals=true }: Props) {
 
     const {setUser} = useContext(UserContext)
 
@@ -62,7 +63,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser }: Prop
             </div>
 
             <div className={`w-full mt-[215px] relative glass-effect p-8 rounded-[18px] flex justify-between items-center flex-col lg:flex-row`}>
-                <User user={trueUser} isMyProfile={isMyProfile} isPrivate={isPrivate} />
+                <User user={trueUser} isMyProfile={isMyProfile} isPrivate={isPrivate} showModals={showModals} />
                 {isMyProfile &&
                     <div>
                         <div className="flex gap-2 hidden lg:flex">

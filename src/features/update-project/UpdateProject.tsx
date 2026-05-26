@@ -11,7 +11,7 @@ import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
 import {usePathname, useRouter} from "next/navigation";
 import EditGallery from "@/features/edit-gallery/EditGallery";
-import GetStacks from "@/features/get-stacks/GetStacks";
+import GetStacks from "../get-stacks/ui/GetStacks";
 import {userLink} from "@/shared/lib/utils/userLink";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
 import {Modal} from "@/shared/ui/Modals/Modal";
@@ -25,7 +25,11 @@ export default function UpdateProject() {
 
     const [project, setProject] = useState<Record<string, any> | null>(null)
     const [errors, setErrors] = useState<Record<string, any> | null>(null)
-    const [checked, setChecked] = useState(project?.is_public)
+    const [checked, setChecked] = useState<boolean>(Boolean(project?.is_public) || false)
+
+    useEffect(() => {
+        setChecked(project?.is_public)
+    }, [project]);
 
     const id = usePathname().split("/").pop()
 
