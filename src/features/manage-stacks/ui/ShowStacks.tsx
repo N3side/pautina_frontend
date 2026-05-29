@@ -7,13 +7,14 @@ import { useGetStacks } from "@/features/manage-stacks/model/useGetStacks";
 
 interface ShowStacksProps {
     title?: string;
-    selectedStacks: Record<string, any>[];
+    selectedStacks?: Record<string, any>[];
     setSelectedStacks?: React.Dispatch<React.SetStateAction<Record<string, any>[] | null>>;
     showSelected?: boolean;
     showAll?: boolean;
     showSearch?: boolean;
     userId?: number | string;
     isReadOnly?: boolean; // Новый проп
+    setCurrentSelectedStack?: (any) => void
 }
 
 export default function ShowStacks({
@@ -23,7 +24,8 @@ export default function ShowStacks({
        showAll = false,
        showSearch = false,
        userId,
-       isReadOnly = false // По умолчанию false
+       isReadOnly = false, // По умолчанию false
+       setCurrentSelectedStack
    }: ShowStacksProps) {
 
     const {
@@ -44,6 +46,7 @@ export default function ShowStacks({
     );
 
     const handleSelect = (stack: any) => {
+        setCurrentSelectedStack && setCurrentSelectedStack(stack)
         if (isReadOnly || !setSelectedStacks) return;
         const found = selectedStacks?.some(_ => _.id === stack.id);
         if (!found) {

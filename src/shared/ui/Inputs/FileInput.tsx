@@ -9,6 +9,7 @@ interface FileInputProps {
     accept?: string;
     className?: string;
     placeholder?: string;
+    mimes?: string
 }
 
 const FileInput = ({
@@ -18,7 +19,8 @@ const FileInput = ({
        onChange,
        accept = "image/*,application/pdf",
        className,
-       placeholder = "Нажмите или перетащите файл сюда"
+       placeholder = "Нажмите или перетащите файл сюда",
+       mimes="PNG, JPG, JPEG, WEBP, PDF до 5МБ",
    }: FileInputProps) => {
     const [isDragging, setIsDragging] = useState(false);
     const [fileName, setFileName] = useState<string | null>(null);
@@ -154,7 +156,7 @@ const FileInput = ({
                                 {fileName ? fileName : placeholder}
                             </p>
                             <p className="text-xs text-text-muted/60 mt-1">
-                                {fileName ? 'Файл распознан. Нажмите, чтобы заменить' : 'PNG, JPG, JPEG, WEBP, PDF до 5МБ'}
+                                {fileName ? 'Файл распознан. Нажмите, чтобы заменить' : mimes}
                             </p>
                         </div>
                     </>
