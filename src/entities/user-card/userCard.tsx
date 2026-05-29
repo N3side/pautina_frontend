@@ -39,7 +39,7 @@ export default function UserCard({ user }: Props) {
 
         const formData = new FormData(form?.current)
 
-        const response = await $fetch(`admin/users/${user?.id}/give_sub`, {method: "PATCH", body: formData})
+        await $fetch(`admin/users/${user?.id}/give_sub`, {method: "PATCH", body: formData})
     }
 
 
@@ -49,7 +49,7 @@ export default function UserCard({ user }: Props) {
 
             <div className="relative shrink-0">
                 <img
-                    src={user.avatar}
+                    src={user?.main?.avatar}
                     alt={user.username}
                     className="w-14 h-14 md:w-16 md:h-16 rounded-full object-cover border-2 border-glass-border"
                 />
@@ -71,7 +71,7 @@ export default function UserCard({ user }: Props) {
             </SyntaxHighlighter>
 
             <div className="flex gap-3">
-                <Link href={userLink(user?.public_url)}
+                <Link href={userLink(user?.publication?.public_url)}
                       target="_blank">
                     <ActionButton>
                         Профиль
