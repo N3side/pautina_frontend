@@ -1,3 +1,5 @@
+"use client"
+
 import { Fragment } from 'react';
 import { Combobox, Transition } from '@headlessui/react';
 
@@ -45,7 +47,6 @@ const MODERN_INPUT_CLASSES = `
   focus:border-brand focus:ring-4 focus:ring-brand/10 hover:border-brand/50
 `;
 
-// Базовый интерфейс для любой опции
 export interface ComboboxOption {
     id: string | number;
     name: string;
@@ -62,22 +63,26 @@ export interface AsyncComboboxProps<T extends ComboboxOption> {
     onChange: (option: T | null) => void;
     onClear: () => void;
     emptyState?: React.ReactNode;
-    showDropdown?: boolean; // <-- Новый опциональный проп
+    showDropdown?: boolean;
 }
 
 export function AsyncCombobox<T extends ComboboxOption>({
-        label,
-        placeholder,
-        inputValue,
-        selectedOption,
-        options,
-        isLoading,
-        onInputChange,
-        onChange,
-        onClear,
-        emptyState,
-        showDropdown = true // <-- По умолчанию выпадашка включена
-    }: AsyncComboboxProps<T>) {
+                                                            label,
+                                                            placeholder,
+                                                            inputValue,
+                                                            selectedOption,
+                                                            options = [],
+                                                            isLoading,
+                                                            onInputChange,
+                                                            onChange,
+                                                            onClear,
+                                                            emptyState,
+                                                            showDropdown = true
+                                                        }: AsyncComboboxProps<T>) {
+
+    // Флаг, открывать ли список вообще (когда идет загрузка — скрываем, чтобы не дергать старые данные)
+    const isDropdownVisible = showDropdown && !isLoading && inputValue.trim().length >= 2;
+
     return (
         <div>
             {label && <p className="text-label mb-1.5">{label}</p>}
@@ -115,16 +120,47 @@ export function AsyncCombobox<T extends ComboboxOption>({
                     ) : null}
                 </div>
 
-                {/* Рендерим выпадающий список только если флаг равен true */}
-                {showDropdown && (
+                {isDropdownVisible && (
                     <Transition
                         as={Fragment}
                         leave="transition ease-in duration-100"
                         leaveFrom="opacity-100"
                         leaveTo="opacity-0"
                     >
-                        <Combobox.Options className="absolute top-full left-0 z-50 w-full mt-2 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] focus:outline-none py-1.5 text-sm custom-scrollbar bg-surface max-h-60 overflow-y-auto">
-                            {/* ... внутренности Combobox.Options остаются без изменений ... */}
+                        <Combobox.Options className="absolute top-full left-0 z-50 w-full mt-2 rounded-xl shadow-[0_10px_40px_-10px_rgba(0,0,0,0.1)] focus:outline-none py-1.5 text-sm custom-scrollbar bg-surface max-h-60 overflow-y-auto border border-border-default/50 backdrop-blur-md">
+                            {options.length > 0 ? (
+                                options.map((option) => (
+                                    <Combobox.Option
+                                        key={option.id}
+                                        value={option}
+                                        className={({ active }) =>
+                                            `relative cursor-pointer select-none py-2.5 pl-10 pr-4 transition-colors duration-150
+                                            ${active ? 'bg-brand/10 text-brand' : 'text-text-main hover:bg-white/[0.02]'}`
+                                        }
+                                    >
+                                        {({ selected, active }) => (
+                                            <>
+                                                <span className={`block truncate ${selected ? 'font-semibold text-brand' : 'font-normal'}`}>
+                                                    <HighlightedText text={option.name} highlight={inputValue} />
+                                                </span>
+
+                                                {selected && (
+                                                    <span className="absolute inset-y-0 left-3 flex items-center text-brand">
+                                                        <CheckIcon className="w-4 h-4" />
+                                                    </span>
+                                                )}
+                                            </>
+                                        )}
+                                    </Combobox.Option>
+                                ))
+                            ) : (
+                                // Если массив пустой — выводим кастомный emptyState, переданный из хука города
+                                emptyState || (
+                                    <div className="relative cursor-default select-none py-4 px-4 text-text-muted text-center">
+                                        Ничего не найдено
+                                    </div>
+                                )
+                            )}
                         </Combobox.Options>
                     </Transition>
                 )}

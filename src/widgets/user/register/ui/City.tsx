@@ -3,6 +3,7 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import useCitySelect from "@/features/select-city/useCitySelect";
 import {editCity} from "@/widgets/user/profile/ui/profile/api";
 import {$fetch} from "@/shared/api/fetch";
+import Typewriter from "typewriter-effect";
 
 export default function City({ next = () => {} }: { next: () => void }) {
 
@@ -40,9 +41,18 @@ export default function City({ next = () => {} }: { next: () => void }) {
     return (
         <div>
             <div className="flex flex-col gap-[15px] w-full">
-                <h4 className="text-text-main font-bold">Из какого вы города?</h4>
+                <h4 className="text-text-main font-bold">
+                    <Typewriter
+                        onInit={(typewriter) => {
+                            typewriter
+                                .changeDelay(30) // Устанавливаем скорость 20ms
+                                .typeString('Из какого вы города?')
+                                .start(); // Запускаем один раз и всё
+                        }}
+                    />
+                </h4>
 
-                <p className="secondary text-text-muted">
+                <p className="text-secondary text-text-muted">
                     Напишите и выберите город из списка (если введеного города в списке нет, мы примем его)
                 </p>
             </div>

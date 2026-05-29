@@ -8,6 +8,7 @@ import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 import {Checkbox} from "@mui/material";
 import toast from "react-hot-toast";
 import Link from "next/link"
+import Typewriter from "typewriter-effect";
 
 interface FormErrors {
     email?: string;
@@ -76,9 +77,17 @@ export default function Email({name, email, setEmail, next, setTimer, position})
         <div>
             <div className="flex flex-col gap-[15px]">
                 <h4 className="text-text-main font-bold">
-                    Привет, {name?.charAt(0).toUpperCase() + name?.slice(1,) }, приятно познакомиться
+                    <Typewriter
+                        onInit={(typewriter) => {
+                            typewriter
+                                .changeDelay(30) // Устанавливаем скорость 20ms
+                                .typeString(`Привет, ${name?.charAt(0).toUpperCase() + name?.slice(1,) }, приятно познакомиться`)
+                                .start(); // Запускаем один раз и всё
+                        }}
+                    />
+
                 </h4>
-                <p className="secondary text-text-muted">
+                <p className="text-secondary text-text-muted">
                     Чтобы система запомнила Вас, необходимо ввести свою электронную почту. На эту почту придет код подтверждения
                 </p>
             </div>

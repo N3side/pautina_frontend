@@ -30,11 +30,11 @@ interface UseCitySelectProps {
 }
 
 export default function useCitySelect({
-          city_local = "",
-          city_id_local = "",
-          default_city = "",
-          default_city_id = ""
-      }: UseCitySelectProps = {}) {
+                                          city_local = "",
+                                          city_id_local = "",
+                                          default_city = "",
+                                          default_city_id = ""
+                                      }: UseCitySelectProps = {}) {
 
     const [city, setCity] = useState<string>(() => {
         if (default_city) return default_city;
@@ -83,6 +83,7 @@ export default function useCitySelect({
         const timeout = setTimeout(async () => {
             setLoading(true);
             const response = await $fetch(`cities?city=${encodeURIComponent(city)}`);
+            console.log(response?.json?.cities)
             setCities((response?.json?.cities as ComboboxOption[]) || []);
             setLoading(false);
         }, 500);

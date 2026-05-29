@@ -3,6 +3,7 @@ import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import useSelectSource from "@/features/select-source/useSelectSource";
 import {unionFormData} from "@/shared/lib/utils/UnionFormData";
+import Typewriter from "typewriter-effect";
 
 
 export default function Source({next}) {
@@ -36,7 +37,15 @@ export default function Source({next}) {
             {/* Заголовок и описание */}
             <div className="flex flex-col gap-4">
                 <h4 className="text-text-main font-bold">
-                    Откуда вы узнали о Паутине? *
+                    <Typewriter
+                        onInit={(typewriter) => {
+                            typewriter
+                                .changeDelay(30) // Устанавливаем скорость 20ms
+                                .typeString(`Откуда вы узнали о Паутине? *`)
+                                .start(); // Запускаем один раз и всё
+                        }}
+                    />
+
                 </h4>
 
                 <p className="text-secondary text-text-muted">

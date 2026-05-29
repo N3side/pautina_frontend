@@ -2,6 +2,7 @@ import {useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
+import Typewriter from 'typewriter-effect';
 
 export default function Name({name, setName, next}) {
 
@@ -28,7 +29,14 @@ export default function Name({name, setName, next}) {
             {/* Заголовок и подзаголовок */}
             <div className="flex flex-col gap-3 lg:text-left">
                 <h4 className="font-bold text-text-main">
-                    Добро пожаловать на платформу Паутина
+                    <Typewriter
+                        onInit={(typewriter) => {
+                            typewriter
+                                .changeDelay(30) // Устанавливаем скорость 20ms
+                                .typeString('Добро пожаловать на плафторму Паутина')
+                                .start(); // Запускаем один раз и всё
+                        }}
+                    />
                 </h4>
                 <p className="text-secondary text-text-muted">
                     Для дальнейшей работы предлагаем познакомиться

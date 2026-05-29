@@ -2,6 +2,7 @@ import React, {FormEvent, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {$fetch} from "@/shared/api/fetch";
 import {UseSelectActivity} from "@/features/select-activity/useSelectActivity";
+import Typewriter from "typewriter-effect";
 
 // Описываем структуру возможных ошибок
 interface FormErrors {
@@ -51,7 +52,14 @@ export default function Activity({ next }: ActivityProps) {
         <div className="flex flex-col gap-6 max-w-2xl mx-auto">
             <div className="flex flex-col gap-4">
                 <h4 className="text-text-main font-bold">
-                    Чем Вы занимаетесь?
+                    <Typewriter
+                        onInit={(typewriter) => {
+                            typewriter
+                                .changeDelay(30) // Устанавливаем скорость 20ms
+                                .typeString('Чем вы занимаетесь?')
+                                .start(); // Запускаем один раз и всё
+                        }}
+                    />
                 </h4>
                 <p className="text-secondary text-text-muted">
                     На нашем портале собрано множество интересных людей
