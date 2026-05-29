@@ -9,7 +9,7 @@ import {useRouter} from "next/navigation";
 
 interface Props {
     isMyProfile: boolean,
-    trueUser?: Record<string, any>
+    trueUser?: Record<string, any> | null
 }
 
 export default function ProjectWidget({isMyProfile, trueUser}: Props) {
@@ -96,9 +96,7 @@ export default function ProjectWidget({isMyProfile, trueUser}: Props) {
 
                 {
                     !isLoading && projects && Array.isArray(projects) && projects?.length < 1 && <p className="text-text-main font-semibold">
-                        {isMyProfile ?
-                            "Вы не загрузили ни одного проекта :(" :
-                            Boolean(trueUser?.publication?.is_uploaded) ? "Пользователь не загрузил ни одного проекта :(" : ""
+                        {isMyProfile && "Вы не загрузили ни одного проекта :("
                         }
                     </p>
                 }

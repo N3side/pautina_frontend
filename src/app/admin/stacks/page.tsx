@@ -1,7 +1,7 @@
 "use client"
 
 import AdminLayout from "@/widgets/admin/admin-layout/ui/AdminLayout";
-import GetStacks from "../../../features/get-stacks/ui/GetStacks";
+import ShowStacks from "../../../features/manage-stacks/ui/ShowStacks";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
@@ -28,7 +28,7 @@ export default function Page() {
 
         const formData = new FormData(formRef?.current || undefined)
 
-         await $fetch("admin/stacks", {
+         await $fetch("admin/stack", {
             method: "POST",
             body: formData
         })
@@ -96,7 +96,7 @@ export default function Page() {
                     </ActionButton>
 
                     <div className="glass-effect p-6 rounded-xl">
-                        <GetStacks selectedStacks={[]} setSelectedStacks={() => {}} />
+                        <ShowStacks selectedStacks={[]} setSelectedStacks={() => {}} />
                     </div>
 
                     <Modal

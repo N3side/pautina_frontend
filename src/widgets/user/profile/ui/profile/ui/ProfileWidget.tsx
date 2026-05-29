@@ -15,7 +15,7 @@ import UserSkeleton from "@/widgets/user/edit-user-info/ui/user-skeleton";
 interface Props {
     isMyProfile: boolean
     isPrivate: boolean
-    trueUser: Record<string, any>
+    trueUser: Record<string, any> | null
     showModals?: boolean
 }
 

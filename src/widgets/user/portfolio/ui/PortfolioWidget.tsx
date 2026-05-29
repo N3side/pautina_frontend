@@ -16,7 +16,7 @@ import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollX
 
 interface Props {
     isMyProfile: boolean,
-    trueUser?: Record<string, any>
+    trueUser?: Record<string, any> | null
 }
 
 export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
@@ -64,7 +64,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
     }, [trueUser, page, filters]);
 
     return (
-        <section className="mt-4 glass-effect rounded-[18px] p-6">
+        <section className="glass-effect rounded-[18px] p-6">
 
             <header className="flex flex-col md:flex-row md:items-end justify-between gap-6">
                 <div className="flex flex-col gap-1">

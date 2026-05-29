@@ -1,114 +1,114 @@
+// components/pages/UpdateProject/UpdateProject.tsx (или твой путь к странице/виджету)
 "use client"
 
-import {Button, Checkbox} from "@mui/material";
-import Input from "@/shared/ui/Inputs/Input"
+import { Checkbox } from "@mui/material";
+import Input from "@/shared/ui/Inputs/Input";
 import Textarea from "@/shared/ui/Inputs/Textarea";
-import {useContext, useEffect, useRef, useState} from "react";
-import Date from "@/shared/ui/Inputs/Date";
+import { useContext, useEffect, useRef, useState } from "react";
+import DateInput from "@/shared/ui/Inputs/Date";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 
-import {UserContext} from "@/entities/user";
-import {$fetch} from "@/shared/api/fetch";
-import {usePathname, useRouter} from "next/navigation";
+import { UserContext } from "@/entities/user";
+import { $fetch } from "@/shared/api/fetch";
+import { usePathname, useRouter } from "next/navigation";
 import EditGallery from "@/features/edit-gallery/EditGallery";
-import GetStacks from "../get-stacks/ui/GetStacks";
-import {userLink} from "@/shared/lib/utils/userLink";
+import ShowStacks from "@/features/manage-stacks/ui/ShowStacks";
+import { userLink } from "@/shared/lib/utils/userLink";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
-import {Modal} from "@/shared/ui/Modals/Modal";
-import {useModal} from "@/shared/lib/hooks/useModal";
+import { Modal } from "@/shared/ui/Modals/Modal";
+import { useModal } from "@/shared/lib/hooks/useModal";
 import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOperation";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 
 export default function UpdateProject() {
+    const { user } = useContext(UserContext);
 
-    const {user} = useContext(UserContext)
+    // Локальные стейты сущности проекта
+    const [project, setProject] = useState<Record<string, any> | null>(null);
+    const [errors, setErrors] = useState<Record<string, any> | null>(null);
+    const [checked, setChecked] = useState<boolean>(false);
+    const [selectedStacks, setSelectedStacks] = useState<Record<string, any>[]>([]);
+    const [gallery, setGallery] = useState<Record<string, any>[]>([]);
 
-    const [project, setProject] = useState<Record<string, any> | null>(null)
-    const [errors, setErrors] = useState<Record<string, any> | null>(null)
-    const [checked, setChecked] = useState<boolean>(Boolean(project?.is_public) || false)
+    const id = usePathname().split("/").pop();
+    const router = useRouter();
+    const formRef = useRef<HTMLFormElement | null>(null);
 
-    useEffect(() => {
-        setChecked(project?.is_public)
-    }, [project]);
+    // Модалка удаления
+    const {
+        close: closeModalConfirmOperation,
+        open: openModalConfirmOperation,
+        isOpen: isOpenModalConfirmOperation
+    } = useModal();
 
-    const id = usePathname().split("/").pop()
+    const { confirm, decline } = UseConfirmOperation({
+        close: closeModalConfirmOperation,
+        callback: deleteProject
+    });
 
+    // Загрузка данных проекта
     async function getProject() {
-        const response = await $fetch(`projects/${id}`)
-
-        const project_ = response?.json?.project
+        const response = await $fetch(`projects/${id}`);
+        const project_ = response?.json?.project;
 
         if (project_) {
-            setProject(project_)
+            setProject(project_);
         }
     }
 
-    const router = useRouter()
-    const formRef = useRef<HTMLFormElement | null>(null)
+    // Первоначальный запрос данных
+    useEffect(() => {
+        getProject();
+    }, []);
 
-    async function updateProject(e) {
-        e.preventDefault()
-        const formData = new FormData(formRef.current || undefined)
-        formData.set("is_public", checked ? "1" : "0")
+    // Синхронизация стейтов при получении данных проекта с бэкенда
+    useEffect(() => {
+        if (project) {
+            setChecked(Boolean(project.is_public));
 
-        let stacks_ids
-        if (selectedStacks) {
-            stacks_ids = selectedStacks.map(stack => stack?.id)
+            if (project.stacks && Array.isArray(project.stacks)) {
+                setSelectedStacks(project.stacks);
+            }
+            if (project.gallery && Array.isArray(project.gallery)) {
+                setGallery(project.gallery);
+            }
         }
+    }, [project]);
 
-        console.log(stacks_ids)
+    // Обновление проекта
+    async function updateProject(e: React.FormEvent<HTMLFormElement>) {
+        e.preventDefault();
+        const formData = new FormData(formRef.current || undefined);
 
-        if (stacks_ids && stacks_ids.length > 0) {
-            stacks_ids.forEach(id => {
-                formData.append("stack_ids[]", id); // Именно append и именно с []
+        // Передаем статус приватности (0 или 1 для бэка на Laravel)
+        formData.set("is_public", checked ? "1" : "0");
+
+        // Безопасно упаковываем массив выбранных ID стеков в FormData
+        if (selectedStacks && selectedStacks.length > 0) {
+            selectedStacks.forEach(stack => {
+                if (stack?.id) {
+                    formData.append("stack_ids[]", stack.id.toString());
+                }
             });
         }
 
         const response = await $fetch(`projects/${id}`, {
             method: "PATCH",
             body: formData
-        })
+        });
 
-        // if (response?.response?.ok) {
-        //     router.replace(userLink(user?.publication?.public_url))
-        // }
-    }
-
-    useEffect(() => {
-        getProject()
-    }, []);
-
-    const {
-        close: closeModalConfirmOperation,
-        open: openModalConfirmOperation,
-        isOpen: isOpenModalConfirmOperation
-    } = useModal()
-    const {confirm, decline} = UseConfirmOperation({
-        close: closeModalConfirmOperation,
-        callback: deleteProject
-    })
-
-    async function deleteProject() {
-        const response = await $fetch(`projects/${id}`, {method: "DELETE"})
         if (response?.response?.ok) {
-            router.replace(userLink(user?.publication?.public_url))
+            router.replace(userLink(user?.publication?.public_url));
         }
     }
 
-    const [selectedStacks, setSelectedStacks] = useState<Record<string, any> | null>([])
-
-    useEffect(() => {
-        if (project && project?.stacks && Array.isArray(project?.stacks) && project?.stacks?.length > 0) {
-            setSelectedStacks(project?.stacks)
+    // Удаление проекта
+    async function deleteProject() {
+        const response = await $fetch(`projects/${id}`, { method: "DELETE" });
+        if (response?.response?.ok) {
+            router.replace(userLink(user?.publication?.public_url));
         }
-    }, [project]);
-
-    const [gallery, setGallery] = useState<Record<string, any> | null>([])
-
-    useEffect(() => {
-        if (project && project?.gallery && Array.isArray(project?.gallery) && project?.gallery?.length > 0)
-        setGallery(project?.gallery)
-    }, [project]);
+    }
 
     return (
         <form className="relative flex flex-col w-full" ref={formRef} onSubmit={updateProject}>
@@ -117,6 +117,7 @@ export default function UpdateProject() {
 
             <div className="flex flex-col gap-6 pb-8 w-full">
 
+                {/* Основные поля ввода */}
                 <Input
                     name="name"
                     label="Имя проекта"
@@ -133,43 +134,47 @@ export default function UpdateProject() {
                     defaultValue={project?.description}
                 />
 
+                {/* Галерея проекта */}
                 <div className="flex flex-col gap-4">
                     <div className="gap-2">
                         <h6 className="text-text-main font-bold">Добавить фотографии</h6>
-
-                        <p className="text-text-muted text-small font-bold">{gallery?.length} из 10</p>
+                        <p className="text-text-muted text-small font-bold">{gallery?.length || 0} из 10</p>
                     </div>
 
                     <EditGallery
                         cards={gallery}
                         setCards={setGallery}
                     />
-
                 </div>
 
-                <Date
+                {/* Даты разработки */}
+                <DateInput
                     name="start_date"
                     label="Дата начала разработки"
                     error={errors?.start_date}
                     defaultValue={project?.start_date}
                 />
 
-                <Date
+                <DateInput
                     name="end_date"
                     label="Дата окончания разработки"
                     error={errors?.end_date}
                     defaultValue={project?.end_date}
                 />
 
+                {/* Выбор стека технологий по архитектуре FSD */}
                 <div className="glass-effect p-6 rounded-xl">
-                    <GetStacks
+                    <ShowStacks
                         title="Нажмите на технологии, которые использовались в проекте"
+                        showSearch={true}
+                        showAll={true}
+                        showSelected={true}
                         selectedStacks={selectedStacks}
                         setSelectedStacks={setSelectedStacks}
                     />
                 </div>
 
-
+                {/* Ссылки на продакшн и репозиторий */}
                 <Input
                     name="link"
                     label="Ссылка"
@@ -188,11 +193,13 @@ export default function UpdateProject() {
                     additionalGap={16}
                 />
 
-                <div className="flex items-center cursor-pointer" onClick={() => setChecked(!checked)}>
+                {/* Чекбокс видимости */}
+                <div className="flex items-center cursor-pointer select-none" onClick={() => setChecked(!checked)}>
                     <Checkbox checked={checked} className="!text-text-main"/>
                     <p className="text-text-muted font-semibold">Проект виден в вашем профиле другим людям</p>
                 </div>
 
+                {/* Модалка подтверждения удаления */}
                 <Modal
                     isOpen={isOpenModalConfirmOperation}
                     close={closeModalConfirmOperation}
@@ -204,20 +211,18 @@ export default function UpdateProject() {
                     />
                 </Modal>
 
-                <div className="flex flex-col gap-2">
-                    <ButtonLarge>
+                {/* Управляющие кнопки */}
+                <div className="flex flex-col gap-2 mt-4">
+                    <ButtonLarge type="submit">
                         Сохранить проект
                     </ButtonLarge>
 
-                    <ActionButton onClick={() => openModalConfirmOperation()}>
+                    <ActionButton type="button" onClick={openModalConfirmOperation}>
                         Удалить проект
                     </ActionButton>
                 </div>
 
-
-
             </div>
-
         </form>
-    )
+    );
 }
