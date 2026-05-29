@@ -1,4 +1,4 @@
-import ProjectGallery from "@/entities/project-gallery/ProjectGallery";
+import Gallery from "../../../../entities/gallery/Gallery";
 import ProjectStackBadge from "@/entities/project-stack-badge/ProjectStackBadge";
 
 interface Props {
@@ -24,7 +24,7 @@ export default function ProjectModalWidget({project, isMyProfile}: Props) {
             }} // Теперь при клике открывается модалка
         >
             <div onClick={(e) => e.stopPropagation()}>
-                <ProjectGallery gallery={project?.gallery} className="!h-full !max-h-[400px]" />
+                <Gallery gallery={project?.gallery} className="!h-full !max-h-[400px]" />
             </div>
 
             <div className="mt-2 pl-1 flex flex-col pb-6">

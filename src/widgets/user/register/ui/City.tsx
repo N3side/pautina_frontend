@@ -1,6 +1,4 @@
-import { Heading } from "@/shared/styles/typography/headings";
-import { PautinaText } from "@/shared/styles/typography/text";
-import { useState } from 'react';
+import {useState} from 'react';
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import useCitySelect from "@/features/select-city/useCitySelect";
 import {editCity} from "@/widgets/user/profile/ui/profile/api";

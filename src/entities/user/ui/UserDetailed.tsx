@@ -8,7 +8,7 @@ import PersonOutlineOutlinedIcon from "@mui/icons-material/PersonOutlineOutlined
 import AlternateEmailIcon from '@mui/icons-material/AlternateEmail';
 import TelegramIcon from '@mui/icons-material/Telegram';
 import LinkIcon from '@mui/icons-material/Link';
-import {userLink, userLinkWithoutProtocol} from "@/shared/lib/utils/userLink";
+import {userLinkWithoutProtocol} from "@/shared/lib/utils/userLink";
 import VkIcon from "@/shared/assets/images/vector/vk/VkIcon";
 import LanguageIcon from '@mui/icons-material/Language';
 
@@ -69,6 +69,12 @@ export default function UserDetailed({user, isPrivate}: Props) {
             v: user?.contacts?.vk,
             Icon: VkIcon,
             link: `https://vk.com/${user?.contacts?.vk}`
+        },
+        {
+            k: "Телеграмм",
+            v: user?.contacts?.tg,
+            Icon: TelegramIcon,
+            link: `https://t.me/${user?.contacts?.tg}`
         },
         {
             k: "Сайт",

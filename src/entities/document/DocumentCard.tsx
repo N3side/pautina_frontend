@@ -15,7 +15,7 @@ export default function DocumentCard({ document }) {
     }
 
     return (
-        <div className="glass-effect rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
+        <div className="w-full glass-effect rounded-2xl p-5 flex flex-col gap-4 relative overflow-hidden group hover:-translate-y-1 transition-transform duration-300">
 
             {/* Индикатор статуса: Желтый для ожидания, Красный для отклоненного */}
             {document.status === "pending" && (
@@ -25,18 +25,22 @@ export default function DocumentCard({ document }) {
                 <div className="absolute top-0 left-0 w-full h-1 bg-red-500 shadow-[0_0_10px_rgba(239,68,68,0.5)]"/>
             )}
 
-            <img className="h-[400px]" src={document?.file_url} alt=""/>
+            <img className="max-w-[500px] w-full" src={document?.file_url} alt=""/>
 
-            {/*<SyntaxHighlighter*/}
-            {/*    language="json"*/}
-            {/*    style={dracula}*/}
-            {/*    customStyle={{*/}
-            {/*        width: "100%",*/}
-            {/*        background: "transparent"*/}
-            {/*    }}*/}
-            {/*>*/}
-            {/*    {JSON.stringify(document, null, 2)}*/}
-            {/*</SyntaxHighlighter>*/}
+            <SyntaxHighlighter
+                language="json"
+                style={dracula}
+                wrapLines={true}
+                lineProps={{
+                    style: { wordBreak: 'break-all', whiteSpace: 'pre-wrap' }
+                }}
+                customStyle={{
+                    width: "100%",
+                    background: "transparent",
+                }}
+            >
+                {JSON.stringify(document, null, 2)}
+            </SyntaxHighlighter>
 
             <div className="flex gap-3">
                 <ActionButton text="Принять" onClick={approve} />

@@ -8,12 +8,6 @@ export async function deleteDocument({document_id, callBack=() => {}}) {
 
     callBack()
 
-    const documents = response?.json?.documents
-
-    console.log(documents)
-
-    if (documents) {
-        return documents
-    }
+    return response
 
 }

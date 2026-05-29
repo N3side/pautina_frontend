@@ -74,9 +74,7 @@ export default function SubscriptionOffer({user}: Props) {
 
     ];
 
-    useEffect(() => {
-        console.log(user)
-    }, [user]);
+    const {user: authUser} = useContext(UserContext)
 
     return (
         <section className="flex items-center justify-center">
@@ -125,7 +123,7 @@ export default function SubscriptionOffer({user}: Props) {
 
                     <div className="flex flex-col gap-2 mt-4">
                         <h6 className="text-text-main font-bold">Ваш профиль с подпиской:</h6>
-                        <ProfileWidget isMyProfile={false} isPrivate={false} trueUser={user} showModals={false} />
+                        <ProfileWidget isMyProfile={false} isPrivate={false} trueUser={authUser} showModals={false} />
                     </div>
 
                 }

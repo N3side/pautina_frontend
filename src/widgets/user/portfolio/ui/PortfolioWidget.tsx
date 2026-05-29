@@ -11,6 +11,8 @@ import usePaginate from "@/shared/lib/hooks/usePaginate"
 import BrandActionButton from "@/shared/ui/Buttons/BrandActionButton";
 import CardSkeleton from "@/widgets/user/portfolio/ui/CardSkeleton";
 import UploadFile from "@/features/create-document/ui/UploadFile";
+import Category from "@/shared/ui/Category/Category";
+import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollXWrapper";
 
 interface Props {
     isMyProfile: boolean,
@@ -27,8 +29,8 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
     const {close: closeDocument, open: openDocument, isOpen: isOpenDocument} = useModal()
     const {close: closeCreateDocument, open: openCreateDocument, isOpen: isOpenCreateDocument} = useModal()
 
-    // const [categories, setCategories] = useState<Record<string, any>[] | null>(null)
-    // const [filters, setFilters] = useState({})
+    const [categories, setCategories] = useState<Record<string, any>[] | null>(null)
+    const [filters, setFilters] = useState({})
 
     const [isLoading, setIsLoading] = useState<boolean>(true)
 
@@ -36,15 +38,15 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
 
         setIsLoading(true)
 
-        // const params = new URLSearchParams(filters).toString()
-        const response = await $fetch(`documents/user/${trueUser?.main?.id}?page=${page}`,
+        const params = new URLSearchParams(filters).toString()
+        const response = await $fetch(`documents/user/${trueUser?.main?.id}?page=${page}&${params}`,
             {onLoadingChange: setIsLoading}
         )
         const documents_ = response?.json?.documents
         const page_ = response?.json?.current_page
         const lastPage_ = response?.json?.last_page
-        // const categories_ = response?.json?.categories
-        // setCategories(categories_)
+        const categories_ = response?.json?.categories
+        setCategories(categories_)
 
         if (documents_.length > 0) {
             setDocuments(documents_)
@@ -59,7 +61,7 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
         if (trueUser) {
             getDocuments()
         }
-    }, [trueUser, page]);
+    }, [trueUser, page, filters]);
 
     return (
         <section className="mt-4 glass-effect rounded-[18px] p-6">
@@ -79,8 +81,24 @@ export default function PortfolioWidget({isMyProfile, trueUser}: Props) {
 
             <main className="flex flex-col gap-4">
 
+                <div className="mt-4">
+                    <WheelXScrollProvider>
+                        <ul className="flex items-center gap-3 py-2">
+                            {categories && categories?.length > 0 && <Category category={{name: "Все"}} onClick={() => setFilters(prev => ({...prev, name: "all"}))} />}
+                            {categories?.map((category, i) => (
+                                <Category
+                                    key={i}
+                                    category={category}
+                                    onClick={() => {
+                                        setFilters(prev => ({ ...prev, name: category?.name }))
+                                    }}
+                                />
+                            ))}
+                        </ul>
+                    </WheelXScrollProvider>
+                </div>
                 {!(trueUser && !isMyProfile && !isLoading && !trueUser?.publication?.is_uploaded) &&
-                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                         {!isLoading ? documents?.map((document, i) => (
                             <Card
                                 key={i}

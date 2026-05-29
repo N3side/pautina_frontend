@@ -20,6 +20,7 @@ import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 import toast from "react-hot-toast";
 import {useContext} from "react";
 import {UserContext} from "@/entities/user";
+import TelegramIcon from "@mui/icons-material/Telegram";
 
 interface Props {
     user: Record<string, any>
@@ -56,6 +57,11 @@ export default function User({user, isMyProfile, isPrivate, showModals}: Props) 
         {
             text: user?.contacts?.post,
             Icon: PersonOutlineOutlinedIcon
+        },
+        {
+            text: user?.contacts?.tg,
+            Icon: TelegramIcon,
+            link: `https://t.me/${user?.contacts?.tg}`
         },
         {
             text: user?.contacts?.vk,

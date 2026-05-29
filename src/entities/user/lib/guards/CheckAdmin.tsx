@@ -1,26 +1,19 @@
 "use client"
 
-import {useContext, useEffect} from "react";
-import {useRouter} from "next/navigation";
-import toast from "react-hot-toast";
-import {UserContext} from "@/entities/user";
+import { useContext } from "react";
+import { notFound } from "next/navigation";
+import { UserContext } from "@/entities/user";
 
 export function CheckAdmin({ children }: { children: React.ReactNode }) {
-    const { user, isLoading } = useContext(UserContext)
-    const router = useRouter()
+    const { user, isLoading } = useContext(UserContext);
 
-    useEffect(() => {
-
-        if (isLoading) return
-        if (user && user?.access?.role !== "admin") {
-            router.back();
-            toast.error("Вам сюда нельзя :)");
-        }
-    }, [user, router]);
-
-    if (user && user?.access?.role === "admin") {
-        return <>{children}</>;
+    if (isLoading) {
+        return null;
     }
 
-    return null;
+    if (!user || user?.access?.role !== "admin") {
+        notFound();
+    }
+
+    return <>{children}</>;
 }

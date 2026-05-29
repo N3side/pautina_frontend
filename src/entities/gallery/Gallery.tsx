@@ -9,7 +9,7 @@ interface Props {
     className?: string
 }
 
-export default function ProjectGallery({ gallery, className }: Props) {
+export default function Gallery({ gallery, className }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const { isOpen, open, close } = useModal();
 
@@ -38,7 +38,7 @@ export default function ProjectGallery({ gallery, className }: Props) {
     return (
         <>
             <div
-                className={`w-full mt-4 group/slider relative rounded-[16px] overflow-hidden border border-white/10 bg-surface/30 max-h-[180px] sm:max-h-[220px] shadow-sm cursor-zoom-in ${className}`}
+                className={`w-full mt-4 group/slider relative rounded-[16px] overflow-hidden  max-h-[180px] sm:max-h-[220px] shadow-sm cursor-zoom-in ${className}`}
                 onClick={open}
             >
                 {/* ... (код трека слайдера оставляем как был) ... */}

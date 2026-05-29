@@ -65,6 +65,16 @@ export default function Contacts({heading}) {
                         />
 
                         <Input
+                            name="tg"
+                            label="Юзернейм телеграмм"
+                            defaultValue={user?.contacts?.tg}
+                            error={errors?.tg}
+                            leftAdditional="@"
+                            additionalGap={20}
+                            onInput={autoReplace}
+                        />
+
+                        <Input
                             name="extra_link"
                             label="Сайт"
                             defaultValue={user?.contacts?.extra_link}

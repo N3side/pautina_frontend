@@ -8,6 +8,9 @@ export async function updateDocument({e, setErrors, formRef, tags, checked, docu
     const formData = new FormData(formRef.current)
 
     formData.set("categories", JSON.stringify(tags))
+
+    console.log(tags)
+
     formData.set("is_public", String(checked))
 
     const response = await $fetch(`documents/${document_id}`, {

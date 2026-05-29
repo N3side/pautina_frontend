@@ -61,6 +61,10 @@ export default function LogCard({ log }: LogProps) {
                     width: "100%",
                     background: "transparent"
                 }}
+                wrapLines={true}
+                lineProps={{
+                    style: { wordBreak: 'break-all', whiteSpace: 'pre-wrap' }
+                }}
             >
                 {JSON.stringify(log, null, 2)}
             </SyntaxHighlighter>

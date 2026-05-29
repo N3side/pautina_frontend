@@ -62,6 +62,10 @@ export default function UserCard({ user }: Props) {
                     width: "100%",
                     background: "transparent"
                 }}
+                wrapLines={true}
+                lineProps={{
+                    style: { wordBreak: 'break-all', whiteSpace: 'pre-wrap' }
+                }}
             >
                 {JSON.stringify(user, null, 2)}
             </SyntaxHighlighter>
