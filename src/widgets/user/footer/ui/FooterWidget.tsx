@@ -3,11 +3,43 @@
 import LogoLight from "@/shared/assets/images/vector/logo/LogoLight";
 import {Container} from "@/shared/ui/Container/Container";
 import NavigationLink from "@/shared/ui/Navigation/NavigationLink";
+import Link from "next/link";
+import VkIcon from "@/shared/assets/images/vector/vk/VkIcon";
+import {Telegram} from "@mui/icons-material";
+import TelegramIcon from "@mui/icons-material/Telegram";
+import {MaxIcon} from "@/shared/assets/images/vector/max/MaxIcon";
+import EditIcon from "@mui/icons-material/Edit";
+import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
 
 
 
 function Heading({text}) {
     return <p className="text-text-main text-large font-semibold">{text}</p>
+}
+
+export const links = [
+    {
+        Icon: VkIcon,
+        href: "https://vk.com/im/channels/-236408213"
+    },
+    {
+        Icon: TelegramIcon,
+        href: "https://t.me/pautinatop"
+    },
+    {
+        Icon: MaxIcon,
+        href: "https://max.ru/join/kpMiVZSxKP2p6q3MqxgUhCHKaN9EVrD_Rkw7itrE2K0"
+    },
+]
+
+export const LogoLink = ({link}) => {
+    return (
+        <Link href={link?.href} target="_blank">
+            <IconWrapper className="group">
+                <link.Icon className="text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold !text-[18px] text-text-muted group-hover:text-text-main"/>
+            </IconWrapper>
+        </Link>
+    )
 }
 
 export default function FooterWidget() {
@@ -28,14 +60,14 @@ export default function FooterWidget() {
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">
-                        <Heading text="Контакты" />
-                        <div className="flex flex-col gap-2">
-                            {/*<NavigationLink href="https://t.me/pautina_top" target="_blank">*/}
-                            {/*    Телеграм*/}
-                            {/*</NavigationLink>*/}
-                            <NavigationLink href="https://vk.com/pautina_top" target="_blank">
-                                ВК
-                            </NavigationLink>
+                        <Heading text="Подписывайтесь" />
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(40px,1fr))] gap-2">
+                            {links?.map((link, i) =>
+                                <LogoLink
+                                    key={i}
+                                    link={link}
+                                />
+                            )}
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">

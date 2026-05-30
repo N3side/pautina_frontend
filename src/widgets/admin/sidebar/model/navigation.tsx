@@ -35,7 +35,7 @@ export const mainNavItems: NavItem[] = [
     {
         icon: <StorageIcon />,
         name: "Стеки",
-        path: "/admin/stack"
+        path: "/admin/stacks"
     },
 
 ];
