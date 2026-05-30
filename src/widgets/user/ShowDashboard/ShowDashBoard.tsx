@@ -13,7 +13,7 @@ export default function ShowDashBoard() {
     const [info, setInfo] = useState<Record<string, any> | null>(null);
 
     async function getDashboard() {
-        const response = await $fetch("admin/dashboard");
+        const response = await $fetch("dashboard");
         setInfo(response?.json);
     }
 
