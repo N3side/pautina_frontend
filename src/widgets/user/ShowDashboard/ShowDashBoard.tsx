@@ -14,7 +14,7 @@ export default function ShowDashBoard() {
 
     async function getDashboard() {
         const response = await $fetch("dashboard");
-        setInfo(response?.json);
+        setInfo(response?.json?.info);
     }
 
     useEffect(() => {
