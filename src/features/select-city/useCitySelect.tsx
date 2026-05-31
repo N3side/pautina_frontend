@@ -83,7 +83,6 @@ export default function useCitySelect({
         const timeout = setTimeout(async () => {
             setLoading(true);
             const response = await $fetch(`cities?city=${encodeURIComponent(city)}`);
-            console.log(response?.json?.cities)
             setCities((response?.json?.cities as ComboboxOption[]) || []);
             setLoading(false);
         }, 500);

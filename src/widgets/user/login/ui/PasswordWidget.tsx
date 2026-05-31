@@ -4,7 +4,7 @@ import Link from "next/link"
 import {FormEvent, useContext, useEffect, useState} from "react"
 import {$fetch} from "@/shared/api/fetch"
 import {useRouter} from "next/navigation"
-import {CheckIsNotUser, UserContext} from "@/entities/user";
+import {CheckIsNotUser, UserContext} from "../../../../entities/user-entity";
 import Input from "@/shared/ui/Inputs/Input";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Card1 from "@/shared/ui/Sections/Card1";

@@ -1,5 +1,5 @@
 import {useContext, useRef} from "react";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../../entities/user-entity";
 import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 import {useRouter} from "next/navigation";
 

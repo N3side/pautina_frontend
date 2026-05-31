@@ -1,6 +1,6 @@
 import AdminLayout from "@/widgets/admin/admin-layout/ui/AdminLayout";
 import ShowLogs from "@/features/admin/show-logs/ShowLogs"
-import {CheckAdmin} from "@/entities/user/lib/guards/CheckAdmin";
+import {CheckAdmin} from "../../../entities/user-entity/lib/guards/CheckAdmin";
 
 export const dynamic = 'force-dynamic'
 

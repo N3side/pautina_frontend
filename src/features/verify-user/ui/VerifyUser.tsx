@@ -2,7 +2,7 @@ import React, {ReactNode, useContext, useEffect, useMemo, useState} from "react"
 import Stepper from "@/shared/ui/Stepper/Stepper";
 import PasswordForm from "@/features/verify-user/ui/components/PasswordForm";
 import CheckOtp from "@/features/verify-user/ui/components/CheckOTP";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../entities/user-entity";
 import UseStepper from "@/shared/lib/hooks/UseStepper";
 import {IsVerifiedUser} from "@/features/verify-user/api/is-verified-user";
 

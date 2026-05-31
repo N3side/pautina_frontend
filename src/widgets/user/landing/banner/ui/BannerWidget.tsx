@@ -8,7 +8,7 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge"
 import {rise} from "@/shared/styles/animations";
 import Link from "next/link"
 import {useContext, useEffect} from "react";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../../entities/user-entity";
 import {userLink} from "@/shared/lib/utils/userLink";
 
 

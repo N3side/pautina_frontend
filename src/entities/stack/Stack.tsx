@@ -31,7 +31,7 @@ export function Stack({ stack, handleDelete, selected = false, onClick, isReadOn
 
     // Если это чужой профиль (isReadOnly), то сбрасываем стили выделения до обычного glass-эффекта
     const cardStyles = isReadOnly
-        ? 'glass-effect border-white/5 cursor-default'
+        ? 'glass-effect border-white/5 cursor-default border-box'
         : isSelected
             ? 'bg-brand/10 border-brand/40 ring-2 ring-brand ring-offset-2 ring-offset-surface shadow-lg shadow-brand/5 cursor-pointer hover:scale-[1.01]'
             : `glass-effect border-white/5 hover:border-white/15 hover:bg-white/[0.04] hover:shadow-md cursor-pointer ${pushable}`;

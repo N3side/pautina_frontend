@@ -1,7 +1,7 @@
 "use client"
 
 import {useEffect, useState} from "react";
-import UserCard from "@/entities/user-card/userCard";
+import UserCard from "../../../entities/admin/user-card/userCard";
 import {$fetch} from "@/shared/api/fetch";
 import usePaginate from "@/shared/lib/hooks/usePaginate"
 import Pagination from "@/features/pagination/ui/Pagination";

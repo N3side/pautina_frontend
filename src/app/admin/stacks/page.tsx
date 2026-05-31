@@ -12,7 +12,7 @@ import toast from "react-hot-toast";
 import {$fetch} from "@/shared/api/fetch";
 import {useEffect, useRef, useState} from "react";
 import Select from "@/shared/ui/Inputs/Select";
-import {CheckAdmin} from "@/entities/user/lib/guards/CheckAdmin";
+import {CheckAdmin} from "../../../entities/user-entity/lib/guards/CheckAdmin";
 import {useGetStacks} from "@/features/manage-stacks/model/useGetStacks";
 import FileInput from "@/shared/ui/Inputs/FileInput";
 

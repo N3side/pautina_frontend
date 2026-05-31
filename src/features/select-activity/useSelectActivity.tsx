@@ -4,7 +4,7 @@ import Option from "@/shared/ui/Inputs/Option";
 import Input from "@/shared/ui/Inputs/Input";
 import React, {ChangeEvent, useContext, useEffect, useRef, useState} from "react";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../entities/user-entity";
 
 interface Props {
     errors?: Record<string, any> | null

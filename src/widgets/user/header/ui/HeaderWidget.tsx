@@ -6,7 +6,7 @@ import {useContext, useEffect, useState} from "react"
 import Navigation from "./Navigation"
 import {Burger} from "./Burger"
 import {BodyBlockContext} from "@/shared/lib/providers/BodyBlockProvider"
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../entities/user-entity";
 import Link from "next/link"
 import {useTheme} from "@/shared/lib/providers/ThemeProvider";
 import {ThemeSwitch} from "@/shared/ui/Buttons/ThemeSwitch";

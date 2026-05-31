@@ -7,7 +7,7 @@ import {useHandleSubmit} from "@/widgets/user/edit-user-info/api/useHandleSubmit
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {useContext, useRef} from "react";
 import {autoReplace} from "@/shared/lib/utils/replace";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../../entities/user-entity";
 import {$fetch} from "@/shared/api/fetch";
 
 

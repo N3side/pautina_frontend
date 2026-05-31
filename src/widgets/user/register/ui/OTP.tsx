@@ -3,7 +3,7 @@ import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {useContext, useEffect} from "react";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../entities/user-entity";
 
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Timer from "@/features/timer/Timer"

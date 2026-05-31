@@ -2,7 +2,7 @@ import {IOSSwitch} from "@/shared/ui/Inputs/IOSSwitch";
 import Setting from "@/shared/ui/Sections/Setting";
 import {$fetch} from "@/shared/api/fetch";
 import {useContext, useEffect, useState} from "react";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../entities/user-entity";
 
 export default function ToggleProfileVisibility() {
     const { user, setUser } = useContext(UserContext);

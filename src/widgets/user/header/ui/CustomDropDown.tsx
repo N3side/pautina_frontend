@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../entities/user-entity";
 import DropDown from "@/shared/ui/DropDown/DropDown"
 import LogoutIcon from '@mui/icons-material/Logout'
 import SettingsIcon from '@mui/icons-material/Settings'

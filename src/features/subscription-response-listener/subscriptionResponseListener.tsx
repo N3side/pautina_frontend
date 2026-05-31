@@ -3,18 +3,14 @@
 import React, {useContext, useEffect} from "react";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
-import SubscriptionOffer from "@/widgets/user/SubscriptionOffer/SubscriptionOffer";
-import {UserContext} from "@/entities/user";
+import SubscriptionOffer from "../../widgets/user/subscription-offer/SubscriptionOffer";
+import {UserContext} from "../../entities/user-entity";
 
 export default function SubscriptionResponseListener() {
 
     const {isOpen, open, close} = useModal()
 
     const {user} = useContext(UserContext)
-
-    useEffect(() => {
-        console.log(user)
-    }, [user]);
 
     useEffect(() => {
         const handler = () => {

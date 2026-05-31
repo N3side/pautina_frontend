@@ -10,13 +10,13 @@ import useTags from "@/entities/tags/lib/useTags";
 import Circle from "@/shared/ui/Buttons/Circle"
 import AddIcon from '@mui/icons-material/Add';
 import LoadingOverlay from "@/shared/ui/Overlays/LoadingOverlay";
-import {deleteDocument} from "@/entities/document/api/delete"
-import {updateDocument} from "@/entities/document/api/update";
+import {deleteDocument} from "../../../entities/admin/document/api/delete"
+import {updateDocument} from "../../../entities/admin/document/api/update";
 import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOperation";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
 import {Modal} from "@/shared/ui/Modals/Modal";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../entities/user-entity";
 import {$fetch} from "@/shared/api/fetch";
 import {useRouter} from "next/navigation";
 import {homeLink, userLink} from "@/shared/lib/utils/userLink";

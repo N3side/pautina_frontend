@@ -3,7 +3,7 @@
 import Input from "@/shared/ui/Inputs/Input"
 import React, {useContext, useRef, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../entities/user-entity";
 import {$fetch} from "@/shared/api/fetch";
 import toast from "react-hot-toast";
 import useCitySelect from "@/features/select-city/useCitySelect";
@@ -81,7 +81,6 @@ export default function EditProfileForm({enabled=true, close}: Props) {
         });
 
         const errors_ = response?.json?.errors
-        console.log(errors_)
 
         if (errors_) {
             setErrors(errors_)
@@ -145,7 +144,7 @@ export default function EditProfileForm({enabled=true, close}: Props) {
             {/*<Input*/}
             {/*    name="tg"*/}
             {/*    label="Телеграм юзернейм"*/}
-            {/*    defaultValue={user?.contacts?.tg}*/}
+            {/*    defaultValue={user-entity?.contacts?.tg}*/}
             {/*    error={errors?.tg}*/}
             {/*    isUsername={true}*/}
             {/*    onInput={autoReplace}*/}

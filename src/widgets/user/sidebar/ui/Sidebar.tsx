@@ -6,7 +6,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Elem from "@/widgets/user/sidebar/ui/Elem";
 import {homeLink, userLink} from "@/shared/lib/utils/userLink";
 import {useContext, useEffect, useState} from "react";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../entities/user-entity";
 
 interface Props {
     className?: string

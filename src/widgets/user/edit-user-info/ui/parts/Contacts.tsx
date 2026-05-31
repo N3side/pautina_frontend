@@ -1,6 +1,6 @@
 import {useHandleSubmit} from "@/widgets/user/edit-user-info/api/useHandleSubmit";
 import {useContext, useRef} from "react";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../../entities/user-entity";
 import useCitySelect from "@/features/select-city/useCitySelect";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input"

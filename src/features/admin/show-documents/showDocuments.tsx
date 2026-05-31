@@ -5,7 +5,7 @@ import {$fetch} from "@/shared/api/fetch";
 import usePaginate from "@/shared/lib/hooks/usePaginate"
 import Pagination from "@/features/pagination/ui/Pagination";
 import UseFilters from "@/shared/lib/hooks/useFilters";
-import DocumentCard from "../../../entities/document/DocumentCard";
+import DocumentCard from "../../../entities/admin/document/DocumentCard";
 import FilterDocuments from "@/features/admin/filter-documents/FilterDocuments";
 
 export default function ShowUsers() {
@@ -24,7 +24,6 @@ export default function ShowUsers() {
         const page_ = response?.json?.current_page
         if (documents_) {
             setDocuments(documents_)
-            console.log(documents_)
         }
         setLastPage(last_page)
         setPage(page_)

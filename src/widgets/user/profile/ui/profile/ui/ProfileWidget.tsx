@@ -1,13 +1,13 @@
 "use client"
 
 import React, {useContext} from "react";
-import User from "@/entities/user/ui/User"
+import User from "../../../../../../entities/user-entity/ui/User"
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SettingsIcon from "@mui/icons-material/Settings";
 import Link from "next/link";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../../../entities/user-entity";
 import {$fetch} from "@/shared/api/fetch";
 import UploadPhoto from "@/widgets/user/profile/ui/profile/ui/UploadPhoto";
 import UserSkeleton from "@/widgets/user/edit-user-info/ui/user-skeleton";
@@ -17,9 +17,10 @@ interface Props {
     isPrivate: boolean
     trueUser: Record<string, any> | null
     showModals?: boolean
+    isPremium?: boolean
 }
 
-export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showModals=true }: Props) {
+export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showModals=true, isPremium=false }: Props) {
 
     const {setUser} = useContext(UserContext)
 
@@ -63,7 +64,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
             </div>
 
             <div className={`w-full mt-[215px] relative glass-effect p-8 rounded-[18px] flex justify-between items-center flex-col lg:flex-row`}>
-                <User user={trueUser} isMyProfile={isMyProfile} isPrivate={isPrivate} showModals={showModals} />
+                <User user={trueUser} isMyProfile={isMyProfile} isPrivate={isPrivate} showModals={showModals} isPremium={isPremium} />
                 {isMyProfile &&
                     <div>
                         <div className="flex gap-2 hidden lg:flex">

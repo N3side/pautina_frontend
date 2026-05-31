@@ -1,7 +1,7 @@
 "use client"
 
 import Link from "next/link"
-import {CheckIsNotUser} from "@/entities/user";
+import {CheckIsNotUser} from "../../../../entities/user-entity";
 import Card1 from "@/shared/ui/Sections/Card1";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";

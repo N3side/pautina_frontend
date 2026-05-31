@@ -5,7 +5,7 @@ import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import React, {ChangeEvent, useContext, useEffect, useState} from "react";
 import {useSources} from "@/entities/sources/api/useSources";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../entities/user-entity";
 
 interface Props {
     errors?: Record<string, any> | null

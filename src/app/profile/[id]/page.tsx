@@ -1,18 +1,22 @@
 "use client"
 
 import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
-import PortfolioWidget from "@/widgets/user/portfolio/ui/PortfolioWidget";
+import DocumentsWidget from "@/widgets/user/documents-widget/DocumentsWidget";
 import {useParams} from "next/navigation";
-import {useContext, useEffect, useState} from "react";
-import {UserContext} from "@/entities/user";
+import {ReactNode, useContext, useEffect, useState} from "react";
+import {UserContext} from "@/entities/user-entity";
 import {$fetch} from "@/shared/api/fetch";
 import Layout from "@/widgets/user/layout-h-s-f/Layout";
 import {PrivateProfileWidget} from "@/widgets/user/profile/ui/profile/ui/PrivateProfileWidget";
-import ProjectWidget from "@/widgets/user/portfolio/ui/ProjectWidget";
-import ShowStacks from "@/features/manage-stacks/ui/ShowStacks";
-import EditIcon from '@mui/icons-material/Edit';
-import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
+import ProjectsWidget from "@/widgets/user/projects-widget/ProjectsWidget";
+import StacksWidget from "@/widgets/user/stacks-widget/StacksWidget";
+import DesertScene from "@/shared/assets/images/vector/empty/DesertScene";
 
+const DEFAULT_SECTIONS = [
+    { name: "documents", default_sort: 1 },
+    { name: "stacks", default_sort: 2 },
+    { name: "projects", default_sort: 3 },
+];
 
 export default function Page() {
     const { user } = useContext(UserContext);
@@ -21,13 +25,7 @@ export default function Page() {
 
     const [isMyProfile, setIsMyProfile] = useState<boolean>(false);
     const [trueUser, setTrueUser] = useState<Record<string, any> | null>(user);
-    const [isMounted, setIsMounted] = useState<boolean>(false);
 
-    // Стейт для хранения выбранных стеков (для отображения и редактирования)
-    const [selectedStacks, setSelectedStacks] = useState<Record<string, any>[]>([]);
-    const [readOnly, setReadOnly] = useState(false)
-
-    // Проверка прав владельца
     useEffect(() => {
         if (url_base && user?.publication?.public_url) {
             setIsMyProfile(
@@ -37,31 +35,11 @@ export default function Page() {
         }
     }, [user, url_base]);
 
-    // Синхронизация данных текущего авторизованного юзера
     useEffect(() => {
         if (user && user?.main?.id === trueUser?.main?.id) {
             setTrueUser(user);
         }
     }, [user]);
-
-    async function getUserStacks() {
-        const response = await $fetch(`stacks/${trueUser?.main?.id}`)
-
-        const stacks_ = response?.json?.stacks
-
-        console.log(stacks_)
-
-        if (stacks_) {
-            setSelectedStacks(stacks_)
-        }
-    }
-
-    // Наполнение стейта стеков данными просматриваемого пользователя
-    useEffect(() => {
-        if (trueUser) {
-            getUserStacks()
-        }
-    }, [trueUser]);
 
     async function getUser() {
         const response = await $fetch(`user/${url_base}`);
@@ -75,28 +53,110 @@ export default function Page() {
         if (!user) getUser();
     }, [user, url_base]);
 
+    const isPrivate = !isMyProfile && Boolean(trueUser?.publication?.is_uploaded) === false;
+
+    const [filledSections, setFilledSections] = useState({
+        documents: false,
+        stacks: false,
+        projects: false
+    });
+
+    const hasContent = isMyProfile || Object.values(filledSections).some(Boolean);
+
+    const [sectionsOrder, setSectionsOrder] = useState(DEFAULT_SECTIONS);
+    const [sectionsSort, setSectionsSort] = useState<Record<string, any>[] | null>(null);
+
+    // Храним индекс элемента, который сейчас тащим
+    const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
+
+    async function getSectionsSort() {
+        const response = await $fetch(`get_sort/${trueUser?.main?.id}`);
+        const sort = response?.json?.sections;
+        if (sort) {
+            setSectionsSort(sort);
+        }
+    }
+
     useEffect(() => {
-        setIsMounted(true);
-    }, []);
+        if (trueUser?.main?.id) {
+            getSectionsSort();
+        }
+    }, [trueUser?.main?.id]);
 
-    // Функция мутации стеков (работает только для владельца профиля)
-    const handleUpdateStacks = async (newStacks: Record<string, any>[]) => {
-        setSelectedStacks(newStacks);
+    useEffect(() => {
+        if (sectionsSort && Array.isArray(sectionsSort) && sectionsSort.length > 0) {
+            const updated = DEFAULT_SECTIONS.map(section => {
+                const backendItem = sectionsSort.find(b => b.name === section.name);
+                return {
+                    ...section,
+                    id: backendItem?.id || null,
+                    sort: backendItem?.sort !== undefined ? backendItem.sort : section.default_sort
+                };
+            });
 
-        const stackIds = newStacks.map(stack => stack.id);
+            const sorted = [...updated].sort((a, b) => (a.sort || 0) - (b.sort || 0));
+            setSectionsOrder(sorted);
+        }
+    }, [sectionsSort]);
 
-        await $fetch(`stacks`, {
-            method: 'POST',
-            headers: {"Content-Type": "application/json", "Accept": "application/json"},
+    async function handleSortSave(newOrder: typeof DEFAULT_SECTIONS) {
+        const payload = newOrder.map((section: any, index) => ({
+            id: section.id,
+            sort: index + 1
+        })).filter(item => item.id);
+
+        const response = await $fetch("me/sections/sort", {
+            method: "PATCH",
+            headers: {
+                "Content-type": "application/json",
+                "Accept": "application/json"
+            },
             body: JSON.stringify({
-                stacks: stackIds || []
+                "sections": payload
             })
         });
+
+        if (response?.response?.ok) {
+            console.log(newOrder)
+            setSectionsOrder(newOrder);
+        }
+    }
+
+    // --- НАЧАЛО ЛОГИКИ DRAG AND DROP ---
+
+    const handleDragStart = (index: number) => {
+        if (!isMyProfile) return;
+        setDraggedIndex(index);
     };
 
-    if (!isMounted) return null;
+    const handleDragOver = (e: React.DragEvent) => {
+        // Обязательно отменяем дефолтное поведение, иначе drop не сработает
+        e.preventDefault();
+    };
 
-    const isPrivate = !isMyProfile && Boolean(trueUser?.publication?.is_uploaded) === false;
+    const handleDrop = (targetIndex: number) => {
+        if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+        const updatedOrder = [...sectionsOrder];
+        // Вырезаем тащимый элемент
+        const [draggedItem] = updatedOrder.splice(draggedIndex, 1);
+        // Вставляем его на новое место
+        updatedOrder.splice(targetIndex, 0, draggedItem);
+
+        // Обновляем локальный стейт, чтобы всё мгновенно перерисовать
+        // setSectionsOrder(updatedOrder);
+
+        // Отправляем новый порядок на бэкенд
+        handleSortSave(updatedOrder);
+
+        setDraggedIndex(null);
+    };
+
+    const handleDragEnd = () => {
+        setDraggedIndex(null);
+    };
+
+    // --- КОНЕЦ ЛОГИКИ DRAG AND DROP ---
 
     return (
         <Layout>
@@ -104,62 +164,70 @@ export default function Page() {
                 <ProfileWidget isMyProfile={isMyProfile} isPrivate={isPrivate} trueUser={trueUser} />
 
                 {!isPrivate ? (
-                    <div className="flex flex-col gap-5 py-5">
+                    <>
+                        <div className={`flex flex-col gap-5 ${hasContent || isMyProfile ? 'py-5' : 'hidden'}`}>
 
-                        <PortfolioWidget isMyProfile={isMyProfile} trueUser={trueUser} />
+                            {/* Рендерим отсортированный массив */}
+                            {sectionsOrder.map((section, index) => {
+                                // Переменная для хранения внутренностей виджета
+                                let componentNode: React.ReactNode = null;
 
-                        {
-                            <div className="glass-effect p-6 rounded-xl relative">
-
-                                <h6 className="text-text-main font-bold">
-                                    {
-                                        isMyProfile ?
-                                            `Ваш технологический стек ${selectedStacks.length < 1 ? "не заполнен. Нажмите на стеки, которыми владеете" : ""}`
-                                        :
-                                            `Технологический стек пользователя ${selectedStacks.length < 1 ? "пуст" : ""}`
-                                    }
-                                </h6>
-
-                                {
-                                    isMyProfile &&
-                                    <IconWrapper
-                                        onClick={() => setReadOnly(!readOnly)}
-                                        className="!absolute !top-4 !right-6"
-                                    >
-                                        <EditIcon className="!text-[20px]" />
-                                    </IconWrapper>
+                                if (section.name === "documents") {
+                                    componentNode = (
+                                        <DocumentsWidget
+                                            isMyProfile={isMyProfile}
+                                            trueUser={trueUser}
+                                            setIsEmpty={(hasData) => setFilledSections(p => ({...p, documents: hasData}))}
+                                        />
+                                    );
+                                } else if (section.name === "stacks") {
+                                    componentNode = (
+                                        <StacksWidget
+                                            isMyProfile={isMyProfile}
+                                            trueUser={trueUser}
+                                            setIsEmpty={(hasData) => setFilledSections(p => ({...p, stacks: hasData}))}
+                                        />
+                                    );
+                                } else if (section.name === "projects") {
+                                    componentNode = (
+                                        <ProjectsWidget
+                                            isMyProfile={isMyProfile}
+                                            trueUser={trueUser}
+                                            setIsEmpty={(hasData) => setFilledSections(p => ({...p, projects: hasData}))}
+                                        />
+                                    );
                                 }
 
-                                {readOnly && isMyProfile ? (
-                                    <div className="flex flex-col gap-3 mt-7">
-                                        <ShowStacks
-                                            showSearch={true}
-                                            showAll={true}
-                                            showSelected={true}
-                                            selectedStacks={selectedStacks}
-                                            setSelectedStacks={(updater) => {
-                                                const nextState = typeof updater === 'function' ? updater(selectedStacks) : updater;
-                                                if (nextState) handleUpdateStacks(nextState);
-                                            }}
-                                        />
-                                    </div>
-                                ) : (
-                                    selectedStacks && Array.isArray(selectedStacks) && selectedStacks.length > 0 &&
-                                    <div className="flex flex-col gap-4 mt-6">
-                                        <ShowStacks
-                                            showSearch={false}
-                                            showAll={false}
-                                            showSelected={true}
-                                            selectedStacks={selectedStacks}
-                                            isReadOnly={true} // Передаем true, всё лишнее скроется и заблокируется автоматически
-                                        />
-                                    </div>
-                                )}
-                            </div>
-                        }
+                                if (!componentNode) return null;
 
-                        <ProjectWidget isMyProfile={isMyProfile} trueUser={trueUser} />
-                    </div>
+                                return (
+                                    <div
+                                        key={section.name}
+                                        draggable={isMyProfile} // Таскать можно только в своем профиле
+                                        onDragStart={() => handleDragStart(index)}
+                                        onDragOver={handleDragOver}
+                                        onDrop={() => handleDrop(index)}
+                                        onDragEnd={handleDragEnd}
+                                        // Стили: меняем курсор на "руку" и плавно уменьшаем непрозрачность перетаскиваемого элемента
+                                        className={`transition-all duration-200 select-none 
+                                            ${isMyProfile ? 'cursor-grab active:cursor-grabbing border border-transparent active:border-dashed active:border-gray-300 rounded-[18px]' : ''} 
+                                            ${draggedIndex === index ? 'opacity-30 scale-[0.98]' : 'opacity-100'}`}
+                                    >
+                                        {componentNode}
+                                    </div>
+                                );
+                            })}
+                        </div>
+
+                        {!hasContent && !isMyProfile && (
+                            <div className="glass-effect p-6 rounded-[18px] mt-4">
+                                <h3 className="text-text-main font-bold">
+                                    Пустота...
+                                </h3>
+                                <DesertScene className="w-full h-full text-text-main" />
+                            </div>
+                        )}
+                    </>
                 ) : (
                     <div className="mt-4">
                         <PrivateProfileWidget />

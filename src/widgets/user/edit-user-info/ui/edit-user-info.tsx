@@ -2,7 +2,7 @@
 
 import React, { useContext, useEffect, useState } from "react";
 import { useSearchParams, useRouter, usePathname } from "next/navigation";
-import { UserContext } from "@/entities/user";
+import { UserContext } from "../../../../entities/user-entity";
 import Elem from "@/widgets/user/sidebar/ui/Elem";
 import Profile from "@/widgets/user/edit-user-info/ui/parts/Profile";
 import Contacts from "@/widgets/user/edit-user-info/ui/parts/Contacts";

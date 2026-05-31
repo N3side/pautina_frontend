@@ -4,7 +4,7 @@ import "@/app/globals.css";
 import {ReactNode} from "react"
 import {WindowProvider} from "./WindowProvider"
 import {BodyBlockProvider} from "@/shared/lib/providers/BodyBlockProvider";
-import {UserProvider} from "@/entities/user";
+import {UserProvider} from "../../../entities/user-entity";
 import {ThemeProvider} from "@/shared/lib/providers/ThemeProvider";
 import {ToastListener} from "@/shared/lib/providers/ToastListener";
 // Импортируем ToastBar

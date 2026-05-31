@@ -4,7 +4,7 @@ import Input from "@/shared/ui/Inputs/Input";
 import {$fetch} from "@/shared/api/fetch";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../entities/user-entity";
 import {userLink} from "@/shared/lib/utils/userLink";
 import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 import PasswordRequirements from "@/entities/password-requirements/PasswordRequirements";

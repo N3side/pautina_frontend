@@ -1,10 +1,10 @@
 "use client"
 
-import Gallery from "../gallery/Gallery";
+import Gallery from "@/entities/gallery/Gallery";
 import ProjectStackBadge from "@/entities/project-stack-badge/ProjectStackBadge";
 import { useModal } from "@/shared/lib/hooks/useModal";
 import { Modal } from "@/shared/ui/Modals/Modal";
-import ProjectModalWidget from "@/widgets/user/portfolio/ui/ProjectModalWidget";
+import ProjectModalWidget from "@/widgets/user/modal-project-widget/ProjectModalWidget";
 import EventIcon from "@mui/icons-material/Event";
 
 interface ProjectCardProps {

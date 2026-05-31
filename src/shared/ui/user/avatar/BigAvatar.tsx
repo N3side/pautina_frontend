@@ -1,7 +1,7 @@
 import {HTMLAttributes, useContext} from "react";
 import UploadPhoto from "@/widgets/user/profile/ui/profile/ui/UploadPhoto";
 import {$fetch} from "@/shared/api/fetch";
-import {UserContext} from "@/entities/user";
+import {UserContext} from "../../../../entities/user-entity";
 import {Button} from "@mui/material";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
 
