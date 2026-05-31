@@ -21,6 +21,7 @@ import toast from "react-hot-toast";
 import {useContext} from "react";
 import {UserContext} from "..";
 import TelegramIcon from "@mui/icons-material/Telegram";
+import {GitHub} from "@mui/icons-material";
 
 interface Props {
     user: Record<string, any>
@@ -68,6 +69,11 @@ export default function User({user, isMyProfile, isPrivate, showModals, isPremiu
             text: user?.contacts?.vk,
             Icon: VkIcon,
             link: `https://vk.com/${user?.contacts?.vk}`
+        },
+        {
+            text: user?.contacts?.github,
+            Icon: GitHub,
+            link: `https://github.com/${user?.contacts?.github}`
         },
         {
             text: user?.contacts?.extra_link,

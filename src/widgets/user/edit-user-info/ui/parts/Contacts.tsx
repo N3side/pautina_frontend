@@ -75,6 +75,16 @@ export default function Contacts({heading}) {
                         />
 
                         <Input
+                            name="github"
+                            label="Юзернейм github"
+                            defaultValue={user?.contacts?.github}
+                            error={errors?.github}
+                            leftAdditional="https://github.com/"
+                            additionalGap={16}
+                            onInput={autoReplace}
+                        />
+
+                        <Input
                             name="extra_link"
                             label="Сайт"
                             defaultValue={user?.contacts?.extra_link}

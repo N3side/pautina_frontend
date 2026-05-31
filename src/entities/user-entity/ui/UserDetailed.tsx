@@ -11,6 +11,7 @@ import LinkIcon from '@mui/icons-material/Link';
 import {userLinkWithoutProtocol} from "@/shared/lib/utils/userLink";
 import VkIcon from "@/shared/assets/images/vector/vk/VkIcon";
 import LanguageIcon from '@mui/icons-material/Language';
+import {GitHub} from "@mui/icons-material";
 
 interface Props {
     user: Record<string, any>
@@ -75,6 +76,12 @@ export default function UserDetailed({user, isPrivate}: Props) {
             v: user?.contacts?.tg,
             Icon: TelegramIcon,
             link: `https://t.me/${user?.contacts?.tg}`
+        },
+        {
+            k: "Гитхаб",
+            v: user?.contacts?.github,
+            Icon: GitHub,
+            link: `https://github.com/${user?.contacts?.github}`
         },
         {
             k: "Сайт",
