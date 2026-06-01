@@ -221,9 +221,9 @@ export default function Page() {
 
                         {!hasContent && !isMyProfile && (
                             <div className="glass-effect p-6 rounded-[18px] mt-4">
-                                <h3 className="text-text-main font-bold">
-                                    Пустота...
-                                </h3>
+                                <h4 className="text-text-main font-bold">
+                                    Пока что тут ничего нет...
+                                </h4>
                                 <DesertScene className="w-full h-full text-text-main" />
                             </div>
                         )}

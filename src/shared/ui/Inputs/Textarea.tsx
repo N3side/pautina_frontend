@@ -15,6 +15,7 @@ interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     label?: string | null;
     error?: string | null;
     selected?: boolean;
+    inputClassName?: string
 }
 
 const Textarea = ({
@@ -22,6 +23,7 @@ const Textarea = ({
       error,
       selected,
       className,
+      inputClassName,
       style,
       value,
       defaultValue,
@@ -47,7 +49,7 @@ const Textarea = ({
 
             <div className="relative group">
                 <textarea
-                    className={`${BASE_TEXTAREA_CLASSES} ${
+                    className={`${BASE_TEXTAREA_CLASSES} ${inputClassName} ${
                         error ? 'border-red-500' : 'border-border-default hover:border-brand/50'
                     }`}
                     style={dynamicStyles}

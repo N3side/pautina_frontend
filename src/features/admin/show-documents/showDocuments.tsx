@@ -5,7 +5,7 @@ import {$fetch} from "@/shared/api/fetch";
 import usePaginate from "@/shared/lib/hooks/usePaginate"
 import Pagination from "@/features/pagination/ui/Pagination";
 import UseFilters from "@/shared/lib/hooks/useFilters";
-import DocumentCard from "../../../entities/admin/document/DocumentCard";
+import DocumentCard from "@/entities/admin/document/DocumentCard";
 import FilterDocuments from "@/features/admin/filter-documents/FilterDocuments";
 
 export default function ShowUsers() {

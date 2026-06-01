@@ -26,7 +26,7 @@ export default function UpdateProject() {
     // Локальные стейты сущности проекта
     const [project, setProject] = useState<Record<string, any> | null>(null);
     const [errors, setErrors] = useState<Record<string, any> | null>(null);
-    const [checked, setChecked] = useState<boolean>(false);
+    const [checked, setChecked] = useState<boolean>(true);
     const [selectedStacks, setSelectedStacks] = useState<Record<string, any>[]>([]);
     const [gallery, setGallery] = useState<Record<string, any>[]>([]);
 
@@ -129,7 +129,7 @@ export default function UpdateProject() {
                 <Textarea
                     name="description"
                     label="Описание проекта"
-                    placeholder="Приложение для создание заметок"
+                    placeholder="Крутое приложение, заходите: localhost:3000"
                     error={errors?.description}
                     defaultValue={project?.description}
                 />
@@ -165,12 +165,12 @@ export default function UpdateProject() {
                 {/* Выбор стека технологий по архитектуре FSD */}
                 <div className="glass-effect p-6 rounded-xl">
                     <ShowStacks
-                        title="Нажмите на технологии, которые использовались в проекте"
                         showSearch={true}
                         showAll={true}
                         showSelected={true}
                         selectedStacks={selectedStacks}
                         setSelectedStacks={setSelectedStacks}
+
                     />
                 </div>
 

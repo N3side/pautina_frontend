@@ -27,6 +27,7 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChan
     additionalGap?: number;
     Button?: ReactNode
     ref?: React.Ref<HTMLInputElement>;
+    inputClassName?: string
 }
 
 const Input = ({
@@ -37,6 +38,7 @@ const Input = ({
        error,
        selected,
        className,
+       inputClassName,
        style,
        mask,
        onChange,
@@ -91,7 +93,7 @@ const Input = ({
 
                 {mask ? (
                     <IMaskInput
-                        className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
+                        className={`${BASE_INPUT_CLASSES} ${inputClassName} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
                         style={dynamicInputStyle}
                         prepare={(str) => str.replace(/\D/g, '')}
                         type={type_ === "password" ? (isOpen ? "text" : "password") : props.type}
@@ -103,7 +105,7 @@ const Input = ({
                     />
                 ) : (
                     <input
-                        className={`${BASE_INPUT_CLASSES} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
+                        className={`${BASE_INPUT_CLASSES} ${inputClassName} ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50'}`}
                         style={dynamicInputStyle}
                         onChange={onChange}
                         // Для обычного input работает как раньше

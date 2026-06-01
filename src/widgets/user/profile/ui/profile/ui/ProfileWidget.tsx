@@ -1,16 +1,17 @@
 "use client"
 
 import React, {useContext} from "react";
-import User from "../../../../../../entities/user-entity/ui/User"
+import User from "@/entities/user-entity/ui/User"
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SettingsIcon from "@mui/icons-material/Settings";
 import Link from "next/link";
-import {UserContext} from "../../../../../../entities/user-entity";
+import {UserContext} from "@/entities/user-entity";
 import {$fetch} from "@/shared/api/fetch";
 import UploadPhoto from "@/widgets/user/profile/ui/profile/ui/UploadPhoto";
 import UserSkeleton from "@/widgets/user/edit-user-info/ui/user-skeleton";
+import {dots} from "@/shared/styles/patterns/dots";
 
 interface Props {
     isMyProfile: boolean
@@ -45,7 +46,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
         <div className="relative w-full">
 
             <div className="left-0 absolute h-[230px] w-full glass-effect rounded-t-[18px] overflow-hidden" style={{
-                backgroundImage: `url("data:image/svg+xml,%3Csvg width='20' height='20' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%2394a3b8' fill-opacity='0.2' fill-rule='evenodd'%3E%3Ccircle cx='3' cy='3' r='1'/%3E%3C/g%3E%3C/svg%3E")`,
+                backgroundImage: `url("${dots}")`,
             }}>
 
                 {isMyProfile &&

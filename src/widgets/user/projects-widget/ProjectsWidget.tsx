@@ -86,7 +86,7 @@ export default function ProjectsWidget({isMyProfile, trueUser, setIsEmpty}: Prop
 
             <main className="flex flex-col gap-4">
                 {projects && Array.isArray(projects) && projects?.length > 0 &&
-                    <div className="grid grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-3 mt-4">
+                    <div className="grid grid-cols-[repeat(auto-fill,minmax(320px,1fr))] min-[500px]:grid-cols-[repeat(auto-fill,minmax(340px,1fr))] gap-3 mt-4">
                         {!isLoading ? projects?.map((project, i) => (
                                 <ProjectCard
                                     key={i}

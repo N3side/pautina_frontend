@@ -100,7 +100,7 @@ export default function DocumentsWidget({isMyProfile, trueUser, setIsEmpty}: Pro
                     categories && categories?.length > 0 &&
                     <div className="mt-4">
                         <WheelXScrollProvider>
-                            <ul className="flex items-center gap-3 py-2">
+                            <ul className="flex items-center gap-3 py-2 max-w-[800px] w-full">
                                 <Category category={{name: "Все"}} onClick={() => setFilters(prev => ({...prev, name: "all"}))} />
                                 {categories?.map((category, i) => (
                                     <Category

@@ -73,10 +73,10 @@ export default function FooterWidget() {
                     <div className="flex flex-col gap-4">
                         <Heading text="Больше информации" />
                         <div className="flex flex-col gap-2">
-                            <NavigationLink href="https://docs.google.com/document/d/1-mDw1_bSwmQAsuOAiOjGiAxW-fhcxbRyRg4tSFOCBJQ/edit?usp=sharing" target="_blank">
+                            <NavigationLink className="whitespace-pre-wrap" href="https://docs.google.com/document/d/1-mDw1_bSwmQAsuOAiOjGiAxW-fhcxbRyRg4tSFOCBJQ/edit?usp=sharing" target="_blank">
                                 Пользовательское соглашение
                             </NavigationLink>
-                            <NavigationLink href="https://docs.google.com/document/d/1l0Vqo7sirSn4_dqWWlq-Y58pQ2u9p8EtcsInNhQy5m0/edit?usp=sharing" target="_blank">
+                            <NavigationLink className="whitespace-pre-wrap" href="https://docs.google.com/document/d/1l0Vqo7sirSn4_dqWWlq-Y58pQ2u9p8EtcsInNhQy5m0/edit?usp=sharing" target="_blank">
                                 Политика конфидициальности
                             </NavigationLink>
                         </div>
