@@ -1,4 +1,4 @@
-import {ChangeEvent, FormEvent, useContext, useState} from "react";
+import {ChangeEvent, FormEvent, useContext, useEffect, useState} from "react";
 import {$fetch} from "@/shared/api/fetch";
 import {UserContext} from "../../../../entities/user-entity";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
@@ -22,11 +22,18 @@ export default function Email({name, email, setEmail, next, setTimer, position})
 
     const [checked, setIsChecked] = useState<boolean>(false)
 
+    useEffect(() => {
+        if (user?.main?.email) {
+            next()
+            return
+        }
+    }, [user]);
+
     async function handleSubmit(e: FormEvent<HTMLFormElement>): Promise<void> {
 
         setErrors(null)
 
-        if (user?.contacts?.email) {
+        if (user?.main?.email) {
             next()
             return
         }
@@ -64,7 +71,6 @@ export default function Email({name, email, setEmail, next, setTimer, position})
             safeCookieStorage.setItem("token", token)
             setToken(token)
         }
-        next()
     }
 
     function handleChange(e: ChangeEvent<HTMLInputElement>): void {

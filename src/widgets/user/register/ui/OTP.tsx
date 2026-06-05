@@ -8,7 +8,7 @@ import {UserContext} from "../../../../entities/user-entity";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Timer from "@/features/timer/Timer"
 
-export default function OTP({name, email, otp, setOtp, next, position, timer, setTimer}) {
+export default function OTP({name, email, setEmail, otp, setOtp, next, position, timer, setTimer}) {
 
     const {user, setUser} = useContext(UserContext)
 
@@ -51,11 +51,15 @@ export default function OTP({name, email, otp, setOtp, next, position, timer, se
 
     useEffect(() => {
 
+        if (user?.main?.email) {
+            setEmail(user?.main?.email)
+        }
+
         if (user?.access?.confirmed_email) {
             next()
         }
 
-    }, [position]);
+    }, [position, user]);
 
 
 

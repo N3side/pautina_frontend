@@ -15,9 +15,7 @@ import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 export default function OTP({email, next, prev, timer, setTimer}) {
 
     const {user, setToken} = useContext(UserContext)
-
     const [otp, setOtp] = useState<string | number | null>(null)
-
 
     async function handleSubmit(e) {
 

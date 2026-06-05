@@ -96,6 +96,7 @@ export default function ProjectsWidget({isMyProfile, trueUser, setIsEmpty}: Prop
                                     //     setCurrentDocument(document)
                                     //     openDocument()
                                     // }}
+                                    // пупупу
                                 />
                             )) :
                             [...Array(6)].map((e, key) =>

@@ -1,10 +1,11 @@
-import {useState} from "react";
+import {useContext, useEffect, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Typewriter from 'typewriter-effect';
+import {UserContext} from "../../../../entities/user-entity";
 
-export default function Name({name, setName, next}) {
+export default function Name({name, setName, next, position}) {
 
     const [errors, setErrors] = useState<Record<any, string> | null>(null)
 
@@ -17,6 +18,14 @@ export default function Name({name, setName, next}) {
         }
         next()
     }
+
+    const {user} = useContext(UserContext)
+
+    useEffect(() => {
+        if (user?.main?.email && position == 0) {
+            next()
+        }
+    }, [user]);
 
     async function handleChange(e) {
         const name_ = e.target.value
