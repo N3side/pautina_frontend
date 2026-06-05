@@ -1,6 +1,8 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import {createPortal} from "react-dom";
+import {create} from "zustand";
 
 interface ModalProps {
     isOpen: boolean;
@@ -11,6 +13,18 @@ interface ModalProps {
 
 export default function ProjectGalleryModal({ isOpen, close, gallery, initialIndex }: ModalProps) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
+
+    // КРИТИЧЕСКИЙ ФИКС: Синхронизируем индекс при каждом открытии модалки
+    useEffect(() => {
+        if (isOpen) {
+            setCurrentIndex(initialIndex);
+            // Блокируем скролл страницы, пока открыта полноэкранная галерея
+            document.body.style.overflow = "hidden";
+        }
+        return () => {
+            document.body.style.overflow = "";
+        };
+    }, [isOpen, initialIndex]);
 
     if (!isOpen) return null;
 
@@ -24,51 +38,64 @@ export default function ProjectGalleryModal({ isOpen, close, gallery, initialInd
         if (currentIndex > 0) setCurrentIndex(prev => prev - 1);
     };
 
-    return (
+    return createPortal(
         <div
-            className="fixed inset-0 z-[100] flex items-center justify-center bg-black/95 backdrop-blur-md"
+            // fixed inset-0 и самый высокий z-индекс гарантируют экран "как в телеге"
+            className="fixed inset-0 !z-[999999] flex flex-col items-center justify-center bg-neutral-950/95 backdrop-blur-xl"
             onClick={close}
         >
-            {/* Кнопка закрытия */}
+            {/* Кнопка закрытия сверху справа */}
             <button
                 onClick={close}
-                className="absolute top-6 right-6 p-2 text-white/50 hover:text-white transition-colors z-[101]"
+                className="absolute top-6 right-6 p-3 text-white/60 hover:text-white hover:bg-white/10 rounded-full transition-all z-[1000000]"
             >
-                <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" /></svg>
+                <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+                </svg>
             </button>
 
-            {/* Контейнер изображения */}
-            <div className="relative w-full h-full flex items-center justify-center p-4" onClick={(e) => e.stopPropagation()}>
+            {/* Главный контейнер фото */}
+            <div
+                className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center p-4"
+                onClick={(e) => e.stopPropagation()}
+            >
                 <img
-                    src={gallery[currentIndex].image_url}
-                    alt="Project"
-                    className="max-w-full max-h-full object-contain animate-in zoom-in-95 duration-300"
+                    src={gallery[currentIndex]?.image_url}
+                    alt="Увеличенное изображение проекта"
+                    className="max-w-full max-h-full object-contain select-none rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out"
+                    draggable="false"
                 />
 
-                {/* Кнопки навигации */}
+                {/* Стрелка Назад */}
                 {currentIndex > 0 && (
                     <button
                         onClick={prev}
-                        className="absolute left-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-md"
+                        className="absolute left-4 p-4 rounded-full bg-neutral-900/60 border border-white/10 hover:bg-neutral-800 text-white transition-all backdrop-blur-md shadow-lg"
                     >
-                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" /></svg>
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
+                        </svg>
                     </button>
                 )}
 
+                {/* Стрелка Вперед */}
                 {currentIndex < gallery.length - 1 && (
                     <button
                         onClick={next}
-                        className="absolute right-6 p-3 rounded-full bg-white/10 hover:bg-white/20 text-white transition-all backdrop-blur-md"
+                        className="absolute right-4 p-4 rounded-full bg-neutral-900/60 border border-white/10 hover:bg-neutral-800 text-white transition-all backdrop-blur-md shadow-lg"
                     >
-                        <svg className="w-8 h-8" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" /></svg>
+                        <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
+                            <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
+                        </svg>
                     </button>
                 )}
             </div>
 
-            {/* Индикатор прогресса */}
-            <div className="absolute bottom-6 left-0 right-0 text-center text-white/60 font-medium">
+            {/* Счётчик страниц снизу */}
+            <div className="absolute bottom-6 left-0 right-0 text-center text-white/50 text-sm font-medium tracking-wider select-none">
                 {currentIndex + 1} / {gallery.length}
             </div>
-        </div>
-    );
+        </div>,
+        document.body
+    )
 }

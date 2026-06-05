@@ -1,7 +1,7 @@
 "use client"
 
 import { useState } from "react";
-import { useModal } from "@/shared/lib/hooks/useModal"; // Укажи свой путь
+import { useModal } from "@/shared/lib/hooks/useModal";
 import GalleryModal from "../gallery-modal/GalleryModal";
 
 interface Props {
@@ -16,10 +16,8 @@ export default function Gallery({ gallery, className }: Props) {
     if (!gallery || gallery.length === 0) return null;
 
     const sortedGallery = [...gallery].sort((a, b) => a.sort - b.sort);
-
     const total = sortedGallery.length;
 
-    // Навигация
     const nextSlide = (e: React.MouseEvent) => {
         e.stopPropagation();
         if (currentIndex < total - 1) setCurrentIndex(prev => prev + 1);
@@ -35,13 +33,18 @@ export default function Gallery({ gallery, className }: Props) {
         setCurrentIndex(index);
     };
 
+    const handleGalleryClick = (e: React.MouseEvent) => {
+        // Стопаем, чтобы карточка проекта под слайдером не реагировала на клик
+        e.stopPropagation();
+        open();
+    };
+
     return (
         <>
             <div
-                className={`w-full mt-4 group/slider relative rounded-[16px] overflow-hidden  max-h-[180px] sm:max-h-[220px] shadow-sm cursor-zoom-in ${className}`}
-                onClick={open}
+                className={`w-full group/slider rounded-[16px] overflow-hidden h-full shadow-sm cursor-zoom-in relative ${className}`}
+                onClick={handleGalleryClick}
             >
-                {/* ... (код трека слайдера оставляем как был) ... */}
                 <div
                     className="flex h-full w-full transition-transform duration-500 ease-[cubic-bezier(0.25,1,0.5,1)]"
                     style={{ transform: `translateX(-${currentIndex * 100}%)` }}
@@ -51,7 +54,7 @@ export default function Gallery({ gallery, className }: Props) {
                         return (
                             <div key={img.id} className="w-full flex-none max-w-full relative h-full">
                                 {isNear ? (
-                                    <img src={img.image_url} className="w-full h-full object-cover block" draggable="false" />
+                                    <img src={img.image_url} className="w-full h-full object-cover block" draggable="false" alt="" />
                                 ) : (
                                     <div className="w-full h-full bg-border-default/10" />
                                 )}
@@ -62,11 +65,10 @@ export default function Gallery({ gallery, className }: Props) {
 
                 {total > 1 && (
                     <>
-                        {/* Кнопка "Назад" */}
                         <button
                             onClick={prevSlide}
                             disabled={currentIndex === 0}
-                            className={`absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full glass-effect text-white transition-all duration-200 active:scale-95 ${
+                            className={`absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md text-white transition-all duration-200 active:scale-95 z-10 ${
                                 currentIndex === 0 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/slider:opacity-100 hover:bg-white/20"
                             }`}
                         >
@@ -75,11 +77,10 @@ export default function Gallery({ gallery, className }: Props) {
                             </svg>
                         </button>
 
-                        {/* Кнопка "Вперед" */}
                         <button
                             onClick={nextSlide}
                             disabled={currentIndex === total - 1}
-                            className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full glass-effect text-white transition-all duration-200 active:scale-95 ${
+                            className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md text-white transition-all duration-200 active:scale-95 z-10 ${
                                 currentIndex === total - 1 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/slider:opacity-100 hover:bg-white/20"
                             }`}
                         >
@@ -88,16 +89,13 @@ export default function Gallery({ gallery, className }: Props) {
                             </svg>
                         </button>
 
-                        {/* Точки пагинации */}
-                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 px-2 py-1 rounded-full glass-effect bg-black/20">
+                        <div className="absolute bottom-3 left-1/2 -translate-x-1/2 flex gap-1.5 px-2 py-1 rounded-full bg-black/40 backdrop-blur-sm z-10">
                             {sortedGallery.map((_, idx) => (
                                 <button
                                     key={idx}
                                     onClick={(e) => goToSlide(e, idx)}
                                     className={`h-1.5 rounded-full transition-all duration-300 ${
-                                        idx === currentIndex
-                                            ? "bg-white w-4"
-                                            : "bg-white/40 hover:bg-white/80 w-1.5"
+                                        idx === currentIndex ? "bg-white w-4" : "bg-white/40 hover:bg-white/80 w-1.5"
                                     }`}
                                     aria-label={`Перейти к слайду ${idx + 1}`}
                                 />
@@ -105,17 +103,17 @@ export default function Gallery({ gallery, className }: Props) {
                         </div>
                     </>
                 )}
-
-                {/* (Стрелки и Dots - оставляем без изменений) */}
             </div>
 
-            {/* Модальное окно */}
-            <GalleryModal
-                isOpen={isOpen}
-                close={close}
-                gallery={sortedGallery}
-                initialIndex={currentIndex}
-            />
+            {/* Модалка рендерится снаружи структуры карточки */}
+            {isOpen && (
+                <GalleryModal
+                    isOpen={isOpen}
+                    close={close}
+                    gallery={sortedGallery}
+                    initialIndex={currentIndex}
+                />
+            )}
         </>
     );
 }

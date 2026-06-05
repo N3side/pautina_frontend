@@ -26,7 +26,7 @@ export function BodyBlockProvider({ children }: { children: ReactNode }) {
             const scrollBarWidth = window ? window?.innerWidth - html.clientWidth : 0;
 
             body.style.overflow = "hidden";
-            // body.style.paddingRight = scrollBarWidth + "px"
+            body.style.paddingRight = scrollBarWidth + "px"
 
             // Если фон все равно ломается, принудительно фиксируем его на html
             // html.style.backgroundColor = "var(--bg-loginPage)"; // Опциональный костыль

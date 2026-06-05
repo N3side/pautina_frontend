@@ -57,6 +57,9 @@ export default function FooterWidget() {
                             <NavigationLink>
                                 Главная
                             </NavigationLink>
+                            <NavigationLink href="https://t.me/pautina_admin">
+                                Написать в поддержку
+                            </NavigationLink>
                         </div>
                     </div>
                     <div className="flex flex-col gap-4">
