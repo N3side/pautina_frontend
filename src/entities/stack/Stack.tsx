@@ -3,6 +3,7 @@
 import { pushable } from "@/shared/styles/animations";
 import RoundedIconWrapper from "@/shared/ui/Buttons/RoundedIconWrapper";
 import CloseIcon from '@mui/icons-material/Close';
+import ServerIcon from "../../shared/ui/ServerIcon/ServerIcon";
 
 export function StackSkeleton() {
     return (
@@ -43,11 +44,13 @@ export function Stack({ stack, handleDelete, selected = false, onClick, isReadOn
                 transition-all duration-200 ease-in-out border ${cardStyles}`}
         >
             <div className={`flex items-center justify-center w-8 h-8 p-1 rounded-lg bg-white/[0.02] border border-white/5 transition-transform duration-200 ${!isReadOnly && 'group-hover:scale-105'}`}>
-                <img
-                    src={stack?.image_url || stack?.themes?.[0]?.image_url}
-                    alt={stack?.name || 'stack'}
-                    className="w-full h-full object-contain filter drop-shadow-sm"
+
+                <ServerIcon
+                    url={stack?.image_url || stack?.themes?.[0]?.image_url}
+                    // Вот теперь это сработает! По дефолту цвет текста, при ховере — бренд
+                    className="w-full h-full transition-colors duration-300 text-text-main"
                 />
+
             </div>
 
             <p className="text-text-main font-medium text-[15px] tracking-wide transition-colors">
