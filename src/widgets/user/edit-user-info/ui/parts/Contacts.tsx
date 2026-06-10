@@ -42,7 +42,7 @@ export default function Contacts({heading}) {
                 <div className='glass-effect py-8 px-6 rounded-[18px]'>
                     <p className="text-text-main text-secondary font-bold">{heading}</p>
 
-                    <div className="flex flex-col gap-4 mt-10">
+                    <div className="flex flex-col gap-4 mt-6">
                         {input}
 
                         <Input

@@ -3,7 +3,7 @@
 import { pushable } from "@/shared/styles/animations";
 import RoundedIconWrapper from "@/shared/ui/Buttons/RoundedIconWrapper";
 import CloseIcon from '@mui/icons-material/Close';
-import ServerIcon from "../../shared/ui/ServerIcon/ServerIcon";
+import ServerIcon from "@/shared/ui/ServerIcon/ServerIcon";
 
 export function StackSkeleton() {
     return (

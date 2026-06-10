@@ -28,7 +28,7 @@ export default function HeaderWidget() {
         <header className="sticky glass-effect top-0 z-20 w-full">
             <Container className="flex items-center justify-between w-full py-4 md:py-5">
                 {/* Логотип с эффектом при наведении */}
-                <Link href={homeLink} className={`logo group relative ${smooth} hover:scale-105`}>
+                <Link href={homeLink} className={`logo group relative ${smooth} hover:scale-105 px-4`}>
                     <LogoLight className="h-8 md:h-10 w-auto fill-text-main group-hover:drop-shadow-[0_0_15px_rgba(14,165,233,0.3)]"/>
                 </Link>
 

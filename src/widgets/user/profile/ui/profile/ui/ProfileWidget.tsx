@@ -56,7 +56,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
                             cropShape="rect"
                             aspect={448 / 100}
                         >
-                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="!bg-input"  />
+                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect"  />
                         </UploadPhoto>
                     </div>
                 }
@@ -72,7 +72,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
                             <Link href="/edit">
                                 <ActionButton className="h-fit" text="Редактировать профиль" />
                             </Link>
-                            <Link href="/settings">
+                            <Link href="/edit?step=settings">
                                 <ActionButton className="h-fit" text="Настройки" />
                             </Link>
                         </div>
@@ -82,7 +82,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
                                     <EditOutlinedIcon className="!text-[18px]" />
                                 </IconWrapper>
                             </Link>
-                            <Link href="/settings">
+                            <Link href="/edit?step=settings">
                                 <IconWrapper>
                                     <SettingsIcon className="!text-[18px]" />
                                 </IconWrapper>

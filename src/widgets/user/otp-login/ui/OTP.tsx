@@ -2,7 +2,7 @@ import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {useContext, useEffect, useState} from "react";
-import {UserContext} from "../../../../entities/user-entity/model/UserContext";
+import {UserContext} from "@/entities/user-entity/model/UserContext";
 import {router} from "next/client";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";

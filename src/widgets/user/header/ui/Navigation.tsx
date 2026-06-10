@@ -8,6 +8,7 @@ import Link from "next/link"
 import {UserContext} from "../../../../entities/user-entity";
 import NavigationLink from "@/shared/ui/Navigation/NavigationLink";
 import PromoTimer from "@/entities/promo-timer/PromoTimer";
+import toast from "react-hot-toast";
 
 
 interface Props {
@@ -17,6 +18,8 @@ interface Props {
 
 export default function Navigation({ isActive, setIsActive }: Props) {
     const { user } = useContext(UserContext)
+    const [clicks, setClicks] = useState<number>(0)
+
 
     const closeMenu = () => {
         if (setIsActive) setIsActive(false)
@@ -29,6 +32,9 @@ export default function Navigation({ isActive, setIsActive }: Props) {
     }, []);
 
     if (!mounted) return null
+
+    const r_words = ["пупупу", "как дела", "окак", "67", "52", "реакт хот тост"]
+
 
     return (
         <>
@@ -61,7 +67,14 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                             </NavigationLink>
                         )}
 
-                        <NavigationLink>
+                        <NavigationLink onClick={() => {
+                            setClicks(prev => prev + 1)
+                            const message = clicks % 10 === 0 && clicks > 0 ?
+                                "не надоело?)" :
+                                r_words[Math.floor(Math.random() * r_words.length)]
+                            toast.success(message)
+                        }}
+                        >
                             Платформа находится в разработке
                         </NavigationLink>
 

@@ -35,7 +35,7 @@ export default function ServerIcon({ url, className }: ServerIconProps) {
         <div
             // text-current заставляет currentColor внутри SVG смотреть на цвет этого дива
             // [&>svg]:fill-current и [&>svg]:stroke-current форсят покраску, если на бэке забыли инлайн-стиль
-            className={`inline-block text-main [&>svg]:w-full [&>svg]:h-full [&>svg]:fill-main ${className}`}
+            className={`[&>svg]:w-full [&>svg]:h-full ${className}`}
             dangerouslySetInnerHTML={{ __html: svgHtml }}
         />
     );

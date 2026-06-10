@@ -2,7 +2,7 @@
 
 import {$fetch} from "@/shared/api/fetch";
 import {useContext, useEffect} from "react";
-import {UserContext} from "../../entities/user-entity";
+import {UserContext} from "@/entities/user-entity";
 import {useRouter} from "next/navigation";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";

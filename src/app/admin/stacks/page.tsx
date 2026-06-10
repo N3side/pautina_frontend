@@ -1,19 +1,14 @@
 "use client"
 
 import AdminLayout from "@/widgets/admin/admin-layout/ui/AdminLayout";
-import ShowStacks from "../../../features/manage-stacks/ui/ShowStacks";
-import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
+import ShowStacks from "@/features/manage-stacks/ui/ShowStacks";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
-import {useThemes} from "@/entities/themes/model/getThemes";
 import Input from "@/shared/ui/Inputs/Input";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
-import toast from "react-hot-toast";
 import {$fetch} from "@/shared/api/fetch";
 import {useEffect, useRef, useState} from "react";
-import Select from "@/shared/ui/Inputs/Select";
-import {CheckAdmin} from "../../../entities/user-entity/lib/guards/CheckAdmin";
-import {useGetStacks} from "@/features/manage-stacks/model/useGetStacks";
+import {CheckAdmin} from "@/entities/user-entity/lib/guards/CheckAdmin";
 import FileInput from "@/shared/ui/Inputs/FileInput";
 
 export default function Page() {

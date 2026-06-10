@@ -15,7 +15,7 @@ import BigAvatar from "@/shared/ui/user/avatar/BigAvatar";
 import VkIcon from "@/shared/assets/images/vector/vk/VkIcon";
 import LanguageIcon from "@mui/icons-material/Language";
 import SubscriptionIcon from "@/shared/ui/user/subscription/SubscriptionIcon";
-import SubscriptionOffer from "../../../widgets/user/subscription-offer/SubscriptionOffer";
+import SubscriptionOffer from "@/widgets/user/subscription-offer/SubscriptionOffer";
 import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 import toast from "react-hot-toast";
 import {useContext} from "react";

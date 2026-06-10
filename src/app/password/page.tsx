@@ -1,5 +1,5 @@
 import HeaderWidget from "@/widgets/user/header/ui/HeaderWidget";
-import {CheckIsNotUser} from "../../entities/user-entity";
+import {CheckIsNotUser} from "@/entities/user-entity";
 import FooterWidget from "@/widgets/user/footer/ui/FooterWidget";
 import PasswordWidget from "@/widgets/user/login/ui/PasswordWidget";
 

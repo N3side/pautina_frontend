@@ -26,6 +26,13 @@ export default function Providers({children}: Props) {
 
                         <Toaster
                             position="top-right"
+                            reverseOrder={false}
+                            gutter={8}
+                            containerStyle={{
+                                top: 20,
+                                right: 20,
+                                // Не задавай max-height и overflow, чтобы тосты не сжимались
+                            }}
                             toastOptions={{
                                 duration: 5000,
                                 // Эти стили теперь будут применяться корректно к ToastBar
@@ -36,6 +43,9 @@ export default function Providers({children}: Props) {
                                     background: 'transparent',
                                     boxShadow: 'none',
                                     border: 'none',
+                                    padding: '8px 12px',
+                                    marginBottom: '8px', // важно: отступ снизу
+                                    position: 'relative',
                                 },
                             }}
                         >

@@ -6,7 +6,7 @@ import usePaginate from "@/shared/lib/hooks/usePaginate"
 import Pagination from "@/features/pagination/ui/Pagination";
 import UseFilters from "@/shared/lib/hooks/useFilters";
 import FilterLogs from "@/features/admin/log-filters/LogFilters"
-import LogCard from "../../../entities/admin/log-card/LogCard";
+import LogCard from "@/entities/admin/log-card/LogCard";
 
 export default function ShowUsers() {
 

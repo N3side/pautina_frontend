@@ -60,7 +60,7 @@ export default function Profile({heading}) {
                             cropShape="rect"
                             aspect={448 / 100}
                         >
-                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="!bg-input"  />
+                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect"  />
                         </UploadPhoto>
                     </div>
                 </div>

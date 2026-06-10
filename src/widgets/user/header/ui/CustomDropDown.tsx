@@ -53,7 +53,7 @@ export default function CustomDropDown() {
                                             <IOSSwitch scale={.7} size="small" checked={theme === "dark"} onClick={() => theme === "dark" ? setTheme("light") : setTheme("dark")} />
                                         </button>
 
-                                        <Link href="/settings">
+                                        <Link href="/edit?step=settings">
                                             <button className="w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-border-default/30 transition-colors group mt-1">
                                                 <SettingsIcon fontSize="small" className="text-text-muted group-hover:text-text-main transition-colors" />
                                                 <p className="text-small text-text-muted group-hover:text-text-main transition-colors">Настройки</p>

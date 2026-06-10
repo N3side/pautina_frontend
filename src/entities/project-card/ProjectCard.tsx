@@ -6,7 +6,7 @@ import { useModal } from "@/shared/lib/hooks/useModal";
 import { Modal } from "@/shared/ui/Modals/Modal";
 import ProjectModalWidget from "@/widgets/user/modal-project-widget/ProjectModalWidget";
 import EventIcon from "@mui/icons-material/Event";
-import { dots } from "../../shared/styles/patterns/dots";
+import { dots } from "@/shared/styles/patterns/dots";
 
 interface ProjectCardProps {
     project: Record<string, any>;
