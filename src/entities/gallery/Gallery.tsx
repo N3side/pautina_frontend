@@ -1,31 +1,34 @@
 "use client"
 
-import { useState } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useModal } from "@/shared/lib/hooks/useModal";
 import GalleryModal from "../gallery-modal/GalleryModal";
 
 interface Props {
     gallery: Record<string, any>[] | null
     className?: string
+    timer?: number
+    autoFlip?: boolean
 }
 
-export default function Gallery({ gallery, className }: Props) {
+export default function Gallery({ gallery, className, timer = 5000, autoFlip=false }: Props) {
     const [currentIndex, setCurrentIndex] = useState(0);
     const { isOpen, open, close } = useModal();
+    const timerRef = useRef<NodeJS.Timeout | null>(null);
 
     if (!gallery || gallery.length === 0) return null;
 
     const sortedGallery = [...gallery].sort((a, b) => a.sort - b.sort);
     const total = sortedGallery.length;
 
-    const nextSlide = (e: React.MouseEvent) => {
-        e.stopPropagation();
-        if (currentIndex < total - 1) setCurrentIndex(prev => prev + 1);
+    const nextSlide = (e?: React.MouseEvent) => {
+        if (e) e.stopPropagation();
+        setCurrentIndex(prev => prev >= total - 1 ? 0 : prev + 1);
     };
 
     const prevSlide = (e: React.MouseEvent) => {
         e.stopPropagation();
-        if (currentIndex > 0) setCurrentIndex(prev => prev - 1);
+        setCurrentIndex(prev => prev > 0 ? prev - 1 : total - 1);
     };
 
     const goToSlide = (e: React.MouseEvent, index: number) => {
@@ -34,10 +37,47 @@ export default function Gallery({ gallery, className }: Props) {
     };
 
     const handleGalleryClick = (e: React.MouseEvent) => {
-        // Стопаем, чтобы карточка проекта под слайдером не реагировала на клик
         e.stopPropagation();
         open();
     };
+
+    useEffect(() => {
+        if (total > 1 && !isOpen) {
+            timerRef.current = setInterval(() => {
+                setCurrentIndex(prev => (prev + 1) % total);
+            }, timer);
+        }
+
+        // Очистка таймера при размонтировании или изменении зависимостей
+        return () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        };
+    }, [total, timer, isOpen]); // Перезапускаем таймер при изменении этих значений
+
+    // Сброс таймера при ручном переключении слайда
+    useEffect(() => {
+        if (total > 1 && !isOpen) {
+            // Сбрасываем текущий таймер
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+            }
+            // Запускаем новый таймер
+            if (autoFlip)
+            timerRef.current = setInterval(() => {
+                setCurrentIndex(prev => (prev + 1) % total);
+            }, timer);
+        }
+
+        return () => {
+            if (timerRef.current) {
+                clearInterval(timerRef.current);
+                timerRef.current = null;
+            }
+        };
+    }, [currentIndex, total, timer, isOpen]); // Сбрасываем при ручном переключении
 
     return (
         <>
@@ -67,7 +107,6 @@ export default function Gallery({ gallery, className }: Props) {
                     <>
                         <button
                             onClick={prevSlide}
-                            disabled={currentIndex === 0}
                             className={`absolute left-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md text-white transition-all duration-200 active:scale-95 z-10 ${
                                 currentIndex === 0 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/slider:opacity-100 hover:bg-white/20"
                             }`}
@@ -79,7 +118,6 @@ export default function Gallery({ gallery, className }: Props) {
 
                         <button
                             onClick={nextSlide}
-                            disabled={currentIndex === total - 1}
                             className={`absolute right-2 top-1/2 -translate-y-1/2 w-8 h-8 flex items-center justify-center rounded-full bg-black/30 backdrop-blur-md text-white transition-all duration-200 active:scale-95 z-10 ${
                                 currentIndex === total - 1 ? "opacity-0 pointer-events-none" : "opacity-0 group-hover/slider:opacity-100 hover:bg-white/20"
                             }`}
@@ -105,7 +143,6 @@ export default function Gallery({ gallery, className }: Props) {
                 )}
             </div>
 
-            {/* Модалка рендерится снаружи структуры карточки */}
             {isOpen && (
                 <GalleryModal
                     isOpen={isOpen}

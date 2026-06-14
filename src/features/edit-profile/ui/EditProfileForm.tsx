@@ -3,7 +3,7 @@
 import Input from "@/shared/ui/Inputs/Input"
 import React, {useContext, useRef, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
-import {UserContext} from "../../../entities/user-entity";
+import {UserContext} from "@/entities/user-entity";
 import {$fetch} from "@/shared/api/fetch";
 import toast from "react-hot-toast";
 import useCitySelect from "@/features/select-city/useCitySelect";

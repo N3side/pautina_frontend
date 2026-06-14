@@ -5,7 +5,7 @@ import {Button} from "@mui/material"
 import {useContext, useEffect, useState} from "react"
 import {model} from "../model"
 import Link from "next/link"
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user-entity";
 import NavigationLink from "@/shared/ui/Navigation/NavigationLink";
 import PromoTimer from "@/entities/promo-timer/PromoTimer";
 import toast from "react-hot-toast";

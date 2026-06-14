@@ -1,7 +1,7 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-export function proxy(request: NextRequest) {
+export async function proxy(request: NextRequest) {
     const url = request.nextUrl.clone()
     const hostname = request.headers.get('host')?.split(':')[0]
 
@@ -12,23 +12,44 @@ export function proxy(request: NextRequest) {
         return NextResponse.next()
     }
 
-    // Для Turbopack HMR (Next.js 16)
     if (url.pathname.startsWith('/_next/hmr') ||
         url.pathname.startsWith('/_next/webpack-hmr')) {
         return NextResponse.next()
     }
 
-    // Пропускаем основной домен
-    if (!hostname || hostname === rootDomain || hostname.includes('localhost')) {
-        return NextResponse.next()
-    }
-
-    // Пропускаем статику и API
     if (
         url.pathname.startsWith('/_next') ||
         url.pathname.startsWith('/api') ||
         url.pathname.includes('.')
     ) {
+        return NextResponse.next()
+    }
+
+    if (process.env.APP_ENV === "production") {
+        try {
+            const url = `${process.env.UPSTASH_REDIS_REST_URL}/get/is_maintenance`;
+            const res = await fetch(url, {
+                headers: {
+                    Authorization: `Bearer ${process.env.UPSTASH_REDIS_REST_TOKEN}`,
+                },
+                cache: 'no-store'
+            });
+
+            const data = await res.json();
+            const isMaintenance = data.result === "true"
+
+            if (isMaintenance) {
+                return NextResponse.rewrite(new URL('/maintenance', request.url));
+            }
+
+        } catch (error) {
+            console.error("Ошибка проверки тех. работ:", error);
+            return NextResponse.next();
+        }
+    }
+
+    // Пропускаем основной домен
+    if (!hostname || hostname === rootDomain || hostname.includes('localhost')) {
         return NextResponse.next()
     }
 

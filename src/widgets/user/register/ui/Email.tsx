@@ -57,7 +57,9 @@ export default function Email({name, email, setEmail, next, setTimer, position})
         })
         const response_errors = response?.json?.errors
         if (response_errors) {
+            console.log(response_errors)
             setErrors(response_errors)
+            toast.success("okak")
             return
         }
 

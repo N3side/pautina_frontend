@@ -5,14 +5,23 @@ import {CheckIsNotUser} from "../../../../entities/user-entity";
 import Card1 from "@/shared/ui/Sections/Card1";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
+import Typewriter from "typewriter-effect";
 
 export default function LoginWidget() {
 
     return (
         <CheckIsNotUser>
             <Card1>
+
                 <h4 className="font-bold text-text-main">
-                    Вход в аккаунт
+                    <Typewriter
+                        onInit={(typewriter) => {
+                            typewriter
+                                .changeDelay(20) // Устанавливаем скорость 20ms
+                                .typeString('Вход в аккаунт')
+                                .start(); // Запускаем один раз и всё
+                        }}
+                    />
                 </h4>
 
                 <div className="mt-6 w-full flex flex-col gap-2">

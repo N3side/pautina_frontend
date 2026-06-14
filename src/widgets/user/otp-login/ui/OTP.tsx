@@ -11,6 +11,7 @@ import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Timer from "@/features/timer/Timer"
 import {userLink} from "@/shared/lib/utils/userLink";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
+import Typewriter from "typewriter-effect";
 
 export default function OTP({email, next, prev, timer, setTimer}) {
 
@@ -94,7 +95,16 @@ export default function OTP({email, next, prev, timer, setTimer}) {
         <div>
             <div className="flex flex-col gap-[15px]">
                 <h4 className="text-text-main font-bold">
-                    Проверка одноразового кода
+                    <h4 className="font-bold text-text-main">
+                        <Typewriter
+                            onInit={(typewriter) => {
+                                typewriter
+                                    .changeDelay(30) // Устанавливаем скорость 20ms
+                                    .typeString('Проверка одноразового кода')
+                                    .start(); // Запускаем один раз и всё
+                            }}
+                        />
+                    </h4>
                 </h4>
                 <p className="text-secondary text-text-muted">
                     Eсли не видите письма на {email}, посмотрите пожайлуста папку "Спам". Если письма там нет, запросите

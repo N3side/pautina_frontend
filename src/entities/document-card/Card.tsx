@@ -50,7 +50,7 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                     />}
 
                 {isMyProfile && (
-                    <Status variant={document?.is_public ? "public" : "private"} />
+                    <Status variant={document?.is_public ? "Видно всем" : "Черновик"} />
                 )}
 
 

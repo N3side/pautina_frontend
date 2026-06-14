@@ -21,9 +21,14 @@
 	--brand-hover: #0284c7;
 	--green-main: #16A34A;
 	--border-default: #e2e8f0;
-	--bg-glass: rgba(255, 255, 255, 1);
-	--border-glass: rgba(209, 213, 219, 0.4);
-	--glass-highlight: rgba(255, 255, 255, 0.5);
+	--bg-glass: rgba(255, 255, 255, 0.95);
+	--border-glass: rgba(255, 255, 255, 0.35);
+
+	/* Переменные для симуляции преломления света (Фаски) */
+	--glass-bevel-top: rgba(255, 255, 255, 0.75);    /* Яркий блик на верхнем ребре */
+	--glass-bevel-bottom: rgba(15, 23, 42, 0.04);   /* Мягкая тень на нижнем ребре */
+	--glass-inner-glow: rgba(255, 255, 255, 0.25);  /* Внутреннее свечение стекла */
+	--glass-shadow: rgba(14, 165, 233, 0.08);;
 
 	--subscription-color: linear-gradient(
 		180deg,
@@ -42,9 +47,13 @@
 	--text-muted: #94a3b8;
 	--text-brand: #38bdf8;
 	--border-default: #334155;
-	--bg-glass: rgba(15, 23, 42, 1);
-	--border-glass: rgba(255, 255, 255, 0.08);
-	--glass-highlight: rgba(255, 255, 255, 0.05);
+	--bg-glass: rgba(15, 23, 42, 0.95);
+	--border-glass: rgba(255, 255, 255, 0.09);
+	--glass-highlight: rgba(255, 255, 255, 0.04);
+	--glass-bevel-top: rgba(255, 255, 255, 0.28);   /* Блик на темном стекле */
+	--glass-bevel-bottom: rgba(0, 0, 0, 0.4);        /* Глубокая тень внизу */
+	--glass-inner-glow: rgba(255, 255, 255, 0.03);  /* Едва заметный внутренний контур */
+	--glass-shadow: rgba(0, 0, 0, 0.5);
 }
 
 @theme {
@@ -71,11 +80,34 @@
 @layer utilities {
 	.glass-effect {
 		background: var(--bg-glass);
-		backdrop-filter: blur(25px) saturate(160%);
-		-webkit-backdrop-filter: blur(25px) saturate(160%);
+
+		/* Выкручиваем сочность бэкграунда как в iOS (saturate 220%) */
+		backdrop-filter: blur(40px) saturate(220%);
+		-webkit-backdrop-filter: blur(40px) saturate(220%);
+
+		/* Базовая тонкая нить вокруг всей карточки */
 		border: 1px solid var(--border-glass);
-		box-shadow: inset 0 0 0 1px var(--glass-highlight),
-		0 10px 20px -10px rgba(0, 0, 0, 0.05);
+
+		/* Секретная оптика Apple: */
+		box-shadow:
+			/* 1. Тот самый верхний блик. За счет смещения по Y (1.2px) он ложится только на верх и углы,
+                 визуально "сужая" боковые рамки */
+				inset 0 1.2px 0 0 var(--glass-bevel-top),
+
+					/* 2. Нижнее полупрозрачное затемнение (карточка обретает вес снизу) */
+				inset 0 -1px 2px 0 var(--glass-bevel-bottom),
+
+					/* 3. Внутренний контур, который сглаживает переход */
+				inset 0 -1 2px 0 var(--glass-inner-glow),
+
+					/* 4. Объемные внешние тени для эффекта парения */
+				0 4px 6px -1px rgba(0, 0, 0, 0.05),
+				0 20px 40px -10px var(--glass-shadow);
+
+		/* Важно: предотвращает "вылезание" фонового цвета за скругленные края рамки на Retina-дисплеях */
+		background-clip: padding-box;
+
+		transform: translateZ(0);
 	}
 
 	.custom-scrollbar {

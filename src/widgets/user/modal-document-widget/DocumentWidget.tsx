@@ -39,8 +39,7 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
 
     const handleDeleteDocument = useCallback(async () => {
         if (!document?.id) return;
-        const saved = await deleteDocument({document_id: document?.id, callBack: close});
-        setDocuments(saved);
+        await deleteDocument({document_id: document?.id, callBack: close});
         close();
     }, [document, close, setDocuments]);
 
@@ -56,7 +55,7 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
         <div className="w-full flex flex-col">
 
             {isMyProfile && (
-                <Status variant={document?.is_public ? "public" : "private"} className="absolute top-[40px] left-[40px]"/>
+                <Status variant={document?.is_public ? "Видно всем" : "Черновик"} className="absolute top-[40px] left-[40px]"/>
             )}
 
             {file_extension === "pdf" ?

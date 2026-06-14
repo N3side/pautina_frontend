@@ -8,7 +8,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import DateInput from "@/shared/ui/Inputs/Date";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 
-import { UserContext } from "../../entities/user-entity";
+import { UserContext } from "@/entities/user-entity";
 import { $fetch } from "@/shared/api/fetch";
 import { usePathname, useRouter } from "next/navigation";
 import EditGallery from "@/features/edit-gallery/EditGallery";
@@ -180,8 +180,6 @@ export default function UpdateProject() {
                     label="Ссылка"
                     defaultValue={project?.link}
                     error={errors?.link}
-                    leftAdditional="https://"
-                    additionalGap={16}
                 />
 
                 <Input
@@ -189,8 +187,6 @@ export default function UpdateProject() {
                     label="Ссылка на репозиторий"
                     defaultValue={project?.repo_link}
                     error={errors?.repo_link}
-                    leftAdditional="https://"
-                    additionalGap={16}
                 />
 
                 {/* Чекбокс видимости */}

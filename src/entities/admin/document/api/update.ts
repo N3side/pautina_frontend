@@ -25,8 +25,6 @@ export async function updateDocument({e, setErrors, formRef, tags, checked, docu
 
     const documents = response?.json?.documents
 
-    if (documents) {
-        return documents
-    }
+    return response
 
 }

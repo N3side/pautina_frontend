@@ -1,16 +1,14 @@
 "use client"
 
 import React, { useContext, useEffect, useState } from "react";
-import {useSearchParams, useRouter, usePathname, useParams} from "next/navigation";
-import { UserContext } from "@/entities/user-entity";
+import {useSearchParams, useRouter, usePathname} from "next/navigation";
+import { UserContext} from "@/entities/user-entity";
 import Profile from "@/widgets/user/edit-user-info/ui/parts/Profile";
 import Contacts from "@/widgets/user/edit-user-info/ui/parts/Contacts";
 import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 import Subscription from "@/widgets/user/edit-user-info/ui/parts/Subscription";
-import SettingsWidget from "../../settings/ui/SettingsWidget";
+import SettingsWidget from "@/widgets/user/settings/ui/SettingsWidget";
 import Chip from "@/shared/ui/Chip/Chip";
-
-// Выносим массив за пределы компонента, чтобы он не пересоздавался при каждом рендере
 
 export default function EditUserInfo() {
     const [isClient, setIsClient] = useState(false);

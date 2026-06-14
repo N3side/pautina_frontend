@@ -1,6 +1,6 @@
 import {useHandleSubmit} from "@/widgets/user/edit-user-info/api/useHandleSubmit";
 import {useContext, useRef} from "react";
-import {UserContext} from "../../../../../entities/user-entity";
+import {UserContext} from "@/entities/user-entity";
 import useCitySelect from "@/features/select-city/useCitySelect";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input"
@@ -8,7 +8,6 @@ import {autoReplace} from "@/shared/lib/utils/replace";
 import AccordionLayout from "@/shared/ui/Inputs/AccordionLayout";
 import useSelectSource from "@/features/select-source/useSelectSource";
 import {UseSelectActivity} from "@/features/select-activity/useSelectActivity";
-import {underline} from "next/dist/lib/picocolors";
 
 export default function Contacts({heading}) {
 
@@ -89,8 +88,6 @@ export default function Contacts({heading}) {
                             label="Сайт"
                             defaultValue={user?.contacts?.extra_link}
                             error={errors?.extra_link}
-                            leftAdditional="https://"
-                            additionalGap={16}
                         />
 
                         {/*<AccordionLayout>*/}

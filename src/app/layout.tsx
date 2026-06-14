@@ -25,7 +25,7 @@ export default function RootLayout({
     clampGenerator(320, 1920, 16, 40)
 
     return (
-        <html lang="en" suppressHydrationWarning>
+        <html lang="ru" suppressHydrationWarning>
             <head>
                 <ThemeScript />
             </head>

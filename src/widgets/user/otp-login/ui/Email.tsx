@@ -6,6 +6,7 @@ import {UserContext} from "../../../../entities/user-entity";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Link from "next/link";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
+import Typewriter from "typewriter-effect";
 
 interface FormErrors {
     email?: string;
@@ -75,7 +76,16 @@ export default function Email({email,  setEmail, next, setTimer, timer}) {
         <div>
             <div className="flex flex-col gap-[15px]">
                 <h4 className="font-bold text-text-main">
-                    Введите почту
+                    <h4 className="font-bold text-text-main">
+                        <Typewriter
+                            onInit={(typewriter) => {
+                                typewriter
+                                    .changeDelay(20) // Устанавливаем скорость 20ms
+                                    .typeString('Введите почту')
+                                    .start(); // Запускаем один раз и всё
+                            }}
+                        />
+                    </h4>
                 </h4>
                 <p className="text-secondary text-text-muted">
                      Введите почту, к которой привязан ваш аккаунт. На нее будет отправлен одноразовый код

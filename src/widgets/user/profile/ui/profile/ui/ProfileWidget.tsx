@@ -68,7 +68,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
                 <User user={trueUser} isMyProfile={isMyProfile} isPrivate={isPrivate} showModals={showModals} isPremium={isPremium} />
                 {isMyProfile &&
                     <div>
-                        <div className="flex gap-2 hidden lg:flex">
+                        <div className="flex gap-2 hidden xl:flex">
                             <Link href="/edit">
                                 <ActionButton className="h-fit" text="Редактировать профиль" />
                             </Link>
@@ -76,7 +76,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
                                 <ActionButton className="h-fit" text="Настройки" />
                             </Link>
                         </div>
-                        <div className="absolute top-4 right-4 flex lg:hidden gap-2 flex-col">
+                        <div className="absolute top-4 right-4 flex xl:hidden gap-2 flex-col">
                             <Link href="/edit">
                                 <IconWrapper>
                                     <EditOutlinedIcon className="!text-[18px]" />

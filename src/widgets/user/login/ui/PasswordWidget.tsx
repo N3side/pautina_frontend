@@ -14,6 +14,7 @@ import {userLink} from "@/shared/lib/utils/userLink";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
 import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
+import Typewriter from "typewriter-effect";
 
 
 interface LoginErrors {
@@ -71,7 +72,16 @@ export default function PasswordWidget() {
         <CheckIsNotUser>
             <Card1>
                 <h4 className="font-bold text-text-main">
-                    Вход по паролю
+                    <h4 className="font-bold text-text-main">
+                        <Typewriter
+                            onInit={(typewriter) => {
+                                typewriter
+                                    .changeDelay(20) // Устанавливаем скорость 20ms
+                                    .typeString('Вход по паролю')
+                                    .start(); // Запускаем один раз и всё
+                            }}
+                        />
+                    </h4>
                 </h4>
 
                 {/*<MonkeyAnimation type={isOpen ? "peek" : "close"} width={120} height={120} />*/}

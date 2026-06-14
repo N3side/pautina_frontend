@@ -9,7 +9,7 @@ import {Modal} from "@/shared/ui/Modals/Modal";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import usePaginate from "@/shared/lib/hooks/usePaginate"
 import BrandActionButton from "@/shared/ui/Buttons/BrandActionButton";
-import CardSkeleton from "../../../entities/document-card/CardSkeleton";
+import CardSkeleton from "@/entities/document-card/CardSkeleton";
 import UploadFile from "@/features/create-document/ui/UploadFile";
 import Category from "@/shared/ui/Category/Category";
 import {WheelXScrollProvider} from "@/shared/ui/WheelScrollXWrapper/WheelScrollXWrapper";

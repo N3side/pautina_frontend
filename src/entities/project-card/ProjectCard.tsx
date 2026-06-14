@@ -40,7 +40,7 @@ export default function ProjectCard({ project, isMyProfile }: ProjectCardProps) 
                 >
                     {/* 3. Легкий зум, поворот и повышение яркости картинки */}
                     <div className="w-full h-full transition-all duration-700 ease-[cubic-bezier(0.25,1,0.5,1)] group-hover:-rotate-1 group-hover:brightness-110">
-                        <Gallery gallery={project?.gallery} />
+                        <Gallery gallery={project?.gallery} autoFlip={true} />
                     </div>
 
                     <div className="absolute inset-0 bg-gradient-to-t from-neutral-950/50 via-transparent to-transparent pointer-events-none" />
@@ -58,7 +58,7 @@ export default function ProjectCard({ project, isMyProfile }: ProjectCardProps) 
                         <div className="flex shrink-0 gap-1.5 translate-x-1" onClick={(e) => e.stopPropagation()}>
                             {project?.repo_link && (
                                 <a
-                                    href={"https://" + project.repo_link}
+                                    href={project.repo_link}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="flex items-center justify-center rounded-xl p-2 text-text-muted/70 bg-white/[0.02] border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:bg-brand/10 hover:text-brand hover:border-brand/40 hover:shadow-[0_0_15px_-3px_rgba(14,165,233,0.4)]"
@@ -69,7 +69,7 @@ export default function ProjectCard({ project, isMyProfile }: ProjectCardProps) 
                             )}
                             {project?.link && (
                                 <a
-                                    href={"https://" + project.link}
+                                    href={project.link}
                                     target="_blank"
                                     rel="noreferrer"
                                     className="flex items-center justify-center rounded-xl p-2 text-text-muted/70 bg-white/[0.02] border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:bg-brand/10 hover:text-brand hover:border-brand/40 hover:shadow-[0_0_15px_-3px_rgba(14,165,233,0.4)]"

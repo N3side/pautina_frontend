@@ -1,5 +1,5 @@
 import {useContext, useRef} from "react";
-import {UserContext} from "../../../../../entities/user-entity";
+import {UserContext} from "@/entities/user-entity";
 import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 import {useRouter} from "next/navigation";
 
@@ -22,6 +22,7 @@ export default function Subscription({heading}) {
                 <div className='glass-effect py-8 px-6 rounded-[18px]'>
                     <p className="text-text-main text-secondary font-bold">{heading}</p>
 
+                    <p className="mt-[8px] font-medium text-small text-text-muted">В разработке</p>
 
 
                 </div>

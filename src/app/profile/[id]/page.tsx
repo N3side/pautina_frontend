@@ -2,12 +2,12 @@
 
 import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
 import DocumentsWidget from "@/widgets/user/documents-widget/DocumentsWidget";
-import {useParams} from "next/navigation";
-import {ReactNode, useContext, useEffect, useState} from "react";
-import {UserContext} from "@/entities/user-entity";
-import {$fetch} from "@/shared/api/fetch";
+import { useParams } from "next/navigation";
+import { ReactNode, useContext, useEffect, useState } from "react";
+import { UserContext } from "@/entities/user-entity";
+import { $fetch } from "@/shared/api/fetch";
 import Layout from "@/widgets/user/layout-h-s-f/Layout";
-import {PrivateProfileWidget} from "@/widgets/user/profile/ui/profile/ui/PrivateProfileWidget";
+import { PrivateProfileWidget } from "@/widgets/user/profile/ui/profile/ui/PrivateProfileWidget";
 import ProjectsWidget from "@/widgets/user/projects-widget/ProjectsWidget";
 import StacksWidget from "@/widgets/user/stacks-widget/StacksWidget";
 import DesertScene from "@/shared/assets/images/vector/empty/DesertScene";
@@ -19,6 +19,14 @@ const DEFAULT_SECTIONS = [
 ];
 
 export default function Page() {
+    // === ПОДКЛЮЧЕНИЕ ПОЛИФИЛА ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ===
+    useEffect(() => {
+        if (typeof window !== "undefined") {
+            // Подгружаем полифил только в браузере
+            require("drag-drop-touch");
+        }
+    }, []);
+
     const { user } = useContext(UserContext);
     const params = useParams();
     const url_base = params?.id;
@@ -117,7 +125,7 @@ export default function Page() {
         });
 
         if (response?.response?.ok) {
-            console.log(newOrder)
+            console.log(newOrder);
             setSectionsOrder(newOrder);
         }
     }
@@ -144,7 +152,7 @@ export default function Page() {
         updatedOrder.splice(targetIndex, 0, draggedItem);
 
         // Обновляем локальный стейт, чтобы всё мгновенно перерисовать
-        // setSectionsOrder(updatedOrder);
+        setSectionsOrder(updatedOrder);
 
         // Отправляем новый порядок на бэкенд
         handleSortSave(updatedOrder);
@@ -177,7 +185,7 @@ export default function Page() {
                                         <DocumentsWidget
                                             isMyProfile={isMyProfile}
                                             trueUser={trueUser}
-                                            setIsEmpty={(hasData) => setFilledSections(p => ({...p, documents: hasData}))}
+                                            setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, documents: hasData }))}
                                         />
                                     );
                                 } else if (section.name === "stacks") {
@@ -185,7 +193,7 @@ export default function Page() {
                                         <StacksWidget
                                             isMyProfile={isMyProfile}
                                             trueUser={trueUser}
-                                            setIsEmpty={(hasData) => setFilledSections(p => ({...p, stacks: hasData}))}
+                                            setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, stacks: hasData }))}
                                         />
                                     );
                                 } else if (section.name === "projects") {
@@ -193,7 +201,7 @@ export default function Page() {
                                         <ProjectsWidget
                                             isMyProfile={isMyProfile}
                                             trueUser={trueUser}
-                                            setIsEmpty={(hasData) => setFilledSections(p => ({...p, projects: hasData}))}
+                                            setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, projects: hasData }))}
                                         />
                                     );
                                 }
