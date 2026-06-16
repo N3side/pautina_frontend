@@ -1,7 +1,7 @@
 "use client"
 
 import {ReactElement, useEffect, useState} from "react"
-import {CheckIsNotUser} from "../../../../entities/user-entity";
+import {CheckIsNotUser} from "@/entities/user";
 import Email from "../ui/Email"
 import OTP from "../ui/OTP"
 import Card1 from "@/shared/ui/Sections/Card1";

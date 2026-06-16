@@ -3,7 +3,7 @@ import {unionFormData} from "@/shared/lib/utils/UnionFormData";
 import {editCity} from "@/widgets/user/profile/ui/profile/api";
 import toast from "react-hot-toast";
 import {useContext, useState} from "react";
-import {UserContext} from "@/entities/user-entity";
+import {UserContext} from "@/entities/user";
 
 
 interface Props {

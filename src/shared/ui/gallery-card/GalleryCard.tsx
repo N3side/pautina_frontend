@@ -32,7 +32,7 @@ export default function GalleryCard({
         const formData = new FormData();
         formData.set("image", file);
 
-        const response = await $fetch(`projects/${id}/gallery/load`, {
+        const response = await $fetch(`posts/${id}/gallery/load`, {
             method: "PATCH",
             body: formData
         });
@@ -49,7 +49,7 @@ export default function GalleryCard({
     };
 
     async function handleDelete() {
-        const response = await $fetch(`projects/${id}/gallery/${image?.id}`, {method: "DELETE"})
+        const response = await $fetch(`posts/${id}/gallery/${image?.id}`, {method: "DELETE"})
 
         if (response?.response?.ok) {
             onRemove?.();

@@ -1,13 +1,13 @@
 "use client"
 
 import React, {useContext} from "react";
-import User from "@/entities/user-entity/ui/User"
+import User from "@/entities/user/ui/User"
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import SettingsIcon from "@mui/icons-material/Settings";
 import Link from "next/link";
-import {UserContext} from "@/entities/user-entity";
+import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
 import UploadPhoto from "@/widgets/user/profile/ui/profile/ui/UploadPhoto";
 import UserSkeleton from "@/widgets/user/edit-user-info/ui/user-skeleton";
@@ -29,7 +29,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
         const formData = new FormData()
         formData.set("header", blob)
 
-        const response = await $fetch("me/update", {
+        const response = await $fetch("me/update/user", {
             method: "PATCH",
             body: formData
         })
@@ -56,7 +56,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
                             cropShape="rect"
                             aspect={448 / 100}
                         >
-                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect"  />
+                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect !bg-surface"  />
                         </UploadPhoto>
                     </div>
                 }

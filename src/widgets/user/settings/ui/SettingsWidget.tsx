@@ -9,7 +9,7 @@ import {Modal} from "@/shared/ui/Modals/Modal";
 import NewPassword from "@/features/verify-user/ui/components/NewPassword"
 import Link from "next/link"
 import {useContext} from "react";
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 
 export default function SettingsWidget() {

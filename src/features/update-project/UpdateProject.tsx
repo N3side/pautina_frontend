@@ -8,7 +8,7 @@ import { useContext, useEffect, useRef, useState } from "react";
 import DateInput from "@/shared/ui/Inputs/Date";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 
-import { UserContext } from "@/entities/user-entity";
+import { UserContext } from "@/entities/user";
 import { $fetch } from "@/shared/api/fetch";
 import { usePathname, useRouter } from "next/navigation";
 import EditGallery from "@/features/edit-gallery/EditGallery";
@@ -48,8 +48,8 @@ export default function UpdateProject() {
 
     // Загрузка данных проекта
     async function getProject() {
-        const response = await $fetch(`projects/${id}`);
-        const project_ = response?.json?.project;
+        const response = await $fetch(`posts/${id}`);
+        const project_ = response?.json?.post;
 
         if (project_) {
             setProject(project_);
@@ -81,7 +81,7 @@ export default function UpdateProject() {
         const formData = new FormData(formRef.current || undefined);
 
         // Передаем статус приватности (0 или 1 для бэка на Laravel)
-        formData.set("is_public", checked ? "1" : "0");
+        // formData.set("is_public", checked ? "1" : "0");
 
         // Безопасно упаковываем массив выбранных ID стеков в FormData
         if (selectedStacks && selectedStacks.length > 0) {
@@ -92,21 +92,21 @@ export default function UpdateProject() {
             });
         }
 
-        const response = await $fetch(`projects/${id}`, {
+        const response = await $fetch(`posts/${id}`, {
             method: "PATCH",
             body: formData
         });
 
         if (response?.response?.ok) {
-            router.replace(userLink(user?.publication?.public_url));
+            router.replace(userLink(user?.main?.short_id));
         }
     }
 
     // Удаление проекта
     async function deleteProject() {
-        const response = await $fetch(`projects/${id}`, { method: "DELETE" });
+        const response = await $fetch(`posts/${id}`, { method: "DELETE" });
         if (response?.response?.ok) {
-            router.replace(userLink(user?.publication?.public_url));
+            router.replace(userLink(user?.main?.short_id));
         }
     }
 
@@ -119,11 +119,11 @@ export default function UpdateProject() {
 
                 {/* Основные поля ввода */}
                 <Input
-                    name="name"
+                    name="title"
                     label="Имя проекта"
                     placeholder="todo list"
                     error={errors?.name}
-                    defaultValue={project?.name}
+                    defaultValue={project?.title}
                 />
 
                 <Textarea
@@ -147,21 +147,6 @@ export default function UpdateProject() {
                     />
                 </div>
 
-                {/* Даты разработки */}
-                <DateInput
-                    name="start_date"
-                    label="Дата начала разработки"
-                    error={errors?.start_date}
-                    defaultValue={project?.start_date}
-                />
-
-                <DateInput
-                    name="end_date"
-                    label="Дата окончания разработки"
-                    error={errors?.end_date}
-                    defaultValue={project?.end_date}
-                />
-
                 {/* Выбор стека технологий по архитектуре FSD */}
                 <div className="glass-effect p-6 rounded-xl">
                     <ShowStacks
@@ -170,7 +155,6 @@ export default function UpdateProject() {
                         showSelected={true}
                         selectedStacks={selectedStacks}
                         setSelectedStacks={setSelectedStacks}
-
                     />
                 </div>
 
@@ -190,10 +174,10 @@ export default function UpdateProject() {
                 />
 
                 {/* Чекбокс видимости */}
-                <div className="flex items-center cursor-pointer select-none" onClick={() => setChecked(!checked)}>
-                    <Checkbox checked={checked} className="!text-text-main"/>
-                    <p className="text-text-muted font-semibold">Проект виден в вашем профиле другим людям</p>
-                </div>
+                {/*<div className="flex items-center cursor-pointer select-none" onClick={() => setChecked(!checked)}>*/}
+                {/*    <Checkbox checked={checked} className="!text-text-main"/>*/}
+                {/*    <p className="text-text-muted font-semibold">Проект виден в вашем профиле другим людям</p>*/}
+                {/*</div>*/}
 
                 {/* Модалка подтверждения удаления */}
                 <Modal
@@ -208,7 +192,7 @@ export default function UpdateProject() {
                 </Modal>
 
                 {/* Управляющие кнопки */}
-                <div className="flex flex-col gap-2 mt-4">
+                <div className="flex flex-col gap-2">
                     <ButtonLarge type="submit">
                         Сохранить проект
                     </ButtonLarge>

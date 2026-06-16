@@ -4,7 +4,7 @@ import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
 import DocumentsWidget from "@/widgets/user/documents-widget/DocumentsWidget";
 import { useParams } from "next/navigation";
 import { ReactNode, useContext, useEffect, useState } from "react";
-import { UserContext } from "@/entities/user-entity";
+import { UserContext } from "@/entities/user";
 import { $fetch } from "@/shared/api/fetch";
 import Layout from "@/widgets/user/layout-h-s-f/Layout";
 import { PrivateProfileWidget } from "@/widgets/user/profile/ui/profile/ui/PrivateProfileWidget";
@@ -35,10 +35,10 @@ export default function Page() {
     const [trueUser, setTrueUser] = useState<Record<string, any> | null>(user);
 
     useEffect(() => {
-        if (url_base && user?.publication?.public_url) {
+        if (url_base && user?.main?.short_id) {
             setIsMyProfile(
-                user?.publication?.public_url?.toLowerCase() === url_base ||
-                user?.main?.username?.toLowerCase() === url_base
+                Boolean(user?.main?.short_id.toLowerCase() == url_base) ||
+                Boolean(user?.main?.username?.toLowerCase() == url_base)
             );
         }
     }, [user, url_base]);
@@ -61,7 +61,7 @@ export default function Page() {
         if (!user) getUser();
     }, [user, url_base]);
 
-    const isPrivate = !isMyProfile && Boolean(trueUser?.publication?.is_uploaded) === false;
+    const isPrivate = !isMyProfile && Boolean(trueUser?.main?.is_uploaded) === false;
 
     const [filledSections, setFilledSections] = useState({
         documents: false,

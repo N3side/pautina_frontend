@@ -2,7 +2,7 @@
 
 import AdminLayout from "@/widgets/admin/admin-layout/ui/AdminLayout";
 import ShowDocuments from "@/features/admin/show-documents/showDocuments"
-import {CheckAdmin} from "@/entities/user-entity/lib/guards/CheckAdmin";
+import {CheckAdmin} from "@/entities/user/lib/guards/CheckAdmin";
 
 export default function Page() {
     return (

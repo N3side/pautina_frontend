@@ -5,9 +5,9 @@ import BigAvatar from "@/shared/ui/user/avatar/BigAvatar";
 import Input from "@/shared/ui/Inputs/Input"
 import {useHandleSubmit} from "@/widgets/user/edit-user-info/api/useHandleSubmit";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
-import {useContext, useRef} from "react";
+import {useContext, useRef, useState} from "react";
 import {autoReplace} from "@/shared/lib/utils/replace";
-import {UserContext} from "@/entities/user-entity";
+import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
 import Textarea from "@/shared/ui/Inputs/Textarea";
 import {dots} from "@/shared/styles/patterns/dots";
@@ -15,20 +15,36 @@ import {dots} from "@/shared/styles/patterns/dots";
 
 export default function Profile({heading}) {
 
-    const form_ = useRef(null)
+    const [errors, setErrors] = useState<Record<string, any> | null>(null)
 
-    const {user, isLoading, setUser} = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
 
-    const {errors, handleSubmit} = useHandleSubmit({
-        form_,
-    })
+    const form = useRef<HTMLFormElement>(null)
+
+    async function handleSubmit(e) {
+
+        e.preventDefault()
+
+        const formData = new FormData(form.current || undefined)
+
+        const response = await $fetch("me/update/user", {
+            method: "PATCH",
+            body: formData
+        })
+
+        const user_ = response?.json?.user
+
+        if (user_) {
+            setUser(user_)
+        }
+    }
 
     async function ChangeHeader(blob) {
 
         const formData = new FormData()
         formData.set("header", blob)
 
-        const response = await $fetch("me/update", {
+        const response = await $fetch("me/update/user", {
             method: "PATCH",
             body: formData
         })
@@ -41,7 +57,7 @@ export default function Profile({heading}) {
     }
 
     return (
-        <form className="flex flex-col gap-5 relative" onSubmit={handleSubmit} ref={form_}>
+        <form className="flex flex-col gap-5 relative" onSubmit={handleSubmit} ref={form}>
             <div className="absolute w-full flex flex-col">
                 <div className='glass-effect py-4 px-6 rounded-t-[18px]'>
                     <p className="text-text-main text-secondary font-bold">{heading}</p>
@@ -60,7 +76,7 @@ export default function Profile({heading}) {
                             cropShape="rect"
                             aspect={448 / 100}
                         >
-                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect"  />
+                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect !bg-surface"  />
                         </UploadPhoto>
                     </div>
                 </div>

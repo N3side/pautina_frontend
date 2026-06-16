@@ -1,5 +1,5 @@
 import {useContext} from "react";
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 import DropDown from "@/shared/ui/DropDown/DropDown"
 import LogoutIcon from '@mui/icons-material/Logout'
 import SettingsIcon from '@mui/icons-material/Settings'
@@ -37,7 +37,7 @@ export default function CustomDropDown() {
                                 </div>
 
                                 <div className="px-4 pb-3">
-                                    <Link href={userLink(user?.publication?.public_url)} className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
+                                    <Link href={userLink(user?.main?.short_id)} className="block w-full text-center py-2 rounded-lg bg-brand/10 hover:bg-brand/20 text-text-brand text-sm font-medium transition-colors">
                                         Перейти в профиль
                                     </Link>
                                 </div>

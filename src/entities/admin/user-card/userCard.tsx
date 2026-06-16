@@ -20,11 +20,11 @@ export default function UserCard({ user }: Props) {
 
 
     async function ban() {
-        await $fetch(`admin/users/${user?.id}/ban`, {method: "PATCH"})
+        await $fetch(`admin/users/${user?.main?.id}/ban`, {method: "PATCH"})
     }
 
     async function unban() {
-        await $fetch(`admin/users/${user?.id}/unban`, {method: "PATCH"})
+        await $fetch(`admin/users/${user?.main?.id}/unban`, {method: "PATCH"})
     }
 
     const {isOpen, open, close} = useModal()
@@ -71,14 +71,14 @@ export default function UserCard({ user }: Props) {
             </SyntaxHighlighter>
 
             <div className="flex gap-3">
-                <Link href={userLink(user?.publication?.public_url)}
+                <Link href={userLink(user?.main?.short_id)}
                       target="_blank">
                     <ActionButton>
                         Профиль
                     </ActionButton>
                 </Link>
                 <ActionButton text="Выдать подписку" onClick={open} />
-                {user?.is_banned ?
+                {user?.main?.is_banned ?
                     <ActionButton text="Разбанить" onClick={unban} />
                     :
                     <ActionButton text="Забанить" onClick={ban} />

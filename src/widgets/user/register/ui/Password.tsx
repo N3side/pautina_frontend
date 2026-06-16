@@ -4,7 +4,7 @@ import Input from "@/shared/ui/Inputs/Input";
 import {$fetch} from "@/shared/api/fetch";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 import {userLink} from "@/shared/lib/utils/userLink";
 import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 import PasswordRequirements from "@/entities/password-requirements/PasswordRequirements";
@@ -66,8 +66,8 @@ export default function Password() {
     }
 
     useEffect(() => {
-        if (registered && user?.publication?.public_url) {
-            router.replace(userLink(user?.publication?.public_url))
+        if (registered && user?.main?.short_id) {
+            router.replace(userLink(user?.main?.short_id))
         }
     }, [registered, user]);
 

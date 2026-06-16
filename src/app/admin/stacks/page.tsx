@@ -8,7 +8,7 @@ import Input from "@/shared/ui/Inputs/Input";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import {$fetch} from "@/shared/api/fetch";
 import {useEffect, useRef, useState} from "react";
-import {CheckAdmin} from "@/entities/user-entity/lib/guards/CheckAdmin";
+import {CheckAdmin} from "@/entities/user/lib/guards/CheckAdmin";
 import FileInput from "@/shared/ui/Inputs/FileInput";
 
 export default function Page() {

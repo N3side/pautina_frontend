@@ -7,6 +7,7 @@ import { Modal } from "@/shared/ui/Modals/Modal";
 import ProjectModalWidget from "@/widgets/user/modal-project-widget/ProjectModalWidget";
 import EventIcon from "@mui/icons-material/Event";
 import { dots } from "@/shared/styles/patterns/dots";
+import {normalizeUrl} from "@/shared/lib/utils/urlHelper";
 
 interface ProjectCardProps {
     project: Record<string, any>;
@@ -58,9 +59,8 @@ export default function ProjectCard({ project, isMyProfile }: ProjectCardProps) 
                         <div className="flex shrink-0 gap-1.5 translate-x-1" onClick={(e) => e.stopPropagation()}>
                             {project?.repo_link && (
                                 <a
-                                    href={project.repo_link}
+                                    href={normalizeUrl(project.repo_link)}
                                     target="_blank"
-                                    rel="noreferrer"
                                     className="flex items-center justify-center rounded-xl p-2 text-text-muted/70 bg-white/[0.02] border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:bg-brand/10 hover:text-brand hover:border-brand/40 hover:shadow-[0_0_15px_-3px_rgba(14,165,233,0.4)]"
                                     title="Репозиторий"
                                 >
@@ -69,9 +69,8 @@ export default function ProjectCard({ project, isMyProfile }: ProjectCardProps) 
                             )}
                             {project?.link && (
                                 <a
-                                    href={project.link}
+                                    href={normalizeUrl(project.link)}
                                     target="_blank"
-                                    rel="noreferrer"
                                     className="flex items-center justify-center rounded-xl p-2 text-text-muted/70 bg-white/[0.02] border border-white/[0.05] transition-all duration-300 hover:-translate-y-1 hover:bg-brand/10 hover:text-brand hover:border-brand/40 hover:shadow-[0_0_15px_-3px_rgba(14,165,233,0.4)]"
                                     title="Сайт"
                                 >

@@ -3,7 +3,7 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Typewriter from 'typewriter-effect';
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 
 export default function Name({name, setName, next, position}) {
 

@@ -2,7 +2,7 @@ import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {useContext, useEffect, useState} from "react";
-import {UserContext} from "@/entities/user-entity/model/UserContext";
+import {UserContext} from "@/entities/user/model/UserContext";
 import {router} from "next/client";
 import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo";
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
@@ -51,8 +51,8 @@ export default function OTP({email, next, prev, timer, setTimer}) {
     }
 
     useEffect(() => {
-        if (user?.publication?.public_url) {
-            router.push(userLink(user?.publication?.public_url))
+        if (user?.main?.short_id) {
+            router.push(userLink(user?.main?.short_id))
         }
     }, [user])
 

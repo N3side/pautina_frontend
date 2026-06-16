@@ -45,7 +45,7 @@ export default function EditGallery({ cards, setCards }) {
     };
 
     async function sendSorted(cards, project_id) {
-        const response = await $fetch(`projects/${project_id}/gallery/sort`, {
+        const response = await $fetch(`posts/${project_id}/gallery/sort`, {
             method: "PATCH",
             body: cards,
             headers: {

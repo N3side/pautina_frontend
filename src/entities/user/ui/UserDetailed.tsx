@@ -91,7 +91,7 @@ export default function UserDetailed({user, isPrivate}: Props) {
         },
         {
             k: "Ссылка на профиль",
-            v: userLinkWithoutProtocol(user?.publication?.public_url),
+            v: userLinkWithoutProtocol(user?.main?.short_id),
             Icon: LinkIcon,
             shouldCopy: true
         }

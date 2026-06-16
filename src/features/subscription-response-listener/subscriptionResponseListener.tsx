@@ -4,7 +4,7 @@ import React, {useContext, useEffect} from "react";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import {Modal} from "@/shared/ui/Modals/Modal";
 import SubscriptionOffer from "@/widgets/user/subscription-offer/SubscriptionOffer";
-import {UserContext} from "@/entities/user-entity";
+import {UserContext} from "@/entities/user";
 
 export default function SubscriptionResponseListener() {
 

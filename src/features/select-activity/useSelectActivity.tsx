@@ -4,7 +4,7 @@ import Option from "@/shared/ui/Inputs/Option";
 import Input from "@/shared/ui/Inputs/Input";
 import React, {ChangeEvent, useContext, useEffect, useRef, useState} from "react";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
-import {UserContext} from "@/entities/user-entity";
+import {UserContext} from "@/entities/user";
 
 interface Props {
     errors?: Record<string, any> | null
@@ -79,13 +79,13 @@ export function UseSelectActivity({
                 />
             </div>
 
-            <div className="flex flex-row gap-3 mt-5">
+            <div className="flex flex-row gap-3">
                 {selectedStatus === "учусь" && (
                     <div className="flex gap-3 flex-col w-full">
                         <div className="flex flex-col gap-3 w-full">
-                            {/*<div className="flex flex-col gap-3">*/}
-                            {/*    <PautinaText variant={"default"} style={{ fontWeight: 700 }}>Кто вы?</PautinaText>*/}
-                            {/*</div>*/}
+                            <div className="flex flex-col gap-3">
+                                <p className="text-text-muted text-small font-semibold">Кто вы?</p>
+                            </div>
 
                             <Option
                                 selected={schoolStudyStatus == "Я школьник"}
@@ -129,7 +129,7 @@ export function UseSelectActivity({
 
                 {selectedStatus === "работаю" && (
                     <div className="flex flex-col w-full">
-                        <div className="flex flex-col gap-3 mt-5">
+                        <div className="flex flex-col gap-3">
                             <Input
                                 label={"Организация"}
                                 placeholder={"Паутина"}

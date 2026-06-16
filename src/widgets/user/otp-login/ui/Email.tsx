@@ -2,7 +2,7 @@ import {ChangeEvent, FormEvent, useContext, useEffect, useState} from "react";
 import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Link from "next/link";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";

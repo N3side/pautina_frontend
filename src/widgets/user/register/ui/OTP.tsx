@@ -3,7 +3,7 @@ import {$fetch} from "@/shared/api/fetch";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {useContext, useEffect} from "react";
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
 import Timer from "@/features/timer/Timer"
@@ -55,7 +55,7 @@ export default function OTP({name, email, setEmail, otp, setOtp, next, position,
             setEmail(user?.main?.email)
         }
 
-        if (user?.access?.confirmed_email) {
+        if (user?.confirmed_email) {
             next()
         }
 

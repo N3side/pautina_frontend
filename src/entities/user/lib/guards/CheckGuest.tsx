@@ -13,7 +13,7 @@ export function CheckGuest({ children }: { children: React.ReactNode }) {
     useEffect(() => {
         if (user && user?.access?.isGuest === false) {
             toast.error("Вы уже зарегистрированы");
-            router.replace(userLink(user?.publication?.public_url));
+            router.replace(userLink(user?.main?.short_id));
         }
     }, [user, router]);
 

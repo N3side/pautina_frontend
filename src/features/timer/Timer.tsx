@@ -90,7 +90,7 @@ export default function Timer({ handleClick, timer, setTimer, message }: Props) 
             {timer !== null && (
                 <div className="flex items-center gap-1.5 bg-surface/50 px-2 py-0.5 rounded-md border border-border-default/50">
                     {/* Иконка часов (опционально) */}
-                    <AccessTimeIcon />
+                    <AccessTimeIcon className="!text-text-muted" />
                     <span className="font-mono tabular-nums text-text-muted text-xs font-semibold">
                         {formatTime(timer)}
                     </span>

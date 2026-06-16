@@ -5,7 +5,7 @@ import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
 import Elem from "@/widgets/user/sidebar/ui/Elem";
 import {homeLink, userLink} from "@/shared/lib/utils/userLink";
 import {useContext, useMemo} from "react";
-import {UserContext} from "@/entities/user-entity";
+import {UserContext} from "@/entities/user";
 import ForumIcon from '@mui/icons-material/Forum';
 import PersonIcon from '@mui/icons-material/Person';
 import {usePathname} from "next/navigation";
@@ -30,14 +30,15 @@ export default function Sidebar({className}: Props) {
         user && {
             Icon: PersonIcon,
             text: "Профиль",
-            link: userLink(user?.publication?.public_url), // полный URL с поддоменом
+            link: userLink(user?.main?.short_id), // полный URL с поддоменом
             path: "/" // профиль находится на корневом пути
         },
         user && {
             Icon: ForumIcon,
             text: "Лента",
             link: "/feed",
-            path: "/feed"
+            path: "/feed",
+            stopPropagation: true
         },
         user && {
             Icon: SettingsOutlinedIcon,
@@ -67,7 +68,16 @@ export default function Sidebar({className}: Props) {
                         text={elem.text}
                         href={elem.link}
                         key={key}
-                        onClick={(e) => elem?.path == "/feed" && toast.success("скоро...") }
+                        onClick={(e) => {
+                            if (elem?.path == "/feed") {
+                                toast.success("скоро...");
+                            }
+                            if (elem.stopPropagation) {
+                                e.preventDefault();
+                                e.stopPropagation();
+                                return;
+                            }
+                        }}
                     />
                 )
             })}

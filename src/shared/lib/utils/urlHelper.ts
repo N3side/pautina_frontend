@@ -7,3 +7,12 @@ export function convertStorageUrl(url: string): string {
     }
     return url;
 }
+
+export function normalizeUrl(url): string {
+    if (!url) return "";
+
+    // Убираем http:// или https:// если есть
+    const cleanUrl = url.replace(/^https?:\/\//, '');
+
+    return 'https://' + cleanUrl;
+}

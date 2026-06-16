@@ -6,7 +6,7 @@ import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Gradient from "@/shared/ui/IconContainers/Gradient";
-import {UserContext} from "../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
 import EditIcon from '@mui/icons-material/Edit';
 

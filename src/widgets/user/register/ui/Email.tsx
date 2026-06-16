@@ -1,6 +1,6 @@
 import {ChangeEvent, FormEvent, useContext, useEffect, useState} from "react";
 import {$fetch} from "@/shared/api/fetch";
-import {UserContext} from "../../../../entities/user-entity";
+import {UserContext} from "@/entities/user";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input";
 import {safeLocalStorage} from "@/shared/lib/utils/safeLocalStorage";
@@ -59,7 +59,6 @@ export default function Email({name, email, setEmail, next, setTimer, position})
         if (response_errors) {
             console.log(response_errors)
             setErrors(response_errors)
-            toast.success("okak")
             return
         }
 

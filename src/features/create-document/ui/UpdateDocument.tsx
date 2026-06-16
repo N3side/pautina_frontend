@@ -16,7 +16,7 @@ import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOp
 import {useModal} from "@/shared/lib/hooks/useModal";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
 import {Modal} from "@/shared/ui/Modals/Modal";
-import {UserContext} from "@/entities/user-entity";
+import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
 import {useRouter} from "next/navigation";
 import {homeLink, userLink} from "@/shared/lib/utils/userLink";
@@ -109,7 +109,7 @@ export default function UpdateDocument({document_values, document_id}: Props) {
 
         if (!document_) {
             if (user) {
-                router.replace(userLink(user?.publication?.public_url))
+                router.replace(userLink(user?.main?.short_id))
             } else {
                 router.replace(homeLink)
             }
@@ -129,7 +129,7 @@ export default function UpdateDocument({document_values, document_id}: Props) {
         const response = await updateDocument({e, setErrors, formRef, tags, checked, document_id})
         safeLocalStorage.removeItem(key)
         if (response?.response?.ok) {
-            router.replace(userLink(user?.publication?.public_url))
+            router.replace(userLink(user?.main?.short_id))
         }
     }
 
@@ -137,7 +137,7 @@ export default function UpdateDocument({document_values, document_id}: Props) {
         const response = await deleteDocument({document_id: document_id})
         safeLocalStorage.removeItem(key)
         if (response?.response?.ok) {
-            router.replace(userLink(user?.publication?.public_url))
+            router.replace(userLink(user?.main?.short_id))
         }
     }
 

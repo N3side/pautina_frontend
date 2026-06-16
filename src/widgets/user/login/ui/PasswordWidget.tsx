@@ -4,7 +4,7 @@ import Link from "next/link"
 import {FormEvent, useContext, useEffect, useState} from "react"
 import {$fetch} from "@/shared/api/fetch"
 import {useRouter} from "next/navigation"
-import {CheckIsNotUser, UserContext} from "../../../../entities/user-entity";
+import {CheckIsNotUser, UserContext} from "@/entities/user";
 import Input from "@/shared/ui/Inputs/Input";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Card1 from "@/shared/ui/Sections/Card1";
@@ -12,7 +12,6 @@ import {DeleteRegistrationInfo} from "@/shared/lib/utils/deleteRegistrationInfo"
 import {DeleteAuthorizationInfo} from "@/shared/lib/utils/deleteAuthorizationInfo";
 import {userLink} from "@/shared/lib/utils/userLink";
 import {safeCookieStorage} from "@/shared/lib/utils/safeCookieStorage";
-import MonkeyAnimation from "@/shared/ui/Animations/MonkeyAnimation";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import Typewriter from "typewriter-effect";
 
@@ -25,7 +24,7 @@ interface LoginErrors {
 
 export default function PasswordWidget() {
     const { setToken } = useContext(UserContext)
-    const [isActive, setIsActive] = useState<boolean>(false)
+    // const [isActive, setIsActive] = useState<boolean>(false)
     const [errors, setErrors] = useState<LoginErrors | null>(null)
     const router = useRouter()
     const {user} = useContext(UserContext)
@@ -59,12 +58,6 @@ export default function PasswordWidget() {
         safeCookieStorage.setItem("token", token_)
         setToken(token_)
     }
-
-    useEffect(() => {
-        if (user?.publication?.public_url) {
-            router.push(userLink(user?.publication?.public_url))
-        }
-    }, [user]);
 
     const [isOpen, setIsOpen] = useState<boolean>(false)
 

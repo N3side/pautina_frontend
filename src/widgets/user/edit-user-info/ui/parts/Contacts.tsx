@@ -1,6 +1,5 @@
-import {useHandleSubmit} from "@/widgets/user/edit-user-info/api/useHandleSubmit";
-import {useContext, useRef} from "react";
-import {UserContext} from "@/entities/user-entity";
+import {useContext, useRef, useState} from "react";
+import {UserContext} from "@/entities/user";
 import useCitySelect from "@/features/select-city/useCitySelect";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Input from "@/shared/ui/Inputs/Input"
@@ -8,12 +7,15 @@ import {autoReplace} from "@/shared/lib/utils/replace";
 import AccordionLayout from "@/shared/ui/Inputs/AccordionLayout";
 import useSelectSource from "@/features/select-source/useSelectSource";
 import {UseSelectActivity} from "@/features/select-activity/useSelectActivity";
+import {unionFormData} from "@/shared/lib/utils/UnionFormData";
+import {editCity} from "@/widgets/user/profile/ui/profile/api";
+import {$fetch} from "@/shared/api/fetch";
 
 export default function Contacts({heading}) {
 
     const form_ = useRef(null)
 
-    const {user} = useContext(UserContext)
+    const {user, setUser} = useContext(UserContext)
 
     const {input, city, city_id} = useCitySelect({
         default_city: user?.contacts?.translated_city || user?.contacts?.city,
@@ -25,14 +27,43 @@ export default function Contacts({heading}) {
     const {sourceTsx,result} = useSelectSource({errors: null})
     const {activityTsx, formRef, statusValue} = UseSelectActivity({errors: null})
 
-    const {errors, handleSubmit} = useHandleSubmit({
-        form_,
-        city,
-        city_id,
-        formRef,
-        result,
-        statusValue
-    })
+    const [errors, setErrors] = useState<Record<string, any> | null>(null)
+
+    async function handleSubmit(e) {
+
+        e.preventDefault()
+
+        const activityFormData = formRef && formRef.current
+            ? Object.fromEntries(new FormData(formRef.current))
+            : {};
+
+        const formData = unionFormData(new FormData(form_.current!), [
+            ...editCity(city, city_id),
+            result,
+            activityFormData
+        ])
+
+        formData.set("status", `${statusValue}`);
+
+        const response = await $fetch("me/update/contacts", {
+            method: "PATCH",
+            body: formData
+        });
+
+        const errors_ = response?.json?.errors
+
+        if (errors_) {
+            setErrors(errors_)
+            return
+        }
+
+        const user_ = response?.json?.user
+
+        if (user_) {
+            setUser(user_)
+        }
+
+    }
 
 
     return (
