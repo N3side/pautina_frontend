@@ -44,6 +44,8 @@ jobs:
             NEXT_PUBLIC_ROOT_DOMAIN=${{ secrets.NEXT_PUBLIC_ROOT_DOMAIN }}
             NEXT_PUBLIC_ROOT_BACKEND=${{ secrets.NEXT_PUBLIC_ROOT_BACKEND }}
             APP_ENV=${{ secrets.APP_ENV }}
+            UPSTASH_REDIS_REST_URL=${{ secrets.UPSTASH_REDIS_REST_URL }}
+            UPSTASH_REDIS_REST_TOKEN=${{ secrets.UPSTASH_REDIS_REST_TOKEN }}
 
       # 3. Подготовка к деплою (ставим sshpass)
       - name: Install sshpass

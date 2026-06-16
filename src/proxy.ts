@@ -25,7 +25,7 @@ export async function proxy(request: NextRequest) {
         return NextResponse.next()
     }
 
-    if (process.env.APP_ENV === "production") {
+    if (process.env.NODE_ENV === "production") {
         try {
             const url = `${process.env.UPSTASH_REDIS_REST_URL}/get/is_maintenance`;
             const res = await fetch(url, {
