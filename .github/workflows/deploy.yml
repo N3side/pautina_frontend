@@ -43,6 +43,7 @@ jobs:
             NEXT_PUBLIC_ROOT_PROTOCOL=${{ secrets.NEXT_PUBLIC_ROOT_PROTOCOL }}
             NEXT_PUBLIC_ROOT_DOMAIN=${{ secrets.NEXT_PUBLIC_ROOT_DOMAIN }}
             NEXT_PUBLIC_ROOT_BACKEND=${{ secrets.NEXT_PUBLIC_ROOT_BACKEND }}
+            APP_ENV=${{ secrets.APP_ENV }}
 
       # 3. Подготовка к деплою (ставим sshpass)
       - name: Install sshpass
