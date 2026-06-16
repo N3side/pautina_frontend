@@ -3,7 +3,7 @@
 import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
 import DocumentsWidget from "@/widgets/user/documents-widget/DocumentsWidget";
 import { useParams } from "next/navigation";
-import { ReactNode, useContext, useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { UserContext } from "@/entities/user";
 import { $fetch } from "@/shared/api/fetch";
 import Layout from "@/widgets/user/layout-h-s-f/Layout";
@@ -22,7 +22,6 @@ export default function Page() {
     // === ПОДКЛЮЧЕНИЕ ПОЛИФИЛА ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ===
     useEffect(() => {
         if (typeof window !== "undefined") {
-            // Подгружаем полифил только в браузере
             require("drag-drop-touch");
         }
     }, []);
@@ -74,7 +73,6 @@ export default function Page() {
     const [sectionsOrder, setSectionsOrder] = useState(DEFAULT_SECTIONS);
     const [sectionsSort, setSectionsSort] = useState<Record<string, any>[] | null>(null);
 
-    // Храним индекс элемента, который сейчас тащим
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
     async function getSectionsSort() {
@@ -125,12 +123,9 @@ export default function Page() {
         });
 
         if (response?.response?.ok) {
-            console.log(newOrder);
             setSectionsOrder(newOrder);
         }
     }
-
-    // --- НАЧАЛО ЛОГИКИ DRAG AND DROP ---
 
     const handleDragStart = (index: number) => {
         if (!isMyProfile) return;
@@ -138,7 +133,6 @@ export default function Page() {
     };
 
     const handleDragOver = (e: React.DragEvent) => {
-        // Обязательно отменяем дефолтное поведение, иначе drop не сработает
         e.preventDefault();
     };
 
@@ -146,25 +140,17 @@ export default function Page() {
         if (draggedIndex === null || draggedIndex === targetIndex) return;
 
         const updatedOrder = [...sectionsOrder];
-        // Вырезаем тащимый элемент
         const [draggedItem] = updatedOrder.splice(draggedIndex, 1);
-        // Вставляем его на новое место
         updatedOrder.splice(targetIndex, 0, draggedItem);
 
-        // Обновляем локальный стейт, чтобы всё мгновенно перерисовать
         setSectionsOrder(updatedOrder);
-
-        // Отправляем новый порядок на бэкенд
         handleSortSave(updatedOrder);
-
         setDraggedIndex(null);
     };
 
     const handleDragEnd = () => {
         setDraggedIndex(null);
     };
-
-    // --- КОНЕЦ ЛОГИКИ DRAG AND DROP ---
 
     return (
         <Layout>
@@ -175,9 +161,7 @@ export default function Page() {
                     <>
                         <div className={`flex flex-col gap-5 ${hasContent || isMyProfile ? 'py-5' : 'hidden'}`}>
 
-                            {/* Рендерим отсортированный массив */}
                             {sectionsOrder.map((section, index) => {
-                                // Переменная для хранения внутренностей виджета
                                 let componentNode: React.ReactNode = null;
 
                                 if (section.name === "documents") {
@@ -211,16 +195,60 @@ export default function Page() {
                                 return (
                                     <div
                                         key={section.name}
-                                        draggable={isMyProfile} // Таскать можно только в своем профиле
-                                        onDragStart={() => handleDragStart(index)}
+                                        // Оставляем только обработчики дропа (чтобы сюда можно было бросить элемент)
                                         onDragOver={handleDragOver}
                                         onDrop={() => handleDrop(index)}
-                                        onDragEnd={handleDragEnd}
-                                        // Стили: меняем курсор на "руку" и плавно уменьшаем непрозрачность перетаскиваемого элемента
-                                        className={`transition-all duration-200 select-none 
-                                            ${isMyProfile ? 'cursor-grab active:cursor-grabbing border border-transparent active:border-dashed active:border-gray-300 rounded-[18px]' : ''} 
+                                        className={`transition-all duration-200 relative select-none
+                                            ${isMyProfile ? 'border border-transparent rounded-[18px]' : ''} 
                                             ${draggedIndex === index ? 'opacity-30 scale-[0.98]' : 'opacity-100'}`}
                                     >
+
+                                        {/* РУЧКА ПЕРЕТАСКИВАНИЯ (Отображается только владельцу) */}
+                                        {isMyProfile && (
+                                            <div
+                                                draggable={true}
+                                                onDragStart={() => handleDragStart(index)}
+                                                onDragEnd={handleDragEnd}
+                                                className="relative w-full flex items-center justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing transition-all touch-none group/drag"
+                                                title="Перетащить секцию"
+                                            >
+                                                {/* Маленькая закругленная плашка (капсула) */}
+                                                <div className="w-12 h-1.5 bg-gray-200 dark:bg-neutral-800 rounded-full group-hover/drag:bg-gray-400 dark:group-hover/drag:bg-neutral-600 group-active/drag:bg-gray-500 transition-colors" />
+
+                                                {/* БЛОК С ПОДСКАЗКОЙ И ВИДЕО (Всплывает СВЕРХУ-СПРАВА при ховере) */}
+                                                <div className="absolute bottom-full left-[calc(50%-24px)] mb-2 max-w-110 w-full p-4
+                                                    glass-effect border border-gray-200 dark:border-neutral-800 rounded-[24px] shadow-xl
+                                                    opacity-0 pointer-events-none transition-all duration-200 scale-95 origin-bottom z-50
+                                                    md:group-hover/drag:opacity-100 md:group-hover/drag:scale-100
+                                                    hidden md:flex flex-col gap-2"
+                                                >
+                                                    {/* Стрелочка подсказки снизу (смещена влево к центру ручки) */}
+                                                    <div className="absolute -bottom-1 left-6 w-2 h-2 rotate-45 bg-white/80 dark:bg-neutral-900/80 border-b border-r border-gray-200 dark:border-neutral-800" />
+
+                                                    <h5 className="text-sm font-bold text-text-main text-center">
+                                                        Как сортировать профиль?
+                                                    </h5>
+
+                                                    <p className="text-xs text-text-muted text-center leading-relaxed">
+                                                        Зажмите эту полоску и перетащите блок выше или ниже.
+                                                    </p>
+
+                                                    {/* ТВОЕ ВИДЕО */}
+                                                    <div className="w-full aspect-video rounded-lg overflow-hidden bg-black/10 mt-1">
+                                                        <video
+                                                            src="/video/guide.mov"
+                                                            autoPlay
+                                                            loop
+                                                            muted
+                                                            playsInline
+                                                            className="w-full h-full object-cover"
+                                                        />
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        )}
+
+                                        {/* Контент виджета */}
                                         {componentNode}
                                     </div>
                                 );

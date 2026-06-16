@@ -169,6 +169,7 @@
 	body {
 		min-height: 100vh;
 		height: 100%;
+		width: 100vw;
 		background: var(--bg-page);
 		background-repeat: no-repeat;
 		overflow-x: hidden;

@@ -8,6 +8,7 @@ import ProjectModalWidget from "@/widgets/user/modal-project-widget/ProjectModal
 import EventIcon from "@mui/icons-material/Event";
 import { dots } from "@/shared/styles/patterns/dots";
 import {normalizeUrl} from "@/shared/lib/utils/urlHelper";
+import {useEffect} from "react";
 
 interface ProjectCardProps {
     project: Record<string, any>;

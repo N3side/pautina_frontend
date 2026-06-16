@@ -15,14 +15,10 @@ import {smooth} from "@/shared/styles/animations";
 import {homeLink} from "@/shared/lib/utils/userLink";
 
 export default function HeaderWidget() {
-    const { setIsBlocked } = useContext(BodyBlockContext)
     const [isActive, setIsActive] = useState(false)
     const { theme, setTheme } = useTheme()
     const { user } = useContext(UserContext)
 
-    useEffect(() => {
-        setIsBlocked(isActive)
-    }, [isActive])
 
     return (
         <header className="sticky glass-effect top-[-5px] z-20 w-full">
