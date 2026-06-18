@@ -3,7 +3,6 @@ import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import BigAvatar from "@/shared/ui/user/avatar/BigAvatar";
 import Input from "@/shared/ui/Inputs/Input"
-import {useHandleSubmit} from "@/widgets/user/edit-user-info/api/useHandleSubmit";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import {useContext, useRef, useState} from "react";
 import {autoReplace} from "@/shared/lib/utils/replace";

@@ -53,7 +53,7 @@ export default function ProjectCard({ project, isMyProfile }: ProjectCardProps) 
                     <div className="flex items-start justify-between gap-4 mb-2.5">
                         {/* 4. Сдвиг заголовка при ховере */}
                         <h4 className="text-xl font-bold tracking-tight text-text-main line-clamp-1 transition-all duration-300 group-hover:translate-x-1">
-                            {project?.name || "Без названия"}
+                            {project?.title || "Без названия"}
                         </h4>
 
                         {/* Кнопки действий со свечением */}

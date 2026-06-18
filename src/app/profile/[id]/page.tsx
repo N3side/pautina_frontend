@@ -11,6 +11,7 @@ import { PrivateProfileWidget } from "@/widgets/user/profile/ui/profile/ui/Priva
 import ProjectsWidget from "@/widgets/user/projects-widget/ProjectsWidget";
 import StacksWidget from "@/widgets/user/stacks-widget/StacksWidget";
 import DesertScene from "@/shared/assets/images/vector/empty/DesertScene";
+import SubscriptionOffer from "@/widgets/user/subscription-offer/SubscriptionOffer";
 
 const DEFAULT_SECTIONS = [
     { name: "documents", default_sort: 1 },
@@ -122,7 +123,7 @@ export default function Page() {
             })
         });
 
-        if (response?.response?.ok) {
+        if (!response?.json?.offer_subscription) {
             setSectionsOrder(newOrder);
         }
     }
@@ -143,7 +144,6 @@ export default function Page() {
         const [draggedItem] = updatedOrder.splice(draggedIndex, 1);
         updatedOrder.splice(targetIndex, 0, draggedItem);
 
-        setSectionsOrder(updatedOrder);
         handleSortSave(updatedOrder);
         setDraggedIndex(null);
     };

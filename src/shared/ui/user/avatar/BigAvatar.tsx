@@ -25,7 +25,7 @@ export default function BigAvatar({
         const formData = new FormData()
         formData.set("avatar", blob)
 
-        const response = await $fetch("me/update", {
+        const response = await $fetch("me/update/user", {
             method: "PATCH",
             body: formData
         })

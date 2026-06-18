@@ -32,7 +32,7 @@ export default function ShowDashBoard() {
                 />
                 <StatCard
                     title="Проекты"
-                    count={info?.projects_count}
+                    count={info?.posts_count}
                     icon={FolderOpenOutlinedIcon}
                     colorClass="text-emerald-500 bg-emerald-500"
                 />

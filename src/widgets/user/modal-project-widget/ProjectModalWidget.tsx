@@ -35,7 +35,7 @@ export default function ProjectModalWidget({project, isMyProfile}: Props) {
 
                     <div className="flex justify-between items-center mt-4">
                         <h4 className="font-bold text-text-main transition-colors">
-                            {project?.name || "Без названия"}
+                            {project?.title || "Без названия"}
                         </h4>
 
                         <div className="flex gap-1.5">
