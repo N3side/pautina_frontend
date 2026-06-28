@@ -107,8 +107,13 @@ export default function PostWidget({ post, setPosts }: Props) {
     };
 
 
-    const [comments, setComments] = useState<Array<Record<string, any>>>([])
-    const {page: commentsPage, setPage: setCommentsPage, lastPage: commentsLastPage, setLastPage: setCommentsLastPage, perPage: commentsPerPage, setPerPage: setCommentsPerPage} = UsePaginate()
+    const [comments, setComments] = useState<Array<Record<string, any>>>(post?.comments)
+    const {page: commentsPage, setPage: setCommentsPage, lastPage: commentsLastPage, setLastPage: setCommentsLastPage, perPage: commentsPerPage, setPerPage: setCommentsPerPage} =
+    UsePaginate({
+        pageI: post?.paginate_comments?.current_page || 1,
+        lastPageI: post?.paginate_comments?.last_page || 1,
+        perPageI: post?.paginate_comments?.per_page || 1,
+    })
 
     async function getComments(page, post_id) {
         const response = await $fetch(`posts/${post_id}/comments?page=${page}&comments_limit=3`)
@@ -126,12 +131,6 @@ export default function PostWidget({ post, setPosts }: Props) {
             setCommentsLastPage(last_page)
         }
     }
-
-    useEffect(() => {
-        if (post && post?.id) {
-            getComments(commentsPage, post?.id)
-        }
-    }, [post, commentsPage]);
 
     return (
         <div ref={targetRef} className="transition-colors w-full min-w-0">
@@ -211,7 +210,12 @@ export default function PostWidget({ post, setPosts }: Props) {
                                         />
                                     )}
                                     {commentsPage < commentsLastPage && commentsLastPage > 1 &&
-                                        <button className="text-text-muted font-bold w-fit hover:text-text-main transition-all duration-300" onClick={() => setCommentsPage(prev => prev + 1)}>
+                                        <button className="text-text-muted font-bold w-fit hover:text-text-main transition-all duration-300"
+                                            onClick={async () => {
+                                                await setCommentsPage(prev => prev + 1)
+                                                await getComments(commentsPage, post?.id)
+                                            }}
+                                        >
                                             Загрузить еще
                                         </button>
                                     }
