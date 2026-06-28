@@ -2,10 +2,9 @@
 
 import LogoLight from "@/shared/assets/images/vector/logo/LogoLight"
 import {Container} from "@/shared/ui/Container/Container"
-import {useContext, useEffect, useState} from "react"
+import {useContext, useState} from "react"
 import Navigation from "./Navigation"
 import {Burger} from "./Burger"
-import {BodyBlockContext} from "@/shared/lib/providers/BodyBlockProvider"
 import {UserContext} from "@/entities/user";
 import Link from "next/link"
 import {useTheme} from "@/shared/lib/providers/ThemeProvider";

@@ -1,9 +1,12 @@
-export const fullName = (user) => {
+interface Props {
+    surname?: any
+    name?: any
+    patronymic?: any
+}
 
-    if (!user) return
+export const fullName = (surname, name, patronymic) => {
 
-    return [user.main?.surname, user.main?.name, user.main?.patronymic]
+    return [surname, name, patronymic]
         .filter(Boolean)
         .join(" ");
 }
-

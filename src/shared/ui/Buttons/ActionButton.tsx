@@ -1,7 +1,6 @@
-import {Button, ButtonProps} from "@mui/material";
-import {ElementType} from "react";
+import {ElementType, HTMLAttributes} from "react";
 
-interface Props extends Omit<ButtonProps, 'startIcon'> {
+interface Props extends HTMLAttributes<HTMLDivElement> {
     text?: string
     className?: string
     Icon?: ElementType
@@ -9,14 +8,17 @@ interface Props extends Omit<ButtonProps, 'startIcon'> {
 
 export default function ActionButton({text, Icon, className, children, ...props}: Props) {
     return (
-        <Button
-            className={`!rounded-xl !px-6 !py-2.5 !normal-case !text-text-muted !border-border-default hover:!bg-input transition-all flex justify-center items-center gap-3 ${className}`}
+        <button
+            className={`border rounded-xl px-6 py-2.5 normal-case text-text-muted border-border-default hover:bg-input transition-all flex justify-center items-center gap-3 ${className}`}
             variant="outlined"
-            startIcon={Icon ? <Icon className="text-text-muted"/> : undefined}
             {...props}
         >
-            <p className="text-small font-semibold">{text}</p>
-            {children}
-        </Button>
+            <div className="flex gap-2 items-center">
+                {Icon ? <Icon className="text-text-muted"/> : undefined}
+                <p className="text-small font-semibold">{text}</p>
+                {children}
+            </div>
+
+        </button>
     )
 }

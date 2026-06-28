@@ -1,22 +1,20 @@
 // components/pages/UpdateProject/UpdateProject.tsx (или твой путь к странице/виджету)
 "use client"
 
-import { Checkbox } from "@mui/material";
 import Input from "@/shared/ui/Inputs/Input";
 import Textarea from "@/shared/ui/Inputs/Textarea";
-import { useContext, useEffect, useRef, useState } from "react";
-import DateInput from "@/shared/ui/Inputs/Date";
+import {useContext, useEffect, useRef, useState} from "react";
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 
-import { UserContext } from "@/entities/user";
-import { $fetch } from "@/shared/api/fetch";
-import { usePathname, useRouter } from "next/navigation";
+import {UserContext} from "@/entities/user";
+import {$fetch} from "@/shared/api/fetch";
+import {usePathname, useRouter} from "next/navigation";
 import EditGallery from "@/features/edit-gallery/EditGallery";
 import ShowStacks from "@/features/manage-stacks/ui/ShowStacks";
-import { userLink } from "@/shared/lib/utils/userLink";
+import {userLink} from "@/shared/lib/utils/userLink";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
-import { Modal } from "@/shared/ui/Modals/Modal";
-import { useModal } from "@/shared/lib/hooks/useModal";
+import {Modal} from "@/shared/ui/Modals/Modal";
+import {useModal} from "@/shared/lib/hooks/useModal";
 import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOperation";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 
@@ -56,12 +54,10 @@ export default function UpdateProject() {
         }
     }
 
-    // Первоначальный запрос данных
     useEffect(() => {
         getProject();
     }, []);
 
-    // Синхронизация стейтов при получении данных проекта с бэкенда
     useEffect(() => {
         if (project) {
             setChecked(Boolean(project.is_public));
@@ -80,10 +76,6 @@ export default function UpdateProject() {
         e.preventDefault();
         const formData = new FormData(formRef.current || undefined);
 
-        // Передаем статус приватности (0 или 1 для бэка на Laravel)
-        // formData.set("is_public", checked ? "1" : "0");
-
-        // Безопасно упаковываем массив выбранных ID стеков в FormData
         if (selectedStacks && selectedStacks.length > 0) {
             selectedStacks.forEach(stack => {
                 if (stack?.id) {
@@ -136,6 +128,7 @@ export default function UpdateProject() {
 
                 {/* Галерея проекта */}
                 <div className="flex flex-col gap-4">
+
                     <div className="gap-2">
                         <h6 className="text-text-main font-bold">Добавить фотографии</h6>
                         <p className="text-text-muted text-small font-bold">{gallery?.length || 0} из 10</p>
@@ -148,15 +141,13 @@ export default function UpdateProject() {
                 </div>
 
                 {/* Выбор стека технологий по архитектуре FSD */}
-                <div className="glass-effect p-6 rounded-xl">
-                    <ShowStacks
-                        showSearch={true}
-                        showAll={true}
-                        showSelected={true}
-                        selectedStacks={selectedStacks}
-                        setSelectedStacks={setSelectedStacks}
-                    />
-                </div>
+                <ShowStacks
+                    showSearch={true}
+                    showAll={true}
+                    showSelected={true}
+                    selectedStacks={selectedStacks}
+                    setSelectedStacks={setSelectedStacks}
+                />
 
                 {/* Ссылки на продакшн и репозиторий */}
                 <Input

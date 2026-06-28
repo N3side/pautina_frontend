@@ -1,28 +1,28 @@
 "use client"
 
-import { pushable } from "@/shared/styles/animations";
 import RoundedIconWrapper from "@/shared/ui/Buttons/RoundedIconWrapper";
 import CloseIcon from '@mui/icons-material/Close';
 import ServerIcon from "@/shared/ui/ServerIcon/ServerIcon";
 
 export function StackSkeleton() {
     return (
-        <div className="px-4 py-3 rounded-lg flex gap-4 items-center bg-border-default/20 animate-pulse w-full">
-            <div className="w-[30px] h-[30px] rounded-full bg-border-default/40 flex-shrink-0" />
-            <div className="h-5 w-full bg-border-default/40 rounded" />
+        <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-white/5 bg-white/[0.02] animate-pulse w-full">
+            <div className="w-4 h-4 rounded bg-white/10 flex-shrink-0" />
+            <div className="h-3 w-16 bg-white/10 rounded" />
         </div>
     )
 }
 
-interface StackProps {
+interface Props {
     stack: Record<string, any>
     handleDelete?: (stack: any) => void
     selected?: boolean
     onClick?: () => void
-    isReadOnly?: boolean; // Новый проп для гостевого режима
+    isReadOnly?: boolean;
+    className?: string
 }
 
-export function Stack({ stack, handleDelete, selected = false, onClick, isReadOnly = false }: StackProps) {
+export function Stack({ stack, handleDelete, selected = false, onClick, isReadOnly = false, className }: Props) {
     const isSelected = stack?.selected || selected;
 
     const onDeleteClick = (e: React.MouseEvent) => {
@@ -30,40 +30,29 @@ export function Stack({ stack, handleDelete, selected = false, onClick, isReadOn
         if (stack && handleDelete) handleDelete(stack);
     };
 
-    // Если это чужой профиль (isReadOnly), то сбрасываем стили выделения до обычного glass-эффекта
-    const cardStyles = isReadOnly
-        ? 'glass-effect border-white/5 cursor-default border-box'
-        : isSelected
-            ? 'bg-brand/10 border-brand/40 ring-2 ring-brand ring-offset-2 ring-offset-surface shadow-lg shadow-brand/5 cursor-pointer hover:scale-[1.01]'
-            : `glass-effect border-white/5 hover:border-white/15 hover:bg-white/[0.04] hover:shadow-md cursor-pointer ${pushable}`;
-
     return (
         <div
             onClick={isReadOnly ? undefined : onClick}
-            className={`group relative flex items-center gap-3.5 px-4 py-2.5 rounded-xl select-none 
-                transition-all duration-200 ease-in-out border ${cardStyles}`}
+            className={`group glass-effect relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border select-none transition-all duration-200 ${className}`}
         >
-            <div className={`flex items-center justify-center w-8 h-8 p-1 rounded-lg bg-white/[0.02] border border-white/5 transition-transform duration-200 ${!isReadOnly && 'group-hover:scale-105'}`}>
-
+            <div className="w-4 h-4 flex items-center justify-center">
                 <ServerIcon
                     url={stack?.image_url || stack?.themes?.[0]?.image_url}
-                    // Вот теперь это сработает! По дефолту цвет текста, при ховере — бренд
-                    className="w-full h-full transition-colors duration-300 text-text-main"
+                    className={`w-full h-full object-contain filter drop-shadow-sm text-text-main transition-transform duration-200 
+                        ${!isReadOnly && 'group-hover:scale-105'}`}
                 />
-
             </div>
 
-            <p className="text-text-main font-medium text-[15px] tracking-wide transition-colors">
+            <span className="text-text-main font-medium text-[12px] tracking-wide whitespace-nowrap">
                 {stack?.name}
-            </p>
+            </span>
 
-            {/* Крестик появится только если профиль свой И передан обработчик удаления */}
             {!isReadOnly && isSelected && handleDelete && (
                 <RoundedIconWrapper
                     onClick={onDeleteClick}
                     Icon={CloseIcon}
-                    className="!w-5 !h-5 absolute -top-1.5 -right-1.5 shadow-md bg-surface border border-white/10 text-text-main hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-all duration-150 active:scale-95"
-                    IconClassName="!text-[11px]"
+                    className="!w-3.5 !h-3.5 ml-1 bg-white/10 border border-white/10 text-text-muted hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-all duration-150 active:scale-95"
+                    IconClassName="!text-[9px]"
                 />
             )}
         </div>

@@ -1,3 +1,5 @@
+"use client"
+
 import React, {Dispatch, InputHTMLAttributes, ReactNode, SetStateAction, useEffect, useRef, useState} from 'react';
 import {IMaskInput} from 'react-imask';
 import {smooth} from "@/shared/styles/animations";
@@ -23,7 +25,7 @@ interface InputProps extends Omit<InputHTMLAttributes<HTMLInputElement>, 'onChan
     selected?: boolean;
     mask?: any;
     onChange?: (e: React.ChangeEvent<HTMLInputElement>) => void;
-    leftAdditional?: string;
+    leftAdditional?: ReactNode;
     additionalGap?: number;
     Button?: ReactNode
     ref?: React.Ref<HTMLInputElement>;
@@ -84,10 +86,13 @@ const Input = ({
 
             <div className="relative group">
                 {leftAdditional && (
-                    <div className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-10" ref={leftAdditionalRef}>
-                        <span className={`text-base transition-colors duration-200 ${error ? 'text-red-400' : 'text-text-muted group-focus-within:text-brand'}`}>
+                    <div
+                        className="absolute left-4 top-1/2 -translate-y-1/2 flex items-center justify-center pointer-events-none z-10"
+                        ref={leftAdditionalRef}
+                    >
+                        <div className={`flex items-center gap-2 transition-colors duration-200 ${error ? 'text-red-500' : 'text-text-muted group-focus-within:text-brand'}`}>
                             {leftAdditional}
-                        </span>
+                        </div>
                     </div>
                 )}
 

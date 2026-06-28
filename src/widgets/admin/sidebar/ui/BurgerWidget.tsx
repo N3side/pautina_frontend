@@ -17,7 +17,7 @@ export default function BurgerWidget({isOpen=false}: Props) {
         <BurgerMenu isOpen={isOpen}>
             <SidebarLogo isSidebarOpen={false} />
 
-            <div className="flex flex-col flex-1 overflow-y-auto duration-300 ease-linear custom-scrollbar px-4 py-6">
+            <div className="flex flex-col absolute flex-1 overflow-y-auto duration-300 ease-linear custom-scrollbar px-4 py-6">
                 <nav className="mb-6">
                     <div className="flex flex-col gap-4">
                         <SidebarHeader isSidebarOpen={false} />

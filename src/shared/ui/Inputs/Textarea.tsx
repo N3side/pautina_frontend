@@ -1,34 +1,65 @@
-import React, { TextareaHTMLAttributes } from 'react';
-import { smooth } from "@/shared/styles/animations";
+"use client"
 
-// Используем те же базовые классы для идентичного вида
-const BASE_TEXTAREA_CLASSES = `
-  w-full py-4 rounded-xl ${smooth} outline-none
-  border glass-effect text-text-main text-sm font-medium
-  placeholder:text-text-muted/60
-  focus:ring-4 focus:ring-brand/10 focus:bg-surface
-  disabled:opacity-50 disabled:cursor-not-allowed
-  resize-none min-h-[120px]
-`;
+import React, { TextareaHTMLAttributes, useRef, useEffect } from 'react';
+import { smooth } from "@/shared/styles/animations";
 
 interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
     label?: string | null;
     error?: string | null;
     selected?: boolean;
-    inputClassName?: string
+    inputClassName?: string;
+    autoResize?: boolean;
 }
 
 const Textarea = ({
-      label,
-      error,
-      selected,
-      className,
-      inputClassName,
-      style,
-      value,
-      defaultValue,
-      ...props
-  }: TextareaProps) => {
+                      label,
+                      error,
+                      selected,
+                      className,
+                      inputClassName,
+                      style,
+                      value,
+                      defaultValue,
+                      autoResize = false,
+                      onChange,
+                      ...props
+                  }: TextareaProps) => {
+
+    // Динамически управляем минимальной высотой:
+    // Если autoResize — даем высоту под одну строку (52px с учетом py-4), иначе оставляем стандартные 120px
+    const BASE_TEXTAREA_CLASSES = `
+      w-full py-4 rounded-xl ${smooth} outline-none
+      border glass-effect text-text-main text-sm font-medium
+      placeholder:text-text-muted/60
+      focus:ring-4 focus:ring-brand/10 focus:bg-surface
+      disabled:opacity-50 disabled:cursor-not-allowed
+      resize-none ${autoResize ? "min-h-0" : "min-h-[120px]"}
+    `;
+
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+    const adjustHeight = () => {
+        const textarea = textareaRef.current;
+        if (textarea && autoResize) {
+            textarea.style.height = 'auto'; // Сбрасываем, чтобы поймать уменьшение текста
+            textarea.style.height = `${textarea.scrollHeight}px`; // Расширяем строго по контенту
+        }
+    };
+
+    useEffect(() => {
+        if (autoResize) {
+            adjustHeight();
+        }
+    }, [value, defaultValue, autoResize]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+        if (autoResize) {
+            adjustHeight();
+        }
+        if (onChange) {
+            onChange(e);
+        }
+    };
 
     const dynamicStyles = {
         borderColor: error
@@ -49,13 +80,17 @@ const Textarea = ({
 
             <div className="relative group">
                 <textarea
+                    ref={textareaRef}
                     className={`${BASE_TEXTAREA_CLASSES} ${inputClassName} ${
                         error ? 'border-red-500' : 'border-border-default hover:border-brand/50'
                     }`}
                     style={dynamicStyles}
                     value={value}
                     defaultValue={defaultValue}
-                    placeholder={props?.placeholder || "Введите текст..."}
+                    placeholder={props?.placeholder || "Введите text..."}
+                    onChange={handleChange}
+                    // КРИТИЧНО: заставляем браузер рендерить 1 строку по дефолту, если включен autoResize
+                    rows={autoResize ? 1 : props.rows}
                     {...props}
                 />
 

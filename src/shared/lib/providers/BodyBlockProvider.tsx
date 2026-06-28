@@ -3,47 +3,36 @@
 import { createContext, ReactNode, useState, useEffect } from "react";
 
 interface BodyBlockContextType {
-    isBlocked: boolean;
-    setIsBlocked: (isBlocked: boolean) => void;
+    block: () => void;
+    unblock: () => void;
 }
 
 export const BodyBlockContext = createContext<BodyBlockContextType>({
-    isBlocked: false,
-    setIsBlocked: () => {},
+    block: () => {},
+    unblock: () => {},
 });
 
 export function BodyBlockProvider({ children }: { children: ReactNode }) {
-    const [isBlocked, setIsBlocked] = useState(false);
+    const [count, setCount] = useState<number>(0);
 
     useEffect(() => {
-        if (typeof document === "undefined") return;
-
-        const body = document.body;
-        const html = document.documentElement;
-
-        if (isBlocked) {
-            // 1. Вычисляем ширину скроллбара, чтобы страница не "прыгала" вправо
-            const scrollBarWidth = window ? window?.innerWidth - html.clientWidth : 0;
-
-            body.style.overflow = "hidden";
-            body.style.paddingRight = scrollBarWidth + "px"
-
-            // Если фон все равно ломается, принудительно фиксируем его на html
-            // html.style.backgroundColor = "var(--bg-loginPage)"; // Опциональный костыль
+        console.log(count)
+        if (count > 0) {
+            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
+            document.body.style.overflow = "hidden";
+            document.body.style.paddingRight = `${scrollBarWidth}px`;
         } else {
-            // 3. Чистим за собой
-            body.style.removeProperty("overflow");
-            body.style.removeProperty("padding-right");
+            document.body.style.overflow = "";
+            document.body.style.paddingRight = "";
         }
+    }, [count]);
 
-        return () => {
-            body.style.removeProperty("overflow");
-            body.style.removeProperty("padding-right");
-        };
-    }, [isBlocked]);
+    const block = () => setCount(prev => prev + 1);
+    // Теперь это функция, которая правильно вызывает обновление состояния
+    const unblock = () => setCount(prev => Math.max(0, prev - 1));
 
     return (
-        <BodyBlockContext.Provider value={{ isBlocked, setIsBlocked }}>
+        <BodyBlockContext.Provider value={{ block, unblock }}>
             {children}
         </BodyBlockContext.Provider>
     );

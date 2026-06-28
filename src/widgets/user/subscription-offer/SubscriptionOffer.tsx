@@ -4,6 +4,7 @@ import DocumentScannerIcon from '@mui/icons-material/DocumentScanner';
 import BlockIcon from '@mui/icons-material/Block';
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
 import EmojiEmotionsIcon from '@mui/icons-material/EmojiEmotions';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Gradient from "@/shared/ui/IconContainers/Gradient";
 import {UserContext} from "@/entities/user";
@@ -82,7 +83,11 @@ export default function SubscriptionOffer({user}: Props) {
             description: "Создайте идеальный профиль.",
             Icon: EditIcon
         },
-
+        {
+            title: "Ваши гости",
+            description: "Смотрите, кто посещал вашу страницу.",
+            Icon: AccountCircleIcon
+        },
 
     ];
 
@@ -132,7 +137,6 @@ export default function SubscriptionOffer({user}: Props) {
                 </div>
 
                 {user &&
-
                     <div className="flex flex-col gap-2 mt-4">
                         <h6 className="text-text-main font-bold">Ваш профиль с подпиской:</h6>
                         <ProfileWidget
@@ -149,6 +153,7 @@ export default function SubscriptionOffer({user}: Props) {
                 {/* Кнопка покупки */}
                 <div className="z-10 flex flex-col items-center">
                     <ButtonLarge
+                        className="!py-4 !mt-4"
                         style={{
                             position: 'relative',
                             zIndex: 1,

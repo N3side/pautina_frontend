@@ -1,19 +1,30 @@
-"use client"
+"use client";
 
-import {useContext, useEffect, useState} from "react"
-import {BodyBlockContext} from "@/shared/lib/providers/BodyBlockProvider"
+import { useContext, useEffect, useState } from "react";
+import { BodyBlockContext } from "@/shared/lib/providers/BodyBlockProvider";
 
 export function useModal() {
-
     const [isOpen, setIsOpen] = useState(false);
-    const { setIsBlocked } = useContext(BodyBlockContext)
+    const { block, unblock } = useContext(BodyBlockContext);
 
     useEffect(() => {
-        setIsBlocked(isOpen)
-    }, [isOpen, setIsBlocked])
+        // Мы вызываем block ТОЛЬКО при открытии
+        if (isOpen) {
+            block();
+        }
 
-    const open = () => setIsOpen(true);
-    const close = () => setIsOpen(false);
+        // Мы вызываем unblock ТОЛЬКО при размонтировании
+        // ИЛИ при переключении isOpen в false
+        return () => {
+            if (isOpen) {
+                unblock();
+            }
+        };
+    }, [isOpen]); // block и unblock стабильны, их можно не указывать
 
-    return { isOpen, open, close};
+    return {
+        isOpen,
+        open: () => setIsOpen(true),
+        close: () => setIsOpen(false)
+    };
 }

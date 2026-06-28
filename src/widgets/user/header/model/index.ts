@@ -5,4 +5,8 @@ export const model = [
         text: "Главная",
         link: homeLink
     },
+    {
+        text: "Лента",
+        link: "/feed"
+    }
 ]

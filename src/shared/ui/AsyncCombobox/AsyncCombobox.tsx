@@ -81,7 +81,7 @@ export function AsyncCombobox<T extends ComboboxOption>({
                                                         }: AsyncComboboxProps<T>) {
 
     // Флаг, открывать ли список вообще (когда идет загрузка — скрываем, чтобы не дергать старые данные)
-    const isDropdownVisible = showDropdown && !isLoading && inputValue.trim().length >= 2;
+    const isDropdownVisible = showDropdown && !isLoading && inputValue?.trim().length >= 2;
 
     return (
         <div>
@@ -109,7 +109,7 @@ export function AsyncCombobox<T extends ComboboxOption>({
                 <div className="absolute right-3.5 top-1/2 -translate-y-1/2 flex items-center z-10">
                     {isLoading ? (
                         <div className="w-4 h-4 border-2 border-border-default border-t-brand rounded-full animate-spin"></div>
-                    ) : inputValue.length > 0 ? (
+                    ) : inputValue?.length > 0 ? (
                         <button
                             type="button"
                             onClick={onClear}

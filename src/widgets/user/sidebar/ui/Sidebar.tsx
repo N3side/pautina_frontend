@@ -9,7 +9,10 @@ import {UserContext} from "@/entities/user";
 import ForumIcon from '@mui/icons-material/Forum';
 import PersonIcon from '@mui/icons-material/Person';
 import {usePathname} from "next/navigation";
-import toast from "react-hot-toast";
+import {useModal} from "@/shared/lib/hooks/useModal";
+import {Modal} from "@/shared/ui/Modals/Modal";
+import SubscriptionOffer from "@/widgets/user/subscription-offer/SubscriptionOffer";
+import VerifiedIcon from '@mui/icons-material/Verified';
 
 interface Props {
     className?: string
@@ -19,6 +22,8 @@ export default function Sidebar({className}: Props) {
 
     const {user} = useContext(UserContext)
     const pathname = usePathname() // например: "/" или "/settings"
+
+    const {isOpen, close, open} = useModal()
 
     const elems = useMemo(() => [
         !user && {
@@ -33,12 +38,11 @@ export default function Sidebar({className}: Props) {
             link: userLink(user?.main?.short_id), // полный URL с поддоменом
             path: "/" // профиль находится на корневом пути
         },
-        user && {
+        {
             Icon: ForumIcon,
             text: "Лента",
             link: "/feed",
             path: "/feed",
-            stopPropagation: true
         },
         user && {
             Icon: SettingsOutlinedIcon,
@@ -46,13 +50,24 @@ export default function Sidebar({className}: Props) {
             link: "/edit?step=settings",
             path: "/edit"
         },
+        {
+            Icon: VerifiedIcon,
+            text: "Подписка",
+            link: "",
+            path: "",
+            customFunc: () => {
+                open()
+            }
+        },
     ].filter(Boolean), [user]);
 
     return (
         <div
             className={`
-                flex flex-col w-full gap-2
+                flex flex-col gap-2
                 transition-all duration-300 ease-in-out
+                glass-effect rounded-2xl
+                min-w-[230px] w-full h-full
                 ${className}
             `}
         >
@@ -69,18 +84,19 @@ export default function Sidebar({className}: Props) {
                         href={elem.link}
                         key={key}
                         onClick={(e) => {
-                            if (elem?.path == "/feed") {
-                                toast.success("скоро...");
-                            }
-                            if (elem.stopPropagation) {
-                                e.preventDefault();
-                                e.stopPropagation();
-                                return;
+                            if (elem?.customFunc) {
+                                e.preventDefault()
+                                e.stopPropagation()
+                                elem?.customFunc()
                             }
                         }}
                     />
                 )
             })}
+
+            <Modal isOpen={isOpen} close={close}>
+                <SubscriptionOffer user={user} />
+            </Modal>
         </div>
     )
 }

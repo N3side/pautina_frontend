@@ -9,6 +9,11 @@ import {UserContext} from "@/entities/user";
 import NavigationLink from "@/shared/ui/Navigation/NavigationLink";
 import PromoTimer from "@/entities/promo-timer/PromoTimer";
 import toast from "react-hot-toast";
+import BuildIcon from '@mui/icons-material/Build';
+import IconWrapper from "@/shared/ui/Buttons/IconWrapper";
+import {LogoLink} from "@/widgets/user/footer/ui/FooterWidget";
+import DropDown from "@/shared/ui/DropDown/DropDown";
+import InfoIcon from '@mui/icons-material/Info';
 
 
 interface Props {
@@ -32,9 +37,6 @@ export default function Navigation({ isActive, setIsActive }: Props) {
     }, []);
 
     if (!mounted) return null
-
-    const r_words = ["пупупу", "как дела", "окак", "67", "52", "реакт хот тост"]
-
 
     return (
         <>
@@ -67,23 +69,23 @@ export default function Navigation({ isActive, setIsActive }: Props) {
                             </NavigationLink>
                         )}
 
-                        <NavigationLink onClick={() => {
-                            setClicks(prev => prev + 1)
-                            const message = clicks % 10 === 0 && clicks > 0 ?
-                                "не надоело?)" :
-                                r_words[Math.floor(Math.random() * r_words.length)]
-                            toast.success(message)
-                        }}
-                        >
-                            Платформа находится в разработке
-                        </NavigationLink>
-
                         {
                             user?.access?.role === "admin" &&
 							<NavigationLink href={"/admin"} onClick={closeMenu}>
 								Админ-панель
 							</NavigationLink>
                         }
+
+                        <DropDown trigger={
+                            <IconWrapper>
+                                <BuildIcon className="text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold !text-[18px] text-text-muted group-hover:text-text-main" />
+                            </IconWrapper>
+                        }>
+                            <div className="glass-effect rounded-2xl p-4 flex gap-2 items-center mt-2">
+                                <InfoIcon className="text-text-muted !text-[18px]" />
+                                <p className="text-text-muted font-medium text-small">Платформа находится в разработке</p>
+                            </div>
+                        </DropDown>
 
                         <PromoTimer />
 

@@ -17,6 +17,7 @@ export default function ConfirmationForm({
         submitText = "Выполнить",
         declineText = "Отмена",
     }: Props) {
+
     return (
         <div
             className="w-full"
@@ -43,7 +44,7 @@ export default function ConfirmationForm({
 
                 {/* Заголовок и описание */}
                 <div className="flex flex-col gap-2 text-center">
-                    <h4 className="text-text-main font-black">
+                    <h4 className="text-text-main font-bold">
                         {title}
                     </h4>
                     <p className="text-secondary text-text-muted">

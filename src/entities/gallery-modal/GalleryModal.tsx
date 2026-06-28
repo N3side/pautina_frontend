@@ -1,8 +1,7 @@
 "use client"
 
-import { useState, useEffect } from "react";
-import {createPortal} from "react-dom";
-import {create} from "zustand";
+import { useState } from "react";
+import { createPortal } from "react-dom";
 
 interface ModalProps {
     isOpen: boolean;
@@ -13,18 +12,6 @@ interface ModalProps {
 
 export default function ProjectGalleryModal({ isOpen, close, gallery, initialIndex }: ModalProps) {
     const [currentIndex, setCurrentIndex] = useState(initialIndex);
-
-    // КРИТИЧЕСКИЙ ФИКС: Синхронизируем индекс при каждом открытии модалки
-    useEffect(() => {
-        if (isOpen) {
-            setCurrentIndex(initialIndex);
-            // Блокируем скролл страницы, пока открыта полноэкранная галерея
-            document.body.style.overflow = "hidden";
-        }
-        return () => {
-            document.body.style.overflow = "";
-        };
-    }, [isOpen, initialIndex]);
 
     if (!isOpen) return null;
 
@@ -38,9 +25,12 @@ export default function ProjectGalleryModal({ isOpen, close, gallery, initialInd
         if (currentIndex > 0) setCurrentIndex(prev => prev - 1);
     };
 
+    // ОПРЕДЕЛЯЕМ ВИДЕО ДЛЯ ТЕКУЩЕГО СЛАЙДА
+    const currentMedia = gallery[currentIndex];
+    const isVideo = currentMedia?.image_url?.match(/\.(mp4|webm|ogg|mov|avi)($|\?)/i) || currentMedia?.type?.includes('video');
+
     return createPortal(
         <div
-            // fixed inset-0 и самый высокий z-индекс гарантируют экран "как в телеге"
             className="fixed inset-0 !z-[999999] flex flex-col items-center justify-center bg-neutral-950/95 backdrop-blur-xl"
             onClick={close}
         >
@@ -54,23 +44,34 @@ export default function ProjectGalleryModal({ isOpen, close, gallery, initialInd
                 </svg>
             </button>
 
-            {/* Главный контейнер фото */}
+            {/* Главный контейнер медиа */}
             <div
-                className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center p-4"
+                className="relative w-full max-w-5xl h-[80vh] flex items-center justify-center p-4 z-10"
                 onClick={(e) => e.stopPropagation()}
             >
-                <img
-                    src={gallery[currentIndex]?.image_url}
-                    alt="Увеличенное изображение проекта"
-                    className="max-w-full max-h-full object-contain select-none rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out"
-                    draggable="false"
-                />
+                {/* Рендерим по условию: полноценный видеоплеер или картинку */}
+                {isVideo ? (
+                    <video
+                        src={currentMedia?.image_url}
+                        autoPlay
+                        controls // Даем возможность включать звук, разворачивать и мотать
+                        playsInline
+                        className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out outline-none"
+                    />
+                ) : (
+                    <img
+                        src={currentMedia?.image_url}
+                        alt="Увеличенное изображение проекта"
+                        className="max-w-full max-h-full object-contain select-none rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out"
+                        draggable="false"
+                    />
+                )}
 
                 {/* Стрелка Назад */}
                 {currentIndex > 0 && (
                     <button
                         onClick={prev}
-                        className="absolute left-4 p-4 rounded-full bg-neutral-900/60 border border-white/10 hover:bg-neutral-800 text-white transition-all backdrop-blur-md shadow-lg"
+                        className="absolute left-4 p-4 rounded-full bg-neutral-900/60 border border-white/10 hover:bg-neutral-800 text-white transition-all backdrop-blur-md shadow-lg z-20"
                     >
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" />
@@ -82,7 +83,7 @@ export default function ProjectGalleryModal({ isOpen, close, gallery, initialInd
                 {currentIndex < gallery.length - 1 && (
                     <button
                         onClick={next}
-                        className="absolute right-4 p-4 rounded-full bg-neutral-900/60 border border-white/10 hover:bg-neutral-800 text-white transition-all backdrop-blur-md shadow-lg"
+                        className="absolute right-4 p-4 rounded-full bg-neutral-900/60 border border-white/10 hover:bg-neutral-800 text-white transition-all backdrop-blur-md shadow-lg z-20"
                     >
                         <svg className="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2.5}>
                             <path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" />
@@ -92,7 +93,7 @@ export default function ProjectGalleryModal({ isOpen, close, gallery, initialInd
             </div>
 
             {/* Счётчик страниц снизу */}
-            <div className="absolute bottom-6 left-0 right-0 text-center text-white/50 text-sm font-medium tracking-wider select-none">
+            <div className="absolute bottom-6 left-0 right-0 text-center text-white/50 text-sm font-medium tracking-wider select-none z-10">
                 {currentIndex + 1} / {gallery.length}
             </div>
         </div>,

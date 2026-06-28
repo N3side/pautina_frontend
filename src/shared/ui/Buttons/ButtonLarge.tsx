@@ -1,5 +1,6 @@
+"use client"
+
 import {colorStyles} from "@/shared/styles/colors";
-import {ShadowWrapper} from "@/shared/ui/Shadow/Shadow";
 import {Button} from "@mui/material"
 
 export default function ButtonLarge({ children, className="", text="", ...props }) {

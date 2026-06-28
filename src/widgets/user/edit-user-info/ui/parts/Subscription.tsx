@@ -5,6 +5,7 @@ import {useRouter} from "next/navigation";
 import {$fetch} from "@/shared/api/fetch";
 import UsePaginate from "@/shared/lib/hooks/usePaginate";
 import SubscriptionCard from "@/entities/subscription/SubscriptionCard";
+import Pagination from "@/features/pagination/ui/Pagination";
 
 export default function Subscription({heading}) {
 
@@ -41,7 +42,7 @@ export default function Subscription({heading}) {
     useEffect(() => {
         if (!isLoading && user && HasUserSubscription({user}))
             getSubscriptions()
-    }, []);
+    }, [page]);
 
     return (
         HasUserSubscription({user}) &&
@@ -64,7 +65,10 @@ export default function Subscription({heading}) {
                                     canceled={sub.canceled}
                                     autopay={sub.autopay}
                                 />
+
                             )}
+
+                            <Pagination currentPage={page} totalPages={lastPage} setCurrentPage={setPage} />
                         </div>
                     </div>
 

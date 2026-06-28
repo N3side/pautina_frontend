@@ -8,40 +8,50 @@ interface DropdownProps {
     trigger: React.ReactNode;
     children: React.ReactNode;
     menuClassName?: string;
+    closeOnClick?: boolean
 }
 
-const DropDown = ({ trigger, children, menuClassName = '' }: DropdownProps) => {
+const DropDown = ({ trigger, children, menuClassName = '', closeOnClick=false }: DropdownProps) => {
     const { anchorEl, open, handleOpen, handleClose } = useMenu();
+
+    // Клонируем триггер и подмешиваем ему onClick
+    const renderTrigger = () => {
+        if (!React.isValidElement(trigger)) return trigger;
+
+        return React.cloneElement(trigger as React.ReactElement<any>, {
+            onClick: (e: React.MouseEvent) => {
+                // Вызываем родной onClick триггера, если он был
+                if (trigger.props.onClick) {
+                    trigger.props.onClick(e);
+                }
+                // Открываем меню
+                handleOpen(e);
+            }
+        });
+    };
 
     return (
         <>
-            <span onClick={handleOpen} className="cursor-pointer inline-block">
-                {trigger}
-            </span>
+            {renderTrigger()}
 
             <Menu
                 anchorEl={anchorEl}
                 open={open}
                 onClose={handleClose}
-                onClick={handleClose}
+                onClick={() => closeOnClick && handleClose()}
                 disableScrollLock={true}
                 slotProps={{
                     paper: {
                         className: `shadow-lg rounded-lg bg-transparent ${menuClassName}`,
                         elevation: 0,
                         sx: {
-                            // Убираем все дефолтные отступы MUI
                             '& .MuiMenu-list': {
                                 padding: 0,
                             },
-                            // Убираем белый фон если нужно
                             backgroundColor: 'transparent',
-                            // Или устанавливаем свой фон
-                            // backgroundColor: '#f5f5f5',
                         }
                     }
                 }}
-
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >

@@ -50,9 +50,11 @@ export async function $fetch(
         else toast.success(message)
     }
 
-    if (json && json?.offer_subscription) {
+    if (json) {
         if (typeof window !== 'undefined') {
-            window.dispatchEvent(new CustomEvent("subscription-required"))
+            if (json?.offer_subscription) {
+                window.dispatchEvent(new CustomEvent("subscription-required"))
+            }
         }
     }
 
