@@ -70,6 +70,7 @@ export default function Page() {
                                 setPosts={setPosts}
                                 post={post}
                                 key={`${post.id}-${post.created_at}`}
+                                redirectOnClick={true}
                             />
                         ))}
 

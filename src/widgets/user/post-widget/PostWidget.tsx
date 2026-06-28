@@ -22,13 +22,16 @@ import {useRouter} from "next/navigation";
 import usePagination from "@mui/material/usePagination";
 import UsePaginate from "@/shared/lib/hooks/usePaginate";
 import page from "@/app/maintenance/page";
+import EditGallery from "@/features/edit-gallery/EditGallery";
+import ActionButton from "@/shared/ui/Buttons/ActionButton";
 
 interface Props {
     post: Record<string, any>;
     setPosts: (any) => void
+    redirectOnClick?: boolean
 }
 
-export default function PostWidget({ post, setPosts }: Props) {
+export default function PostWidget({ post, setPosts, redirectOnClick=false }: Props) {
 
     const { targetRef } = useIntersectionView({
         entityId: post?.id,
@@ -67,6 +70,7 @@ export default function PostWidget({ post, setPosts }: Props) {
         isMyPost && {
             text: "Редактировать",
             Icon: EditIcon,
+            onClick: () => setIsEditing(prev => !prev)
         },
         isMyPost && {
             text: "Удалить",
@@ -74,12 +78,6 @@ export default function PostWidget({ post, setPosts }: Props) {
             onClick: () => open()
         },
     ]
-
-    async function deleteImage(post_id, image_id) {
-        const response = await $fetch(`posts/${post_id}/gallery/${image_id}`, {
-            method: "DELETE"
-        })
-    }
 
     const [showWriteComment, setShowWriteComment] = useState<boolean>(false)
     const [gallery, setGallery] = useState<Record<string, any>[] | null>(post?.gallery || null)
@@ -89,31 +87,38 @@ export default function PostWidget({ post, setPosts }: Props) {
     const router = useRouter()
 
     const handleCardClick = (e: React.MouseEvent) => {
-        // 1. Исключаем все элементы, которые ведут себя как кнопки или ссылки
         const target = e.target as HTMLElement;
-
-        // Если кликнули на саму ссылку или кнопку - игнорируем
         if (target.closest('button') || target.closest('a') || target.closest('input')) {
             return;
         }
-
-        // 2. САМОЕ ВАЖНОЕ: Проверяем, не открыт ли сейчас дропдаун или модалка
-        // Если меню открыто, клик по пустому месту должен только закрыть меню, а не перекинуть на страницу
         if (document.querySelector('.MuiPopover-root')) {
             return;
         }
-
         router.push(`posts/${post?.id}`);
     };
 
 
     const [comments, setComments] = useState<Array<Record<string, any>>>(post?.comments)
+
     const {page: commentsPage, setPage: setCommentsPage, lastPage: commentsLastPage, setLastPage: setCommentsLastPage, perPage: commentsPerPage, setPerPage: setCommentsPerPage} =
     UsePaginate({
         pageI: post?.paginate_comments?.current_page || 1,
         lastPageI: post?.paginate_comments?.last_page || 1,
         perPageI: post?.paginate_comments?.per_page || 1,
     })
+
+    useEffect(() => {
+        if (post?.comments) {
+            setComments(post.comments);
+        }
+        if (post?.title) {
+            setContent(post?.title)
+        }
+        if (post?.paginate_comments) {
+            setCommentsLastPage(post?.paginate_comments?.last_page)
+            setCommentsPerPage(post?.paginate_comments?.per_page)
+        }
+    }, [post])
 
     async function getComments(page, post_id) {
         const response = await $fetch(`posts/${post_id}/comments?page=${page}&comments_limit=3`)
@@ -132,10 +137,27 @@ export default function PostWidget({ post, setPosts }: Props) {
         }
     }
 
+    async function updatePost(post_id, title): Promise<boolean> {
+        const response = await $fetch(`posts/${post_id}`, {
+            method: "PATCH",
+            body: JSON.stringify({
+                "title": title
+            }),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        })
+
+        return response?.response?.ok
+    }
+
+    const [isEditing, setIsEditing] = useState<boolean>(false)
+
     return (
         <div ref={targetRef} className="transition-colors w-full min-w-0">
 
-            <div className="flex flex-col w-full cursor-pointer" onClick={handleCardClick}>
+            <div className="flex flex-col w-full cursor-pointer" onClick={redirectOnClick ? (e) => handleCardClick(e) : () => {}}>
                 <UserHeader
                     user={post?.user}
                     created_at={post?.created_at}
@@ -143,13 +165,14 @@ export default function PostWidget({ post, setPosts }: Props) {
                     updated={post?.updated}
                     expandedButtons={postActionButtons}
                     content={content}
+                    isEditing={isEditing}
                     setContent={setContent}
                     portal={
                         <div>
                             {
-                                // isEditing ?
-                                //     <EditGallery className="mt-2" cards={post?.gallery} setCards={setGallery} />
-                                    // :
+                                isEditing ?
+                                    <EditGallery className="mt-3" cards={post?.gallery} setCards={setGallery} />
+                                    :
                                     <Gallery className="mt-2" gallery={gallery} />
                             }
 
@@ -169,38 +192,46 @@ export default function PostWidget({ post, setPosts }: Props) {
                             }
 
 
+                            {!isEditing &&
+                                <div className="flex justify-between items-center text-text-muted pr-2 mt-2 w-full min-w-0 !z-100">
 
-                            <div className="flex justify-between items-center text-text-muted pr-2 mt-2 w-full min-w-0 !z-100">
+                                    <div className="flex items-center gap-5">
 
-                                <div className="flex items-center gap-5">
+                                        <Like
+                                            is_liked={post?.is_liked}
+                                            likes_count={post?.likes_count}
+                                            entity={"post"}
+                                            entity_id={post?.id}
+                                        />
 
-                                    <Like
-                                        is_liked={post?.is_liked}
-                                        likes_count={post?.likes_count}
-                                        entity={"post"}
-                                        entity_id={post?.id}
-                                    />
+                                        <SocialButton
+                                            count={post?.comments_count}
+                                            Icon={ChatBubbleOutlineOutlinedIcon}
+                                            onClick={() => setShowWriteComment(prev => !prev)}
+                                        />
+
+                                    </div>
 
                                     <SocialButton
-                                        count={post?.comments_count}
-                                        Icon={ChatBubbleOutlineOutlinedIcon}
-                                        onClick={() => setShowWriteComment(prev => !prev)}
+                                        count={post?.views_count}
+                                        Icon={RemoveRedEyeIcon} hover={false}
                                     />
 
                                 </div>
+                            }
 
-                                <SocialButton
-                                    count={post?.views_count}
-                                    Icon={RemoveRedEyeIcon} hover={false}
+                            {showWriteComment &&
+                                <WriteComment
+                                    className="mt-4 !py-3 z-100"
+                                    entity="post"
+                                    entity_id={post?.id}
+                                    setComments={setComments}
                                 />
-
-                            </div>
-
+                            }
 
                             {
-                                comments && Array.isArray(comments) && comments?.length > 0 &&
-                                // Добавили overflow-x-auto и max-w-full
-                                <div className="flex flex-col gap-2 py-3 border-t-[0.1px] mt-2 border-text-muted/50 overflow-x-auto max-w-full z-100">
+                                !isEditing && comments && Array.isArray(comments) && comments?.length > 0 &&
+                                <div className="flex flex-col gap-2 py-3 mt-2 overflow-x-auto max-w-full z-100">
                                     {comments?.map((comment, i) =>
                                         <CommentWidget
                                             comment={comment}
@@ -222,15 +253,18 @@ export default function PostWidget({ post, setPosts }: Props) {
                                 </div>
                             }
 
-                            {showWriteComment &&
-                                <WriteComment
-                                    className="mt-4 !py-3 z-100"
-                                    entity="post"
-                                    entity_id={post?.id}
-                                    setComments={setComments}
-                                />
-                            }
+                            {isEditing &&
+                                <div className="flex gap-5 items-center justify-end" onClick={(e) => e.stopPropagation()}>
+                                    <p className="text-text-main cursor-pointer font-bold text-small" onClick={() => setIsEditing(prev => !prev)}>Отмена</p>
+                                    <ActionButton className="h-fit" text="Изменить" onClick={async() => {
+                                        const isOk = await updatePost(post?.id, content)
 
+                                        if (isOk) {
+                                            setIsEditing(false)
+                                        }
+                                    }} />
+                                </div>
+                            }
 
                         </div>
                     }

@@ -22,27 +22,22 @@ export default function Layout({
     const [headerHeight, setHeaderHeight] = useState(0);
 
     useEffect(() => {
-        // Находим хедер по классу или id
-        const header = document.querySelector('header'); // или ваш селектор
+        const header = document.querySelector('header');
         if (header) {
             setHeaderHeight(header.offsetHeight);
         }
     }, []);
 
     return (
-        // ГЛАВНЫЙ КОНТЕЙНЕР - занимает всю высоту экрана и скроллится
         <div className="h-screen overflow-y-auto">
+
             <HeaderWidget />
 
-            {/* КОНТЕЙНЕР - просто центрирует контент */}
             <Container className={`flex gap-4 items-start mt-6 flex-col lg:flex-row pb-10 ${className}`}>
-                {/* САЙДБАР - sticky привязан к верху с отступом */}
                 {hasSidebar && (
-                    <div
+                    <div className="sticky self-start"
                         style={{
-                            position: 'sticky',
                             top: `${headerHeight + 16}px`,
-                            alignSelf: 'flex-start'
                         }}
                     >
                         <Sidebar className="w-full" />
@@ -55,11 +50,9 @@ export default function Layout({
                 {/* ПРАВЫЙ САЙДБАР */}
                 {rightChildren && (
                     <div
-                        className="hidden lg:block w-full lg:max-w-[350px] flex-shrink-0"
+                        className="hidden lg:block w-full lg:max-w-[350px] flex-shrink-0 self-start sticky"
                         style={{
-                            position: 'sticky',
                             top: `${headerHeight + 16}px`,
-                            alignSelf: 'flex-start'
                         }}
                     >
                         {rightChildren}

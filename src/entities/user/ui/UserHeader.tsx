@@ -136,9 +136,9 @@ export default function UserHeader({ user, expandedButtons, content, setContent,
 
                         {
                             !isEditing ?
-                                <ExpandText text={content} previewLength={20} className="max-w-[85%] w-full !mt-0" />
+                                <ExpandText text={content} previewLength={20} className="max-w-[85%] w-full !mt-1" />
                                 :
-                                <div className="flex items-start border-b pb-1 border-text-main">
+                                <div className="flex items-start border-b pb-1 mt-2 border-text-main" onClick={(e) => e.stopPropagation()}>
                                     <AdjustableText
                                         text={content}
                                         setText={setContent}
