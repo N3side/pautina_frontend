@@ -61,6 +61,7 @@ export default function Page() {
 
                     <div className="glass-effect p-6 rounded-xl flex flex-col gap-6">
                         <ShowStacks
+                            baseUrl={"stacks"}
                             showSelected={false}
                             showAll={true}
                             showSearch={true}

@@ -3,9 +3,10 @@ import { $fetch } from "@/shared/api/fetch";
 
 interface UseGetStacksProps {
     userId?: number | string; // Передаем, если нужны стеки конкретного юзера
+    baseUrl: string
 }
 
-export function useGetStacks({ userId }: UseGetStacksProps = {}) {
+export function useGetStacks({ userId, baseUrl }: UseGetStacksProps) {
     const [stacks, setStacks] = useState<Record<string, any>[]>([]);
     const [searchName, setSearchName] = useState<string>("");
     const [isInitialLoading, setIsInitialLoading] = useState<boolean>(true);
@@ -24,11 +25,6 @@ export function useGetStacks({ userId }: UseGetStacksProps = {}) {
 
         if (pageToLoad === 1) setIsInitialLoading(true);
         else setIsFetchingMore(true);
-
-        // Динамически определяем URL в зависимости от наличия userId
-        const baseUrl = userId
-            ? `users/${userId}/stacks`
-            : `stacks`;
 
         const response = await $fetch(`${baseUrl}?page=${pageToLoad}&name=${encodeURIComponent(currentSearch)}`, {
             onLoadingChange: (loading) => {

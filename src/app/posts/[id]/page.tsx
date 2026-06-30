@@ -44,7 +44,7 @@ export default function Page() {
             }
         >
             <div className="flex flex-col gap-4 p-6 max-w-[650px] w-full glass-effect rounded-2xl">
-                <Link href="/feed" className="flex items-center gap-6">
+                <Link href="/" className="flex items-center gap-6">
                     <RoundedIconWrapper hitboxWidth={40} hitboxHeight={40} Icon={ArrowBack} />
                     <p className="text-text-main font-bold text-default">Пост</p>
                 </Link>

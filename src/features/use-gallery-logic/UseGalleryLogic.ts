@@ -1,19 +1,26 @@
 "use client";
 
-import { useRef, useState } from "react";
+import {useEffect, useRef, useState} from "react";
 import { $fetch } from "@/shared/api/fetch";
 
 interface UseGalleryLogicProps {
     entity: string;
-    isClientOnly?: boolean; // true — копим на клиенте, false — сразу шлем на бэк
-    existingEntityId?: number | string; // Передаем сюда ID, только если РЕДАКТИРУЕМ старый пост
+    isClientOnly?: boolean;
+    existingEntityId?: number | string;
+    galleryInit?: Record<string, any>[]
 }
 
-export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId }: UseGalleryLogicProps) {
-    const [gallery, setGallery] = useState<Record<string, any>[]>([]);
-    // Мапа для хранения сырых файлов: "temp_id" -> File
+export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId, galleryInit }: UseGalleryLogicProps) {
+    const [gallery, setGallery] = useState<Record<string, any>[]>(galleryInit || []);
     const pendingFilesRef = useRef<Map<string, File>>(new Map());
     const fileInputRef = useRef<HTMLInputElement>(null);
+
+    // Синхронизация с galleryInit при изменении
+    useEffect(() => {
+        if (galleryInit && Array.isArray(galleryInit) && galleryInit?.length > 0) {
+            setGallery(galleryInit);
+        }
+    }, [galleryInit]);
 
     const handleTriggerSelect = () => {
         fileInputRef.current?.click();
@@ -24,7 +31,6 @@ export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId
         if (!file) return;
 
         if (isClientOnly) {
-            // СЦЕНАРИЙ 1: Генерируем временный ID и превью для реакта
             const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
             const previewUrl = URL.createObjectURL(file);
 
@@ -38,12 +44,16 @@ export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId
 
             setGallery((prev) => [...prev, newCard]);
         } else {
-            // СЦЕНАРИЙ 2: Старый режим редактирования (берем переданный id)
             const formData = new FormData();
             formData.set("image", file);
+            formData.set("entity", entity);
 
-            const response = await $fetch(`${entity}/${existingEntityId}/gallery/load`, {
-                method: "PATCH",
+            if (existingEntityId) {
+                formData.set("entity_id", String(existingEntityId));
+            }
+
+            const response = await $fetch(`images`, {
+                method: "POST",
                 body: formData
             });
 
@@ -62,14 +72,12 @@ export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId
         const isTemp = String(imageId).startsWith("temp_");
 
         if (isTemp) {
-            // Удаляем локально
             const fileData = pendingFilesRef.current.get(String(imageId));
             if (fileData) URL.revokeObjectURL(fileData.name);
             pendingFilesRef.current.delete(String(imageId));
             setGallery((prev) => prev.filter((c) => c.id !== imageId));
         } else {
-            // Удаляем с сервера для старого режима
-            const response = await $fetch(`${entity}/${existingEntityId}/gallery/${imageId}`, {
+            const response = await $fetch(`images/${imageId}`, {
                 method: "DELETE"
             });
 
@@ -79,13 +87,11 @@ export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId
         }
     };
 
-    // Та самая функция, куда ты прокинешь полученный response?.json?.post_id
     const uploadAllPendingFiles = async (targetPostId: number | string) => {
         if (!isClientOnly) return;
 
-        // Сортируем по актуальному порядку драг-н-дропа перед отправкой
         const sortedGallery = [...gallery].sort((a, b) => (a.sort || 0) - (b.sort || 0));
-        const uploadedImages = [];
+        const uploadedImages: Record<string, any>[] = []; // ✅ Явно указываем тип
 
         for (const card of sortedGallery) {
             const file = pendingFilesRef.current.get(card.id);
@@ -93,20 +99,24 @@ export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId
 
             const formData = new FormData();
             formData.set("image", file);
+            formData.set("entity", entity);
+            formData.set("entity_id", String(targetPostId));
 
-            // Шлем PATCH запрос на эндпоинт с реальным post_id
-            const response = await $fetch(`${entity}/${targetPostId}/gallery/load`, {
-                method: "PATCH",
+            const response = await $fetch(`images`, {
+                method: "POST",
                 body: formData
             });
 
-            const responseData = response?.json;
-            const newCard = responseData?.image || responseData;
+            const newCard = response?.json?.image || [];
             if (newCard) uploadedImages.push(newCard);
         }
 
         pendingFilesRef.current.clear();
-        setGallery(uploadedImages); // Обновляем стейт уже серверными данными
+
+        // Если нужно обновить галерею после загрузки
+        if (uploadedImages.length > 0) {
+            setGallery(uploadedImages);
+        }
     };
 
     return {

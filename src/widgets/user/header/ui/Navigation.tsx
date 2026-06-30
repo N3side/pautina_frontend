@@ -51,7 +51,7 @@ export default function Navigation({ isActive, setIsActive }: Props) {
 
             <div
                 className={`
-                    fixed top-0 right-0 h-screen w-[80vw] bg-surface/95 backdrop-blur-xl z-20 
+                    fixed top-0 right-0 h-screen w-[80vw] glass-effect backdrop-blur-xl z-20 
                     border-l border-border-default/50 shadow-2xl
                     flex flex-col items-start pt-[100px] px-8 gap-8 transition-transform duration-300 ease-out
                     ${isActive ? "translate-x-0" : "translate-x-full"}

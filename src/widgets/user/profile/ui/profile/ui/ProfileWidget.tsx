@@ -56,7 +56,7 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
                             cropShape="rect"
                             aspect={448 / 100}
                         >
-                            <ActionButton component="div" text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect !bg-surface"  />
+                            <ActionButton text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect !bg-surface"  />
                         </UploadPhoto>
                     </div>
                 }

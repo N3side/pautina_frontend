@@ -17,6 +17,9 @@ import {Modal} from "@/shared/ui/Modals/Modal";
 import {useModal} from "@/shared/lib/hooks/useModal";
 import UseConfirmOperation from "@/features/confirm-operation/logic/useConfirmOperation";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
+import {useGalleryLogic} from "@/features/use-gallery-logic/UseGalleryLogic";
+import RoundedIconWrapper from "@/shared/ui/IconWrapper/RoundedIconWrapper";
+import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
 
 export default function UpdateProject() {
     const { user } = useContext(UserContext);
@@ -26,9 +29,8 @@ export default function UpdateProject() {
     const [errors, setErrors] = useState<Record<string, any> | null>(null);
     const [checked, setChecked] = useState<boolean>(true);
     const [selectedStacks, setSelectedStacks] = useState<Record<string, any>[]>([]);
-    const [gallery, setGallery] = useState<Record<string, any>[]>([]);
 
-    const id = usePathname().split("/").pop();
+    const id: string = usePathname().split("/").pop() || "";
     const router = useRouter();
     const formRef = useRef<HTMLFormElement | null>(null);
 
@@ -46,9 +48,10 @@ export default function UpdateProject() {
 
     // Загрузка данных проекта
     async function getProject() {
-        const response = await $fetch(`posts/${id}`);
-        const project_ = response?.json?.post;
+        const response = await $fetch(`projects/${id}`);
+        const project_ = response?.json?.project;
 
+        console.log(project_)
         if (project_) {
             setProject(project_);
         }
@@ -84,36 +87,51 @@ export default function UpdateProject() {
             });
         }
 
-        const response = await $fetch(`posts/${id}`, {
+        const response = await $fetch(`projects/${id}`, {
             method: "PATCH",
             body: formData
         });
 
         if (response?.response?.ok) {
-            router.replace(userLink(user?.main?.short_id));
+            await uploadAllPendingFiles(id);
         }
     }
 
     // Удаление проекта
     async function deleteProject() {
-        const response = await $fetch(`posts/${id}`, { method: "DELETE" });
+        const response = await $fetch(`projects/${id}`, { method: "DELETE" });
         if (response?.response?.ok) {
             router.replace(userLink(user?.main?.short_id));
         }
     }
+
+    const {handleTriggerSelect, gallery, setGallery, fileInputRef, handleFileChange, uploadAllPendingFiles, handleDelete} = useGalleryLogic({
+        entity: "project",
+        isClientOnly: true,
+        existingEntityId: id,
+        galleryInit: project?.gallery
+    })
 
     return (
         <form className="relative flex flex-col w-full" ref={formRef} onSubmit={updateProject}>
 
             <h5 className="text-text-main font-bold mb-6">Изменить информацию о проекте</h5>
 
-            <div className="flex flex-col gap-6 pb-8 w-full">
+            <div className="flex flex-col gap-6 w-full">
+
+                <input
+                    type="file"
+                    ref={fileInputRef}
+                    onChange={handleFileChange}
+                    accept="image/*, video/*"
+                    className="hidden"
+                />
 
                 {/* Основные поля ввода */}
                 <Input
                     name="title"
                     label="Имя проекта"
-                    placeholder="todo list"
+                    placeholder="Название"
                     error={errors?.name}
                     defaultValue={project?.title}
                 />
@@ -121,35 +139,42 @@ export default function UpdateProject() {
                 <Textarea
                     name="description"
                     label="Описание проекта"
-                    placeholder="Крутое приложение, заходите: localhost:3000"
+                    placeholder="Описание"
                     error={errors?.description}
                     defaultValue={project?.description}
                 />
 
-                {/* Галерея проекта */}
                 <div className="flex flex-col gap-4">
 
-                    <div className="gap-2">
-                        <h6 className="text-text-main font-bold">Добавить фотографии</h6>
-                        <p className="text-text-muted text-small font-bold">{gallery?.length || 0} из 10</p>
+                    <div>
+                        <div className="flex gap-3 items-center">
+                            <h6 className="text-text-main font-bold">Добавить фотографии</h6>
+                            <RoundedIconWrapper Icon={PhotoLibraryOutlinedIcon} onClick={handleTriggerSelect} hitboxWidth={40} hitboxHeight={40} />
+                        </div>
+                        {/*{gallery?.length > 0 &&*/}
+                            <p className="text-text-muted text-small font-bold">{gallery?.length || 0} из 10</p>
+                        {/*}*/}
                     </div>
 
                     <EditGallery
                         cards={gallery}
                         setCards={setGallery}
+                        entity="project"
+                        isClientOnly={true}
                     />
+
                 </div>
 
-                {/* Выбор стека технологий по архитектуре FSD */}
                 <ShowStacks
                     showSearch={true}
                     showAll={true}
                     showSelected={true}
                     selectedStacks={selectedStacks}
                     setSelectedStacks={setSelectedStacks}
+
+                    baseUrl="stacks"
                 />
 
-                {/* Ссылки на продакшн и репозиторий */}
                 <Input
                     name="link"
                     label="Ссылка"
@@ -157,20 +182,6 @@ export default function UpdateProject() {
                     error={errors?.link}
                 />
 
-                <Input
-                    name="repo_link"
-                    label="Ссылка на репозиторий"
-                    defaultValue={project?.repo_link}
-                    error={errors?.repo_link}
-                />
-
-                {/* Чекбокс видимости */}
-                {/*<div className="flex items-center cursor-pointer select-none" onClick={() => setChecked(!checked)}>*/}
-                {/*    <Checkbox checked={checked} className="!text-text-main"/>*/}
-                {/*    <p className="text-text-muted font-semibold">Проект виден в вашем профиле другим людям</p>*/}
-                {/*</div>*/}
-
-                {/* Модалка подтверждения удаления */}
                 <Modal
                     isOpen={isOpenModalConfirmOperation}
                     close={closeModalConfirmOperation}
@@ -189,7 +200,9 @@ export default function UpdateProject() {
                     </ButtonLarge>
 
                     <ActionButton type="button" onClick={openModalConfirmOperation}>
-                        Удалить проект
+                        <p className="text-text-muted font-semibold text-small">
+                            Удалить проект
+                        </p>
                     </ActionButton>
                 </div>
 

@@ -5,6 +5,7 @@ import {ReactNode, useEffect, useState} from "react";
 import Sidebar from "@/widgets/user/sidebar/ui/Sidebar";
 import FooterWidget from "@/widgets/user/footer/ui/FooterWidget";
 import {Container} from "@/shared/ui/Container/Container";
+import {useHeaderHeight} from "@/shared/lib/hooks/useHeaderHeight";
 
 interface Props {
     children: ReactNode
@@ -19,14 +20,8 @@ export default function Layout({
        className,
        hasSidebar = true,
    }: Props) {
-    const [headerHeight, setHeaderHeight] = useState(0);
 
-    useEffect(() => {
-        const header = document.querySelector('header');
-        if (header) {
-            setHeaderHeight(header.offsetHeight);
-        }
-    }, []);
+    const {headerHeight} = useHeaderHeight()
 
     return (
         <div className="h-screen overflow-y-auto">
@@ -35,19 +30,17 @@ export default function Layout({
 
             <Container className={`flex gap-4 items-start mt-6 flex-col lg:flex-row pb-10 ${className}`}>
                 {hasSidebar && (
-                    <div className="sticky self-start"
+                    <div className="lg:sticky lg:self-start lg:w-[230px] w-full"
                         style={{
                             top: `${headerHeight + 16}px`,
                         }}
                     >
-                        <Sidebar className="w-full" />
+                        <Sidebar />
                     </div>
                 )}
 
                 {children}
 
-
-                {/* ПРАВЫЙ САЙДБАР */}
                 {rightChildren && (
                     <div
                         className="hidden lg:block w-full lg:max-w-[350px] flex-shrink-0 self-start sticky"

@@ -16,6 +16,7 @@ import {Modal} from "@/shared/ui/Modals/Modal";
 import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import UsePaginate from "@/shared/lib/hooks/usePaginate";
+import EditText from "@/shared/ui/edit-text/editText";
 
 interface Props {
     comment: Record<string, any> | null
@@ -33,7 +34,7 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
         commentState?.children && Array.isArray(commentState?.children) && commentState?.children?.length > 0 ||
         commentState?.comments_count > 0
 
-    const [childComments, setChildComments] = useState<Record<string, any>[] | null>([])
+    const [childComments, setChildComments] = useState<Record<string, any>[]>([])
     const [isExpanded, setIsExpanded] = useState<boolean>(false)
     const [openCommentation, setOpenCommentation] = useState<boolean>(false)
     const [isDeleted, setIsDeleted] = useState<boolean>(commentState?.deleted)
@@ -124,7 +125,7 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
             Icon: DeleteIcon,
             onClick: () => open()
         },
-    ]
+    ].filter(Boolean) as Record<string, any>[];
 
     const [isEditing, setIsEditing] = useState<boolean>(false)
 
@@ -152,7 +153,7 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
                     is_deleted={isDeleted}
                     updated={commentState?.updated}
                     created_at={commentState?.created_at}
-                    updated_at={commentState?.updated_at}
+                    // updated_at={commentState?.updated_at}
                     size="mini"
                     isEditing={isEditing}
                     actionsAtEnd={false}
@@ -161,6 +162,14 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
                     portal={
 
                     <div className="w-full">
+
+                        {
+                            !isEditing && <p className="text-text-main text-small">{content}</p>
+                        }
+
+                        {
+                            isEditing && <EditText text={content} setText={setContent}  />
+                        }
 
                         {!isEditing &&
                             <div className="flex justify-between items-center text-text-muted pr-2 w-full min-w-0">

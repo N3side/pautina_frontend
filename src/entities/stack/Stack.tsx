@@ -33,7 +33,7 @@ export function Stack({ stack, handleDelete, selected = false, onClick, isReadOn
     return (
         <div
             onClick={isReadOnly ? undefined : onClick}
-            className={`group glass-effect relative flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border select-none transition-all duration-200 ${className}`}
+            className={`group glass-effect relative flex items-center gap-1.5 px-2 py-2 rounded-lg border select-none transition-all duration-200 ${className}`}
         >
             <div className="w-4 h-4 flex items-center justify-center">
                 <ServerIcon
@@ -43,7 +43,7 @@ export function Stack({ stack, handleDelete, selected = false, onClick, isReadOn
                 />
             </div>
 
-            <span className="text-text-main font-medium text-[12px] tracking-wide whitespace-nowrap">
+            <span className="text-text-main truncate font-medium text-[12px] tracking-wide whitespace-nowrap">
                 {stack?.name}
             </span>
 
@@ -51,7 +51,7 @@ export function Stack({ stack, handleDelete, selected = false, onClick, isReadOn
                 <RoundedIconWrapper
                     onClick={onDeleteClick}
                     Icon={CloseIcon}
-                    className="!w-3.5 !h-3.5 ml-1 bg-white/10 border border-white/10 text-text-muted hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-all duration-150 active:scale-95"
+                    className="absolute right-1 !w-3.5 !h-3.5 ml-1 bg-white/10 border border-white/10 text-text-muted hover:bg-red-500/20 hover:text-red-400 hover:border-red-500/30 transition-all duration-150 active:scale-95"
                     IconClassName="!text-[9px]"
                 />
             )}

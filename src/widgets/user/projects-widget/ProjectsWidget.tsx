@@ -25,10 +25,10 @@ export default function ProjectsWidget({isMyProfile, trueUser, setIsEmpty}: Prop
 
         setIsLoading(true)
 
-        const response = await $fetch(`posts/user/${trueUser?.main?.id}?page=${page}`,
+        const response = await $fetch(`projects/user/${trueUser?.main?.id}?page=${page}`,
             {onLoadingChange: setIsLoading}
         )
-        const projects_ = response?.json?.posts
+        const projects_ = response?.json?.projects
         const page_ = response?.json?.current_page
         const lastPage_ = response?.json?.last_page
 
@@ -47,7 +47,7 @@ export default function ProjectsWidget({isMyProfile, trueUser, setIsEmpty}: Prop
     const router = useRouter()
 
     async function createProject() {
-        const response = await $fetch("posts", {
+        const response = await $fetch("projects", {
             method: "POST"
         })
 
@@ -99,13 +99,6 @@ export default function ProjectsWidget({isMyProfile, trueUser, setIsEmpty}: Prop
                             )
                         }
                     </div>
-                }
-
-                {
-                    !isLoading && (!projects || (projects && Array.isArray(projects) && projects?.length < 1)) &&
-                    <p className="text-text-main font-semibold">
-                        Вы не загрузили ни одного проекта :(
-                    </p>
                 }
 
                 {projects &&

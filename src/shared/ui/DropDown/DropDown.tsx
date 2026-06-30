@@ -11,20 +11,21 @@ interface DropdownProps {
     closeOnClick?: boolean
 }
 
-const DropDown = ({ trigger, children, menuClassName = '', closeOnClick=false }: DropdownProps) => {
+const DropDown = ({ trigger, children, menuClassName = '', closeOnClick = false }: DropdownProps) => {
     const { anchorEl, open, handleOpen, handleClose } = useMenu();
 
     // Клонируем триггер и подмешиваем ему onClick
     const renderTrigger = () => {
         if (!React.isValidElement(trigger)) return trigger;
 
-        return React.cloneElement(trigger as React.ReactElement<any>, {
-            onClick: (e: React.MouseEvent) => {
-                // Вызываем родной onClick триггера, если он был
-                if (trigger.props.onClick) {
-                    trigger.props.onClick(e);
+        const triggerElement = trigger as React.ReactElement<any>;
+        const originalOnClick = triggerElement.props?.onClick;
+
+        return React.cloneElement(triggerElement, {
+            onClick: (e: React.MouseEvent<HTMLElement>) => { // ✅ Явно указываем тип HTMLElement
+                if (originalOnClick) {
+                    originalOnClick(e);
                 }
-                // Открываем меню
                 handleOpen(e);
             }
         });

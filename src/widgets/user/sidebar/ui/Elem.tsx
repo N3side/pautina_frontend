@@ -8,10 +8,12 @@ interface Props extends ComponentProps<typeof Link> {
 }
 
 export default function Elem({Icon, text, isActive=false, ...props}: Props) {
+
     return (
         <Link
+            prefetch={true}
             {...props}
-            className={` w-full flex gap-3 items-center py-4 pl-5 group hover:bg-surface transition-all duration-200 cursor-pointer`}
+            className={`w-full flex gap-3 items-center py-4 pl-5 group hover:bg-surface transition-all duration-200 cursor-pointer`}
         >
             {Icon && (
                 <Icon

@@ -119,7 +119,7 @@ export default function SubscriptionOffer({user}: Props) {
                         className="bg-[image:var(--subscription-color)] bg-clip-text text-transparent font-black"
                         style={{ WebkitBackgroundClip: 'text' }}
                     >
-                        Артефакт
+                        Premium
                     </h5>
                 </div>
 

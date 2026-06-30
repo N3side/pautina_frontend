@@ -4,6 +4,20 @@ import { Stack, StackSkeleton } from "@/entities/stack/Stack";
 import { AsyncCombobox } from "@/shared/ui/AsyncCombobox/AsyncCombobox";
 import { useGetStacks } from "@/features/manage-stacks/model/useGetStacks";
 import {useIntersectionObserver} from "@/shared/lib/hooks/useIntersectionObserver";
+import {useEffect} from "react";
+
+interface Props {
+    selectedStacks?: Record<string, any>[]
+    setSelectedStacks?: (any) => void
+    showSelected?: boolean
+    showAll?: boolean
+    showSearch?: boolean
+    userId?: string
+    isReadOnly?: boolean
+    setCurrentSelectedStack?: (any) => void
+    className?: string
+    baseUrl: string
+}
 
 export default function ShowStacks({
        selectedStacks = [],
@@ -14,8 +28,9 @@ export default function ShowStacks({
        userId,
        isReadOnly = false,
        setCurrentSelectedStack,
-       className
-   }: any) {
+       className,
+       baseUrl
+   }: Props) {
     const {
         stacks,
         searchName,
@@ -24,7 +39,7 @@ export default function ShowStacks({
         isFetchingMore,
         hasMore,
         loadMore
-    } = useGetStacks({ userId });
+    } = useGetStacks({ userId, baseUrl });
 
     // Хук для бесконечного скролла
     const observerTarget = useIntersectionObserver(
@@ -82,7 +97,7 @@ export default function ShowStacks({
             )}
 
             {showAll && !isReadOnly && (
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(105px,1fr))] gap-2 overflow-y-scroll max-h-[200px] pr-1 scroll-smooth">
+                <div className="grid grid-cols-[repeat(auto-fill,minmax(125px,1fr))] gap-2 overflow-y-scroll max-h-[130px] pr-1 scroll-smooth mt-2">
                     {isInitialLoading ? (
                         [...Array(12)].map((_, i) => <StackSkeleton key={`init-skeleton-${i}`} />)
                     ) : (

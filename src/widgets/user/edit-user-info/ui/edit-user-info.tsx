@@ -9,6 +9,7 @@ import {HasUserSubscription} from "@/shared/lib/utils/hasUserSubscription";
 import Subscription from "@/widgets/user/edit-user-info/ui/parts/Subscription";
 import SettingsWidget from "@/widgets/user/settings/ui/SettingsWidget";
 import Chip from "@/shared/ui/Chip/Chip";
+import {useHeaderHeight} from "@/shared/lib/hooks/useHeaderHeight";
 
 export default function EditUserInfo() {
     const [isClient, setIsClient] = useState(false);
@@ -66,20 +67,26 @@ export default function EditUserInfo() {
         router.push(`${pathname}?${params.toString()}`);
     };
 
+    const {headerHeight} = useHeaderHeight()
+
     if (!isClient) {
-        return null; // В Next.js лучше возвращать null вместо пустого returnd
+        return null; // В Next.js лучше возвращать null вместо пустого return
     }
 
     return (
-        <div className="flex justify-between w-full">
+        <div className="flex justify-between w-full h-fit top-0">
             <div className="flex flex-col-reverse gap-3 w-full lg:flex-row">
                 <div className="flex-2">
                     {activeStep && activeStep?.children}
                 </div>
-                <div className="glass-effect rounded-[18px] p-4 flex-1">
+                <div className="glass-effect rounded-[18px] p-4 flex-1 h-fit self-start lg:sticky block w-full"
+                     style={{
+                         top: `${headerHeight + 16}px`,
+                     }}
+                >
                     <p className="text-text-main font-bold text-secondary pl-2">Редактирование</p>
 
-                    <div className="flex flex-col mt-3 gap-2 lg:min-h-[50vh] h-full min-h-0">
+                    <div className="flex flex-col mt-3 gap-2 h-full min-h-0">
                         {PARTS.map((part, key) => (
                             part &&
                             <Chip
@@ -87,7 +94,7 @@ export default function EditUserInfo() {
                                 href=""
                                 key={key}
                                 text={part?.name}
-                                className="pr-6 pl-4 py-2"
+                                className="pr-6 pl-3 py-2"
                                 onClick={(e) => {
                                     e.preventDefault(); // Предотвращаем переход по пустой ссылке href=""
                                     handleStepChange(part?.param);

@@ -37,7 +37,6 @@ export default function HeaderWidget() {
 
                     <CustomDropDown />
 
-
                     {!user && (
                         <ThemeSwitch
                             className="!z-[2000000] !relative"

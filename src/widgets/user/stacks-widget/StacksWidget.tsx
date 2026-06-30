@@ -30,8 +30,9 @@ export default function StacksWidget({isMyProfile, trueUser, setIsEmpty}: Props)
         });
     };
 
-    async function getUserStacks() {
-        const response = await $fetch(`stacks/${trueUser?.main?.id}`, {
+    async function getUserStacks(user_id) {
+        console.log(user_id)
+        const response = await $fetch(`stacks/${user_id}`, {
             onLoadingChange: setIsLoading
         })
 
@@ -44,7 +45,7 @@ export default function StacksWidget({isMyProfile, trueUser, setIsEmpty}: Props)
 
     useEffect(() => {
         if (trueUser) {
-            getUserStacks()
+            getUserStacks(trueUser?.main?.id)
         }
     }, [trueUser]);
 
@@ -62,12 +63,7 @@ export default function StacksWidget({isMyProfile, trueUser, setIsEmpty}: Props)
         <section className="glass-effect p-6 rounded-xl relative">
 
             <h6 className="text-text-main font-bold">
-                {
-                    isMyProfile ?
-                        `Ваш технологический стек ${selectedStacks.length < 1 ? "не заполнен. Нажмите на стеки, которыми владеете" : ""}`
-                        :
-                        `Технологический стек пользователя`
-                }
+                Технологический стек
             </h6>
 
             {
@@ -87,6 +83,7 @@ export default function StacksWidget({isMyProfile, trueUser, setIsEmpty}: Props)
                         showAll={true}
                         showSelected={true}
                         selectedStacks={selectedStacks}
+                        baseUrl={`stacks`}
                         setSelectedStacks={(updater) => {
                             const nextState = typeof updater === 'function' ? updater(selectedStacks) : updater;
                             if (nextState) handleUpdateStacks(nextState);
@@ -97,6 +94,7 @@ export default function StacksWidget({isMyProfile, trueUser, setIsEmpty}: Props)
                 selectedStacks && Array.isArray(selectedStacks) && selectedStacks.length > 0 &&
                 <div className="flex flex-col gap-4 mt-6">
                     <ShowStacks
+                        baseUrl={"stacks"}
                         showSearch={false}
                         showAll={false}
                         showSelected={true}

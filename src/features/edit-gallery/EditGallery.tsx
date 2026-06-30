@@ -1,21 +1,24 @@
 "use client"
 
-import {useEffect, useState} from "react";
+import {useState, useMemo, useEffect} from "react";
 import GalleryCard from "@/shared/ui/gallery-card/GalleryCard";
 import { $fetch } from "@/shared/api/fetch";
 
-interface EditGalleryProps {
-    cards: Record<string, any>[];
+interface Props {
+    cards: any;
     setCards: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
     entity?: string;
-    isClientOnly?: boolean; // Прокидываем флаг сюда тоже
+    isClientOnly?: boolean;
     className?: string
 }
 
-export default function EditGallery({ cards, setCards, entity = "posts", isClientOnly = false, className }: EditGalleryProps) {
+export default function EditGallery({ cards, setCards, entity = "post", isClientOnly = false, className }: Props) {
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
-    const sortedCards = [...cards].sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    // Сортируем карточки при каждом изменении cards
+    const sortedCards = useMemo(() => {
+        return [...cards].sort((a, b) => (a.sort || 0) - (b.sort || 0));
+    }, [cards]);
 
     const handleDrop = async (e: React.DragEvent<HTMLDivElement>, targetIndex: number) => {
         e.preventDefault();
@@ -24,18 +27,15 @@ export default function EditGallery({ cards, setCards, entity = "posts", isClien
         const draggedCard = sortedCards[draggedIndex];
         const targetCard = sortedCards[targetIndex];
 
-        // Проверяем, локальная ли это карточка (у временных карт нет реального entity_id)
         const isLocalCard = isClientOnly || !draggedCard.entity_id;
 
         if (isLocalCard) {
-            // СЦЕНАРИЙ 1: Просто меняем их sort местами локально в памяти
             setCards((prev) => prev.map((card) => {
                 if (card.id === draggedCard.id) return { ...card, sort: targetCard.sort };
                 if (card.id === targetCard.id) return { ...card, sort: draggedCard.sort };
                 return card;
             }));
         } else {
-            // СЦЕНАРИЙ 2: Карточка уже на сервере — шлем запрос
             const payload = JSON.stringify({
                 "order": [
                     { image_id: draggedCard.id, sort: targetCard.sort },
@@ -43,7 +43,7 @@ export default function EditGallery({ cards, setCards, entity = "posts", isClien
                 ]
             });
 
-            const response = await $fetch(`${entity}/${draggedCard.entity_id}/gallery/sort`, {
+            const response = await $fetch(`images`, {
                 method: "PATCH",
                 body: payload,
                 headers: {
@@ -63,20 +63,14 @@ export default function EditGallery({ cards, setCards, entity = "posts", isClien
         setDraggedIndex(null);
     };
 
-    async function onDelete(entity_id, image_id) {
+    async function onDelete(image_id: string) {
 
-        let response
+        const response = await $fetch(`images/${image_id}`, {
+            method: "DELETE"
+        });
 
-        if (!isClientOnly) {
-            response = await $fetch(`posts/${entity_id}/gallery/${image_id}`, {
-                method: "DELETE"
-            })
-        }
-
-        if (response?.response?.ok || isClientOnly) {
-            setCards(prev => {
-                return prev.filter(image => image?.id !== image_id)
-            })
+        if (response?.response?.ok) {
+            setCards(prev => prev.filter(image => image?.id !== image_id));
         }
     }
 
@@ -97,7 +91,7 @@ export default function EditGallery({ cards, setCards, entity = "posts", isClien
                 >
                     <GalleryCard
                         image={card}
-                        onRemove={() => onDelete(card.entity_id, card.id)}
+                        onRemove={() => onDelete(card.id)}
                     />
                 </div>
             ))}

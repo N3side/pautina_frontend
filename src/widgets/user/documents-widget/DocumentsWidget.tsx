@@ -136,13 +136,6 @@ export default function DocumentsWidget({isMyProfile, trueUser, setIsEmpty}: Pro
                     </div>
                 }
 
-                {
-                    !isLoading && (!documents || (documents && Array.isArray(documents) && documents?.length < 1)) &&
-                    <p className="text-text-main font-semibold">
-                        Вы не загрузили ни одного документа :(
-                    </p>
-                }
-
                 <Pagination currentPage={page} totalPages={lastPage} setCurrentPage={setPage} />
             </main>
 

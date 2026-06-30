@@ -154,106 +154,101 @@ export default function Page() {
 
     return (
         <Layout>
-            <div className="flex flex-col w-full">
+            <div className="flex flex-col w-full gap-2">
                 <ProfileWidget isMyProfile={isMyProfile} isPrivate={isPrivate} trueUser={trueUser} />
 
                 {!isPrivate ? (
                     <>
-                        <div className={`flex flex-col gap-5 ${hasContent || isMyProfile ? 'py-5' : 'hidden'}`}>
+                        {sectionsOrder.map((section, index) => {
+                            let componentNode: React.ReactNode = null;
 
-                            {sectionsOrder.map((section, index) => {
-                                let componentNode: React.ReactNode = null;
+                            if (section.name === "documents") {
+                                componentNode = (
+                                    <DocumentsWidget
+                                        isMyProfile={isMyProfile}
+                                        trueUser={trueUser}
+                                        setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, documents: hasData }))}
+                                    />
+                                );
+                            } else if (section.name === "stacks") {
+                                componentNode = (
+                                    <StacksWidget
+                                        isMyProfile={isMyProfile}
+                                        trueUser={trueUser}
+                                        setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, stacks: hasData }))}
+                                    />
+                                );
+                            } else if (section.name === "projects") {
+                                componentNode = (
+                                    <ProjectsWidget
+                                        isMyProfile={isMyProfile}
+                                        trueUser={trueUser}
+                                        setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, projects: hasData }))}
+                                    />
+                                );
+                            }
 
-                                if (section.name === "documents") {
-                                    componentNode = (
-                                        <DocumentsWidget
-                                            isMyProfile={isMyProfile}
-                                            trueUser={trueUser}
-                                            setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, documents: hasData }))}
-                                        />
-                                    );
-                                } else if (section.name === "stacks") {
-                                    componentNode = (
-                                        <StacksWidget
-                                            isMyProfile={isMyProfile}
-                                            trueUser={trueUser}
-                                            setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, stacks: hasData }))}
-                                        />
-                                    );
-                                } else if (section.name === "projects") {
-                                    componentNode = (
-                                        <ProjectsWidget
-                                            isMyProfile={isMyProfile}
-                                            trueUser={trueUser}
-                                            setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, projects: hasData }))}
-                                        />
-                                    );
-                                }
+                            if (!componentNode) return null;
 
-                                if (!componentNode) return null;
+                            return (
+                                <div
+                                    key={section.name}
+                                    onDragOver={handleDragOver}
+                                    onDrop={() => handleDrop(index)}
+                                    className={`transition-all duration-200 relative select-none
+                                        ${isMyProfile ? 'border border-transparent rounded-[18px]' : ''} 
+                                        ${draggedIndex === index ? 'opacity-30 scale-[0.98]' : 'opacity-100'}`}
+                                >
 
-                                return (
-                                    <div
-                                        key={section.name}
-                                        // Оставляем только обработчики дропа (чтобы сюда можно было бросить элемент)
-                                        onDragOver={handleDragOver}
-                                        onDrop={() => handleDrop(index)}
-                                        className={`transition-all duration-200 relative select-none
-                                            ${isMyProfile ? 'border border-transparent rounded-[18px]' : ''} 
-                                            ${draggedIndex === index ? 'opacity-30 scale-[0.98]' : 'opacity-100'}`}
-                                    >
+                                    {isMyProfile && (
+                                        <div
+                                            draggable={true}
+                                            onDragStart={() => handleDragStart(index)}
+                                            onDragEnd={handleDragEnd}
+                                            className="relative w-full flex items-center justify-center pb-1 cursor-grab active:cursor-grabbing transition-all touch-none group/drag"
+                                            title="Перетащить секцию"
+                                        >
+                                            {/* Маленькая закругленная плашка (капсула) */}
+                                            <div className="w-12 h-1.5 bg-gray-200 dark:bg-neutral-800 rounded-full group-hover/drag:bg-gray-400 dark:group-hover/drag:bg-neutral-600 group-active/drag:bg-gray-500 transition-colors" />
 
-                                        {/* РУЧКА ПЕРЕТАСКИВАНИЯ (Отображается только владельцу) */}
-                                        {isMyProfile && (
-                                            <div
-                                                draggable={true}
-                                                onDragStart={() => handleDragStart(index)}
-                                                onDragEnd={handleDragEnd}
-                                                className="relative w-full flex items-center justify-center pt-3 pb-1 cursor-grab active:cursor-grabbing transition-all touch-none group/drag"
-                                                title="Перетащить секцию"
+                                            {/* БЛОК С ПОДСКАЗКОЙ И ВИДЕО (Всплывает СВЕРХУ-СПРАВА при ховере) */}
+                                            <div className="absolute bottom-full left-[calc(50%-24px)] mb-2 max-w-110 w-full p-4
+                                                glass-effect border border-gray-200 dark:border-neutral-800 rounded-[24px] shadow-xl
+                                                opacity-0 pointer-events-none transition-all duration-200 scale-95 origin-bottom z-50
+                                                md:group-hover/drag:opacity-100 md:group-hover/drag:scale-100
+                                                hidden md:flex flex-col gap-2"
                                             >
-                                                {/* Маленькая закругленная плашка (капсула) */}
-                                                <div className="w-12 h-1.5 bg-gray-200 dark:bg-neutral-800 rounded-full group-hover/drag:bg-gray-400 dark:group-hover/drag:bg-neutral-600 group-active/drag:bg-gray-500 transition-colors" />
+                                                {/* Стрелочка подсказки снизу (смещена влево к центру ручки) */}
+                                                <div className="absolute -bottom-1 left-6 w-2 h-2 rotate-45 bg-white/80 dark:bg-neutral-900/80 border-b border-r border-gray-200 dark:border-neutral-800" />
 
-                                                {/* БЛОК С ПОДСКАЗКОЙ И ВИДЕО (Всплывает СВЕРХУ-СПРАВА при ховере) */}
-                                                <div className="absolute bottom-full left-[calc(50%-24px)] mb-2 max-w-110 w-full p-4
-                                                    glass-effect border border-gray-200 dark:border-neutral-800 rounded-[24px] shadow-xl
-                                                    opacity-0 pointer-events-none transition-all duration-200 scale-95 origin-bottom z-50
-                                                    md:group-hover/drag:opacity-100 md:group-hover/drag:scale-100
-                                                    hidden md:flex flex-col gap-2"
-                                                >
-                                                    {/* Стрелочка подсказки снизу (смещена влево к центру ручки) */}
-                                                    <div className="absolute -bottom-1 left-6 w-2 h-2 rotate-45 bg-white/80 dark:bg-neutral-900/80 border-b border-r border-gray-200 dark:border-neutral-800" />
+                                                <h5 className="text-sm font-bold text-text-main text-center">
+                                                    Как сортировать профиль?
+                                                </h5>
 
-                                                    <h5 className="text-sm font-bold text-text-main text-center">
-                                                        Как сортировать профиль?
-                                                    </h5>
+                                                <p className="text-xs text-text-muted text-center leading-relaxed">
+                                                    Зажмите эту полоску и перетащите блок выше или ниже.
+                                                </p>
 
-                                                    <p className="text-xs text-text-muted text-center leading-relaxed">
-                                                        Зажмите эту полоску и перетащите блок выше или ниже.
-                                                    </p>
-
-                                                    {/* ТВОЕ ВИДЕО */}
-                                                    <div className="w-full aspect-video rounded-lg overflow-hidden bg-black/10 mt-1">
-                                                        <video
-                                                            src="/video/guide.mov"
-                                                            autoPlay
-                                                            loop
-                                                            muted
-                                                            playsInline
-                                                            className="w-full h-full object-cover"
-                                                        />
-                                                    </div>
+                                                {/* ТВОЕ ВИДЕО */}
+                                                <div className="w-full aspect-video rounded-lg overflow-hidden bg-black/10 mt-1">
+                                                    <video
+                                                        src="/video/guide.mov"
+                                                        autoPlay
+                                                        loop
+                                                        muted
+                                                        playsInline
+                                                        className="w-full h-full object-cover"
+                                                    />
                                                 </div>
                                             </div>
-                                        )}
+                                        </div>
+                                    )}
 
-                                        {/* Контент виджета */}
-                                        {componentNode}
-                                    </div>
-                                );
-                            })}
-                        </div>
+                                    {/* Контент виджета */}
+                                    {componentNode}
+                                </div>
+                            );
+                        })}
 
                         {!hasContent && !isMyProfile && (
                             <div className="glass-effect p-6 rounded-[18px] mt-4">
@@ -265,7 +260,7 @@ export default function Page() {
                         )}
                     </>
                 ) : (
-                    <div className="mt-4">
+                    <div className="mt-1">
                         <PrivateProfileWidget />
                     </div>
                 )}

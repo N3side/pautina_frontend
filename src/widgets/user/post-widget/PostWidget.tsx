@@ -19,14 +19,15 @@ import CommentWidget from "@/widgets/user/comment-widget/CommentWidget";
 import WriteComment from "@/features/write-comment/WriteComment";
 import {useIntersectionView} from "@/features/use-intersection-view/useIntersectionView";
 import {useRouter} from "next/navigation";
-import usePagination from "@mui/material/usePagination";
 import UsePaginate from "@/shared/lib/hooks/usePaginate";
-import page from "@/app/maintenance/page";
 import EditGallery from "@/features/edit-gallery/EditGallery";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
+import EditText from "@/shared/ui/edit-text/editText";
+import ExpandText from "@/shared/ui/expand-text/ExpandText";
+import {useGalleryLogic} from "@/features/use-gallery-logic/UseGalleryLogic";
 
 interface Props {
-    post: Record<string, any>;
+    post: Record<string, any> | null
     setPosts: (any) => void
     redirectOnClick?: boolean
 }
@@ -54,7 +55,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
 
     const {user} = useContext(UserContext)
 
-    const isMyPost = post?.user?.id == user?.id
+    const isMyPost = post?.user?.id == user?.main?.id
 
     const {open, close, isOpen} = useModal()
     const {confirm, decline} = UseConfirmOperation({
@@ -63,10 +64,6 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
     })
 
     const postActionButtons = [
-        // {
-        //     text: "Поделиться",
-        //     Icon: ShareIcon
-        // },
         isMyPost && {
             text: "Редактировать",
             Icon: EditIcon,
@@ -77,13 +74,10 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
             Icon: DeleteIcon,
             onClick: () => open()
         },
-    ]
+    ].filter(Boolean) as Record<string, any>[];
 
     const [showWriteComment, setShowWriteComment] = useState<boolean>(false)
-    const [gallery, setGallery] = useState<Record<string, any>[] | null>(post?.gallery || null)
     const [content, setContent] = useState<string>(post?.title || "")
-    const {open: openEdit, close: closeEdit, isOpen: isOpenEdit} = useModal()
-
     const router = useRouter()
 
     const handleCardClick = (e: React.MouseEvent) => {
@@ -154,6 +148,13 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
 
     const [isEditing, setIsEditing] = useState<boolean>(false)
 
+    const {handleTriggerSelect, gallery, setGallery, fileInputRef, handleFileChange, uploadAllPendingFiles} = useGalleryLogic({
+        entity: "post",
+        isClientOnly: true,
+        existingEntityId: post?.id,
+        galleryInit: post?.gallery
+    })
+
     return (
         <div ref={targetRef} className="transition-colors w-full min-w-0">
 
@@ -161,7 +162,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
                 <UserHeader
                     user={post?.user}
                     created_at={post?.created_at}
-                    updated_at={post?.updated_at}
+                    // updated_at={post?.updated_at}
                     updated={post?.updated}
                     expandedButtons={postActionButtons}
                     content={content}
@@ -169,9 +170,14 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
                     setContent={setContent}
                     portal={
                         <div>
+
+                            {!isEditing &&
+                                <ExpandText text={content} previewLength={20} className="max-w-[85%] w-full !mt-1" />
+                            }
+
                             {
                                 isEditing ?
-                                    <EditGallery className="mt-3" cards={post?.gallery} setCards={setGallery} />
+                                    <EditGallery className="mt-3" cards={gallery} setCards={setGallery} />
                                     :
                                     <Gallery className="mt-2" gallery={gallery} />
                             }
@@ -253,11 +259,24 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
                                 </div>
                             }
 
+                            {
+                                isEditing && <EditText text={content} setText={setContent} handleTriggerSelect={handleTriggerSelect}  />
+                            }
+
+                             <input
+                                 type="file"
+                                 ref={fileInputRef}
+                                 onChange={handleFileChange}
+                                 accept="image/*, video/*"
+                                 className="hidden"
+                             />
+
                             {isEditing &&
-                                <div className="flex gap-5 items-center justify-end" onClick={(e) => e.stopPropagation()}>
+                                <div className="flex gap-5 items-center justify-end mt-2" onClick={(e) => e.stopPropagation()}>
                                     <p className="text-text-main cursor-pointer font-bold text-small" onClick={() => setIsEditing(prev => !prev)}>Отмена</p>
                                     <ActionButton className="h-fit" text="Изменить" onClick={async() => {
                                         const isOk = await updatePost(post?.id, content)
+                                        await uploadAllPendingFiles(post?.id)
 
                                         if (isOk) {
                                             setIsEditing(false)

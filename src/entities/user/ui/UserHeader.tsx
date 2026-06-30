@@ -9,10 +9,6 @@ import MoreHorizIcon from "@mui/icons-material/MoreHoriz";
 import {userLink} from "@/shared/lib/utils/userLink";
 import {diffTimes, formatIsoDate} from "@/shared/lib/utils/time";
 import {fullName} from "@/shared/lib/utils/fullName";
-import ExpandText from "@/shared/ui/expand-text/ExpandText";
-import AdjustableText from "@/shared/ui/adjustable-text/AdjustableText";
-import EmojiDropdown from "@/features/select-emoji/EmojiDropdown";
-import SentimentSatisfiedOutlinedIcon from "@mui/icons-material/SentimentSatisfiedOutlined";
 
 // Исправили типы: теперь строго для кнопки, а не для дива
 interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
@@ -77,11 +73,9 @@ export default function UserHeader({ user, expandedButtons, content, setContent,
 
                             <Link href={userLink(user?.short_id)} className="flex items-center gap-1 min-w-0 w-fit">
                                 {user?.name &&
-                                    <span className={`font-bold text-text-main hover:underline truncate ${
-                                        isMini ? "max-w-[110px]" : "max-w-[150px]"
-                                    }`}>
-                                    {fullName(user?.name)}️
-                                </span>
+                                    <span className={`font-bold text-text-main hover:underline truncate ${isMini ? "max-w-[110px]" : "max-w-[150px]"}`}>
+                                        {fullName(user?.name)}️
+                                    </span>
                                 }
                                 <span className="!text-text-muted hover:!underline truncate">
                                     {
@@ -103,7 +97,7 @@ export default function UserHeader({ user, expandedButtons, content, setContent,
                                 )}
 
 
-                                <p className="text-text-muted text-small">{updated && "(изменено)"}</p>
+                                {/*<p className="text-text-muted text-small">{updated && "(изменено)"}</p>*/}
 
                             </Link>
 
@@ -133,24 +127,6 @@ export default function UserHeader({ user, expandedButtons, content, setContent,
                                 </DropDown>
                             )}
                         </div>
-
-                        {
-                            !isEditing ?
-                                <ExpandText text={content} previewLength={20} className="max-w-[85%] w-full !mt-1" />
-                                :
-                                <div className="flex items-start border-b pb-1 mt-2 border-text-main" onClick={(e) => e.stopPropagation()}>
-                                    <AdjustableText
-                                        text={content}
-                                        setText={setContent}
-                                        placeholder="Контент"
-                                    />
-
-                                    <EmojiDropdown trigger={
-                                        <RoundedIconWrapper btnHeight={20} btnWidth={40} Icon={SentimentSatisfiedOutlinedIcon} />
-                                    } text={content} setText={setContent} />
-
-                                </div>
-                        }
                         
                         {portal}
 

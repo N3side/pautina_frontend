@@ -73,13 +73,13 @@ export default function Gallery({ gallery, className, timer = 5000, autoFlip = f
             <div className={`w-full relative group/slider select-none ${className || ""}`}>
                 <div
                     ref={emblaRef}
-                    className="overflow-hidden rounded-[16px] cursor-zoom-in"
+                    className="overflow-hidden rounded-[16px] h-full w-full"
                     onClick={(e) => {
                         e.stopPropagation();
                         open();
                     }}
                 >
-                    <div className="flex backface-hidden">
+                    <div className="flex backface-hidden w-full h-full">
                         {sortedGallery.map((img, idx) => {
                             const isVideo = checkIsVideo(img?.image_url);
                             const isActive = idx === currentIndex;
@@ -88,7 +88,7 @@ export default function Gallery({ gallery, className, timer = 5000, autoFlip = f
                                 <div
                                     key={img.id}
                                     // Если слайд один — ставим 100% ширины и убираем px-1
-                                    className={`min-w-0 transition-all duration-500 ease-out 
+                                    className={`min-w-0 transition-all h-full w-full duration-500 ease-out 
                                         ${isSingle ? "flex-[0_0_100%]" : "flex-[0_0_85%] px-1"}`}
                                     style={{
                                         transform: isSingle || isActive ? "scale(1)" : "scale(0.96)",

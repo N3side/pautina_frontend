@@ -24,11 +24,11 @@ export default function MakePostWidget({ setPosts, className }: Props) {
         handleTriggerSelect,
         handleFileChange,
         handleDelete,
-        uploadAllPendingFiles, // Достаем функцию догрузки
+        uploadAllPendingFiles,
         gallery,
         setGallery
     } = useGalleryLogic({
-        entity: "posts",
+        entity: "post",
         isClientOnly: true
     });
 
@@ -92,27 +92,13 @@ export default function MakePostWidget({ setPosts, className }: Props) {
             </div>
 
             <div className="flex flex-col w-full gap-4">
-                {/*<textarea*/}
-                {/*    value={title}*/}
-                {/*    className="max-w-full bg-transparent outline-none text-xl placeholder:text-text-muted/60 min-h-[60px] w-full resize-none overflow-hidden text-text-main"*/}
-                {/*    placeholder="Напишите, о чем думаете"*/}
-                {/*    rows={1}*/}
-                {/*    name="title"*/}
-                {/*    onInput={(e) => {*/}
-                {/*        e.currentTarget.style.height = 'auto';*/}
-                {/*        e.currentTarget.style.height = e.currentTarget.scrollHeight + 'px';*/}
-                {/*        setTitle(e?.target?.value || "")*/}
-                {/*    }}*/}
-                {/*/>*/}
-
                 <AdjustableText text={title} setText={setTitle} wrapperClassName="min-h-[60px] text-large" placeholder="Напишите, о чем думаете" />
 
-                {/* Показываем галерею для сортировки только если там есть элементы */}
                 {gallery && gallery.length > 0 && (
                     <EditGallery
                         cards={gallery}
                         setCards={setGallery}
-                        onDelete={handleDelete}
+                        // onDelete={handleDelete}
                         isClientOnly={true}
                     />
                 )}

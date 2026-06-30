@@ -11,6 +11,7 @@ interface Props {
     handleDelete: () => any
     handleFileChange: () => any
     isVideo: boolean
+    className?: string
 }
 
 export default function GalleryCard({
@@ -20,6 +21,7 @@ export default function GalleryCard({
         handleTriggerSelect,
         handleDelete,
         handleFileChange,
+        className
     }: Props) {
 
     const isVideo = checkIsVideo(image?.image_url)
@@ -38,7 +40,7 @@ export default function GalleryCard({
                 onClick={isAddImage ? handleTriggerSelect : undefined}
                 className={`rounded-[8px] aspect-[9/6] relative glass-effect group transition-all duration-300 overflow-hidden ${
                     isAddImage ? "cursor-pointer" : "cursor-move"
-                }`}
+                } ${className}`}
             >
                 {!isAddImage ? (
                     <>
