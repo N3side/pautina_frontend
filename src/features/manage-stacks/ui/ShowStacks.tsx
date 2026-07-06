@@ -22,17 +22,17 @@ interface Props {
 }
 
 export default function ShowStacks({
-       selectedStacks = [],
-       setSelectedStacks,
-       showSelected = false,
-       showAll = false,
-       showSearch = false,
-       userId,
-       isReadOnly = false,
-       setCurrentSelectedStack,
-       className,
-       baseUrl
-    }: Props) {
+                                       selectedStacks = [],
+                                       setSelectedStacks,
+                                       showSelected = false,
+                                       showAll = false,
+                                       showSearch = false,
+                                       userId,
+                                       isReadOnly = false,
+                                       setCurrentSelectedStack,
+                                       className,
+                                       baseUrl
+                                   }: Props) {
     const {
         stacks,
         searchName,
@@ -95,7 +95,7 @@ export default function ShowStacks({
         <div className={`flex flex-col gap-2 ${className}`}>
             {showSelected && selectedStacks.length > 0 && (
                 <>
-                    {isReadOnly ? ( // <-- ИСПРАВЛЕНО: isReadOnly = группировка
+                    {isReadOnly ? (
                         // Не редактируемый режим - группировка по типам
                         <div className="flex flex-col gap-4">
                             {sortedGroupKeys.map((typeId) => (
@@ -104,7 +104,7 @@ export default function ShowStacks({
                                         {getTypeName(typeId)}
                                     </p>
                                     <div className="grid grid-cols-[repeat(auto-fill,minmax(105px,1fr))] gap-2">
-                                        {groupedStacks && Array.isArray(groupedStacks) && groupedStacks?.length > 0 && groupedStacks[typeId].map((stack: any, i: number) => (
+                                        {groupedStacks[typeId].map((stack: any, i: number) => (
                                             <Stack
                                                 key={stack.id || i}
                                                 stack={stack}
