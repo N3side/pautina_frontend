@@ -91,7 +91,6 @@ export default function ProjectsWidget({isMyProfile, trueUser, setIsEmpty}: Prop
                                 <ProjectCard
                                     key={i}
                                     project={project}
-                                    isMyProfile={isMyProfile}
                                 />
                             )) :
                             [...Array(3)].map((e, key) =>

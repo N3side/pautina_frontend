@@ -100,7 +100,6 @@ export default function MakePostWidget({ setPosts, className }: Props) {
                     setText={setTitle}
                     wrapperClassName="min-h-[60px] text-large"
                     placeholder={`${user ? "Напишите, о чем думаете" : "Войдите, чтобы писать посты"}`}
-                    readOnly={!user}
                 />
 
                 {gallery && gallery.length > 0 && (

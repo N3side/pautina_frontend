@@ -126,6 +126,7 @@ export default function Page() {
                                     label: type.name,
                                     value: type.id
                                 }))}
+                                onChange={() => {}}
                                 defaultValue={
                                     types?.find(type => type.id === currentSelectedStack?.type_id)?.id
                                 }

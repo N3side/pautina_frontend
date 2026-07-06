@@ -167,9 +167,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false, clas
                     // updated_at={post?.updated_at}
                     updated={post?.updated}
                     expandedButtons={postActionButtons}
-                    content={content}
                     isEditing={isEditing}
-                    setContent={setContent}
                     portal={
                         <div>
 

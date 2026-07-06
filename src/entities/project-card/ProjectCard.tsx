@@ -8,7 +8,6 @@ import BrandActionButton from "@/shared/ui/Buttons/BrandActionButton";
 import {Stack} from "@/entities/stack/Stack";
 import {dots} from "@/shared/styles/patterns/dots";
 import ExpandText from "@/shared/ui/expand-text/ExpandText";
-import {useRouter} from "next/navigation";
 import Link from "next/link";
 import {useContext} from "react";
 import {UserContext} from "@/entities/user";
@@ -16,14 +15,10 @@ import {UserContext} from "@/entities/user";
 
 interface ProjectCardProps {
     project: Record<string, any>;
-    isMyProfile: boolean;
-    onClick?: () => void;
 }
 
 export default function ProjectCard({
         project,
-        isMyProfile,
-        onClick,
     }: ProjectCardProps) {
 
     const { open, isOpen, close } = useModal();
@@ -32,8 +27,6 @@ export default function ProjectCard({
 
     const stacks = Array.isArray(project?.stacks) ? project.stacks : [];
     const hasLive = Boolean(project?.link);
-
-    const router = useRouter()
 
     const {user} = useContext(UserContext)
 

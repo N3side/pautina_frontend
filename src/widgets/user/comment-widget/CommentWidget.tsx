@@ -148,8 +148,6 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
             <div className="flex flex-col gap-1 w-full">
                 <UserHeader
                     user={commentState?.user}
-                    content={content}
-                    setContent={setContent}
                     is_deleted={isDeleted}
                     updated={commentState?.updated}
                     created_at={commentState?.created_at}

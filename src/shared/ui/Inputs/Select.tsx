@@ -19,16 +19,16 @@ interface SelectProps {
 }
 
 export default function Select({
-                                   label,
-                                   value: externalValue,
-                                   defaultValue,
-                                   options,
-                                   onChange,
-                                   placeholder = "Выберите...",
-                                   error,
-                                   className,
-                                   name
-                               }: SelectProps) {
+       label,
+       value: externalValue,
+       defaultValue,
+       options,
+       onChange,
+       placeholder = "Выберите...",
+       error,
+       className,
+       name
+   }: SelectProps) {
     const [isOpen, setIsOpen] = useState(false);
     const [internalValue, setInternalValue] = useState<string | number>(defaultValue || '');
     const containerRef = useRef<HTMLDivElement>(null);

@@ -50,7 +50,6 @@ export function useGetStacks({ userId, baseUrl }: UseGetStacksProps) {
                             isRequesting.current = false;
                         }
                     },
-                    signal: controller.signal // Передаем сигнал для отмены
                 }
             );
 

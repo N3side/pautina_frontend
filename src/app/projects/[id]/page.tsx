@@ -21,7 +21,7 @@ import ProjectCard from "@/entities/project-card/ProjectCard";
 export default function Page() {
 
     const router = useRouter()
-    const [project, setProject] = useState<Record<string, any> | null>(null)
+    const [project, setProject] = useState<Record<string, any>>([])
 
     const id = usePathname().split("/")?.pop()
 
@@ -53,7 +53,7 @@ export default function Page() {
                     </p>
                 </ActionButton>
 
-                <ProjectCard project={project} isMyProject={isMyProject} redirectOnClick={false} />
+                <ProjectCard project={project} />
             </div>
         </Layout>
     )
