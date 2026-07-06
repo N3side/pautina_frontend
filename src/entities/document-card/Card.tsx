@@ -10,6 +10,7 @@ import dynamic from 'next/dynamic';
 import CalendarTodayIcon from '@mui/icons-material/CalendarToday';
 import ShowTags from "@/entities/tags/ui/showTags";
 import useTags from "@/entities/tags/lib/useTags";
+import SmartMedia from "@/shared/ui/smart-media/SmartMedia";
 
 const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
     ssr: false,
@@ -43,11 +44,13 @@ export default function Card({document, isMyProfile, ...props}: Props) {
                 {file_extension === "pdf" ?
                     <PDFFirstPage file={document?.file_url} />
                     :
-                    <img
-                        src={document?.file_url}
-                        alt={document?.name}
-                        className="w-full h-[160px] object-cover transition-transform duration-700"
-                    />}
+                    <SmartMedia src={document?.file_url} wrapperClassName="min-h-[150px]" />
+                    // <img
+                    //     src={document?.file_url}
+                    //     alt={document?.name}
+                    //     className="w-full h-[160px] object-cover transition-transform duration-700"
+                    // />
+                }
 
                 {isMyProfile && (
                     <Status variant={document?.is_public ? "Видно всем" : "Черновик"} />

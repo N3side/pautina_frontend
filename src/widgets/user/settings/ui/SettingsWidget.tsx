@@ -29,8 +29,10 @@ export default function SettingsWidget() {
 
                     <div className="flex flex-col gap-6">
 
-                        <ToggleThemeSetting />
-
+                        <div className="flex items-center justify-between">
+                            <p className="text-text-muted font-semibold text-small">Темная тема</p>
+                            <ToggleThemeSetting flashBang={true} />
+                        </div>
 
                         <Link href="/edit">
                             <LinkSetting

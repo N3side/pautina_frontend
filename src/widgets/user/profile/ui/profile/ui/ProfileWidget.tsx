@@ -12,6 +12,7 @@ import {$fetch} from "@/shared/api/fetch";
 import UploadPhoto from "@/widgets/user/profile/ui/profile/ui/UploadPhoto";
 import UserSkeleton from "@/widgets/user/edit-user-info/ui/user-skeleton";
 import {dots} from "@/shared/styles/patterns/dots";
+import SmartMedia from "@/shared/ui/smart-media/SmartMedia";
 
 interface Props {
     isMyProfile: boolean
@@ -50,18 +51,20 @@ export default function ProfileWidget({ isMyProfile, isPrivate, trueUser, showMo
             }}>
 
                 {isMyProfile &&
-                    <div className="!absolute !top-[20px] !right-[20px]">
+                    <div className="!absolute !top-[20px] !right-[20px] !z-99999">
                         <UploadPhoto
                             onSave={changeHeader}
                             cropShape="rect"
                             aspect={448 / 100}
                         >
-                            <ActionButton text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect !bg-surface"  />
+                            <ActionButton text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect !bg-surface !z-9999"  />
                         </UploadPhoto>
                     </div>
                 }
 
-                <img className={`w-full h-full object-cover  ${!trueUser?.main?.header && "hidden" }`} src={trueUser?.main?.header} alt=""/>
+                <SmartMedia src={trueUser?.main?.header} />
+
+                {/*<img className={`w-full h-full object-cover  ${!trueUser?.main?.header && "hidden" }`} src={trueUser?.main?.header} alt=""/>*/}
             </div>
 
             <div className={`w-full mt-[215px] relative glass-effect p-8 rounded-[18px] flex justify-between items-center flex-col lg:flex-row`}>

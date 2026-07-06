@@ -5,6 +5,7 @@ import ButtonLarge from "@/shared/ui/Buttons/ButtonLarge";
 import Link from "next/link";
 import { dots } from "@/shared/styles/patterns/dots";
 import { normalizeUrl } from "@/shared/lib/utils/urlHelper";
+import ExpandText from "@/shared/ui/expand-text/ExpandText";
 
 interface Props {
     project: Record<string, any> | null;
@@ -91,9 +92,7 @@ export default function ProjectModalWidget({
 
                 {/* Описание */}
                 {project?.description && (
-                    <p className="mt-2 text-text-muted leading-relaxed">
-                        {project.description}
-                    </p>
+                    <ExpandText text={project?.description} previewLength={150} />
                 )}
             </div>
 
@@ -101,10 +100,6 @@ export default function ProjectModalWidget({
             <div className="mt-2">
                 {project?.stacks?.length > 0 && (
                     <>
-                        <h6 className="font-bold text-text-main">
-                            Стеки
-                        </h6>
-
                         <div className="mt-3 flex flex-wrap gap-2">
                             {project && project.stacks.map((stack: any, i: number) => (
                                 <ProjectStackBadge

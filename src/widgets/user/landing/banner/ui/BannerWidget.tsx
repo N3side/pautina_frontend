@@ -54,7 +54,7 @@ export default function BannerWidget() {
                             <p
                                 className="text-tiny  font-bold tracking-wider text-text-muted group-hover:text-text-main transition-colors"
                             >
-                                ОФИЦИАЛЬНАЯ ПЛАТФОРМА
+                                ПЛАТФОРМА В РАЗРАБОТКЕ
                             </p>
                         </div>
 

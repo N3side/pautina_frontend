@@ -1,16 +1,18 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 import ParsedContentText from "@/shared/lib/utils/ParsedContentText";
 
 interface Props {
     text: string
     previewLength?: number
     className?: string
+    canCloseOnExpanded?: boolean
+    isExpandedDefault?: boolean
 }
 
-export default function ExpandText({text, previewLength=50, className}: Props) {
+export default function ExpandText({text, previewLength=50, className, canCloseOnExpanded=true, isExpandedDefault=false}: Props) {
 
     // Раскрытие текста
-    const [isExpanded, setIsExpanded] = useState<boolean>(false);
+    const [isExpanded, setIsExpanded] = useState<boolean>(isExpandedDefault);
 
     const text_ = text || "";
     const isLongText = text_.length > previewLength;
@@ -24,7 +26,14 @@ export default function ExpandText({text, previewLength=50, className}: Props) {
         <div className={`text-text-main/90 text-small font-normal leading-snug whitespace-pre-wrap mt-1 break-all w-full min-w-0 ${className}`}
              onClick={(e) => {
                  e.stopPropagation();
-                 setIsExpanded(!isExpanded);
+
+
+                 if (!isExpanded) {
+                    setIsExpanded(true)
+                 } else if (canCloseOnExpanded) {
+                    setIsExpanded(false)
+                 }
+
              }}
         >
             <span>{displayedText && <ParsedContentText content={displayedText} />}</span>
@@ -34,7 +43,7 @@ export default function ExpandText({text, previewLength=50, className}: Props) {
                     type="button"
                     className="text-text-main font-bold hover:underline ml-1 cursor-pointer inline text-[15px]"
                 >
-                    {isExpanded ? "Скрыть" : "Ещё"}
+                    {isExpanded ? canCloseOnExpanded && "Скрыть" : "Ещё"}
                 </button>
             )}
         </div>

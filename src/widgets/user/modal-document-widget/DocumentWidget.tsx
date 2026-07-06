@@ -20,6 +20,7 @@ import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import Link from "next/link"
 import useTags from "@/entities/tags/lib/useTags";
 import ShowTags from "@/entities/tags/ui/showTags";
+import SmartMedia from "@/shared/ui/smart-media/SmartMedia";
 
 const PDFFirstPage = dynamic(() => import('@/shared/lib/utils/PDFViewer').then(mod => mod.PDFFirstPage), {
     ssr: false,
@@ -61,10 +62,8 @@ export function DocumentWidget({document, close, setDocuments, isMyProfile}: Pro
             {file_extension === "pdf" ?
                 <PDFFirstPage file={document?.file_url} />
                 :
-                <img
-                    src={document?.file_url}
-                    className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110"
-                />}
+                <SmartMedia src={document?.file_url} className="h-full w-full" wrapperClassName="min-h-[230px]" />
+            }
 
             {/* Правая часть: Информация */}
             <div className="info w-full flex flex-col h-full">

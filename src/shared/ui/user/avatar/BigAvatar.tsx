@@ -4,6 +4,7 @@ import {$fetch} from "@/shared/api/fetch";
 import {UserContext} from "@/entities/user";
 import {Button} from "@mui/material";
 import AddAPhotoIcon from '@mui/icons-material/AddAPhoto';
+import SmartMedia from "@/shared/ui/smart-media/SmartMedia";
 
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
@@ -38,12 +39,15 @@ export default function BigAvatar({
 
     return (
         <div className={`relative w-[120px] h-[120px] rounded-full p-1 ${className}`} {...props}>
-            <img
-                src={avatar}
-                alt="avatar"
-                className="!w-full !h-full rounded-full object-cover shadow-sm"
-                referrerPolicy="no-referrer"
-            />
+
+            <SmartMedia src={avatar} className="!w-full !h-full !rounded-full object-cover shadow-sm" />
+
+            {/*<img*/}
+            {/*    src={avatar}*/}
+            {/*    alt="avatar"*/}
+            {/*    className="!w-full !h-full rounded-full object-cover shadow-sm"*/}
+            {/*    referrerPolicy="no-referrer"*/}
+            {/*/>*/}
 
             {isMyProfile && (
                 <div className="absolute bottom-1 right-1">

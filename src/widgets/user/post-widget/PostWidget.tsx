@@ -27,12 +27,14 @@ import ExpandText from "@/shared/ui/expand-text/ExpandText";
 import {useGalleryLogic} from "@/features/use-gallery-logic/UseGalleryLogic";
 
 interface Props {
+    className?: string
+    galleryClassName?: string
     post: Record<string, any> | null
     setPosts: (any) => void
     redirectOnClick?: boolean
 }
 
-export default function PostWidget({ post, setPosts, redirectOnClick=false }: Props) {
+export default function PostWidget({ post, setPosts, redirectOnClick=false, className, galleryClassName }: Props) {
 
     const { targetRef } = useIntersectionView({
         entityId: post?.id,
@@ -156,7 +158,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
     })
 
     return (
-        <div ref={targetRef} className="transition-colors w-full min-w-0">
+        <div ref={targetRef} className={`transition-colors w-full min-w-0 ${className}`}>
 
             <div className="flex flex-col w-full cursor-pointer" onClick={redirectOnClick ? (e) => handleCardClick(e) : () => {}}>
                 <UserHeader
@@ -172,14 +174,14 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false }: Pr
                         <div>
 
                             {!isEditing &&
-                                <ExpandText text={content} previewLength={20} className="max-w-[85%] w-full !mt-1" />
+                                <ExpandText text={content} previewLength={100} className="max-w-[85%] w-full !mt-1" canCloseOnExpanded={true} />
                             }
 
                             {
                                 isEditing ?
                                     <EditGallery className="mt-3" cards={gallery} setCards={setGallery} />
                                     :
-                                    <Gallery className="mt-2" gallery={gallery} />
+                                    <Gallery className={`mt-2 ${galleryClassName}`} gallery={gallery} />
                             }
 
                             {

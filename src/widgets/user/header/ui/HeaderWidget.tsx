@@ -12,6 +12,7 @@ import {ThemeSwitch} from "@/shared/ui/Buttons/ThemeSwitch";
 import CustomDropDown from "@/widgets/user/header/ui/CustomDropDown";
 import {smooth} from "@/shared/styles/animations";
 import {homeLink} from "@/shared/lib/utils/userLink";
+import ToggleThemeSetting from "@/features/settings-toggle-theme/ToggleThemeSetting";
 
 export default function HeaderWidget() {
     const [isActive, setIsActive] = useState(false)
@@ -38,12 +39,13 @@ export default function HeaderWidget() {
                     <CustomDropDown />
 
                     {!user && (
-                        <ThemeSwitch
-                            className="!z-[2000000] !relative"
-                            size="small"
-                            checked={theme === "dark"}
-                            onClick={() => setTheme(theme === 'dark' ? 'light' : 'dark')}
-                        />
+                        <ToggleThemeSetting renderSwitch={({ checked, onClick }) => (
+                            <ThemeSwitch
+                                size="small"
+                                checked={checked}
+                                onClick={onClick}
+                            />
+                        )} />
                     )}
 
                 </div>

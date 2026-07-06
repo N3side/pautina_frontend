@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { createPortal } from "react-dom";
+import SmartMedia from "@/shared/ui/smart-media/SmartMedia";
 
 interface ModalProps {
     isOpen: boolean;
@@ -50,22 +51,25 @@ export default function ProjectGalleryModal({ isOpen, close, gallery, initialInd
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Рендерим по условию: полноценный видеоплеер или картинку */}
-                {isVideo ? (
-                    <video
-                        src={currentMedia?.image_url}
-                        autoPlay
-                        controls // Даем возможность включать звук, разворачивать и мотать
-                        playsInline
-                        className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out outline-none"
-                    />
-                ) : (
-                    <img
-                        src={currentMedia?.image_url}
-                        alt="Увеличенное изображение проекта"
-                        className="max-w-full max-h-full object-contain select-none rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out"
-                        draggable="false"
-                    />
-                )}
+
+                <SmartMedia src={currentMedia?.image_url} />
+
+                {/*{isVideo ? (*/}
+                {/*    <video*/}
+                {/*        src={currentMedia?.image_url}*/}
+                {/*        autoPlay*/}
+                {/*        controls // Даем возможность включать звук, разворачивать и мотать*/}
+                {/*        playsInline*/}
+                {/*        className="max-w-full max-h-full object-contain rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out outline-none"*/}
+                {/*    />*/}
+                {/*) : (*/}
+                {/*    <img*/}
+                {/*        src={currentMedia?.image_url}*/}
+                {/*        alt="Увеличенное изображение проекта"*/}
+                {/*        className="max-w-full max-h-full object-contain select-none rounded-lg shadow-2xl transition-all duration-300 animate-in zoom-in-95 ease-out"*/}
+                {/*        draggable="false"*/}
+                {/*    />*/}
+                {/*)}*/}
 
                 {/* Стрелка Назад */}
                 {currentIndex > 0 && (

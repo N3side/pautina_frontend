@@ -31,7 +31,6 @@ export default function StacksWidget({isMyProfile, trueUser, setIsEmpty}: Props)
     };
 
     async function getUserStacks(user_id) {
-        console.log(user_id)
         const response = await $fetch(`stacks/${user_id}`, {
             onLoadingChange: setIsLoading
         })
@@ -63,7 +62,7 @@ export default function StacksWidget({isMyProfile, trueUser, setIsEmpty}: Props)
         <section className="glass-effect p-6 rounded-xl relative">
 
             <h6 className="text-text-main font-bold">
-                Технологический стек
+                Технологии
             </h6>
 
             {

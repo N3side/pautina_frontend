@@ -16,14 +16,16 @@ export function BodyBlockProvider({ children }: { children: ReactNode }) {
     const [count, setCount] = useState<number>(0);
 
     useEffect(() => {
-        console.log(count)
         if (count > 0) {
-            const scrollBarWidth = window.innerWidth - document.documentElement.clientWidth;
-            document.body.style.overflow = "hidden";
-            document.body.style.paddingRight = `${scrollBarWidth}px`;
+            document.body.classList.add('modal-open');
+            document.body.style.paddingRight = '0px';
         } else {
-            document.body.style.overflow = "";
-            document.body.style.paddingRight = "";
+            // Форсируем сброс через микро-таймаут
+            setTimeout(() => {
+                document.body.classList.remove('modal-open');
+                document.body.style.paddingRight = '0px';
+                document.body.style.removeProperty('padding-right');
+            }, 0);
         }
     }, [count]);
 

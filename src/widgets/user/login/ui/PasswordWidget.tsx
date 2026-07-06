@@ -98,7 +98,7 @@ export default function PasswordWidget() {
                         setIsOpen={setIsOpen}
                     />
 
-                    <Link href="/otp" className="w-full text-white font-bold text-small">
+                    <Link href="/otp" className="w-full text-text-main font-bold text-small">
                         Вход по коду
                     </Link>
 

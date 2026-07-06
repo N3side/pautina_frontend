@@ -1,7 +1,7 @@
 import {smooth} from "@/shared/styles/animations";
-import {useEffect, useRef} from "react";
+import {HTMLAttributes, useEffect, useRef} from "react";
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLTextAreaElement> {
     text: string
     setText: (any) => void
     placeholder?: string
@@ -9,7 +9,7 @@ interface Props {
     textAreaClassName?: string
 }
 
-export default function AdjustableText({text, setText, placeholder="Комментарий", wrapperClassName, textAreaClassName}: Props) {
+export default function AdjustableText({text, setText, placeholder="Комментарий", wrapperClassName, textAreaClassName, ...props}: Props) {
 
     const textareaRef = useRef<HTMLTextAreaElement | null>(null);
 
@@ -34,6 +34,7 @@ export default function AdjustableText({text, setText, placeholder="Коммен
                 rows={1}
                 placeholder={placeholder}
                 className={`flex-1 outline-none text-text-main !text-small placeholder:text-text-muted/60 resize-none bg-transparent !min-h-0 w-full ${smooth} ${textAreaClassName}`}
+                {...props}
             />
         </div>
     )

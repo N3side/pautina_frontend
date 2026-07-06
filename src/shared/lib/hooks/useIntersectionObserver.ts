@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useCallback } from "react";
 
 export function useIntersectionObserver(
     callback: () => void,
@@ -6,20 +6,37 @@ export function useIntersectionObserver(
     enabled: boolean
 ) {
     const targetRef = useRef<HTMLDivElement | null>(null);
+    const callbackRef = useRef(callback);
+
+    // Обновляем ref при изменении callback
+    useEffect(() => {
+        callbackRef.current = callback;
+    }, [callback]);
 
     useEffect(() => {
-        if (!enabled || !targetRef.current) return;
+        if (!enabled || !targetRef.current) {
+            console.log('Observer disabled or no target');
+            return;
+        }
 
         const observer = new IntersectionObserver(
             ([entry]) => {
-                if (entry.isIntersecting) callback();
+                if (entry.isIntersecting) {
+                    console.log('Intersection detected, calling callback');
+                    callbackRef.current();
+                }
             },
             { rootMargin: "100px", threshold: 0.01 }
         );
 
         observer.observe(targetRef.current);
-        return () => observer.disconnect();
-    }, deps);
+        console.log('Observer attached');
+
+        return () => {
+            console.log('Observer disconnected');
+            observer.disconnect();
+        };
+    }, [...deps, enabled]); // Добавили enabled в зависимости
 
     return targetRef;
 }

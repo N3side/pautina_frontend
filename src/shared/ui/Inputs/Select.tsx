@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect, ReactNode } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { smooth } from "@/shared/styles/animations";
 
 interface Option {
@@ -8,19 +8,35 @@ interface Option {
 
 interface SelectProps {
     label?: string;
-    value?: string | number;
+    value?: string | number; // опционально - если нужно контролировать извне
+    defaultValue?: string | number; // значение по умолчанию
     options: Option[];
     onChange: (value: string | number) => void;
     placeholder?: string;
     error?: string;
     className?: string;
+    name?: string; // для FormData
 }
 
-const Select = ({ label, value, options, onChange, placeholder = "Выберите...", error, className }: SelectProps) => {
+export default function Select({
+                                   label,
+                                   value: externalValue,
+                                   defaultValue,
+                                   options,
+                                   onChange,
+                                   placeholder = "Выберите...",
+                                   error,
+                                   className,
+                                   name
+                               }: SelectProps) {
     const [isOpen, setIsOpen] = useState(false);
+    const [internalValue, setInternalValue] = useState<string | number>(defaultValue || '');
     const containerRef = useRef<HTMLDivElement>(null);
+    const hiddenInputRef = useRef<HTMLInputElement>(null);
 
-    // Закрытие при клике вне компонента
+    // Используем externalValue если передан, иначе internalValue
+    const currentValue = externalValue !== undefined ? externalValue : internalValue;
+
     useEffect(() => {
         const handleClickOutside = (event: MouseEvent) => {
             if (containerRef.current && !containerRef.current.contains(event.target as Node)) {
@@ -31,14 +47,36 @@ const Select = ({ label, value, options, onChange, placeholder = "Выберит
         return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
-    const selectedOption = options.find(opt => opt.value === value);
+    // Обновляем скрытый input при изменении currentValue
+    useEffect(() => {
+        if (hiddenInputRef.current) {
+            hiddenInputRef.current.value = String(currentValue || '');
+        }
+    }, [currentValue]);
+
+    const selectedOption = options.find(opt => opt.value === currentValue);
+
+    const handleSelect = (value: string | number) => {
+        setInternalValue(value);
+        onChange(value);
+        setIsOpen(false);
+    };
 
     return (
         <div className={`flex flex-col gap-1.5 w-full ${className || ''}`} ref={containerRef}>
             {label && <p className="text-text-muted text-sm font-medium">{label}</p>}
 
             <div className="relative">
-                {/* Триггер (аналог Input) */}
+                {/* Скрытый input для FormData */}
+                {name && (
+                    <input
+                        ref={hiddenInputRef}
+                        type="hidden"
+                        name={name}
+                        value={currentValue || ''}
+                    />
+                )}
+
                 <button
                     type="button"
                     onClick={() => setIsOpen(!isOpen)}
@@ -46,7 +84,7 @@ const Select = ({ label, value, options, onChange, placeholder = "Выберит
                         w-full py-4 px-5 rounded-xl ${smooth} outline-none text-left flex justify-between items-center
                         border glass-effect text-sm font-medium transition-all
                         ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50 focus:ring-4 focus:ring-brand/10'}
-                        ${!value ? 'text-text-muted/60' : 'text-text-main'}
+                        ${!currentValue ? 'text-text-muted/60' : 'text-text-main'}
                     `}
                 >
                     {selectedOption ? selectedOption.label : placeholder}
@@ -55,17 +93,14 @@ const Select = ({ label, value, options, onChange, placeholder = "Выберит
                     </svg>
                 </button>
 
-                {/* Выпадающий список */}
                 {isOpen && (
                     <div className="absolute top-full mt-2 w-full bg-surface border border-border-default rounded-xl shadow-lg z-50 overflow-hidden py-1">
                         {options.map((opt) => (
                             <div
                                 key={opt.value}
-                                onClick={() => {
-                                    onChange(opt.value);
-                                    setIsOpen(false);
-                                }}
-                                className="px-5 py-3 hover:bg-brand/5 cursor-pointer transition-colors text-sm text-text-main"
+                                onClick={() => handleSelect(opt.value)}
+                                className={`px-5 py-3 hover:bg-brand/5 cursor-pointer transition-colors text-sm 
+                                    ${currentValue === opt.value ? 'bg-brand/10 text-brand' : 'text-text-main'}`}
                             >
                                 {opt.label}
                             </div>
@@ -77,6 +112,4 @@ const Select = ({ label, value, options, onChange, placeholder = "Выберит
             {error && <span className="text-red-500 text-[12px] ml-1">{error}</span>}
         </div>
     );
-};
-
-export default Select;
+}

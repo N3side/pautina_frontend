@@ -11,6 +11,7 @@ import {$fetch} from "@/shared/api/fetch";
 import RoundedIconWrapper from "@/shared/ui/IconWrapper/RoundedIconWrapper";
 import EmojiDropdown from "@/features/select-emoji/EmojiDropdown";
 import AdjustableText from "@/shared/ui/adjustable-text/AdjustableText";
+import toast from "react-hot-toast";
 
 interface Props {
     className?: string
@@ -87,12 +88,20 @@ export default function MakePostWidget({ setPosts, className }: Props) {
                 className="hidden"
             />
 
-            <div className="w-12 h-12 rounded-full overflow-hidden shrink-0 bg-surface">
-                <img src={user?.main?.avatar} className="w-full h-full object-cover" alt="Avatar"/>
+            <div className={`w-12 h-12 rounded-full overflow-hidden shrink-0 bg-surface ${!user && "animate-pulse glass-effect"}`}>
+                {user?.main?.avatar &&
+                    <img src={user?.main?.avatar} className="w-full h-full object-cover" alt="Avatar"/>
+                }
             </div>
 
             <div className="flex flex-col w-full gap-4">
-                <AdjustableText text={title} setText={setTitle} wrapperClassName="min-h-[60px] text-large" placeholder="Напишите, о чем думаете" />
+                <AdjustableText
+                    text={title}
+                    setText={setTitle}
+                    wrapperClassName="min-h-[60px] text-large"
+                    placeholder={`${user ? "Напишите, о чем думаете" : "Войдите, чтобы писать посты"}`}
+                    readOnly={!user}
+                />
 
                 {gallery && gallery.length > 0 && (
                     <EditGallery
@@ -105,11 +114,20 @@ export default function MakePostWidget({ setPosts, className }: Props) {
 
                 <div className="flex justify-between items-start">
                     <div className="flex gap-1 text-brand">
-                        <RoundedIconWrapper Icon={PhotoLibraryOutlinedIcon} onClick={handleTriggerSelect} btnHeight={40} btnWidth={40} />
 
-                        <EmojiDropdown trigger={
-                            <RoundedIconWrapper Icon={SentimentSatisfiedOutlinedIcon} btnHeight={40} btnWidth={40} />
-                        } text={title} setText={setTitle} />
+                        <RoundedIconWrapper Icon={PhotoLibraryOutlinedIcon} onClick={() => {
+                            if (user) {
+                                handleTriggerSelect()
+                            } else {
+                                toast.success("Вы не авторизованы")
+                            }
+                        }} btnHeight={40} btnWidth={40} />
+
+                        <div>
+                            <EmojiDropdown trigger={
+                                <RoundedIconWrapper Icon={SentimentSatisfiedOutlinedIcon} btnHeight={40} btnWidth={40} />
+                            } text={title} setText={setTitle} />
+                        </div>
 
                     </div>
 

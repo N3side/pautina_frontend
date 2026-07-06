@@ -20,6 +20,8 @@ import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import {useGalleryLogic} from "@/features/use-gallery-logic/UseGalleryLogic";
 import RoundedIconWrapper from "@/shared/ui/IconWrapper/RoundedIconWrapper";
 import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
+import DateInput from "@/shared/ui/Inputs/Date";
+import {toDate} from "@/shared/lib/utils/time";
 
 export default function UpdateProject() {
     const { user } = useContext(UserContext);
@@ -180,6 +182,20 @@ export default function UpdateProject() {
                     label="Ссылка"
                     defaultValue={project?.link}
                     error={errors?.link}
+                />
+
+                <DateInput
+                    name="start_date"
+                    label="Начало разработки"
+                    defaultValue={project?.start_date}
+                    error={errors?.start_date}
+                />
+
+                <DateInput
+                    name="end_date"
+                    label="Конец разработки (Оставьте пустым, если разработка еще не закончилась)"
+                    defaultValue={project?.end_date}
+                    error={errors?.end_date}
                 />
 
                 <Modal

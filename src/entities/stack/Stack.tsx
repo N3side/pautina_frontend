@@ -36,6 +36,13 @@ export function Stack({ stack, handleDelete, selected = false, onClick, isReadOn
             className={`group glass-effect relative flex items-center gap-1.5 px-2 py-2 rounded-lg border select-none transition-all duration-200 ${className}`}
         >
             <div className="w-4 h-4 flex items-center justify-center">
+
+                {/*{stack?.image_url &&*/}
+                {/*    <img src={stack?.image_url} alt="stack" className={`w-full h-full object-contain filter drop-shadow-sm text-text-main transition-transform duration-200 */}
+                {/*        ${!isReadOnly && 'group-hover:scale-105'}`}*/}
+                {/*    />*/}
+                {/*}*/}
+
                 <ServerIcon
                     url={stack?.image_url || stack?.themes?.[0]?.image_url}
                     className={`w-full h-full object-contain filter drop-shadow-sm text-text-main transition-transform duration-200 

@@ -10,6 +10,7 @@ import {UserContext} from "@/entities/user";
 import {$fetch} from "@/shared/api/fetch";
 import Textarea from "@/shared/ui/Inputs/Textarea";
 import {dots} from "@/shared/styles/patterns/dots";
+import SmartMedia from "@/shared/ui/smart-media/SmartMedia";
 
 
 export default function Profile({heading}) {
@@ -66,16 +67,24 @@ export default function Profile({heading}) {
                          backgroundImage: `url("${dots}")`,
                      }}
                 >
-                    {user?.main?.header &&
-						<img src={user?.main?.header} alt="" className="w-full h-full object-cover"/>
-                    }
+                    <SmartMedia src={user?.main?.header} className="w-full h-full object-cover" />
+                    {/*{user?.main?.header &&*/}
+					{/*	<img src={user?.main?.header} alt="" className="w-full h-full object-cover"/>*/}
+                    {/*}*/}
                     <div className="!absolute !top-[20px] !right-[20px]">
                         <UploadPhoto
                             onSave={ChangeHeader}
                             cropShape="rect"
                             aspect={448 / 100}
+                            mode="crop"
                         >
-                            <ActionButton text="загрузить шапку" Icon={EditOutlinedIcon} className="glass-effect !bg-surface"  />
+                            <ActionButton
+                                text="загрузить шапку"
+                                Icon={EditOutlinedIcon}
+                                className="glass-effect !bg-surface"
+                                type="button"
+                                // Убираем onClick отсюда!
+                            />
                         </UploadPhoto>
                     </div>
                 </div>

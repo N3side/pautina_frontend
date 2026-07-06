@@ -2,7 +2,7 @@ import { useState, useEffect, useRef } from "react";
 import { $fetch } from "@/shared/api/fetch";
 
 interface UseGetStacksProps {
-    userId?: number | string; // Передаем, если нужны стеки конкретного юзера
+    userId?: number | string;
     baseUrl: string
 }
 
@@ -16,50 +16,101 @@ export function useGetStacks({ userId, baseUrl }: UseGetStacksProps) {
 
     const isRequesting = useRef<boolean>(false);
     const latestSearch = useRef<string>("");
+    const abortControllerRef = useRef<AbortController | null>(null);
 
     async function fetchStacks(pageToLoad: number, currentSearch: string) {
-        if (pageToLoad > 1 && isRequesting.current) return;
+        // Отменяем предыдущий запрос, если он был
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+        }
 
+        const controller = new AbortController();
+        abortControllerRef.current = controller;
+
+        if (isRequesting.current) return;
         isRequesting.current = true;
         latestSearch.current = currentSearch;
 
-        if (pageToLoad === 1) setIsInitialLoading(true);
-        else setIsFetchingMore(true);
+        if (pageToLoad === 1) {
+            setIsInitialLoading(true);
+        } else {
+            setIsFetchingMore(true);
+        }
 
-        const response = await $fetch(`${baseUrl}?page=${pageToLoad}&name=${encodeURIComponent(currentSearch)}`, {
-            onLoadingChange: (loading) => {
-                if (!loading) {
-                    if (latestSearch.current === currentSearch) {
-                        setIsInitialLoading(false);
-                        setIsFetchingMore(false);
-                    }
-                    isRequesting.current = false;
+        try {
+            const response = await $fetch(
+                `${baseUrl}?page=${pageToLoad}&name=${encodeURIComponent(currentSearch)}`,
+                {
+                    onLoadingChange: (loading) => {
+                        if (!loading) {
+                            if (latestSearch.current === currentSearch) {
+                                setIsInitialLoading(false);
+                                setIsFetchingMore(false);
+                            }
+                            isRequesting.current = false;
+                        }
+                    },
+                    signal: controller.signal // Передаем сигнал для отмены
                 }
-            }
-        });
+            );
 
-        if (latestSearch.current !== currentSearch) return;
+            if (latestSearch.current !== currentSearch) return;
 
-        const resData = response?.json;
-        const newStacks = resData?.stacks || [];
+            const resData = response?.json;
+            const newStacks = resData?.data || resData?.stacks || [];
 
-        if (newStacks) {
             setStacks(prev => pageToLoad === 1 ? newStacks : [...prev, ...newStacks]);
-            setHasMore(resData.current_page < resData.last_page);
-            setPage(resData.current_page);
+
+            // Проверяем пагинацию
+            const currentPage = resData?.current_page || pageToLoad;
+            const lastPage = resData?.last_page || 1;
+            const hasMoreData = currentPage < lastPage;
+
+            setHasMore(hasMoreData);
+            setPage(currentPage);
+
+        } catch (error: any) {
+            if (error.name === 'AbortError') {
+                console.log('Request cancelled');
+                return;
+            }
+            console.error('Fetch stacks error:', error);
+            setIsInitialLoading(false);
+            setIsFetchingMore(false);
+            isRequesting.current = false;
         }
     }
 
-    // Эффект для обработки ввода поиска с Дебаунсом (300мс)
+    // Сброс при смене userId
+    useEffect(() => {
+        setStacks([]);
+        setPage(1);
+        setHasMore(true);
+        setIsInitialLoading(true);
+        fetchStacks(1, searchName);
+    }, [userId]);
+
+    // Дебаунс для поиска
     useEffect(() => {
         const delayDebounceFn = setTimeout(() => {
+            setStacks([]);
+            setPage(1);
+            setHasMore(true);
+            setIsInitialLoading(true);
             fetchStacks(1, searchName);
         }, 300);
 
-        return () => clearTimeout(delayDebounceFn);
-    }, [searchName, userId]); // Добавили userId в зависимости на случай изменения контекста
+        return () => {
+            clearTimeout(delayDebounceFn);
+            // Отменяем запрос при размонтировании или новом поиске
+            if (abortControllerRef.current) {
+                abortControllerRef.current.abort();
+            }
+        };
+    }, [searchName]);
 
     const loadMore = () => {
+        console.log('loadMore called', { isRequesting: isRequesting.current, hasMore, page });
         if (!isRequesting.current && hasMore) {
             fetchStacks(page + 1, searchName);
         }
@@ -73,6 +124,6 @@ export function useGetStacks({ userId, baseUrl }: UseGetStacksProps) {
         isFetchingMore,
         hasMore,
         loadMore,
-        page // Возвращаем для синхронизации обсервера
+        page
     };
 }

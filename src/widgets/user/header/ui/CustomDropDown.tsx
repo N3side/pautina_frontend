@@ -9,6 +9,7 @@ import {userLink} from "@/shared/lib/utils/userLink";
 import Avatar from "@/shared/ui/user/avatar/Avatar";
 import {Capitalize} from "@/shared/lib/utils/capitalize";
 import {useTheme} from "@/shared/lib/providers/ThemeProvider";
+import ToggleThemeSetting from "@/features/settings-toggle-theme/ToggleThemeSetting";
 
 export default function CustomDropDown() {
 
@@ -46,12 +47,11 @@ export default function CustomDropDown() {
 
                                 <div className="py-2">
                                     <div className="px-2">
-                                        <button className="w-full text-left px-3 py-2 rounded-lg flex items-center justify-between hover:bg-border-default/30 transition-colors group">
-                                            <div className="flex items-center gap-3">
-                                                <p className="text-small text-text-main font-medium">Темная тема</p>
-                                            </div>
-                                            <IOSSwitch scale={.7} size="small" checked={theme === "dark"} onClick={() => theme === "dark" ? setTheme("light") : setTheme("dark")} />
-                                        </button>
+
+                                        <div className="px-2 mb-3 flex items-center justify-between">
+                                            <p className="text-text-muted text-small font-semibold">Темная тема</p>
+                                            <ToggleThemeSetting switchScale={0.7} />
+                                        </div>
 
                                         <Link href="/edit?step=settings">
                                             <button className="w-full text-left px-3 py-2 rounded-lg flex items-center gap-3 hover:bg-border-default/30 transition-colors group mt-1">
@@ -59,6 +59,7 @@ export default function CustomDropDown() {
                                                 <p className="text-small text-text-muted group-hover:text-text-main transition-colors">Настройки</p>
                                             </button>
                                         </Link>
+
                                     </div>
 
                                     <div className="h-[1px] bg-border-default w-full my-2 opacity-50"></div>

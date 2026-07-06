@@ -36,8 +36,6 @@ function CustomButton({ className, text, Icon, ...props }: ButtonProps) {
 interface Props {
     user: Record<string, any> | null;
     expandedButtons?: Record<string, any>[] | null;
-    content: string
-    setContent: (content: string) => void
     created_at?: string;
     size?: "default" | "mini";
     portal?: any
@@ -47,7 +45,7 @@ interface Props {
     actionsAtEnd?: boolean
 }
 
-export default function UserHeader({ user, expandedButtons, content, setContent, created_at, updated=false, size = "default", portal, is_deleted=false, isEditing=false, actionsAtEnd=true }: Props) {
+export default function UserHeader({ user, expandedButtons, created_at, updated=false, size = "default", portal, is_deleted=false, isEditing=false, actionsAtEnd=true }: Props) {
     const isMini = size === "mini";
 
     const diffInHours = created_at ? diffTimes(new Date(), created_at, "hour") : 0;
@@ -79,7 +77,7 @@ export default function UserHeader({ user, expandedButtons, content, setContent,
                                 }
                                 <span className="!text-text-muted hover:!underline truncate">
                                     {
-                                        is_deleted ? "Удаленно" : `@${user?.username}`
+                                        is_deleted ? "Удаленно" : `@${user?.short_id}`
                                     }
                                 </span>
 

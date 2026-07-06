@@ -76,16 +76,16 @@ export default function Navigation({ isActive, setIsActive }: Props) {
 							</NavigationLink>
                         }
 
-                        <DropDown trigger={
-                            <IconWrapper>
-                                <BuildIcon className="text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold !text-[18px] text-text-muted group-hover:text-text-main" />
-                            </IconWrapper>
-                        }>
-                            <div className="glass-effect rounded-2xl p-4 flex gap-2 items-center mt-2">
-                                <InfoIcon className="text-text-muted !text-[18px]" />
-                                <p className="text-text-muted font-medium text-small">Платформа находится в разработке</p>
-                            </div>
-                        </DropDown>
+                        {/*<DropDown trigger={*/}
+                        {/*    <IconWrapper>*/}
+                        {/*        <BuildIcon className="text-small cursor-pointer whitespace-nowrap transition-colors duration-200 font-semibold !text-[18px] text-text-muted group-hover:text-text-main" />*/}
+                        {/*    </IconWrapper>*/}
+                        {/*}>*/}
+                        {/*    <div className="glass-effect rounded-2xl p-4 flex gap-2 items-center mt-2">*/}
+                        {/*        <InfoIcon className="text-text-muted !text-[18px]" />*/}
+                        {/*        <p className="text-text-muted font-medium text-small">Платформа находится в разработке</p>*/}
+                        {/*    </div>*/}
+                        {/*</DropDown>*/}
 
                         <PromoTimer />
 

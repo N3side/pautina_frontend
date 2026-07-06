@@ -40,7 +40,7 @@ export default function EditUserInfo() {
             children: <SettingsWidget />,
             param: "settings"
         },
-        HasUserSubscription({user}) && {
+        {
             name: "Управление подпиской",
             children: <Subscription heading="Подписка" />,
             param: "subscription"

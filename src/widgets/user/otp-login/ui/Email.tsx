@@ -102,7 +102,7 @@ export default function Email({email,  setEmail, next, setTimer, timer}) {
                     defaultValue={email}
                 />
 
-                <Link href="/password" className="w-full text-white font-bold text-small">
+                <Link href="/password" className="w-full text-text-main font-bold text-small">
                     Вход по паролю
                 </Link>
 

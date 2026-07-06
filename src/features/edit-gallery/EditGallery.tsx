@@ -15,7 +15,6 @@ interface Props {
 export default function EditGallery({ cards, setCards, entity = "post", isClientOnly = false, className }: Props) {
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
-    // Сортируем карточки при каждом изменении cards
     const sortedCards = useMemo(() => {
         return [...cards].sort((a, b) => (a.sort || 0) - (b.sort || 0));
     }, [cards]);
@@ -27,7 +26,8 @@ export default function EditGallery({ cards, setCards, entity = "post", isClient
         const draggedCard = sortedCards[draggedIndex];
         const targetCard = sortedCards[targetIndex];
 
-        const isLocalCard = isClientOnly || !draggedCard.entity_id;
+        const isLocalCard =  !draggedCard.entity_id;
+        console.log(isLocalCard)
 
         if (isLocalCard) {
             setCards((prev) => prev.map((card) => {

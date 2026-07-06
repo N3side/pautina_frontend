@@ -3,7 +3,7 @@
 import ProfileWidget from "@/widgets/user/profile/ui/profile/ui/ProfileWidget";
 import DocumentsWidget from "@/widgets/user/documents-widget/DocumentsWidget";
 import { useParams } from "next/navigation";
-import { useContext, useEffect, useState } from "react";
+import {useContext, useEffect, useRef, useState} from "react";
 import { UserContext } from "@/entities/user";
 import { $fetch } from "@/shared/api/fetch";
 import Layout from "@/widgets/user/layout-h-s-f/Layout";
@@ -12,15 +12,21 @@ import ProjectsWidget from "@/widgets/user/projects-widget/ProjectsWidget";
 import StacksWidget from "@/widgets/user/stacks-widget/StacksWidget";
 import DesertScene from "@/shared/assets/images/vector/empty/DesertScene";
 import SubscriptionOffer from "@/widgets/user/subscription-offer/SubscriptionOffer";
+import PostsWidget from "@/widgets/user/posts-widget/PostsWidget";
+import Input from "@/shared/ui/Inputs/Input";
+import SearchIcon from "@mui/icons-material/Search";
+import SubscriptionSectionOffer from "@/widgets/user/subscription-offer/SubscriptionSectionOffer";
+import {useHeaderHeight} from "@/shared/lib/hooks/useHeaderHeight";
+import MakePostWidget from "@/widgets/user/make-post/MakePostWidget";
 
 const DEFAULT_SECTIONS = [
     { name: "documents", default_sort: 1 },
     { name: "stacks", default_sort: 2 },
     { name: "projects", default_sort: 3 },
+    { name: "posts", default_sort: 4 },
 ];
 
 export default function Page() {
-    // === ПОДКЛЮЧЕНИЕ ПОЛИФИЛА ДЛЯ МОБИЛЬНЫХ УСТРОЙСТВ ===
     useEffect(() => {
         if (typeof window !== "undefined") {
             require("drag-drop-touch");
@@ -49,8 +55,12 @@ export default function Page() {
         }
     }, [user]);
 
+    const [isLoading, setIsLoading] = useState<boolean>(true)
+
     async function getUser() {
-        const response = await $fetch(`user/${url_base}`);
+        const response = await $fetch(`user/${url_base}`, {
+            onLoadingChange: setIsLoading
+        });
         const user_ = response?.json?.user;
         if (user_) {
             setTrueUser(user_);
@@ -152,6 +162,44 @@ export default function Page() {
         setDraggedIndex(null);
     };
 
+    const {headerHeight} = useHeaderHeight()
+
+    const hasViewed = useRef<boolean>(false);
+
+    async function viewProfile(user_id: string) {
+        if (!user_id) return;
+
+        try {
+            await $fetch("view", {
+                method: "POST",
+                body: JSON.stringify({
+                    "entity": "user",
+                    "entity_id": user_id
+                }),
+                headers: {
+                    "Accept": "application/json",
+                    "Content-Type": "application/json"
+                }
+            });
+        } catch (error) {
+            console.error('Ошибка при отправке view:', error);
+        }
+    }
+
+    useEffect(() => {
+        if (
+            trueUser?.main?.id &&
+            !isMyProfile &&
+            !isLoading &&
+            !hasViewed.current &&
+            trueUser?.main?.id !== user?.main?.id
+        ) {
+            hasViewed.current = true;
+            viewProfile(trueUser?.main?.id);
+        }
+    }, [trueUser?.main?.id, isMyProfile, isLoading, user?.main?.id]);
+
+
     return (
         <Layout>
             <div className="flex flex-col w-full gap-2">
@@ -186,6 +234,35 @@ export default function Page() {
                                         setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, projects: hasData }))}
                                     />
                                 );
+                            } else if (section.name === "posts") {
+                                componentNode = (
+                                    <div className="flex gap-4">
+                                        <div className="flex flex-col gap-4 w-full">
+                                            {
+                                                isMyProfile &&
+                                                <div className="glass-effect p-4 rounded-2xl">
+                                                    <MakePostWidget />
+                                                </div>
+                                            }
+                                            <PostsWidget
+                                                isMyProfile={isMyProfile}
+                                                setIsEmpty={(hasData) => setFilledSections(p => ({ ...p, posts: hasData }))}
+                                                trueUser={trueUser}
+                                            />
+                                        </div>
+                                        <div
+                                            className="hidden lg:block w-full lg:max-w-[350px] flex-shrink-0 self-start sticky"
+                                            style={{
+                                                top: `${headerHeight + 16}px`,
+                                            }}
+                                        >
+                                            <div className="flex flex-col gap-3 w-full max-w-[350px] h-fit">
+                                                <Input className="w-full" inputClassName="!rounded-3xl" placeholder="Поиск" leftAdditional={<SearchIcon />} />
+                                                <SubscriptionSectionOffer />
+                                            </div>
+                                        </div>
+                                    </div>
+                                );
                             }
 
                             if (!componentNode) return null;
@@ -195,8 +272,7 @@ export default function Page() {
                                     key={section.name}
                                     onDragOver={handleDragOver}
                                     onDrop={() => handleDrop(index)}
-                                    className={`transition-all duration-200 relative select-none
-                                        ${isMyProfile ? 'border border-transparent rounded-[18px]' : ''} 
+                                    className={`transition-all duration-200 relative select-none rounded-2xl
                                         ${draggedIndex === index ? 'opacity-30 scale-[0.98]' : 'opacity-100'}`}
                                 >
 
@@ -209,17 +285,15 @@ export default function Page() {
                                             title="Перетащить секцию"
                                         >
                                             {/* Маленькая закругленная плашка (капсула) */}
-                                            <div className="w-12 h-1.5 bg-gray-200 dark:bg-neutral-800 rounded-full group-hover/drag:bg-gray-400 dark:group-hover/drag:bg-neutral-600 group-active/drag:bg-gray-500 transition-colors" />
+                                            <div className="w-12 h-1.5 bg-gray-200 dark:bg-neutral-400 rounded-full  glass-effect" />
 
                                             {/* БЛОК С ПОДСКАЗКОЙ И ВИДЕО (Всплывает СВЕРХУ-СПРАВА при ховере) */}
                                             <div className="absolute bottom-full left-[calc(50%-24px)] mb-2 max-w-110 w-full p-4
-                                                glass-effect border border-gray-200 dark:border-neutral-800 rounded-[24px] shadow-xl
+                                                glass-effect glass-effect rounded-2xl
                                                 opacity-0 pointer-events-none transition-all duration-200 scale-95 origin-bottom z-50
                                                 md:group-hover/drag:opacity-100 md:group-hover/drag:scale-100
                                                 hidden md:flex flex-col gap-2"
                                             >
-                                                {/* Стрелочка подсказки снизу (смещена влево к центру ручки) */}
-                                                <div className="absolute -bottom-1 left-6 w-2 h-2 rotate-45 bg-white/80 dark:bg-neutral-900/80 border-b border-r border-gray-200 dark:border-neutral-800" />
 
                                                 <h5 className="text-sm font-bold text-text-main text-center">
                                                     Как сортировать профиль?
@@ -259,7 +333,7 @@ export default function Page() {
                             </div>
                         )}
                     </>
-                ) : (
+                ) : (!isLoading &&
                     <div className="mt-1">
                         <PrivateProfileWidget />
                     </div>

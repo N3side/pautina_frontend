@@ -4,7 +4,9 @@ import { Stack, StackSkeleton } from "@/entities/stack/Stack";
 import { AsyncCombobox } from "@/shared/ui/AsyncCombobox/AsyncCombobox";
 import { useGetStacks } from "@/features/manage-stacks/model/useGetStacks";
 import {useIntersectionObserver} from "@/shared/lib/hooks/useIntersectionObserver";
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
+import {$fetch} from "@/shared/api/fetch";
+import {useTypes} from "@/entities/types/model/useTypes";
 
 interface Props {
     selectedStacks?: Record<string, any>[]
@@ -30,7 +32,7 @@ export default function ShowStacks({
        setCurrentSelectedStack,
        className,
        baseUrl
-   }: Props) {
+    }: Props) {
     const {
         stacks,
         searchName,
@@ -41,7 +43,8 @@ export default function ShowStacks({
         loadMore
     } = useGetStacks({ userId, baseUrl });
 
-    // Хук для бесконечного скролла
+    const {types} = useTypes()
+
     const observerTarget = useIntersectionObserver(
         loadMore,
         [isInitialLoading, hasMore, stacks.length],
@@ -65,20 +68,68 @@ export default function ShowStacks({
         setSelectedStacks((prev: any) => (prev || []).filter((_: any) => _.id !== stack.id));
     };
 
+    // Получаем имя типа по id
+    const getTypeName = (typeId: string) => {
+        if (!typeId) return 'Другое';
+        const type = types.find(t => t.id === typeId);
+        return type?.name || typeId;
+    };
+
+    // Группировка стеков по type_id (только для НЕ редактируемого режима)
+    const groupedStacks = isReadOnly ? selectedStacks.reduce((acc, stack) => {
+        const typeId = stack.type_id || 'other';
+        if (!acc[typeId]) {
+            acc[typeId] = [];
+        }
+        acc[typeId].push(stack);
+        return acc;
+    }, {} as Record<string, any[]>) : null;
+
+    const sortedGroupKeys = groupedStacks
+        ? Object.keys(groupedStacks).sort((a, b) => {
+            return getTypeName(a).localeCompare(getTypeName(b));
+        })
+        : [];
+
     return (
         <div className={`flex flex-col gap-2 ${className}`}>
             {showSelected && selectedStacks.length > 0 && (
-                <div className="grid grid-cols-[repeat(auto-fill,minmax(105px,1fr))] gap-3">
-                    {selectedStacks.map((stack: any, i: number) => (
-                        <Stack
-                            key={stack.id || i}
-                            stack={stack}
-                            handleDelete={isReadOnly ? undefined : () => handleDeleteSelected(stack)}
-                            selected={!isReadOnly}
-                            isReadOnly={isReadOnly}
-                        />
-                    ))}
-                </div>
+                <>
+                    {isReadOnly ? ( // <-- ИСПРАВЛЕНО: isReadOnly = группировка
+                        // Не редактируемый режим - группировка по типам
+                        <div className="flex flex-col gap-4">
+                            {sortedGroupKeys.map((typeId) => (
+                                <div key={typeId} className="flex flex-col gap-2">
+                                    <p className="text-text-muted text-tiny font-semibold uppercase tracking-wider">
+                                        {getTypeName(typeId)}
+                                    </p>
+                                    <div className="grid grid-cols-[repeat(auto-fill,minmax(105px,1fr))] gap-2">
+                                        {groupedStacks[typeId].map((stack: any, i: number) => (
+                                            <Stack
+                                                key={stack.id || i}
+                                                stack={stack}
+                                                isReadOnly={true}
+                                            />
+                                        ))}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    ) : (
+                        // Редактируемый режим - сетка без группировки
+                        <div className="grid grid-cols-[repeat(auto-fill,minmax(105px,1fr))] gap-2">
+                            {selectedStacks.map((stack: any, i: number) => (
+                                <Stack
+                                    key={stack.id || i}
+                                    stack={stack}
+                                    handleDelete={() => handleDeleteSelected(stack)}
+                                    selected={!isReadOnly}
+                                    isReadOnly={isReadOnly}
+                                />
+                            ))}
+                        </div>
+                    )}
+                </>
             )}
 
             {showSearch && !isReadOnly && (
