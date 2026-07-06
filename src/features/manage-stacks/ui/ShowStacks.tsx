@@ -104,7 +104,7 @@ export default function ShowStacks({
                                         {getTypeName(typeId)}
                                     </p>
                                     <div className="grid grid-cols-[repeat(auto-fill,minmax(105px,1fr))] gap-2">
-                                        {groupedStacks[typeId].map((stack: any, i: number) => (
+                                        {groupedStacks && groupedStacks[typeId].map((stack: any, i: number) => (
                                             <Stack
                                                 key={stack.id || i}
                                                 stack={stack}
