@@ -11,7 +11,6 @@ import { PrivateProfileWidget } from "@/widgets/user/profile/ui/profile/ui/Priva
 import ProjectsWidget from "@/widgets/user/projects-widget/ProjectsWidget";
 import StacksWidget from "@/widgets/user/stacks-widget/StacksWidget";
 import DesertScene from "@/shared/assets/images/vector/empty/DesertScene";
-import SubscriptionOffer from "@/widgets/user/subscription-offer/SubscriptionOffer";
 import PostsWidget from "@/widgets/user/posts-widget/PostsWidget";
 import Input from "@/shared/ui/Inputs/Input";
 import SearchIcon from "@mui/icons-material/Search";

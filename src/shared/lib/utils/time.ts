@@ -86,3 +86,20 @@ export function formatIsoDate(isoTime: string | Date): string {
 
     return formattedDate;
 }
+
+export const combineDateTime = (date: string, time: string) => {
+    if (!date || !time) return null;
+    // Результат: "2026-07-10T14:30"
+    return `${date}T${time}`;
+};
+
+export const parseDateTime = (isoString: string | null | undefined) => {
+    if (!isoString) return { date: "", time: "" };
+
+    const parts = isoString.split(/[\sT]/);
+    if (parts.length >= 2) {
+        const timePart = parts[1].substring(0, 5);
+        return { date: parts[0], time: timePart };
+    }
+    return { date: "", time: "" };
+};

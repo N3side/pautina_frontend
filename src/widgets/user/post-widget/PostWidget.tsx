@@ -16,7 +16,7 @@ import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
 import UserHeader from "@/entities/user/ui/UserHeader";
 import Like from "@/features/reactions/Like";
 import CommentWidget from "@/widgets/user/comment-widget/CommentWidget";
-import WriteComment from "@/features/write-comment/WriteComment";
+import WriteComment from "@/features/write-comment/ui/WriteComment";
 import {useIntersectionView} from "@/features/use-intersection-view/useIntersectionView";
 import {useRouter} from "next/navigation";
 import UsePaginate from "@/shared/lib/hooks/usePaginate";
@@ -34,7 +34,7 @@ interface Props {
     redirectOnClick?: boolean
 }
 
-export default function PostWidget({ post, setPosts, redirectOnClick=false, className, galleryClassName }: Props) {
+export default function EventWidget({ post, setPosts, redirectOnClick=false, className, galleryClassName }: Props) {
 
     const { targetRef } = useIntersectionView({
         entityId: post?.id,
@@ -117,7 +117,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false, clas
     }, [post])
 
     async function getComments(page, post_id) {
-        const response = await $fetch(`posts/${post_id}/comments?page=${page}&comments_limit=3`)
+        const response = await $fetch(`comments/get_morph?page=${page}&comments_limit=3&entity_id=${post_id}&entity=${"post"}`)
 
         const comments_ = response?.json?.comments || []
         const per_page = response?.json?.per_page
@@ -150,7 +150,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false, clas
 
     const [isEditing, setIsEditing] = useState<boolean>(false)
 
-    const {handleTriggerSelect, gallery, setGallery, fileInputRef, handleFileChange, uploadAllPendingFiles} = useGalleryLogic({
+    const {handleTriggerSelect, gallery, setGallery, fileInputRef, handleFileChange, uploadAllPendingFiles, handleDelete, sortPendings} = useGalleryLogic({
         entity: "post",
         isClientOnly: true,
         existingEntityId: post?.id,
@@ -177,24 +177,9 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false, clas
 
                             {
                                 isEditing ?
-                                    <EditGallery className="mt-3" cards={gallery} setCards={setGallery} />
+                                    <EditGallery className="mt-3" cards={gallery} setCards={setGallery} onDelete={handleDelete} />
                                     :
                                     <Gallery className={`mt-2 ${galleryClassName}`} gallery={gallery} />
-                            }
-
-                            {
-                                // isEditing ?
-                                //     <ShowStacks
-                                //         className="my-2"
-                                //         showSearch={true}
-                                //         showAll={true}
-                                //         showSelected={true}
-                                //         selectedStacks={stacks}
-                                //         setSelectedStacks={setStacks}
-                                //     />
-                                    // :
-                                    // <OnlyShowStacks stacks={post?.stacks} />
-
                             }
 
 
@@ -208,6 +193,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false, clas
                                             likes_count={post?.likes_count}
                                             entity={"post"}
                                             entity_id={post?.id}
+                                            showLikes={true}
                                         />
 
                                         <SocialButton
@@ -228,10 +214,11 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false, clas
 
                             {showWriteComment &&
                                 <WriteComment
-                                    className="mt-4 !py-3 z-100"
+                                    className="z-100"
                                     entity="post"
                                     entity_id={post?.id}
                                     setComments={setComments}
+                                    setOpenCommentation={setShowWriteComment}
                                 />
                             }
 
@@ -277,6 +264,7 @@ export default function PostWidget({ post, setPosts, redirectOnClick=false, clas
                                     <ActionButton className="h-fit" text="Изменить" onClick={async() => {
                                         const isOk = await updatePost(post?.id, content)
                                         await uploadAllPendingFiles(post?.id)
+                                        await sortPendings()
 
                                         if (isOk) {
                                             setIsEditing(false)

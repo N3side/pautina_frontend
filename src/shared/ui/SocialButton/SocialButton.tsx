@@ -9,9 +9,11 @@ interface Props extends ComponentProps<"button"> {
     active?: boolean;
     hover?: boolean;
     activeColorClass?: string;
+    showCount?: boolean
 }
 
 export default function SocialButton({
+         showCount=true,
          count,
          Icon,
          ActiveIcon,
@@ -51,7 +53,7 @@ export default function SocialButton({
             <p className={`text-small font-medium transition-colors duration-300 tabular-nums ${
                 active ? activeColorClass : "text-text-muted"
             }`}>
-                {count}
+                {showCount && count}
             </p>
         </button>
     );

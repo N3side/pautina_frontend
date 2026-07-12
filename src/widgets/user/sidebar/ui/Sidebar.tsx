@@ -15,6 +15,7 @@ import { UserContext } from "@/entities/user";
 import { useModal } from "@/shared/lib/hooks/useModal";
 import { Modal } from "@/shared/ui/Modals/Modal";
 import SubscriptionOffer from "@/widgets/user/subscription-offer/SubscriptionOffer";
+import BusinessCenterIcon from '@mui/icons-material/BusinessCenter';
 
 interface Props {
     className?: string;
@@ -59,6 +60,12 @@ export default function Sidebar({ className }: Props) {
                     text: "Профиль",
                     link: userLink(user.main.short_id),
                 },
+                user?.access?.role === "company" && {
+                    id: "company",
+                    Icon: BusinessCenterIcon,
+                    text: "Мероприятия",
+                    link: `/company/${user?.main?.id}`
+                },
                 user && {
                     id: "settings",
                     Icon: SettingsOutlinedIcon,
@@ -88,7 +95,7 @@ export default function Sidebar({ className }: Props) {
                     flex flex-col gap-2
                     transition-all duration-300 ease-in-out
                     glass-effect rounded-2xl
-                    w-full h-full
+                    w-full h-full min-w-[190px]
                     ${className}
                 `}
             >

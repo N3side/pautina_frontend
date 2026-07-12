@@ -4,32 +4,23 @@ import SendIcon from "@mui/icons-material/Send";
 import {HTMLAttributes} from "react";
 import AdjustableText from "@/shared/ui/adjustable-text/AdjustableText";
 import RoundedIconWrapper from "@/shared/ui/IconWrapper/RoundedIconWrapper";
-
-interface IconButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
-    Icon: React.ElementType;
-}
-
-function IconButton({ Icon, className, ...props }: IconButtonProps) {
-    return (
-        <button
-            className={`transition-all duration-200 active:scale-95 !w-fit !h-fit aspect-square text-text-muted hover:text-text-main flex justify-center items-center ${className || ""}`}
-            {...props}
-        >
-            <Icon className="!text-[24px]" />
-        </button>
-    );
-}
+import PhotoLibraryOutlinedIcon from "@mui/icons-material/PhotoLibraryOutlined";
+import toast from "react-hot-toast";
+import {useGalleryLogic} from "@/features/use-gallery-logic/UseGalleryLogic";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
     text: string
     setText: (any) => any
     className?: string
     handleSend: (any) => any
+    placeholder?: string
+    handleTriggerSelect?: () => void
 }
 
-export default function MessageForm({text, setText, handleSend, className, ...props}: Props) {
+export default function MessageForm({text, setText, handleSend, className, placeholder, handleTriggerSelect, ...props}: Props) {
+
     return (
-        <div  onClick={(e) => e.stopPropagation()} className={`flex w-full items-end gap-3.5 0 rounded-2xl px-4 py-3 glass-effect ${className}`} {...props}>
+        <div onClick={(e) => e.stopPropagation()} className={`flex w-full items-end gap-3.5 0 rounded-2xl px-4 py-3 glass-effect ${className}`} {...props}>
 
             <EmojiDropdown
                 text={text}
@@ -39,9 +30,15 @@ export default function MessageForm({text, setText, handleSend, className, ...pr
                         btnHeight={20}
                         Icon={MoodIcon}
                     />
-                } />
+                }
+            />
 
-            <AdjustableText text={text} setText={setText} />
+
+            <AdjustableText text={text} setText={setText} placeholder={placeholder} />
+
+            {handleTriggerSelect &&
+                <RoundedIconWrapper Icon={PhotoLibraryOutlinedIcon} onClick={handleTriggerSelect} btnHeight={20} btnWidth={20} />
+            }
 
             <RoundedIconWrapper
                 btnHeight={20}
@@ -50,7 +47,6 @@ export default function MessageForm({text, setText, handleSend, className, ...pr
                 className={`${text.trim() ? "text-text-main" : "text-text-muted/50 cursor-not-allowed"}`}
                 onClick={handleSend}
             />
-
 
         </div>
     )

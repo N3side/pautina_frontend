@@ -60,7 +60,7 @@ export default function ServerIcon({ url, className }: ServerIconProps) {
                     setSvgHtml(svg);
                 }
             })
-            .catch(() => console.error("Ошибка загрузки SVG icon", url));
+            // .catch(() => console.error("Ошибка загрузки SVG icon", url));
 
         return () => {
             isMounted = false;

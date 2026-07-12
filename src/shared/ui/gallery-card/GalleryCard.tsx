@@ -7,13 +7,14 @@ import { checkIsVideo } from "@/shared/lib/utils/checkIsVideo";
 interface Props {
     image: Record<string, any>;
     onRemove?: () => void;
+    className?: string
 }
 
-export default function GalleryCard({ image, onRemove }: Props) {
+export default function GalleryCard({ image, onRemove, className }: Props) {
     const isVideo = checkIsVideo(image?.image_url);
 
     return (
-        <div className="rounded-[8px] aspect-[9/6] relative glass-effect group transition-all duration-300 overflow-hidden cursor-move">
+        <div className={`rounded-[8px] aspect-[9/6] relative glass-effect group transition-all duration-300 overflow-hidden cursor-move ${className}`}>
             {onRemove && (
                 <RoundedIconWrapper
                     className="!glass-effect absolute right-2 top-2 !w-[20px] z-10"

@@ -23,7 +23,7 @@ export default function Activity({ next }: ActivityProps) {
 
     const {activityTsx, formRef, statusValue} = UseSelectActivity({errors, localSelectedStatus: "selectedStatus", localCourse: "course", localPost: "post", localOrganization: "organization", localSchoolStudyStatus: "schoolStudyStatus", localDepartment: "department"})
 
-    async function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    async function handleSubmit(e) {
 
         e.preventDefault();
         if (!formRef.current) return;
@@ -68,9 +68,7 @@ export default function Activity({ next }: ActivityProps) {
 
             {activityTsx}
 
-            <ButtonLarge text={"Далее"} onClick={handleSubmit}>
-                <></>
-            </ButtonLarge>
+            <ButtonLarge text={"Далее"} onClick={handleSubmit} />
         </div>
     );
 }

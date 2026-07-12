@@ -3,19 +3,19 @@ import { smooth } from "@/shared/styles/animations";
 
 interface Option {
     label: string;
-    value: string | number;
+    value: string | number | boolean;
 }
 
 interface SelectProps {
     label?: string;
-    value?: string | number; // опционально - если нужно контролировать извне
-    defaultValue?: string | number; // значение по умолчанию
+    value?: string | number;
+    defaultValue?: string | number;
     options: Option[];
-    onChange: (value: string | number) => void;
+    onChange: (value: string | number | boolean) => void;
     placeholder?: string;
     error?: string;
     className?: string;
-    name?: string; // для FormData
+    name?: string;
 }
 
 export default function Select({
@@ -30,11 +30,19 @@ export default function Select({
        name
    }: SelectProps) {
     const [isOpen, setIsOpen] = useState(false);
-    const [internalValue, setInternalValue] = useState<string | number>(defaultValue || '');
+    // Инициализируем сразу, но это сработает только для синхронных данных
+    const [internalValue, setInternalValue] = useState<string | number | boolean>(defaultValue ?? '');
+
     const containerRef = useRef<HTMLDivElement>(null);
     const hiddenInputRef = useRef<HTMLInputElement>(null);
 
-    // Используем externalValue если передан, иначе internalValue
+    // 🔥 ФИКС: Синхронизируем internalValue когда defaultValue меняется (например, после загрузки с API)
+    useEffect(() => {
+        if (defaultValue !== undefined && defaultValue !== null) {
+            setInternalValue(defaultValue);
+        }
+    }, [defaultValue]);
+
     const currentValue = externalValue !== undefined ? externalValue : internalValue;
 
     useEffect(() => {
@@ -50,14 +58,17 @@ export default function Select({
     // Обновляем скрытый input при изменении currentValue
     useEffect(() => {
         if (hiddenInputRef.current) {
-            hiddenInputRef.current.value = String(currentValue || '');
+            hiddenInputRef.current.value = String(currentValue ?? '');
         }
     }, [currentValue]);
 
     const selectedOption = options.find(opt => opt.value === currentValue);
 
-    const handleSelect = (value: string | number) => {
-        setInternalValue(value);
+    const handleSelect = (value: string | number | boolean) => {
+        // Если компонент неконтролируемый (нет externalValue), обновляем internalValue
+        if (externalValue === undefined) {
+            setInternalValue(value);
+        }
         onChange(value);
         setIsOpen(false);
     };
@@ -67,13 +78,12 @@ export default function Select({
             {label && <p className="text-text-muted text-sm font-medium">{label}</p>}
 
             <div className="relative">
-                {/* Скрытый input для FormData */}
                 {name && (
                     <input
                         ref={hiddenInputRef}
                         type="hidden"
                         name={name}
-                        value={currentValue || ''}
+                        value={String(currentValue) ?? ''}
                     />
                 )}
 
@@ -84,7 +94,7 @@ export default function Select({
                         w-full py-4 px-5 rounded-xl ${smooth} outline-none text-left flex justify-between items-center
                         border glass-effect text-sm font-medium transition-all
                         ${error ? 'border-red-500' : 'border-border-default hover:border-brand/50 focus:ring-4 focus:ring-brand/10'}
-                        ${!currentValue ? 'text-text-muted/60' : 'text-text-main'}
+                        ${!currentValue && currentValue !== 0 ? 'text-text-muted/60' : 'text-text-main'}
                     `}
                 >
                     {selectedOption ? selectedOption.label : placeholder}
@@ -95,9 +105,9 @@ export default function Select({
 
                 {isOpen && (
                     <div className="absolute top-full mt-2 w-full bg-surface border border-border-default rounded-xl shadow-lg z-50 overflow-hidden py-1">
-                        {options.map((opt) => (
+                        {options.map((opt, i) => (
                             <div
-                                key={opt.value}
+                                key={i}
                                 onClick={() => handleSelect(opt.value)}
                                 className={`px-5 py-3 hover:bg-brand/5 cursor-pointer transition-colors text-sm 
                                     ${currentValue === opt.value ? 'bg-brand/10 text-brand' : 'text-text-main'}`}

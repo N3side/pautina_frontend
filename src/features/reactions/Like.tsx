@@ -9,9 +9,10 @@ interface Props {
     likes_count: number
     entity: string
     entity_id: string
+    showLikes: boolean
 }
 
-export default function Like({is_liked, likes_count, entity, entity_id}: Props) {
+export default function Like({is_liked, likes_count, entity, entity_id, showLikes}: Props) {
 
     const [isLiked, setIsLiked] = useState<boolean>(!!is_liked)
     const [likesCount, setLikesCount] = useState<number>(likes_count || 0)
@@ -71,6 +72,7 @@ export default function Like({is_liked, likes_count, entity, entity_id}: Props) 
 
     return (
         <SocialButton
+            showCount={showLikes}
             count={likesCount}
             Icon={FavoriteBorderOutlinedIcon}
             ActiveIcon={HeartFilledIcon}

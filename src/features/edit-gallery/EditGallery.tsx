@@ -1,8 +1,7 @@
 "use client"
 
-import {useState, useMemo, useEffect} from "react";
+import {useState, useMemo} from "react";
 import GalleryCard from "@/shared/ui/gallery-card/GalleryCard";
-import { $fetch } from "@/shared/api/fetch";
 
 interface Props {
     cards: any;
@@ -10,9 +9,11 @@ interface Props {
     entity?: string;
     isClientOnly?: boolean;
     className?: string
+    cardClassName?: string
+    onDelete: (id: string | number) => void;
 }
 
-export default function EditGallery({ cards, setCards, entity = "post", isClientOnly = false, className }: Props) {
+export default function EditGallery({ cards, setCards, className, cardClassName, onDelete }: Props) {
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
     const sortedCards = useMemo(() => {
@@ -22,57 +23,18 @@ export default function EditGallery({ cards, setCards, entity = "post", isClient
     const handleDrop = async (e: React.DragEvent<HTMLDivElement>, targetIndex: number) => {
         e.preventDefault();
         if (draggedIndex === null || draggedIndex === targetIndex) return;
-
         const draggedCard = sortedCards[draggedIndex];
         const targetCard = sortedCards[targetIndex];
 
-        const isLocalCard =  !draggedCard.entity_id;
-        console.log(isLocalCard)
+        // Логику сортировки оставляем здесь, так как она визуальная
+        setCards((prev) => prev.map((card) => {
+            if (card.id === draggedCard.id) return { ...card, sort: targetCard.sort };
+            if (card.id === targetCard.id) return { ...card, sort: draggedCard.sort };
+            return card;
+        }));
 
-        if (isLocalCard) {
-            setCards((prev) => prev.map((card) => {
-                if (card.id === draggedCard.id) return { ...card, sort: targetCard.sort };
-                if (card.id === targetCard.id) return { ...card, sort: draggedCard.sort };
-                return card;
-            }));
-        } else {
-            const payload = JSON.stringify({
-                "order": [
-                    { image_id: draggedCard.id, sort: targetCard.sort },
-                    { image_id: targetCard.id, sort: draggedCard.sort }
-                ]
-            });
-
-            const response = await $fetch(`images`, {
-                method: "PATCH",
-                body: payload,
-                headers: {
-                    "Content-Type": "application/json",
-                    "Accept": "application/json"
-                }
-            });
-
-            if (response?.response?.ok) {
-                setCards((prev) => prev.map((card) => {
-                    if (card.id === draggedCard.id) return { ...card, sort: targetCard.sort };
-                    if (card.id === targetCard.id) return { ...card, sort: draggedCard.sort };
-                    return card;
-                }));
-            }
-        }
         setDraggedIndex(null);
     };
-
-    async function onDelete(image_id: string) {
-
-        const response = await $fetch(`images/${image_id}`, {
-            method: "DELETE"
-        });
-
-        if (response?.response?.ok) {
-            setCards(prev => prev.filter(image => image?.id !== image_id));
-        }
-    }
 
     return (
         <div className={`grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-3 ${className}`}>
@@ -90,8 +52,9 @@ export default function EditGallery({ cards, setCards, entity = "post", isClient
                     className="cursor-grab"
                 >
                     <GalleryCard
+                        className={cardClassName}
                         image={card}
-                        onRemove={() => onDelete(card.id)}
+                        onRemove={() => onDelete(card.id)} // <-- Просто вызываем колбэк
                     />
                 </div>
             ))}

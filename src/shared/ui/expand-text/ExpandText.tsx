@@ -7,9 +7,10 @@ interface Props {
     className?: string
     canCloseOnExpanded?: boolean
     isExpandedDefault?: boolean
+    textClassName?: string
 }
 
-export default function ExpandText({text, previewLength=50, className, canCloseOnExpanded=true, isExpandedDefault=false}: Props) {
+export default function ExpandText({text, textClassName, previewLength=50, className, canCloseOnExpanded=true, isExpandedDefault=false}: Props) {
 
     // Раскрытие текста
     const [isExpanded, setIsExpanded] = useState<boolean>(isExpandedDefault);
@@ -36,7 +37,7 @@ export default function ExpandText({text, previewLength=50, className, canCloseO
 
              }}
         >
-            <span>{displayedText && <ParsedContentText content={displayedText} />}</span>
+            <span>{displayedText && <ParsedContentText className={`${textClassName}`} content={displayedText} />}</span>
 
             {isLongText && (
                 <button

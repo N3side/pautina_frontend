@@ -163,6 +163,7 @@ export default function UpdateProject() {
                         setCards={setGallery}
                         entity="project"
                         isClientOnly={true}
+                        onDelete={handleDelete}
                     />
 
                 </div>

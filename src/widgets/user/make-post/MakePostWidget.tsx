@@ -106,7 +106,7 @@ export default function MakePostWidget({ setPosts, className }: Props) {
                     <EditGallery
                         cards={gallery}
                         setCards={setGallery}
-                        // onDelete={handleDelete}
+                        onDelete={handleDelete}
                         isClientOnly={true}
                     />
                 )}

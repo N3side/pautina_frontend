@@ -1,24 +1,34 @@
 "use client";
 
-import {useEffect, useRef, useState} from "react";
+import { useEffect, useRef, useState } from "react";
 import { $fetch } from "@/shared/api/fetch";
+import { usePendingFiles } from "@/features/use-gallery-logic/usePendingFiles";
 
 interface UseGalleryLogicProps {
     entity: string;
     isClientOnly?: boolean;
     existingEntityId?: number | string;
-    galleryInit?: Record<string, any>[]
+    galleryInit?: Record<string, any>[];
 }
 
-export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId, galleryInit }: UseGalleryLogicProps) {
+export function useGalleryLogic({
+        entity,
+        isClientOnly = false,
+        existingEntityId,
+        galleryInit
+    }: UseGalleryLogicProps) {
     const [gallery, setGallery] = useState<Record<string, any>[]>(galleryInit || []);
-    const pendingFilesRef = useRef<Map<string, File>>(new Map());
+    const [trashImages, setTrashImages] = useState<(number | string)[]>([]);
+    const [isOrderChanged, setIsOrderChanged] = useState(false);
+
+    const { addFile, getFile, removeFile, clearAll } = usePendingFiles();
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // Синхронизация с galleryInit при изменении
     useEffect(() => {
-        if (galleryInit && Array.isArray(galleryInit) && galleryInit?.length > 0) {
+        if (galleryInit && Array.isArray(galleryInit)) {
             setGallery(galleryInit);
+            setTrashImages([]);
+            setIsOrderChanged(false);
         }
     }, [galleryInit]);
 
@@ -34,89 +44,131 @@ export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId
             const tempId = `temp_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`;
             const previewUrl = URL.createObjectURL(file);
 
-            pendingFilesRef.current.set(tempId, file);
+            addFile(tempId, file);
 
             const newCard = {
                 id: tempId,
                 image_url: previewUrl,
-                sort: gallery.length
+                sort: gallery.length + 1 // Исправлено: sort должен быть корректным
             };
 
             setGallery((prev) => [...prev, newCard]);
+            setIsOrderChanged(true);
         } else {
             const formData = new FormData();
             formData.set("image", file);
             formData.set("entity", entity);
-
-            if (existingEntityId) {
-                formData.set("entity_id", String(existingEntityId));
-            }
+            if (existingEntityId) formData.set("entity_id", String(existingEntityId));
 
             const response = await $fetch(`images`, {
                 method: "POST",
                 body: formData
             });
 
-            const responseData = response?.json;
-            const newCard = responseData?.image || responseData;
-
+            const newCard = response?.json?.image || response?.json;
             if (newCard) {
                 setGallery((prev) => [...prev, newCard]);
             }
         }
-
         event.target.value = '';
     };
 
-    const handleDelete = async (imageId: number | string) => {
+    const handleDelete = (imageId: number | string) => {
         const isTemp = String(imageId).startsWith("temp_");
 
-        if (isTemp) {
-            const fileData = pendingFilesRef.current.get(String(imageId));
-            if (fileData) URL.revokeObjectURL(fileData.name);
-            pendingFilesRef.current.delete(String(imageId));
-            setGallery((prev) => prev.filter((c) => c.id !== imageId));
-        } else {
-            const response = await $fetch(`images/${imageId}`, {
-                method: "DELETE"
-            });
+        setGallery((prev) => prev.filter((c) => c.id !== imageId));
+        setIsOrderChanged(true);
 
-            if (response?.response?.ok) {
-                setGallery((prev) => prev.filter((c) => c.id !== imageId));
+        if (isTemp) {
+            removeFile(String(imageId));
+        } else {
+            if (isClientOnly) {
+                setTrashImages((prev) => [...prev, imageId]);
+            } else {
+                $fetch(`images/${imageId}`, { method: "DELETE" })
+                    .catch(e => console.error("Auto-delete failed", e));
             }
         }
     };
 
-    const uploadAllPendingFiles = async (targetPostId: number | string) => {
-        if (!isClientOnly) return;
+    const sortPendings = () => {
+        setGallery(prev => {
+            return prev.map((item, index) => ({
+                ...item,
+                sort: index + 1
+            }))
+        })
+        setIsOrderChanged(true);
+    };
 
-        const sortedGallery = [...gallery].sort((a, b) => (a.sort || 0) - (b.sort || 0));
-        const uploadedImages: Record<string, any>[] = []; // ✅ Явно указываем тип
+    const flushTrash = async () => {
+        if (trashImages.length === 0) return;
 
-        for (const card of sortedGallery) {
-            const file = pendingFilesRef.current.get(card.id);
+        for (const id of trashImages) {
+            await $fetch(`images/${id}`, { method: "DELETE" }).catch(console.error);
+        }
+        setTrashImages([]);
+    };
+
+    const uploadAllPendingFiles = async (entity_id: number | string) => {
+        if (!isClientOnly && !isOrderChanged) return;
+
+        // 1. Удаляем помеченные на удаление
+        await flushTrash();
+
+        // 2. Берем АКТУАЛЬНЫЙ порядок из стейта gallery
+        const currentSortedGallery = [...gallery].sort((a, b) => (a.sort || 0) - (b.sort || 0));
+
+        const uploadedImages: Record<string, any>[] = [];
+        const tempIdsToRemove: string[] = [];
+
+        // Загружаем только временные файлы
+        for (const card of currentSortedGallery) {
+            const file = getFile(card.id);
             if (!file) continue;
 
             const formData = new FormData();
             formData.set("image", file);
             formData.set("entity", entity);
-            formData.set("entity_id", String(targetPostId));
+            formData.set("entity_id", String(entity_id));
 
             const response = await $fetch(`images`, {
                 method: "POST",
                 body: formData
             });
 
-            const newCard = response?.json?.image || [];
-            if (newCard) uploadedImages.push(newCard);
+            const newCard = response?.json?.image || response?.json;
+            if (newCard) {
+                uploadedImages.push(newCard);
+                tempIdsToRemove.push(card.id);
+            }
         }
 
-        pendingFilesRef.current.clear();
+        clearAll();
 
-        // Если нужно обновить галерею после загрузки
-        if (uploadedImages.length > 0) {
-            setGallery(uploadedImages);
+        // 3. Формируем ФИНАЛЬНЫЙ список
+        let finalGallery: Record<string, any>[] = [];
+
+        finalGallery = currentSortedGallery
+            .filter(card => !tempIdsToRemove.includes(card.id)) // Убираем временные
+            .concat(uploadedImages); // Добавляем новые в конец
+
+        // 4. Отправляем сортировку ТОЛЬКО если картинок 2 или больше
+        if (finalGallery.length >= 2) {
+            const orderPayload = finalGallery.map((img, index) => ({
+                image_id: img.id,
+                sort: index + 1
+            }));
+
+            await $fetch(`images`, { // Лучше использовать отдельный роут для сортировки
+                method: "PATCH",
+                body: JSON.stringify({ order: orderPayload }),
+                headers: { "Content-Type": "application/json" }
+            });
         }
+
+        setGallery(finalGallery);
+        setIsOrderChanged(false);
     };
 
     return {
@@ -124,8 +176,14 @@ export function useGalleryLogic({ entity, isClientOnly = false, existingEntityId
         handleTriggerSelect,
         handleFileChange,
         handleDelete,
+        sortPendings,
         uploadAllPendingFiles,
+        flushTrash,
         gallery,
-        setGallery
+        setGallery,
+        addFile,
+        getFile,
+        removeFile,
+        clearAll
     };
 }

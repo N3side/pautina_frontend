@@ -4,9 +4,7 @@ import React, {useContext, useEffect, useState} from "react";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import {getRussianAnswers} from "@/shared/lib/utils/getRussianAnswers";
 import {$fetch} from "@/shared/api/fetch";
-import {ExpandLess} from "@mui/icons-material";
-import WriteComment from "@/features/write-comment/WriteComment";
-import ShareIcon from "@mui/icons-material/Share";
+import WriteComment from "@/features/write-comment/ui/WriteComment";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import {UserContext} from "@/entities/user";
@@ -17,6 +15,9 @@ import ConfirmationForm from "@/features/confirm-operation/ui/confirmationForm";
 import ActionButton from "@/shared/ui/Buttons/ActionButton";
 import UsePaginate from "@/shared/lib/hooks/usePaginate";
 import EditText from "@/shared/ui/edit-text/editText";
+import {useGalleryLogic} from "@/features/use-gallery-logic/UseGalleryLogic";
+import EditGallery from "@/features/edit-gallery/EditGallery";
+import Gallery from "@/entities/gallery/Gallery";
 
 interface Props {
     comment: Record<string, any> | null
@@ -100,6 +101,11 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
         const comment_ = response?.json?.comment
         if (comment_) {
             setCommentState(comment_)
+
+            uploadAllPendingFiles(comment_id)
+            flushTrash()
+            sortPendings()
+
             setIsEditing(false)
         }
     }
@@ -134,6 +140,13 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
         getCommentChildren(commentsPage, comment?.id)
     }, [commentsPage]);
 
+    const {handleTriggerSelect, gallery, setGallery, fileInputRef, handleFileChange, uploadAllPendingFiles, handleDelete, flushTrash, sortPendings} = useGalleryLogic({
+        entity: "comment",
+        isClientOnly: true,
+        existingEntityId: comment?.id,
+        galleryInit: comment?.images
+    })
+
     return (
         !fullDeleted &&
         <div className="w-full min-w-[350px] shrink-0">
@@ -161,12 +174,28 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
 
                     <div className="w-full">
 
+                        {!isEditing &&
+                            <Gallery gallery={gallery} />
+                        }
+
                         {
                             !isEditing && <p className="text-text-main text-small">{content}</p>
                         }
 
+                        <input
+                            type="file"
+                            ref={fileInputRef}
+                            onChange={handleFileChange}
+                            className="hidden"
+                        />
+
+
                         {
-                            isEditing && <EditText text={content} setText={setContent}  />
+                            isEditing &&
+                            <div>
+                                <EditGallery cards={gallery} setCards={setGallery} onDelete={handleDelete} cardClassName="!h-[130px]" />
+                                <EditText text={content} setText={setContent} handleTriggerSelect={handleTriggerSelect} />
+                            </div>
                         }
 
                         {!isEditing &&
@@ -179,6 +208,7 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
                                         likes_count={commentState?.likes_count}
                                         entity={"comment"}
                                         entity_id={commentState?.id}
+                                        showLikes={true}
                                     />
 
                                     <p className="text-text-main font-medium text-small select-none cursor-pointer"
@@ -196,7 +226,16 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
                         }
 
                         {!isEditing && openCommentation &&
-                            <WriteComment onClick={(e) => e.stopPropagation()} setExpanded={setIsExpanded} setOpenCommentation={setOpenCommentation} setComments={setChildComments} className="mt-2" parentComment={commentState} entity={entity} entity_id={entity_id}  />
+                            <WriteComment
+                                onClick={(e) => e.stopPropagation()}
+                                setExpanded={setIsExpanded}
+                                setOpenCommentation={setOpenCommentation}
+                                setComments={setChildComments}
+                                className="mt-2"
+                                parentComment={commentState}
+                                entity={entity}
+                                entity_id={entity_id
+                            }/>
                         }
 
                         {!isEditing && showChildren && !isExpanded &&

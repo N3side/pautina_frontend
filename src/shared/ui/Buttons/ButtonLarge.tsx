@@ -1,9 +1,16 @@
 "use client"
 
 import {colorStyles} from "@/shared/styles/colors";
-import {Button} from "@mui/material"
+import {Button, ButtonProps} from "@mui/material"
+import {ReactNode} from "react";
 
-export default function ButtonLarge({ children, className="", text="", ...props }) {
+interface Props extends ButtonProps {
+    children?: ReactNode
+    className?: string
+    text?: string
+}
+
+export default function ButtonLarge({ children, className="", text="", ...props }: Props) {
     return (
         <Button
             type="submit"
