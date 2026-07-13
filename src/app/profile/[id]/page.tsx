@@ -75,7 +75,8 @@ export default function Page() {
     const [filledSections, setFilledSections] = useState({
         documents: false,
         stacks: false,
-        projects: false
+        projects: false,
+        posts: false
     });
 
     const hasContent = isMyProfile || Object.values(filledSections).some(Boolean);
@@ -168,21 +169,17 @@ export default function Page() {
     async function viewProfile(user_id: string) {
         if (!user_id) return;
 
-        try {
-            await $fetch("view", {
-                method: "POST",
-                body: JSON.stringify({
-                    "entity": "user",
-                    "entity_id": user_id
-                }),
-                headers: {
-                    "Accept": "application/json",
-                    "Content-Type": "application/json"
-                }
-            });
-        } catch (error) {
-            console.error('Ошибка при отправке view:', error);
-        }
+        await $fetch("view", {
+            method: "POST",
+            body: JSON.stringify({
+                "entity": "user",
+                "entity_id": user_id
+            }),
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/json"
+            }
+        });
     }
 
     useEffect(() => {
@@ -197,7 +194,6 @@ export default function Page() {
             viewProfile(trueUser?.main?.id);
         }
     }, [trueUser?.main?.id, isMyProfile, isLoading, user?.main?.id]);
-
 
     return (
         <Layout>
@@ -235,6 +231,7 @@ export default function Page() {
                                 );
                             } else if (section.name === "posts") {
                                 componentNode = (
+                                    hasContent &&
                                     <div className="flex gap-4">
                                         <div className="flex flex-col gap-4 w-full">
                                             {
@@ -324,7 +321,7 @@ export default function Page() {
                         })}
 
                         {!hasContent && !isMyProfile && (
-                            <div className="glass-effect p-6 rounded-[18px] mt-4">
+                            <div className="glass-effect p-6 rounded-[18px]">
                                 <h4 className="text-text-main font-bold">
                                     Пока что тут ничего нет...
                                 </h4>

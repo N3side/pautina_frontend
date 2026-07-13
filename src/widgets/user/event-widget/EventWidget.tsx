@@ -122,25 +122,25 @@ export default function EventWidget({
         galleryInit: event?.images
     })
 
-    async function getComments(page: number, id: string) {
-        const response = await $fetch(`comments/get_morph?page=${page}&comments_limit=3&entity_id=${id}&entity=event`)
-
-        const comments_ = response?.json?.comments || []
-        const per_page = response?.json?.per_page
-        const last_page = response?.json?.last_page
-
-        if (comments_) {
-            setComments(prev => [...prev, ...comments_])
-        }
-        if (per_page) setCommentsPerPage(per_page)
-        if (last_page) setCommentsLastPage(last_page)
-    }
-
-    useEffect(() => {
-        if (showComments && event?.id) {
-            getComments(commentsPage, event?.id)
-        }
-    }, [event?.id]); // Зависимость от ID важнее, чем от всего объекта
+    // async function getComments(page: number, id: string) {
+    //     const response = await $fetch(`comments/get_morph?page=${page}&comments_limit=3&entity_id=${id}&entity=event`)
+    //
+    //     const comments_ = response?.json?.comments || []
+    //     const per_page = response?.json?.per_page
+    //     const last_page = response?.json?.last_page
+    //
+    //     if (comments_) {
+    //         setComments(prev => [...prev, ...comments_])
+    //     }
+    //     if (per_page) setCommentsPerPage(per_page)
+    //     if (last_page) setCommentsLastPage(last_page)
+    // }
+    //
+    // useEffect(() => {
+    //     if (showComments && event?.id) {
+    //         getComments(commentsPage, event?.id)
+    //     }
+    // }, [event?.id]); // Зависимость от ID важнее, чем от всего объекта
 
     const {isOpen, open, close} = useModal()
     const {confirm, decline} = UseConfirmOperation({
@@ -300,11 +300,23 @@ export default function EventWidget({
                     </BrandActionButton>
                 }
 
-                {signed && event?.status === "process" && event?.tasks &&
+                {event?.tasks &&
+                event?.user?.id === user?.main?.id ?
+                    <BrandActionButton className="!my-3 !mb-4 max-w-[300px] w-full" onClick={() => redirectToTasks(event?.id)}>
+                        Смотреть задание
+                    </BrandActionButton>
+                    :
+                    signed && event?.status === "process" &&
                     <BrandActionButton className="!my-3 !mb-4 max-w-[300px] w-full" onClick={() => redirectToTasks(event?.id)}>
                         Делать задания
                     </BrandActionButton>
                 }
+
+                {/*{signed && event?.status === "process" && event?.tasks &&*/}
+                {/*    <BrandActionButton className="!my-3 !mb-4 max-w-[300px] w-full" onClick={() => redirectToTasks(event?.id)}>*/}
+                {/*        Делать задания*/}
+                {/*    </BrandActionButton>*/}
+                {/*}*/}
 
                 {/* Футер с действиями */}
                 <div className="mt-auto">
@@ -365,7 +377,6 @@ export default function EventWidget({
                                     className="text-xs font-bold text-text-muted hover:text-text-brand transition-colors duration-200 self-start"
                                     onClick={async () => {
                                         await setCommentsPage(prev => prev + 1)
-                                        await getComments(commentsPage + 1, event?.id)
                                     }}
                                 >
                                     Загрузить еще комментарии

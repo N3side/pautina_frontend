@@ -35,13 +35,19 @@ export default function PostsWidget({isMyProfile, trueUser, setIsEmpty}: Props) 
             getPosts(trueUser?.main?.id)
     }, []);
 
+
+    useEffect(() => {
+        const hasData = !!(posts && Array.isArray(posts) && posts.length > 0);
+
+        setIsEmpty(hasData);
+    }, [posts]);
+
     return (
+        posts && Array?.isArray(posts) && posts?.length > 0 &&
         <div className="glass-effect rounded-2xl p-6 flex flex-col gap-4 w-full">
             <h6 className="text-text-main font-bold tracking-tight">
                 Посты
             </h6>
-
-            {posts && Array?.isArray(posts) && posts?.length > 0 &&
                 <div className="flex flex-col gap-4 w-full overflow-hidden relative">
                     {posts?.map((post, i) =>
                         <div
@@ -90,7 +96,6 @@ export default function PostsWidget({isMyProfile, trueUser, setIsEmpty}: Props) 
                         </div>
                     )}
                 </div>
-            }
         </div>
     )
 }
