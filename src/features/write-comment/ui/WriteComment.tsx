@@ -14,7 +14,7 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
     setComments?: (any) => any
     setExpanded?: (any) => void
     setOpenCommentation?: (any) => void
-    placeholder?: string
+    placeholder?: string //
 }
 
 export default function WriteComment({ className, entity, entity_id, parentComment, setExpanded=() => {}, setOpenCommentation=() => {}, setComments, placeholder, ...props }: Props) {
