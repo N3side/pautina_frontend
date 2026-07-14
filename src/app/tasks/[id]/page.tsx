@@ -39,20 +39,21 @@ export default function Page() {
 
     const loadComments = useCallback(async (entityId: string, pageNum: number, append: boolean = false) => {
 
+        if (!isMy) return
+
         if (!entityId) return;
 
         setCommentsLoading(true);
 
         const response = await $fetch(
-            `comments/get_morph?entity=task&entity_id=${entityId}&page=${pageNum}&comments_limit=3`
+            `tasks/get_tasks/${entityId}?page=${pageNum}&comments_limit=3`
         );
 
-        const json = response?.json;
-        const newComments = json.comments || [];
+        const newComments = response?.json.comments || [];
 
-        const totalPages = json.last_page;
-        const currentPage = json.current_page;
-        const itemsPerPage = json.per_page;
+        const totalPages = response?.json.last_page;
+        const currentPage = response?.json.current_page;
+        const itemsPerPage = response?.json.per_page;
 
         if (append) {
             setComments(prev => [...prev, ...newComments]);
@@ -80,7 +81,7 @@ export default function Page() {
     }, [id, page, loadComments]);
 
     const { user } = useContext(UserContext);
-    const isMy = user && task?.user_id === user?.main?.id;
+    const isMy =  task?.user_id === user?.main?.id;
 
     const observerTarget = useIntersectionObserver(
         () => {
