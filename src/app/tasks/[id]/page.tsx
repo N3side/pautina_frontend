@@ -38,6 +38,7 @@ export default function Page() {
     }, []);
 
     const loadComments = useCallback(async (entityId: string, pageNum: number, append: boolean = false) => {
+
         if (!entityId) return;
 
         setCommentsLoading(true);
@@ -79,7 +80,7 @@ export default function Page() {
     }, [id, page, loadComments]);
 
     const { user } = useContext(UserContext);
-    const isMy = task?.user_id === user?.main?.id;
+    const isMy = user && task?.user_id === user?.main?.id;
 
     const observerTarget = useIntersectionObserver(
         () => {
