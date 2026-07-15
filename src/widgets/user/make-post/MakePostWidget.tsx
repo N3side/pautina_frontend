@@ -27,7 +27,8 @@ export default function MakePostWidget({ setPosts, className }: Props) {
         handleDelete,
         uploadAllPendingFiles,
         gallery,
-        setGallery
+        setGallery,
+        sortPendings
     } = useGalleryLogic({
         entity: "post",
         isClientOnly: true
@@ -107,7 +108,7 @@ export default function MakePostWidget({ setPosts, className }: Props) {
                         cards={gallery}
                         setCards={setGallery}
                         onDelete={handleDelete}
-                        isClientOnly={true}
+                        onSortChange={sortPendings}
                     />
                 )}
 

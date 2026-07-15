@@ -6,32 +6,40 @@ import GalleryCard from "@/shared/ui/gallery-card/GalleryCard";
 interface Props {
     cards: any;
     setCards: React.Dispatch<React.SetStateAction<Record<string, any>[]>>;
-    entity?: string;
-    isClientOnly?: boolean;
-    className?: string
-    cardClassName?: string
+    onSortChange: () => void;
     onDelete: (id: string | number) => void;
+    className?: string;
+    cardClassName?: string;
 }
 
-export default function EditGallery({ cards, setCards, className, cardClassName, onDelete }: Props) {
+export default function EditGallery({ cards, setCards, className, cardClassName, onDelete, onSortChange }: Props) {
     const [draggedIndex, setDraggedIndex] = useState<number | null>(null);
 
     const sortedCards = useMemo(() => {
         return [...cards].sort((a, b) => (a.sort || 0) - (b.sort || 0));
     }, [cards]);
 
-    const handleDrop = async (e: React.DragEvent<HTMLDivElement>, targetIndex: number) => {
+    const handleDrop = (
+        e: React.DragEvent<HTMLDivElement>,
+        targetIndex: number
+    ) => {
         e.preventDefault();
-        if (draggedIndex === null || draggedIndex === targetIndex) return;
-        const draggedCard = sortedCards[draggedIndex];
-        const targetCard = sortedCards[targetIndex];
 
-        // Логику сортировки оставляем здесь, так как она визуальная
-        setCards((prev) => prev.map((card) => {
-            if (card.id === draggedCard.id) return { ...card, sort: targetCard.sort };
-            if (card.id === targetCard.id) return { ...card, sort: draggedCard.sort };
-            return card;
+        if (draggedIndex === null || draggedIndex === targetIndex) return;
+
+        const newCards = [...sortedCards];
+
+        const [removed] = newCards.splice(draggedIndex, 1);
+        newCards.splice(targetIndex, 0, removed);
+
+        const updated = newCards.map((card, index) => ({
+            ...card,
+            sort: index + 1,
         }));
+
+        setCards(updated);
+
+        onSortChange();
 
         setDraggedIndex(null);
     };

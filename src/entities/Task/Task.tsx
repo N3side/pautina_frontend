@@ -171,7 +171,7 @@ export default function Task({task, setTasks, className, redirectOnClick=true}: 
                             <RoundedIconWrapper Icon={PhotoLibraryOutlinedIcon} onClick={handleTriggerSelect} btnHeight={40} btnWidth={40} />
                         </div>
 
-                        <EditGallery cards={gallery} isClientOnly={false} setCards={setGallery} onDelete={handleDelete} />
+                        <EditGallery cards={gallery} onSortChange={sortPendings} setCards={setGallery} onDelete={handleDelete} />
 
                         <Input name="title" label="Заголовок" defaultValue={task?.title} error={errors?.title} />
                         <Textarea name="description" label="Описание" defaultValue={task?.description} error={errors?.description} />

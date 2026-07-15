@@ -60,8 +60,7 @@ export default function ManageTasks() {
         uploadAllPendingFiles,
         gallery,
         setGallery,
-        removeFile,
-        addFile,
+        sortPendings
     } = useGalleryLogic({
         entity: "task",
         isClientOnly: true
@@ -125,7 +124,12 @@ export default function ManageTasks() {
                         <RoundedIconWrapper Icon={PhotoLibraryOutlinedIcon} onClick={handleTriggerSelect} btnHeight={40} btnWidth={40} />
                     </div>
 
-                    <EditGallery cards={gallery} setCards={setGallery} onDelete={handleDelete} />
+                    <EditGallery
+                        cards={gallery}
+                        setCards={setGallery}
+                        onDelete={handleDelete}
+                        onSortChange={sortPendings}
+                    />
 
                     <Input name="title" label="Заголовок" error={errors?.title} />
                     <Textarea name="description" label="Описание" error={errors?.description} />

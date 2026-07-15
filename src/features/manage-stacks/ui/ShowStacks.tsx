@@ -47,7 +47,6 @@ export default function ShowStacks({
 
     const observerTarget = useIntersectionObserver(
         loadMore,
-        [isInitialLoading, hasMore, stacks.length],
         !isReadOnly && !isInitialLoading && hasMore
     );
 

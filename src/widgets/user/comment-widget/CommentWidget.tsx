@@ -104,7 +104,6 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
 
             uploadAllPendingFiles(comment_id)
             flushTrash()
-            sortPendings()
 
             setIsEditing(false)
         }
@@ -193,7 +192,7 @@ export default function CommentWidget({comment, entity, entity_id, isChild=false
                         {
                             isEditing &&
                             <div>
-                                <EditGallery cards={gallery} setCards={setGallery} onDelete={handleDelete} cardClassName="!h-[130px]" />
+                                <EditGallery cards={gallery} setCards={setGallery} onDelete={handleDelete} onSortChange={sortPendings} cardClassName="!h-[130px]" />
                                 <EditText text={content} setText={setContent} handleTriggerSelect={handleTriggerSelect} />
                             </div>
                         }

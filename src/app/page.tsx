@@ -16,15 +16,12 @@ export default function Page() {
     const [posts, setPosts] = useState<any[]>([]);
     const [loading, setLoading] = useState(false);
 
-    // Используем твой хук.
-    // Коллбэк увеличивает страницу, если мы не грузимся и есть куда листать.
     const observerTarget = useIntersectionObserver(
         () => {
             if (!loading && page < lastPage) {
                 setPage(prev => prev + 1);
             }
         },
-        [loading, page, lastPage],
         page < lastPage
     );
 

@@ -34,7 +34,8 @@ export default function UpdateMainEventFeature() {
         uploadAllPendingFiles,
         gallery,
         setGallery,
-        flushTrash
+        flushTrash,
+        sortPendings
     } = useGalleryLogic({
         galleryInit: event?.images,
         entity: "event",
@@ -137,8 +138,8 @@ export default function UpdateMainEventFeature() {
                     className="grid-cols-[repeat(auto-fill,minmax(200px,1fr))]"
                     cards={gallery}
                     setCards={setGallery}
-                    isClientOnly={true}
                     onDelete={handleDelete}
+                    onSortChange={sortPendings}
                 />
             ) : (
                 <div onClick={handleTriggerSelect}>

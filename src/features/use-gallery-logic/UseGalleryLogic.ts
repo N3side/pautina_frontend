@@ -49,35 +49,38 @@ export function useGalleryLogic({
             const newCard = {
                 id: tempId,
                 image_url: previewUrl,
-                sort: gallery.length + 1 // Исправлено: sort должен быть корректным
+                sort: gallery.length + 1
             };
 
             setGallery((prev) => [...prev, newCard]);
-            setIsOrderChanged(true);
         } else {
             const formData = new FormData();
             formData.set("image", file);
             formData.set("entity", entity);
-            if (existingEntityId) formData.set("entity_id", String(existingEntityId));
 
-            const response = await $fetch(`images`, {
+            if (existingEntityId) {
+                formData.set("entity_id", String(existingEntityId));
+            }
+
+            const response = await $fetch("images", {
                 method: "POST",
                 body: formData
             });
 
             const newCard = response?.json?.image || response?.json;
+
             if (newCard) {
                 setGallery((prev) => [...prev, newCard]);
             }
         }
-        event.target.value = '';
+
+        event.target.value = "";
     };
 
     const handleDelete = (imageId: number | string) => {
         const isTemp = String(imageId).startsWith("temp_");
 
         setGallery((prev) => prev.filter((c) => c.id !== imageId));
-        setIsOrderChanged(true);
 
         if (isTemp) {
             removeFile(String(imageId));
@@ -85,19 +88,25 @@ export function useGalleryLogic({
             if (isClientOnly) {
                 setTrashImages((prev) => [...prev, imageId]);
             } else {
-                $fetch(`images/${imageId}`, { method: "DELETE" })
-                    .catch(e => console.error("Auto-delete failed", e));
+                $fetch(`images/${imageId}`, {
+                    method: "DELETE"
+                }).catch(console.error);
             }
         }
     };
 
+    // const sortPendings = () => {
+    //     setGallery((prev) =>
+    //         prev.map((item, index) => ({
+    //             ...item,
+    //             sort: index + 1
+    //         }))
+    //     );
+    //
+    //     setIsOrderChanged(true);
+    // };
+
     const sortPendings = () => {
-        setGallery(prev => {
-            return prev.map((item, index) => ({
-                ...item,
-                sort: index + 1
-            }))
-        })
         setIsOrderChanged(true);
     };
 
@@ -119,10 +128,8 @@ export function useGalleryLogic({
         // 2. Берем АКТУАЛЬНЫЙ порядок из стейта gallery
         const currentSortedGallery = [...gallery].sort((a, b) => (a.sort || 0) - (b.sort || 0));
 
-        const uploadedImages: Record<string, any>[] = [];
-        const tempIdsToRemove: string[] = [];
+        const uploadedMap = new Map<string, any>();
 
-        // Загружаем только временные файлы
         for (const card of currentSortedGallery) {
             const file = getFile(card.id);
             if (!file) continue;
@@ -132,38 +139,39 @@ export function useGalleryLogic({
             formData.set("entity", entity);
             formData.set("entity_id", String(entity_id));
 
-            const response = await $fetch(`images`, {
+            const response = await $fetch("images", {
                 method: "POST",
                 body: formData
             });
 
             const newCard = response?.json?.image || response?.json;
+
             if (newCard) {
-                uploadedImages.push(newCard);
-                tempIdsToRemove.push(card.id);
+                uploadedMap.set(card.id, newCard);
             }
         }
 
         clearAll();
 
-        // 3. Формируем ФИНАЛЬНЫЙ список
-        let finalGallery: Record<string, any>[] = [];
+        const finalGallery = currentSortedGallery.map(card => {
+            return uploadedMap.get(card.id) ?? card;
+        });
 
-        finalGallery = currentSortedGallery
-            .filter(card => !tempIdsToRemove.includes(card.id)) // Убираем временные
-            .concat(uploadedImages); // Добавляем новые в конец
-
-        // 4. Отправляем сортировку ТОЛЬКО если картинок 2 или больше
-        if (finalGallery.length >= 2) {
+        if (isOrderChanged && finalGallery.length >= 2) {
             const orderPayload = finalGallery.map((img, index) => ({
                 image_id: img.id,
                 sort: index + 1
             }));
 
-            await $fetch(`images`, { // Лучше использовать отдельный роут для сортировки
+            await $fetch("images", {
                 method: "PATCH",
-                body: JSON.stringify({ order: orderPayload }),
-                headers: { "Content-Type": "application/json" }
+                body: JSON.stringify({
+                    order: orderPayload
+                }),
+                headers: {
+                    "Content-Type": "application/json",
+                    "Accept": "application/json"
+                }
             });
         }
 

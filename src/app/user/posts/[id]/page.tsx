@@ -29,7 +29,6 @@ export default function Page() {
                 setPage(prev => prev + 1);
             }
         },
-        [loading, page, lastPage],
         page < lastPage
     );
 

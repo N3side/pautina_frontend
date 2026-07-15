@@ -172,12 +172,17 @@ export default function EventWidget({ post, setPosts, redirectOnClick=false, cla
                         <div>
 
                             {!isEditing &&
-                                <ExpandText text={content} previewLength={100} className="max-w-[85%] w-full !mt-1" canCloseOnExpanded={true} />
+                                <ExpandText text={content} previewLength={100} className="max-w-[85%] w-full" canCloseOnExpanded={false} />
                             }
 
                             {
                                 isEditing ?
-                                    <EditGallery className="mt-3" cards={gallery} setCards={setGallery} onDelete={handleDelete} />
+                                    <EditGallery
+                                        cards={gallery}
+                                        setCards={setGallery}
+                                        onSortChange={sortPendings}
+                                        onDelete={handleDelete}
+                                    />
                                     :
                                     <Gallery className={`mt-2 ${galleryClassName}`} gallery={gallery} />
                             }
@@ -264,7 +269,6 @@ export default function EventWidget({ post, setPosts, redirectOnClick=false, cla
                                     <ActionButton className="h-fit" text="Изменить" onClick={async() => {
                                         const isOk = await updatePost(post?.id, content)
                                         await uploadAllPendingFiles(post?.id)
-                                        await sortPendings()
 
                                         if (isOk) {
                                             setIsEditing(false)

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 
 import Task from "@/entities/Task/Task";
 import { usePathname } from "next/navigation";
@@ -15,82 +15,96 @@ export default function Page() {
     const pathname = usePathname();
     const id = pathname.split("/").pop();
 
+    const { user } = useContext(UserContext);
+
     const [task, setTask] = useState<Record<string, any> | null>(null);
     const [loading, setLoading] = useState(false);
     const [commentsLoading, setCommentsLoading] = useState(false);
     const [comments, setComments] = useState<any[]>([]);
 
-    const { page, setPage, lastPage, setLastPage, perPage, setPerPage } = UsePaginate();
+    const {
+        page,
+        setPage,
+        lastPage,
+        setLastPage,
+        perPage,
+        setPerPage,
+    } = UsePaginate();
 
     const loadTask = useCallback(async (taskId: string) => {
-
         if (!taskId) return;
 
         setLoading(true);
-        const response = await $fetch(`tasks/${taskId}`);
-        const task_ = response?.json?.task;
 
-        if (task_) {
-            setTask(task_);
+        try {
+            const response = await $fetch(`tasks/${taskId}`);
+            const task_ = response?.json?.task;
+
+            if (task_) {
+                setTask(task_);
+            }
+        } finally {
+            setLoading(false);
         }
-
-        setLoading(false)
     }, []);
 
-    const loadComments = useCallback(async (entityId: string, pageNum: number, append: boolean = false) => {
+    const isMy = task?.user_id === user?.main?.id;
 
-        if (!isMy) return
+    const loadComments = useCallback(
+        async (
+            entityId: string,
+            pageNum: number,
+            append: boolean = false
+        ) => {
+            if (!entityId) return;
 
-        if (!entityId) return;
+            setCommentsLoading(true);
 
-        setCommentsLoading(true);
+            try {
+                const response = await $fetch(
+                    `tasks/get_tasks/${entityId}?page=${pageNum}&comments_limit=3`
+                );
 
-        const response = await $fetch(
-            `tasks/get_tasks/${entityId}?page=${pageNum}&comments_limit=3`
-        );
+                const newComments = response?.json?.comments ?? [];
 
-        const newComments = response?.json.comments || [];
+                if (append) {
+                    setComments((prev) => [...prev, ...newComments]);
+                } else {
+                    setComments(newComments);
+                }
 
-        const totalPages = response?.json.last_page;
-        const currentPage = response?.json.current_page;
-        const itemsPerPage = response?.json.per_page;
-
-        if (append) {
-            setComments(prev => [...prev, ...newComments]);
-        } else {
-            setComments(newComments);
-        }
-
-        if (totalPages) setLastPage(totalPages);
-        if (itemsPerPage) setPerPage(itemsPerPage);
-
-        setCommentsLoading(false);
-    }, []);
-
-    useEffect(() => {
-        if (id) {
-            loadTask(id);
-        }
-    }, [id, loadTask]);
+                setLastPage(response?.json?.last_page ?? 1);
+                setPerPage(response?.json?.per_page ?? 3);
+            } finally {
+                setCommentsLoading(false);
+            }
+        },
+        [setLastPage, setPerPage]
+    );
 
     useEffect(() => {
-        if (id) {
-            const isAppend = page > 1;
-            loadComments(id, page, isAppend);
-        }
-    }, [id, page, loadComments]);
+        if (!id) return;
 
-    const { user } = useContext(UserContext);
-    const isMy =  task?.user_id === user?.main?.id;
+        setComments([]);
+        setPage(1);
+        loadTask(id);
+    }, [id, loadTask, setPage]);
+
+    useEffect(() => {
+        if (!id) return;
+
+        if (!isMy) return;
+
+        loadComments(id, page, page > 1);
+    }, [id, page, isMy, loadComments]);
 
     const observerTarget = useIntersectionObserver(
         () => {
             if (!commentsLoading && page < lastPage) {
-                setPage(prev => prev + 1);
+                setPage((prev) => prev + 1);
             }
         },
-        [commentsLoading, page, lastPage],
-        page < lastPage
+        page < lastPage && isMy
     );
 
     return (
@@ -99,7 +113,13 @@ export default function Page() {
                 <h6 className="text-text-main font-bold">Задание</h6>
 
                 <div className="glass-effect p-6 rounded-2xl flex flex-col gap-6 w-full h-full">
-                    {task && <Task task={task} className="!w-full !h-full" redirectOnClick={false} />}
+                    {task && (
+                        <Task
+                            task={task}
+                            className="!w-full !h-full"
+                            redirectOnClick={false}
+                        />
+                    )}
 
                     {!task?.my_comment && task?.id && (
                         <WriteComment
@@ -111,41 +131,55 @@ export default function Page() {
                         />
                     )}
 
-                    {task?.id && comments.find((c) => c.user.id === user?.main?.id) && (
-                        <CommentWidget
-                            comment={comments.find((c) => c.user.id === user?.main?.id)}
-                            entity={"task"}
-                            entity_id={task.id}
-                        />
-                    )}
+                    {task?.id &&
+                        comments.find((c) => c.user.id === user?.main?.id) && (
+                            <CommentWidget
+                                comment={comments.find(
+                                    (c) => c.user.id === user?.main?.id
+                                )}
+                                entity="task"
+                                entity_id={task.id}
+                            />
+                        )}
                 </div>
 
                 {isMy && (
                     <div className="glass-effect p-6 rounded-2xl flex flex-col gap-4 w-full h-full">
-                        <p className="text-text-main font-bold">Ответы от пользователей:</p>
+                        <p className="text-text-main font-bold">
+                            Ответы от пользователей:
+                        </p>
 
-                        <div className="flex flex-col gap-2">
-                            {comments.length > 0 ? (
-                                <div className="flex flex-col gap-4">
-                                    {comments.map((c: any) => (
-                                        <CommentWidget
-                                            key={c.id}
-                                            comment={c}
-                                            entity="task"
-                                            entity_id={task?.id}
-                                        />
-                                    ))}
+                        {comments.length > 0 ? (
+                            <>
+                                {comments.map((c: any) => (
+                                    <CommentWidget
+                                        key={c.id}
+                                        comment={c}
+                                        entity="task"
+                                        entity_id={task?.id}
+                                    />
+                                ))}
 
-                                    {page < lastPage && (
-                                        <div ref={observerTarget} className="h-10 w-full flex justify-center items-center">
-                                            {commentsLoading && <p className="text-sm text-text-muted animate-pulse">Загрузка...</p>}
-                                        </div>
-                                    )}
-                                </div>
-                            ) : (
-                                !commentsLoading && <p className="text-text-muted font-medium">Никто не загрузил работы</p>
-                            )}
-                        </div>
+                                {page < lastPage && (
+                                    <div
+                                        ref={observerTarget}
+                                        className="h-10 flex justify-center items-center"
+                                    >
+                                        {commentsLoading && (
+                                            <p className="text-sm text-text-muted animate-pulse">
+                                                Загрузка...
+                                            </p>
+                                        )}
+                                    </div>
+                                )}
+                            </>
+                        ) : (
+                            !commentsLoading && (
+                                <p className="text-text-muted font-medium">
+                                    Никто не загрузил работы
+                                </p>
+                            )
+                        )}
                     </div>
                 )}
             </div>

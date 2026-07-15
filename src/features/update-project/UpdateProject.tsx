@@ -107,7 +107,7 @@ export default function UpdateProject() {
         }
     }
 
-    const {handleTriggerSelect, gallery, setGallery, fileInputRef, handleFileChange, uploadAllPendingFiles, handleDelete} = useGalleryLogic({
+    const {handleTriggerSelect, gallery, setGallery, fileInputRef, handleFileChange, uploadAllPendingFiles, handleDelete, sortPendings} = useGalleryLogic({
         entity: "project",
         isClientOnly: true,
         existingEntityId: id,
@@ -161,8 +161,7 @@ export default function UpdateProject() {
                     <EditGallery
                         cards={gallery}
                         setCards={setGallery}
-                        entity="project"
-                        isClientOnly={true}
+                        onSortChange={sortPendings}
                         onDelete={handleDelete}
                     />
 

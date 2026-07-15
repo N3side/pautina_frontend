@@ -29,6 +29,7 @@ export default function WriteComment({ className, entity, entity_id, parentComme
         uploadAllPendingFiles,
         gallery,
         setGallery,
+        sortPendings
     } = useGalleryLogic({
         entity: "comment",
         isClientOnly: true,
@@ -89,7 +90,12 @@ export default function WriteComment({ className, entity, entity_id, parentComme
                 className="hidden"
             />
 
-            <EditGallery cards={gallery} setCards={setGallery} onDelete={handleDelete} />
+            <EditGallery
+                cards={gallery}
+                setCards={setGallery}
+                onDelete={handleDelete}
+                onSortChange={sortPendings}
+            />
 
             <MessageForm
                 placeholder={placeholder}
