@@ -1,7 +1,6 @@
 name: Build and Deploy
 on:
-  push:
-    branches: [ main ]
+  workflow_dispatch: 
 
 env:
   # ЗАМЕНИ НА СВОИ ДАННЫЕ (все буквы маленькие!)
